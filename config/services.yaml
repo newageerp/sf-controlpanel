@@ -1,0 +1,22 @@
+services:
+  # default configuration for services in *this* file
+  _defaults:
+    autowire: true      # Automatically injects dependencies in your services.
+    autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+  Newageerp\SfControlpanel\Controller\ConfigBuilderController:
+    arguments: [ ]
+  Newageerp\SfControlpanel\Controller\ConfigCacheController:
+    arguments: [ ]
+  Newageerp\SfControlpanel\Controller\ConfigDbController:
+    arguments: [ ]
+  Newageerp\SfControlpanel\Controller\ConfigDefaultsController:
+    arguments: [ ]
+  Newageerp\SfControlpanel\Controller\ConfigEditController:
+    arguments: [ ]
+  Newageerp\SfControlpanel\Controller\ConfigTabsController:
+    arguments: [ ]
+  Newageerp\SfControlpanel\Controller\ConfigViewController:
+    arguments: [ ]
+  Newageerp\SfControlpanel\Controller\ConfigWidgetsController:
+    arguments: [ ]
