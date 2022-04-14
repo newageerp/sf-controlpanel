@@ -13,10 +13,15 @@ use Symfony\Component\Finder\Finder;
  */
 class ConfigEditController extends ConfigBaseController
 {
+    protected function getLocalStorageFile()
+    {
+        return $this->getLocalStorage() . '/edit.json';
+    }
+
     protected function saveBuilder($data)
     {
         file_put_contents(
-            $this->getLocalStorage(),
+            $this->getLocalStorageFile(),
             json_encode($data)
         );
     }
@@ -33,7 +38,7 @@ class ConfigEditController extends ConfigBaseController
 
         try {
             $data = json_decode(
-                file_get_contents($this->getLocalStorage()),
+                file_get_contents($this->getLocalStorageFile()),
                 true
             );
 
@@ -73,7 +78,7 @@ class ConfigEditController extends ConfigBaseController
 
             $isFound = false;
             $data = json_decode(
-                file_get_contents($this->getLocalStorage()),
+                file_get_contents($this->getLocalStorageFile()),
                 true
             );
             foreach ($data as &$el) {
@@ -110,7 +115,7 @@ class ConfigEditController extends ConfigBaseController
             $id = $request->get('id');
 
             $tmpData = json_decode(
-                file_get_contents($this->getLocalStorage()),
+                file_get_contents($this->getLocalStorageFile()),
                 true
             );
             $data = [];

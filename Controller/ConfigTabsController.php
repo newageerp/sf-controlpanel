@@ -13,10 +13,15 @@ use Symfony\Component\Finder\Finder;
  */
 class ConfigTabsController extends ConfigBaseController
 {
+    protected function getLocalStorageFile()
+    {
+        return $this->getLocalStorage() . '/tabs.json';
+    }
+
     protected function saveBuilder($data)
     {
         file_put_contents(
-            $this->getLocalStorage(),
+            $this->getLocalStorageFile(),
             json_encode($data)
         );
     }
@@ -33,7 +38,7 @@ class ConfigTabsController extends ConfigBaseController
 
         try {
             $data = json_decode(
-                file_get_contents($this->getLocalStorage()),
+                file_get_contents($this->getLocalStorageFile()),
                 true
             );
 
@@ -63,7 +68,7 @@ class ConfigTabsController extends ConfigBaseController
 
             $isFound = false;
             $data = json_decode(
-                file_get_contents($this->getLocalStorage()),
+                file_get_contents($this->getLocalStorageFile()),
                 true
             );
             foreach ($data as &$el) {
@@ -100,7 +105,7 @@ class ConfigTabsController extends ConfigBaseController
             $id = $request->get('id');
 
             $tmpData = json_decode(
-                file_get_contents($this->getLocalStorage()),
+                file_get_contents($this->getLocalStorageFile()),
                 true
             );
             $data = [];

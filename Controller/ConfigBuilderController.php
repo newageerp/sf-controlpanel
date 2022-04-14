@@ -19,9 +19,14 @@ class ConfigBuilderController extends ConfigBaseController
     protected function saveBuilder($data)
     {
         file_put_contents(
-            $this->getLocalStorage(),
+            $this->getLocalStorageFile(),
             json_encode($data)
         );
+    }
+
+    protected function getLocalStorageFile()
+    {
+        return $this->getLocalStorage() . '/builder.json';
     }
 
     /**
@@ -36,7 +41,7 @@ class ConfigBuilderController extends ConfigBaseController
 
         try {
             $data = json_decode(
-                file_get_contents($this->getLocalStorage()),
+                file_get_contents($this->getLocalStorageFile()),
                 true
             );
 
@@ -66,7 +71,7 @@ class ConfigBuilderController extends ConfigBaseController
 
             $isFound = false;
             $data = json_decode(
-                file_get_contents($this->getLocalStorage()),
+                file_get_contents($this->getLocalStorageFile()),
                 true
             );
             foreach ($data as &$el) {
@@ -103,7 +108,7 @@ class ConfigBuilderController extends ConfigBaseController
             $id = $request->get('id');
 
             $tmpData = json_decode(
-                file_get_contents($this->getLocalStorage()),
+                file_get_contents($this->getLocalStorageFile()),
                 true
             );
             $data = [];
