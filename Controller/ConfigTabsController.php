@@ -9,7 +9,7 @@ use Ramsey\Uuid\Uuid;
 use Symfony\Component\Finder\Finder;
 
 /**
- * @Route(path="/app/nae-core/сonfig-tabs")
+ * @Route(path="/app/nae-core/config-tabs")
  */
 class ConfigTabsController extends ConfigBaseController
 {
@@ -27,7 +27,7 @@ class ConfigTabsController extends ConfigBaseController
     }
 
     /**
-     * @Route(path="/listConfig")
+     * @Route(path="/listConfig", methods={"POST"})
      * @OA\Post (operationId="NaeConfigTabList")
      */
     public function listConfig(Request $request)
@@ -51,7 +51,7 @@ class ConfigTabsController extends ConfigBaseController
     }
 
     /**
-     * @Route(path="/saveConfig")
+     * @Route(path="/saveConfig", methods={"POST"})
      * @OA\Post (operationId="NaeConfigTabSave")
      */
     public function saveConfig(Request $request)
@@ -92,7 +92,7 @@ class ConfigTabsController extends ConfigBaseController
     }
 
     /**
-     * @Route(path="/removeConfig")
+     * @Route(path="/removeConfig", methods={"POST"})
      * @OA\Post (operationId="NaeConfigTabRemove")
      */
     public function removeConfig(Request $request)

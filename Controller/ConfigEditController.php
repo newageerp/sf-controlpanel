@@ -27,7 +27,7 @@ class ConfigEditController extends ConfigBaseController
     }
 
     /**
-     * @Route(path="/listConfig")
+     * @Route(path="/listConfig", methods={"POST"})
      * @OA\Post (operationId="NaeConfigEditList")
      */
     public function listConfig(Request $request)
@@ -61,7 +61,7 @@ class ConfigEditController extends ConfigBaseController
     }
 
     /**
-     * @Route(path="/saveConfig")
+     * @Route(path="/saveConfig", methods={"POST"})
      * @OA\Post (operationId="NaeConfigEditSave")
      */
     public function saveConfig(Request $request)
@@ -102,7 +102,7 @@ class ConfigEditController extends ConfigBaseController
     }
 
     /**
-     * @Route(path="/removeConfig")
+     * @Route(path="/removeConfig", methods={"POST"})
      * @OA\Post (operationId="NaeConfigEditRemove")
      */
     public function removeConfig(Request $request)

@@ -31,7 +31,7 @@ class InPathMapConsole extends Command
                 $map[$methodData['operationId']] = [
                     'method' => $method,
                     'path' => $path,
-                    'parameters' => $methodData['parameters']
+                    'parameters' => isset($methodData['parameters']) ? $methodData['parameters'] : []
                 ];
             }
         }
