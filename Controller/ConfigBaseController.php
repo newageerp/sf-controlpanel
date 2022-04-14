@@ -16,7 +16,7 @@ class ConfigBaseController extends OaBaseController
     {
         parent::__construct($em, $eventDispatcher);
 
-        $this->localStorage = $_ENV['NAE_SFS_CP_STORAGE_PATH'] . '/builder.json';
+        $this->localStorage = $_ENV['NAE_SFS_CP_STORAGE_PATH'];
         $this->localDbFile = $_ENV['NAE_SFS_CP_DB_PATH'];
     }
 
