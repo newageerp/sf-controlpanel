@@ -25,6 +25,7 @@ class InRunAll extends Command
             'nae:localconfig:InLocalConfigSyncFields',
             'nae:localconfig:InLocalConfigSyncEntities',
             'nae:localconfig:InLocalConfigSyncUsersPermissions',
+            'nae:localconfig:InPathMap',
         ];
 
         foreach ($commands as $commandName) {

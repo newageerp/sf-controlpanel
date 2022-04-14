@@ -9,7 +9,7 @@ use Ramsey\Uuid\Uuid;
 use Symfony\Component\Finder\Finder;
 
 /**
- * @Route(path="/app/nae-core/сonfig-view")
+ * @Route(path="/app/nae-core/config-view")
  */
 class ConfigViewController extends ConfigBaseController
 {
