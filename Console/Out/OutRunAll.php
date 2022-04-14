@@ -1,6 +1,6 @@
 <?php
 
-namespace App\NaeCore\LocalConfig\Out;
+namespace Newageerp\SfControlpanel\Console\Out;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
