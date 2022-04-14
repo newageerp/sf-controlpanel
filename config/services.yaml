@@ -20,3 +20,44 @@ services:
     arguments: [ ]
   Newageerp\SfControlpanel\Controller\ConfigWidgetsController:
     arguments: [ ]
+
+  Newageerp\SfControlpanel\Console\In\InLocalConfigSyncEntitiesConsole:
+    tags:
+      - { name: 'console.command' }
+  Newageerp\SfControlpanel\Console\In\InLocalConfigSyncFieldsConsole:
+    tags:
+      - { name: 'console.command' }
+  Newageerp\SfControlpanel\Console\In\InLocalConfigSyncPdfsConsole:
+    tags:
+      - { name: 'console.command' }
+  Newageerp\SfControlpanel\Console\In\InLocalConfigSyncStatusesConsole:
+    tags:
+      - { name: 'console.command' }
+  Newageerp\SfControlpanel\Console\In\InLocalConfigSyncUsersPermissionsConsole:
+    tags:
+      - { name: 'console.command' }
+  Newageerp\SfControlpanel\Console\In\InLocalConfigSyncVariablesConsole:
+    tags:
+      - { name: 'console.command' }
+  Newageerp\SfControlpanel\Console\In\InPathMapConsole:
+    tags:
+      - { name: 'console.command' }
+  Newageerp\SfControlpanel\Console\In\InRunAll:
+    tags:
+      - { name: 'console.command' }
+
+  Newageerp\SfControlpanel\Console\Out\OutCacheDocJsonConsole:
+    tags:
+      - { name: 'console.command' }
+  Newageerp\SfControlpanel\Console\Out\OutLocalConfigBuildMockConsole:
+    tags:
+      - { name: 'console.command' }
+  Newageerp\SfControlpanel\Console\Out\OutLocalConfigSyncPropertiesConsole:
+    tags:
+      - { name: 'console.command' }
+  Newageerp\SfControlpanel\Console\Out\OutLocalConfigSyncSchemasConsole:
+    tags:
+      - { name: 'console.command' }
+  Newageerp\SfControlpanel\Console\Out\OutRunAll:
+    tags:
+      - { name: 'console.command' }
