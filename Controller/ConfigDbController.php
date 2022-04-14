@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 class ConfigDbController extends ConfigBaseController
 {
     /**
-     * @Route(path="/variablesSave")
+     * @Route(path="/variablesSave", methods={"POST"})
      * @OA\Post (operationId="NaeConfigDbVariablesSave")
      */
     public function saveVariable(Request $request)
@@ -44,7 +44,7 @@ class ConfigDbController extends ConfigBaseController
     }
 
     /**
-     * @Route(path="/variablesRemove")
+     * @Route(path="/variablesRemove", methods={"POST"})
      * @OA\Post (operationId="NaeConfigDbVariablesRemove")
      */
     public function removeVariable(Request $request)
@@ -66,7 +66,7 @@ class ConfigDbController extends ConfigBaseController
 
 
     /**
-     * @Route(path="/variables")
+     * @Route(path="/variables", methods={"POST"})
      * @OA\Post (operationId="NaeConfigDbVariablesList")
      */
     public function listVariables()
@@ -89,7 +89,7 @@ class ConfigDbController extends ConfigBaseController
     /*********** */
 
     /**
-     * @Route(path="/userPermissionsSave")
+     * @Route(path="/userPermissionsSave", methods={"POST"})
      * @OA\Post (operationId="NaeConfigDbUserPermissionsSave")
      */
     public function saveUserPermission(Request $request)
@@ -121,7 +121,7 @@ class ConfigDbController extends ConfigBaseController
     }
 
     /**
-     * @Route(path="/userPermissionsRemove")
+     * @Route(path="/userPermissionsRemove", methods={"POST"})
      * @OA\Post (operationId="NaeConfigDbUserPermissionsRemove")
      */
     public function removeUserPermission(Request $request)
@@ -143,7 +143,7 @@ class ConfigDbController extends ConfigBaseController
 
 
     /**
-     * @Route(path="/user-permissions")
+     * @Route(path="/user-permissions", methods={"POST"})
      * @OA\Post (operationId="NaeConfigDbUserPermissionsList")
      */
     public function listUserPermissions()
@@ -167,7 +167,7 @@ class ConfigDbController extends ConfigBaseController
 
 
     /**
-     * @Route(path="/pdfSave")
+     * @Route(path="/pdfSave", methods={"POST"})
      * @OA\Post (operationId="NaeConfigDbPdfsSave")
      */
     public function savePdf(Request $request)
@@ -203,7 +203,7 @@ class ConfigDbController extends ConfigBaseController
     }
 
     /**
-     * @Route(path="/pdfRemove")
+     * @Route(path="/pdfRemove", methods={"POST"})
      * @OA\Post (operationId="NaeConfigDbPdfsRemove")
      */
     public function removePdf(Request $request)
@@ -225,7 +225,7 @@ class ConfigDbController extends ConfigBaseController
 
 
     /**
-     * @Route(path="/pdfs")
+     * @Route(path="/pdfs", methods={"POST"})
      * @OA\Post (operationId="NaeConfigDbPdfsList")
      */
     public function listPdfs(Request $request)
@@ -259,7 +259,7 @@ class ConfigDbController extends ConfigBaseController
     /*********** */
 
     /**
-     * @Route(path="/statusSave")
+     * @Route(path="/statusSave", methods={"POST"})
      * @OA\Post (operationId="NaeConfigDbStatusesSave")
      */
     public function saveStatus(Request $request)
@@ -295,7 +295,7 @@ class ConfigDbController extends ConfigBaseController
     }
 
     /**
-     * @Route(path="/statusRemove")
+     * @Route(path="/statusRemove", methods={"POST"})
      * @OA\Post (operationId="NaeConfigDbStatusesRemove")
      */
     public function removeStatus(Request $request)
@@ -317,7 +317,7 @@ class ConfigDbController extends ConfigBaseController
 
 
     /**
-     * @Route(path="/statuses")
+     * @Route(path="/statuses", methods={"POST"})
      * @OA\Post (operationId="NaeConfigDbStatusesList")
      */
     public function listStatuses()
@@ -341,7 +341,7 @@ class ConfigDbController extends ConfigBaseController
     }
 
     /**
-     * @Route(path="/entitySave")
+     * @Route(path="/entitySave", methods={"POST"})
      * @OA\Post (operationId="NaeConfigDbEntitiesSave")
      */
     public function saveEntity(Request $request)
@@ -368,7 +368,7 @@ class ConfigDbController extends ConfigBaseController
     }
 
     /**
-     * @Route(path="/entities")
+     * @Route(path="/entities", methods={"POST"})
      * @OA\Post (operationId="NaeConfigDbEntitiesList")
      */
     public function listEntities(Request $request)
@@ -404,7 +404,7 @@ class ConfigDbController extends ConfigBaseController
     }
 
     /**
-     * @Route(path="/propertySave")
+     * @Route(path="/propertySave", methods={"POST"})
      * @OA\Post (operationId="NaeConfigDbPropertiesSave")
      */
     public function saveProperty(Request $request)
@@ -429,7 +429,7 @@ class ConfigDbController extends ConfigBaseController
     }
 
     /**
-     * @Route(path="/propertyRemove")
+     * @Route(path="/propertyRemove", methods={"POST"})
      * @OA\Post (operationId="NaeConfigDbPropertiesRemove")
      */
     public function removeProperty(Request $request)
@@ -450,7 +450,7 @@ class ConfigDbController extends ConfigBaseController
     }
 
     /**
-     * @Route(path="/properties")
+     * @Route(path="/properties", methods={"POST"})
      * @OA\Post (operationId="NaeConfigDbPropertiesList")
      */
     public function listProperties(Request $request)
@@ -494,7 +494,7 @@ class ConfigDbController extends ConfigBaseController
     }
 
     /**
-     * @Route(path="/enums")
+     * @Route(path="/enums", methods={"POST"})
      * @OA\Post (operationId="NaeConfigDbEnumsList")
      */
     public function listEnums(Request $request)
@@ -528,7 +528,7 @@ class ConfigDbController extends ConfigBaseController
     }
 
     /**
-     * @Route(path="/enumRemove")
+     * @Route(path="/enumRemove", methods={"POST"})
      * @OA\Post (operationId="NaeConfigDbEnumsRemove")
      */
     public function removeEnum(Request $request)
@@ -549,7 +549,7 @@ class ConfigDbController extends ConfigBaseController
     }
 
     /**
-     * @Route(path="/enumSave")
+     * @Route(path="/enumSave", methods={"POST"})
      * @OA\Post (operationId="NaeConfigDbEnumsSave")
      */
     public function saveEnum(Request $request)
@@ -587,7 +587,7 @@ class ConfigDbController extends ConfigBaseController
     }
 
     /**
-     * @Route(path="/test")
+     * @Route(path="/test", methods={"GET"})
      */
     public function test()
     {

@@ -30,7 +30,8 @@ class InPathMapConsole extends Command
             foreach ($data as $method => $methodData) {
                 $map[$methodData['operationId']] = [
                     'method' => $method,
-                    'path' => $path
+                    'path' => $path,
+                    'parameters' => $methodData['parameters']
                 ];
             }
         }
