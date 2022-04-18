@@ -28,15 +28,45 @@ class InPathMapConsole extends Command
         $map = [];
         foreach ($paths as $path => $data) {
             foreach ($data as $method => $methodData) {
-                $map[$methodData['operationId']] = [
+                $map[] = [
+                    'id' => $methodData['operationId'],
                     'method' => $method,
                     'path' => $path,
-                    'parameters' => isset($methodData['parameters']) ? $methodData['parameters'] : []
+                    'parameters' => $methodData['parameters'] ?? []
                 ];
             }
         }
 
         $fileContent = 'export const NaePaths = ' . json_encode($map, JSON_PRETTY_PRINT);
+
+        $fileContent .= '
+
+export const NaeApiFunctions = {';
+
+        foreach ($paths as $path => $data) {
+            foreach ($data as $method => $methodData) {
+                $parameters = [];
+                $replaces = [];
+
+                if ($method === 'post') {
+                    $parameters[] = 'data: any';
+                }
+                if (isset($methodData['parameters'])) {
+                    foreach ($methodData['parameters'] as $param) {
+                        $parameters[] = $param['name'] . ': ' . $param['schema']['type'];
+                        $replaces[] = '.replace(\'{' . $param['name'] . '}\', ' . $param['name'] . ')';
+                    }
+                }
+                $fileContent .= '
+    \'' . $methodData['operationId'] . '\': (' . implode(',', $parameters) . ') => {
+        const url = \'' . $path . '\''.implode('', $replaces).';
+    },
+';
+            }
+        }
+
+        $fileContent .= '
+        }';
 
         file_put_contents(
             $configPath,

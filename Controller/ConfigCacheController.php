@@ -13,7 +13,7 @@ class ConfigCacheController extends ConfigBaseController
 {
     
     /**
-     * @Route(path="/getLocalConfig", methods={"POST"})
+     * @Route(path="/getLocalConfig", methods={"GET"})
      * @OA\Post (operationId="NaeConfigLocalConfigList")
      */
     public function getLocalConfig(Request $request) {
