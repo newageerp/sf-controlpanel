@@ -37,7 +37,10 @@ class InPathMapConsole extends Command
             }
         }
 
-        $fileContent = 'export const NaePaths = ' . json_encode($map, JSON_PRETTY_PRINT);
+        $fileContent = 'import axios from "axios";';
+
+        $fileContent .= '
+export const NaePaths = ' . json_encode($map, JSON_PRETTY_PRINT);
 
         $fileContent .= '
 
@@ -45,6 +48,10 @@ export const NaeApiFunctions = {';
 
         foreach ($paths as $path => $data) {
             foreach ($data as $method => $methodData) {
+                if (!($method === 'post' || $method === 'get')) {
+                    continue;
+                }
+
                 $parameters = [];
                 $replaces = [];
 
@@ -59,7 +66,20 @@ export const NaeApiFunctions = {';
                 }
                 $fileContent .= '
     \'' . $methodData['operationId'] . '\': (' . implode(',', $parameters) . ') => {
-        const url = \'' . $path . '\''.implode('', $replaces).';
+        const url = \'' . $path . '\'' . implode('', $replaces) . ';
+        
+        ';
+                if ($method === 'post') {
+                    $fileContent .= '
+                    return axios.post(url, data, {headers: {Authorization: window.localStorage.getItem("token"),"Content-Type": "application/json",},});
+                    ';
+                } else {
+                    $fileContent .= '
+                    return axios.get(url, {headers: {Authorization: window.localStorage.getItem("token"),"Content-Type": "application/json",},});
+                    ';
+                }
+
+                $fileContent .= '
     },
 ';
             }
