@@ -12,6 +12,53 @@ use Symfony\Component\HttpFoundation\Request;
 class ConfigDbController extends ConfigBaseController
 {
     /**
+     * @Route(path="/runSqlSelect", methods={"POST"})
+     * @OA\Post (operationId="NaeConfigDbRunSqlSelect")
+     */
+    public function runSqlSelect(Request $request)
+    {
+        $request = $this->transformJsonBody($request);
+
+        $db = new \SQLite3($this->getLocalDbFile());
+
+        $sql = $request->get('sql');
+        $result = $db->query($sql);
+
+        $_output = [];
+        while ($data = $result->fetchArray(SQLITE3_ASSOC)) {
+            $_output[] = $data;
+        }
+
+        return $this->json(['data' => $_output]);
+    }
+
+    /**
+     * @Route(path="/runSqlQuery", methods={"POST"})
+     * @OA\Post (operationId="NaeConfigDbRunSqlQuery")
+     */
+    public function runSqlQuery(Request $request)
+    {
+        $request = $this->transformJsonBody($request);
+
+        $db = new \SQLite3($this->getLocalDbFile());
+
+        $sql = $request->get('sql');
+
+        $stmt = $db->prepare($sql);
+        $result = $stmt->execute();
+
+        $_output = [];
+        while ($data = $result->fetchArray(SQLITE3_ASSOC)) {
+            $_output[] = $data;
+        }
+
+        return $this->json(['data' => $_output]);
+    }
+
+    /********** **********/
+
+
+    /**
      * @Route(path="/variablesSave", methods={"POST"})
      * @OA\Post (operationId="NaeConfigDbVariablesSave")
      */
