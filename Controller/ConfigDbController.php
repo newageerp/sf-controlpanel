@@ -545,6 +545,7 @@ class ConfigDbController extends ConfigBaseController
                     properties.dbType,
                     properties.`as`,
                     properties.additionalProperties,
+                    entities.slug as entity_slug,
                     entities.slug || ' (' || entities.titleSingle || ')' as entity_title
                 FROM properties 
                 left join entities on properties.entity = entities.id
