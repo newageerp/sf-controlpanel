@@ -51,7 +51,7 @@ class ConfigTabsController extends ConfigBaseController
                 );
             }
 
-            $output['data'] = $data;
+            $output['data'] = array_values($data);
         } catch (\Exception $e) {
             $output['e'] = $e->getMessage();
         }
