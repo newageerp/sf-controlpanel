@@ -50,6 +50,15 @@ class ConfigDefaultsController extends ConfigBaseController
                 );
             }
 
+            if ($request->get('schema')) {
+                $data = array_filter(
+                    $data,
+                    function ($item) use ($request) {
+                        return $item['schema'] = $request->get('schema');
+                    }
+                );
+            }
+
             $output['data'] = $data;
         } catch (\Exception $e) {
             $output['e'] = $e->getMessage();
