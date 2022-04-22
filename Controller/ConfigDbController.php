@@ -116,13 +116,22 @@ class ConfigDbController extends ConfigBaseController
      * @Route(path="/variables", methods={"POST"})
      * @OA\Post (operationId="NaeConfigDbVariablesList")
      */
-    public function listVariables()
+    public function listVariables(Request $request)
     {
+        $request = $this->transformJsonBody($request);
+
         $db = new \SQLite3($this->getLocalDbFile());
 
         $sql = "SELECT 
                     variables.id, variables.`text`, variables.slug
-                FROM variables";
+                FROM variables
+                WHERE 1 = 1 
+                ";
+
+        if ($request->get('id')) {
+            $sql .= ' AND variables.id = ' . (int)$request->get('id') . ' ';
+        }
+
         $result = $db->query($sql);
 
         $_output = [];
@@ -193,13 +202,22 @@ class ConfigDbController extends ConfigBaseController
      * @Route(path="/user-permissions", methods={"POST"})
      * @OA\Post (operationId="NaeConfigDbUserPermissionsList")
      */
-    public function listUserPermissions()
+    public function listUserPermissions(Request $request)
     {
+        $request = $this->transformJsonBody($request);
+
         $db = new \SQLite3($this->getLocalDbFile());
 
         $sql = "SELECT 
                     user_permissions.id, user_permissions.title as title, user_permissions.slug as slug
-                FROM user_permissions";
+                FROM user_permissions
+                WHERE 1 = 1 
+                ";
+
+        if ($request->get('id')) {
+            $sql .= ' AND user_permissions.id = ' . (int)$request->get('id') . ' ';
+        }
+
         $result = $db->query($sql);
 
         $_output = [];
@@ -367,8 +385,10 @@ class ConfigDbController extends ConfigBaseController
      * @Route(path="/statuses", methods={"POST"})
      * @OA\Post (operationId="NaeConfigDbStatusesList")
      */
-    public function listStatuses()
+    public function listStatuses(Request $request)
     {
+        $request = $this->transformJsonBody($request);
+
         $db = new \SQLite3($this->getLocalDbFile());
 
         $sql = "SELECT 
@@ -376,7 +396,11 @@ class ConfigDbController extends ConfigBaseController
                     entities.slug || ' (' || entities.titleSingle || ')' as entity_title
                 FROM statuses 
                 left join entities on statuses.entity = entities.id
+                WHERE 1 = 1 
                 ";
+        if ($request->get('id')) {
+            $sql .= ' AND statuses.id = ' . (int)$request->get('id') . ' ';
+        }
         $result = $db->query($sql);
 
         $_output = [];
@@ -528,6 +552,10 @@ class ConfigDbController extends ConfigBaseController
                 ";
         if ($schema > 0) {
             $sql .= " AND properties.entity = " . $schema . " ";
+        }
+
+        if ($request->get('id')) {
+            $sql .= ' AND properties.id = ' . (int)$request->get('id') . ' ';
         }
 
         $result = $db->query($sql);
