@@ -45,7 +45,7 @@ class ConfigDefaultsController extends ConfigBaseController
                 $data = array_filter(
                     $data,
                     function ($item) use ($request) {
-                        return $item['id'] = $request->get('id');
+                        return $item['id'] === $request->get('id');
                     }
                 );
             }
@@ -54,7 +54,7 @@ class ConfigDefaultsController extends ConfigBaseController
                 $data = array_filter(
                     $data,
                     function ($item) use ($request) {
-                        return $item['schema'] = $request->get('schema');
+                        return $item['config']['schema'] === $request->get('schema');
                     }
                 );
             }

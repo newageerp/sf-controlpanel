@@ -45,7 +45,7 @@ class ConfigViewController extends ConfigBaseController
                 $data = array_filter(
                     $data,
                     function ($item) use ($request) {
-                        return $item['id'] = $request->get('id');
+                        return $item['id'] === $request->get('id');
                     }
                 );
             }
