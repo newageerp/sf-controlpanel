@@ -41,6 +41,14 @@ class ConfigWidgetsController extends ConfigBaseController
                 true
             );
 
+            if ($request->get('id')) {
+                $data = array_filter(
+                    $data,
+                    function ($item) use ($request) {
+                        return $item['id'] = $request->get('id');
+                    }
+                );
+            }
 
             $output['data'] = $data;
         } catch (\Exception $e) {
