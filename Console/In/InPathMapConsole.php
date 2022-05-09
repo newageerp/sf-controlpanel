@@ -28,6 +28,9 @@ class InPathMapConsole extends Command
         $map = [];
         foreach ($paths as $path => $data) {
             foreach ($data as $method => $methodData) {
+                if (!isset($methodData['operationId'])) {
+                    continue;
+                }
                 $map[] = [
                     'id' => $methodData['operationId'],
                     'method' => $method,
@@ -48,6 +51,9 @@ export const NaeApiFunctions = {';
 
         foreach ($paths as $path => $data) {
             foreach ($data as $method => $methodData) {
+                if (!isset($methodData['operationId'])) {
+                    continue;
+                }
                 if (!($method === 'post' || $method === 'get')) {
                     continue;
                 }
