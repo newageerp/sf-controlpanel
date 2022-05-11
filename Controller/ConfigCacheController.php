@@ -11,7 +11,6 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class ConfigCacheController extends ConfigBaseController
 {
-    
     /**
      * @Route(path="/getLocalConfig", methods={"GET"})
      * @OA\Post (operationId="NaeConfigLocalConfigList")

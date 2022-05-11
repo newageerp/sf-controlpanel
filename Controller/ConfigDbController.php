@@ -500,6 +500,31 @@ class ConfigDbController extends ConfigBaseController
     }
 
     /**
+     * @Route(path="/propertySaveKey", methods={"POST"})
+     */
+    public function propertySaveKey(Request $request)
+    {
+        $request = $this->transformJsonBody($request);
+
+        $id = $request->get('id');
+        $key = $request->get('key');
+        $value = $request->get('value');
+
+        $db = new \SQLite3($this->getLocalDbFile(), SQLITE3_OPEN_READWRITE);
+
+        $sql = "update properties set ".$key." = :val where id = :id";
+
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':id', $id, SQLITE3_INTEGER);
+        $stmt->bindValue(':val', $value);
+
+        $stmt->execute();
+
+        return $this->json(['success' => 1]);
+    }
+
+    /**
      * @Route(path="/propertyRemove", methods={"POST"})
      * @OA\Post (operationId="NaeConfigDbPropertiesRemove")
      */
@@ -544,6 +569,12 @@ class ConfigDbController extends ConfigBaseController
                     properties.isDb,
                     properties.dbType,
                     properties.`as`,
+                    
+                    properties.`available_sort`,
+                    properties.`available_filter`,
+                    properties.`available_group`,
+                    properties.`available_total`,
+       
                     properties.additionalProperties,
                     entities.slug as entity_slug,
                     entities.slug || ' (' || entities.titleSingle || ')' as entity_title
