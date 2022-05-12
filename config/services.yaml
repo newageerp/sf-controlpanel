@@ -20,6 +20,8 @@ services:
     arguments: [ ]
   Newageerp\SfControlpanel\Controller\ConfigWidgetsController:
     arguments: [ ]
+  Newageerp\SfControlpanel\Controller\ConfigMenuController:
+    arguments: [ ]
 
   Newageerp\SfControlpanel\Console\In\InLocalConfigSyncEntitiesConsole:
     tags:
