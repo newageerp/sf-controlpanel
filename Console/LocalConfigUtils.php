@@ -25,6 +25,11 @@ class LocalConfigUtils
         return $_ENV['NAE_SFS_ROOT_PATH'] . '/strapi';
     }
 
+    public static function getCpDbPath()
+    {
+        return $_ENV['NAE_SFS_ROOT_PATH'] . '/config-storage';
+    }
+
     public static function getPhpCachePath()
     {
         return $_ENV['NAE_SFS_ROOT_PATH'] . '/assets/properties';
