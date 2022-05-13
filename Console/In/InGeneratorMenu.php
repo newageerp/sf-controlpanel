@@ -28,6 +28,9 @@ class InGeneratorMenu extends Command
         $menuTemplate = file_get_contents(
             __DIR__ . '/templates/MenuItem.txt'
         );
+        $menuTitleTemplate = file_get_contents(
+            __DIR__ . '/templates/MenuTitle.txt'
+        );
 
         $menuFile = $_ENV['NAE_SFS_CP_STORAGE_PATH'] . '/menu.json';
         $menuItems = json_decode(
@@ -74,6 +77,47 @@ class InGeneratorMenu extends Command
                 );
             }
         }
+
+        $menuTitleFile = $_ENV['NAE_SFS_CP_STORAGE_PATH'] . '/menu-title.json';
+        $menuTitleItems = json_decode(
+            file_get_contents($menuTitleFile),
+            true
+        );
+
+        $generatedPath = LocalConfigUtils::getFrontendGeneratedPath() . '/menu/titles';
+        if (!$fs->exists($generatedPath)) {
+            $fs->mkdir($generatedPath);
+        }
+
+        foreach ($menuItems as $menuItem) {
+            $compName = $this->menuService->componentNameForMenuTitle($menuItem);
+
+            $fileName = $generatedPath . '/' . $compName . '.tsx';
+            $localContents = '';
+            if ($fs->exists($fileName)) {
+                $localContents = file_get_contents($fileName);
+            }
+
+            $generatedContent = str_replace(
+                [
+                    'TP_COMP_NAME',
+                    'TP_TITLE'
+                ],
+                [
+                    $compName,
+                    $menuItem['config']['ttile']
+                ],
+                $menuTitleTemplate
+            );
+
+            if ($localContents !== $generatedContent) {
+                file_put_contents(
+                    $fileName,
+                    $generatedContent
+                );
+            }
+        }
+
 
         return Command::SUCCESS;
     }
