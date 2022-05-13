@@ -150,7 +150,7 @@ class InGeneratorMenu extends Command
                         if ($m['id'] === $itemId) {
                             $menuCompName = $this->menuService->componentNameForMenu($m);
 
-                            $tpChilds .= "<" . $menuCompName . " />" . PHP_EOL;
+                            $tpChilds .= "<" . $menuCompName . " forceSkipIcon={true}/>" . PHP_EOL;
 
                             $tpImports .= "import " .$menuCompName." from \"../items/" . $menuCompName . "\" " . PHP_EOL;
                         }
