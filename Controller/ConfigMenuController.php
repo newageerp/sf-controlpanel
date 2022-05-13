@@ -2,6 +2,7 @@
 
 namespace Newageerp\SfControlpanel\Controller;
 
+use Newageerp\SfControlpanel\Service\MenuService;
 use Symfony\Component\Routing\Annotation\Route;
 use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Request;
@@ -66,7 +67,7 @@ class ConfigMenuController extends ConfigBaseController
      * @Route(path="/saveConfig", methods={"POST"})
      * @OA\Post (operationId="NaeConfigTabSave")
      */
-    public function saveConfig(Request $request)
+    public function saveConfig(Request $request, MenuService $menuService)
     {
         $request = $this->transformJsonBody($request);
 
@@ -74,6 +75,11 @@ class ConfigMenuController extends ConfigBaseController
 
         try {
             $item = $request->get('item');
+            $item['generated'] = [];
+            $item['generated']['menuComp'] = $menuService->componentNameForMenu($item);
+            $item['generated']['menuLink'] = $menuService->menuLinkForMenu($item);
+            $item['generated']['menuTitle'] = $menuService->menuTitleForMenu($item);
+
             if (!isset($item['id']) || !$item['id']) {
                 $item['id'] = Uuid::uuid4()->toString();
             }

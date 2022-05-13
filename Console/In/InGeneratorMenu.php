@@ -2,6 +2,7 @@
 
 namespace Newageerp\SfControlpanel\Console\In;
 
+use Newageerp\SfControlpanel\Service\MenuService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -12,16 +13,17 @@ class InGeneratorMenu extends Command
 {
     protected static $defaultName = 'nae:localconfig:InGeneratorMenu';
 
-    public function __construct()
+    protected MenuService $menuService;
+
+    public function __construct(MenuService $menuService)
     {
         parent::__construct();
+        $this->menuService = $menuService;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $fs = new Filesystem();
-
-        $entities = json_decode(file_get_contents(LocalConfigUtils::getPhpCachePath() . '/NaeSSchema.json'), true);
 
         $menuTemplate = file_get_contents(
             __DIR__ . '/templates/MenuItem.txt'
@@ -39,43 +41,9 @@ class InGeneratorMenu extends Command
         }
 
         foreach ($menuItems as $menuItem) {
-            $compName = '';
-            $menuLink = '';
-            if (isset($menuItem['config']['customLink']) && $menuItem['config']['customLink']) {
-                $menuLink = $menuItem['config']['customLink'];
-                $compName = implode(
-                    "",
-                    array_map(
-                        function ($p) {
-                            return ucfirst($p);
-                        },
-                        explode(
-                            "/",
-                            str_replace(
-                                '-',
-                                '/',
-                                $menuItem['config']['customLink']
-                            )
-                        )
-                    )
-                );
-            } else if ($menuItem['config']['schema'] and $menuItem['config']['type']) {
-                $compName = ucfirst($menuItem['config']['schema']) . ucfirst($menuItem['config']['type']);
-                $menuLink = '/u/' . $menuItem['config']['schema'] . '/' . $menuItem['config']['type'] . '/list';
-            }
-
-            $compName = 'MenuItem'.$compName;
-
-            $menuTitle = '';
-            if (isset($menuItem['config']['customTitle']) && $menuItem['config']['customTitle']) {
-                $menuTitle = $menuItem['config']['customTitle'];
-            } else {
-                foreach ($entities as $entity) {
-                    if ($entity['schema'] === $menuItem['config']['schema']) {
-                        $menuTitle = $entity['titlePlural'];
-                    }
-                }
-            }
+            $compName = $this->menuService->componentNameForMenu($menuItem);
+            $menuLink = $this->menuService->menuLinkForMenu($menuItem);
+            $menuTitle = $this->menuService->menuTitleForMenu($menuItem);
 
             $fileName = $generatedPath . '/' . $compName . '.tsx';
             $localContents = '';

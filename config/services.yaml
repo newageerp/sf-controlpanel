@@ -22,6 +22,8 @@ services:
     arguments: [ ]
   Newageerp\SfControlpanel\Controller\ConfigMenuController:
     arguments: [ ]
+  Newageerp\SfControlpanel\Service\MenuService
+    arguments: [ ]
 
   Newageerp\SfControlpanel\Console\In\InLocalConfigSyncEntitiesConsole:
     tags:
