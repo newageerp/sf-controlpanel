@@ -87,7 +87,7 @@ class InGeneratorMenu extends Command
                 [
                     $compName,
                     $menuLink,
-                    $menuItem['icon'],
+                    $menuItem['config']['icon'] ?? '',
                     $menuTitle
                 ],
                 $menuTemplate
