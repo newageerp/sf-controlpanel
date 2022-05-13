@@ -1,0 +1,16 @@
+import React, { Fragment } from 'react'
+import { MenuFolder, MenuSpacer } from '@newageerp/ui.menu.base.menu'
+TP_IMPORTS
+
+export default function TP_COMP_NAME() {
+    return (
+        <Fragment>
+            <MenuFolder item={{
+                children: 'TP_TITLE',
+                icon: 'TP_ICON'
+            }}>
+                TP_CHILDS
+            </MenuFolder>
+        </Fragment>
+    )
+}
