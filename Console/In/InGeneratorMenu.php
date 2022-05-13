@@ -41,8 +41,8 @@ class InGeneratorMenu extends Command
         foreach ($menuItems as $menuItem) {
             $compName = '';
             $menuLink = '';
-            if (isset($menuItem['customLink']) && $menuItem['customLink']) {
-                $menuLink = $menuItem['customLink'];
+            if (isset($menuItem['config']['customLink']) && $menuItem['config']['customLink']) {
+                $menuLink = $menuItem['config']['customLink'];
                 $compName = implode(
                     "",
                     array_map(
@@ -51,21 +51,21 @@ class InGeneratorMenu extends Command
                         },
                         explode(
                             "/",
-                            $menuItem['customLink']
+                            $menuItem['config']['customLink']
                         )
                     )
                 );
-            } else if ($menuItem['schema'] and $menuItem['type']) {
-                $compName = ucfirst($menuItem['schema']) . ucfirst($menuItem['type']);
-                $menuLink = '/u/' . $menuItem['schema'] . '/' . $menuItem['type'] . '/list';
+            } else if ($menuItem['config']['schema'] and $menuItem['config']['type']) {
+                $compName = ucfirst($menuItem['config']['schema']) . ucfirst($menuItem['config']['type']);
+                $menuLink = '/u/' . $menuItem['config']['schema'] . '/' . $menuItem['config']['type'] . '/list';
             }
 
             $menuTitle = '';
-            if (isset($menuItem['customTitle']) && $menuItem['customTitle']) {
-                $menuTitle = $menuItem['customTitle'];
+            if (isset($menuItem['config']['customTitle']) && $menuItem['config']['customTitle']) {
+                $menuTitle = $menuItem['config']['customTitle'];
             } else {
                 foreach ($entities as $entity) {
-                    if ($entity['schema'] === $menuItem['schema']) {
+                    if ($entity['schema'] === $menuItem['config']['schema']) {
                         $menuTitle = $entity['titlePlural'];
                     }
                 }
