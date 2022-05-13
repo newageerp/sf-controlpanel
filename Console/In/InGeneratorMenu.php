@@ -41,7 +41,7 @@ class InGeneratorMenu extends Command
         foreach ($menuItems as $menuItem) {
             $compName = '';
             $menuLink = '';
-            if ($menuItem['customLink']) {
+            if (isset($menuItem['customLink']) && $menuItem['customLink']) {
                 $menuLink = $menuItem['customLink'];
                 $compName = implode(
                     "",
@@ -61,7 +61,7 @@ class InGeneratorMenu extends Command
             }
 
             $menuTitle = '';
-            if ($menuItem['customTitle']) {
+            if (isset($menuItem['customTitle']) && $menuItem['customTitle']) {
                 $menuTitle = $menuItem['customTitle'];
             } else {
                 foreach ($entities as $entity) {
@@ -92,6 +92,13 @@ class InGeneratorMenu extends Command
                 ],
                 $menuTemplate
             );
+
+            if ($localContents !== $generatedContent) {
+                file_put_contents(
+                    $fileName,
+                    $generatedContent
+                );
+            }
         }
 
         return Command::SUCCESS;
