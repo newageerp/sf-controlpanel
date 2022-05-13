@@ -10,13 +10,13 @@ use Ramsey\Uuid\Uuid;
 use Symfony\Component\Finder\Finder;
 
 /**
- * @Route(path="/app/nae-core/config-menu")
+ * @Route(path="/app/nae-core/config-menu-folder")
  */
-class ConfigMenuController extends ConfigBaseController
+class ConfigMenuFolderController extends ConfigBaseController
 {
     protected function getLocalStorageFile(): string
     {
-        $file = $this->getLocalStorage() . '/menu.json';
+        $file = $this->getLocalStorage() . '/menu-folder.json';
         if (!file_exists($file)) {
             file_put_contents($file, json_encode([]));
         }
@@ -73,14 +73,12 @@ class ConfigMenuController extends ConfigBaseController
 
         try {
             $item = $request->get('item');
-            $item['generated'] = [];
-            $item['generated']['menuComp'] = $menuService->componentNameForMenu($item);
-            $item['generated']['menuLink'] = $menuService->menuLinkForMenu($item);
-            $item['generated']['menuTitle'] = $menuService->menuTitleForMenu($item);
-
             if (!isset($item['id']) || !$item['id']) {
                 $item['id'] = Uuid::uuid4()->toString();
             }
+
+            $item['generated'] = [];
+            $item['generated']['menuComp'] = $menuService->componentNameForMenuFolder($item);
 
             $isFound = false;
             $data = json_decode(
