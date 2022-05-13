@@ -78,6 +78,7 @@ class InGeneratorMenu extends Command
             }
         }
 
+        // MENU TITLE
         $menuTitleFile = $_ENV['NAE_SFS_CP_STORAGE_PATH'] . '/menu-title.json';
         $menuTitleItems = json_decode(
             file_get_contents($menuTitleFile),
@@ -89,7 +90,7 @@ class InGeneratorMenu extends Command
             $fs->mkdir($generatedPath);
         }
 
-        foreach ($menuItems as $menuItem) {
+        foreach ($menuTitleItems as $menuItem) {
             $compName = $this->menuService->componentNameForMenuTitle($menuItem);
 
             $fileName = $generatedPath . '/' . $compName . '.tsx';
