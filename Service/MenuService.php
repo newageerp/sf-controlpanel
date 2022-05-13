@@ -13,7 +13,7 @@ class MenuService
         $this->entities = json_decode(file_get_contents(LocalConfigUtils::getPhpCachePath() . '/NaeSSchema.json'), true);
     }
 
-    public function menuTitleForMenu(array $menuItem) : string
+    public function menuTitleForMenu(array $menuItem): string
     {
         $menuTitle = '';
         if (isset($menuItem['config']['customTitle']) && $menuItem['config']['customTitle']) {
@@ -60,7 +60,37 @@ class MenuService
                 )
             );
         } else if ($menuItem['config']['schema'] and $menuItem['config']['type']) {
-            $compName = ucfirst($menuItem['config']['schema']) . ucfirst($menuItem['config']['type']);
+            $compName = implode(
+                    "",
+                    array_map(
+                        function ($p) {
+                            return ucfirst($p);
+                        },
+                        explode(
+                            "/",
+                            str_replace(
+                                '-',
+                                '/',
+                                $menuItem['config']['schema']
+                            )
+                        )
+                    )
+                ) . implode(
+                    "",
+                    array_map(
+                        function ($p) {
+                            return ucfirst($p);
+                        },
+                        explode(
+                            "/",
+                            str_replace(
+                                '-',
+                                '/',
+                                $menuItem['config']['type']
+                            )
+                        )
+                    )
+                );
         }
         return 'MenuItem' . $compName;
     }
