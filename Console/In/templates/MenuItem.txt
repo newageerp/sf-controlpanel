@@ -1,0 +1,19 @@
+import React, { Fragment } from 'react'
+import { MenuItem } from '@newageerp/ui.menu.base.menu'
+import { useHistory } from 'react-router';
+
+export default function TP_COMP_NAME() {
+    const history = useHistory();
+
+    const path = 'TP_PATH';
+
+    const goTo = () => {
+        history.push(path);
+    }
+
+    return (
+        <Fragment>
+            <MenuItem onClick={goTo} icon={'TP_ICON'}>{'TP_TITLE'}</MenuItem>
+        </Fragment>
+    )
+}

@@ -20,6 +20,11 @@ class LocalConfigUtils
         return $_ENV['NAE_SFS_ROOT_PATH'] . '/front-end-config';
     }
 
+    public static function getFrontendGeneratedPath()
+    {
+        return $_ENV['NAE_SFS_ROOT_PATH'] . '/front-generated';
+    }
+
     public static function getStrapiCachePath()
     {
         return $_ENV['NAE_SFS_ROOT_PATH'] . '/strapi';
