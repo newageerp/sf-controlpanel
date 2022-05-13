@@ -106,7 +106,7 @@ class InGeneratorMenu extends Command
                 ],
                 [
                     $compName,
-                    $menuItem['config']['ttile']
+                    $menuItem['config']['title']
                 ],
                 $menuTitleTemplate
             );
