@@ -143,7 +143,7 @@ class InGeneratorMenu extends Command
             $tpChilds = '';
 
             foreach ($menuItem['config']['items'] as $itemId) {
-                if (mb_strpos($itemId, 'separartor') === 0) {
+                if (mb_strpos($itemId, 'separator') === 0) {
                     $tpChilds .= "<MenuSpacer />" . PHP_EOL;
                 } else {
                     foreach ($menuItems as $m) {
