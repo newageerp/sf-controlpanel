@@ -51,7 +51,11 @@ class InGeneratorMenu extends Command
                         },
                         explode(
                             "/",
-                            $menuItem['config']['customLink']
+                            str_replace(
+                                '-',
+                                '/',
+                                $menuItem['config']['customLink']
+                            )
                         )
                     )
                 );
@@ -59,6 +63,8 @@ class InGeneratorMenu extends Command
                 $compName = ucfirst($menuItem['config']['schema']) . ucfirst($menuItem['config']['type']);
                 $menuLink = '/u/' . $menuItem['config']['schema'] . '/' . $menuItem['config']['type'] . '/list';
             }
+
+            $compName = 'MenuItem'.$compName;
 
             $menuTitle = '';
             if (isset($menuItem['config']['customTitle']) && $menuItem['config']['customTitle']) {
