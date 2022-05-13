@@ -120,11 +120,11 @@ class MenuService
                         $menuFolder['config']['title'],
                         FILTER_SANITIZE_STRING,
                         FILTER_FLAG_STRIP_HIGH
-                    ) . substr(
-                        $menuFolder['id'],
-                        0,
-                        3
                     )
+                ). substr(
+                    $menuFolder['id'],
+                    0,
+                    3
                 )
             );
     }

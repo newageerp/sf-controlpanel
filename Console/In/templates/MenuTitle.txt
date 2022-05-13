@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react'
 import { MenuTitle } from '@newageerp/ui.menu.base.menu'
-import { useHistory } from 'react-router';
 
 export default function TP_COMP_NAME() {
     return (
