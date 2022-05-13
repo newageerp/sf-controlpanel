@@ -44,6 +44,9 @@ services:
   Newageerp\SfControlpanel\Console\In\InPathMapConsole:
     tags:
       - { name: 'console.command' }
+  Newageerp\SfControlpanel\Console\In\InGeneratorMenu:
+    tags:
+      - { name: 'console.command' }
   Newageerp\SfControlpanel\Console\In\InRunAll:
     tags:
       - { name: 'console.command' }
