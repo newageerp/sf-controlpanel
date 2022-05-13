@@ -144,14 +144,15 @@ class InGeneratorMenu extends Command
 
             foreach ($menuItem['config']['items'] as $itemId) {
                 if (mb_strpos($itemId, 'separator') === 0) {
-                    $tpChilds .= "<MenuSpacer />" . PHP_EOL;
+                    $tpChilds .= "
+                <MenuSpacer />" . PHP_EOL;
                 } else {
                     foreach ($menuItems as $m) {
                         if ($m['id'] === $itemId) {
                             $menuCompName = $this->menuService->componentNameForMenu($m);
 
                             $tpChilds .= "
-                            <" . $menuCompName . " forceSkipIcon={true}/>" . PHP_EOL;
+                <" . $menuCompName . " forceSkipIcon={true}/>" . PHP_EOL;
 
                             $tpImports .= "import " .$menuCompName." from \"../items/" . $menuCompName . "\" " . PHP_EOL;
                         }
