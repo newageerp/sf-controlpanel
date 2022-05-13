@@ -178,7 +178,7 @@ class InGeneratorMenu extends Command
                     $tpImports,
                     $tpChilds
                 ],
-                $menuTitleTemplate
+                $menuFolderTemplate
             );
 
             if ($localContents !== $generatedContent) {
