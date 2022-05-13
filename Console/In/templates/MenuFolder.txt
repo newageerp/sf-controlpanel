@@ -9,8 +9,7 @@ export default function TP_COMP_NAME() {
                 children: 'TP_TITLE',
                 icon: 'TP_ICON'
             }}>
-TP_CHILDS
-            </MenuFolder>
+TP_CHILDS</MenuFolder>
         </Fragment>
     )
 }
