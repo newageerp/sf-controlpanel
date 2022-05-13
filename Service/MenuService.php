@@ -97,11 +97,35 @@ class MenuService
 
     public function componentNameForMenuTitle(array $menuItem): string
     {
-        return 'MenuTitle' . iconv('UTF-8', 'ISO-8859-1//IGNORE', $menuItem['config']['title']);
+        return 'MenuTitle' . ucfirst(
+                preg_replace(
+                    "/[^a-zA-Z]+/",
+                    "",
+                    iconv(
+                        'UTF-8',
+                        'ISO-8859-1//IGNORE',
+                        $menuItem['config']['title']
+                    )
+                )
+            );
     }
 
     public function componentNameForMenuFolder(array $menuFolder): string
     {
-        return 'MenuFolder' . iconv('UTF-8', 'ISO-8859-1//IGNORE', $menuFolder['config']['title']).substr($menuFolder['id'], 0, 3);
+        return 'MenuFolder' . ucfirst(
+                preg_replace(
+                    "/[^a-zA-Z]+/",
+                    "",
+                    iconv(
+                        'UTF-8',
+                        'ISO-8859-1//IGNORE',
+                        $menuFolder['config']['title']
+                    ) . substr(
+                        $menuFolder['id'],
+                        0,
+                        3
+                    )
+                )
+            );
     }
 }
