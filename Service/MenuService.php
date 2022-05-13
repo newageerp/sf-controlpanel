@@ -101,10 +101,10 @@ class MenuService
                 preg_replace(
                     "/[^a-zA-Z]+/",
                     "",
-                    iconv(
-                        'UTF-8',
-                        'ISO-8859-1//IGNORE',
-                        $menuItem['config']['title']
+                    filter_var(
+                        $menuItem['config']['title'],
+                        FILTER_SANITIZE_STRING,
+                        FILTER_FLAG_STRIP_HIGH
                     )
                 )
             );
@@ -116,10 +116,10 @@ class MenuService
                 preg_replace(
                     "/[^a-zA-Z]+/",
                     "",
-                    iconv(
-                        'UTF-8',
-                        'ISO-8859-1//IGNORE',
-                        $menuFolder['config']['title']
+                    filter_var(
+                        $menuFolder['config']['title'],
+                        FILTER_SANITIZE_STRING,
+                        FILTER_FLAG_STRIP_HIGH
                     ) . substr(
                         $menuFolder['id'],
                         0,
