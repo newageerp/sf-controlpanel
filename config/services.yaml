@@ -28,6 +28,8 @@ services:
     arguments: [ ]
   Newageerp\SfControlpanel\Service\MenuService:
     arguments: [ ]
+  Newageerp\SfControlpanel\Console\PropertiesUtils:
+    arguments: [ ]
 
   Newageerp\SfControlpanel\Console\In\InLocalConfigSyncEntitiesConsole:
     tags:
