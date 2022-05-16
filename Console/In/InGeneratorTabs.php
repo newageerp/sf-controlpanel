@@ -32,6 +32,12 @@ class InGeneratorTabs extends Command
             __DIR__ . '/templates/tabs/TabTableDataSource.txt'
         );
 
+        $defaultsFile = $_ENV['NAE_SFS_CP_STORAGE_PATH'] . '/defaults.json';
+        $defaultItems = json_decode(
+            file_get_contents($defaultsFile),
+            true
+        );
+
         $tabsFile = $_ENV['NAE_SFS_CP_STORAGE_PATH'] . '/tabs.json';
         $tabItems = json_decode(
             file_get_contents($tabsFile),
@@ -93,7 +99,23 @@ class InGeneratorTabs extends Command
             );
             Utils::writeOnChanges($fileName, $generatedContent);
 
-            $pageSize = isset($tabItem['config']['pageSize']) && $tabItem['config']['pageSize']?$tabItem['config']['pageSize']:20;
+            $sort = [
+                ['key' => 'i.id', 'value' => 'DESC']
+            ];
+            if (isset($tabItem['sort'])) {
+                $sort = json_decode($tabItem['sort'], true);
+            } else {
+                foreach ($defaultItems as $df) {
+                    if ($df['config']['schema'] === $tabItem['config']['schema'] &&
+                        isset($df['config']['defaultSort']) &&
+                        $df['config']['defaultSort']
+                    ) {
+                        $sort = json_decode($df['config']['defaultSort'], true);
+                    }
+                }
+            }
+
+            $pageSize = isset($tabItem['config']['pageSize']) && $tabItem['config']['pageSize'] ? $tabItem['config']['pageSize'] : 20;
             $dataSourceFileName = $dataSourceGeneratedPath . '/' . $dataSourceCompName . '.tsx';
             $generatedContent = str_replace(
                 [
@@ -102,13 +124,15 @@ class InGeneratorTabs extends Command
                     'TP_SCHEMA',
                     'TP_TYPE',
                     'TP_PAGE_SIZE',
+                    'TP_SORT',
                 ],
                 [
                     $dataSourceCompName,
                     $compName,
                     $tabItem['config']['schema'],
                     $tabItem['config']['type'],
-                    $pageSize
+                    $pageSize,
+                    json_encode($sort),
                 ],
                 $tabTableDataSourceTemplate
             );

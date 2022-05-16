@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { useTranslation } from "react-i18next";
 import TP_TABLE_COMP_NAME from "../tables/TP_TABLE_COMP_NAME"
 import { OpenApi } from '@newageerp/nae-react-auth-wrapper';
@@ -10,18 +10,16 @@ interface Props {
 
 export default function TP_COMP_NAME(props: Props) {
     const tab = functions.tabs.getTabFromSchemaAndType('TP_SCHEMA', 'TP_TYPE');
-    const fieldsToReturn = functions.tabs.getTabFieldsToReturn();
+    const fieldsToReturn = functions.tabs.getTabFieldsToReturn(tab);
 
     const [getData, data] = OpenApi.useUList('TP_SCHEMA', fieldsToReturn);
     const { t } = useTranslation();
 
     const loadData = () => {
-        const filter = [];
+        const filter : any = [];
         const page = 1;
         const pageSize = TP_PAGE_SIZE;
-        const sort = [
-            {key: 'i.id', value: 'ASC'}
-        ];
+        const sort = TP_SORT;
         getData(
             filter,
             page,
