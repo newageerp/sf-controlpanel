@@ -25,10 +25,11 @@ class InGeneratorTabs extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $fs = new Filesystem();
-
         $tabTableTemplate = file_get_contents(
             __DIR__ . '/templates/tabs/TabTable.txt'
+        );
+        $tabTableDataSourceTemplate = file_get_contents(
+            __DIR__ . '/templates/tabs/TabTableDataSource.txt'
         );
 
         $tabsFile = $_ENV['NAE_SFS_CP_STORAGE_PATH'] . '/tabs.json';
@@ -37,17 +38,21 @@ class InGeneratorTabs extends Command
             true
         );
 
-        $generatedPath = LocalConfigUtils::getFrontendGeneratedPath() . '/tabs/tables';
-        if (!$fs->exists($generatedPath)) {
-            $fs->mkdir($generatedPath);
-        }
+        $generatedPath = Utils::generatedPath('tabs/tables');
+        $dataSourceGeneratedPath = Utils::generatedPath('tabs/tables-data-source');
 
         foreach ($tabItems as $tabItem) {
             $tpHead = [];
+            $tpBody = [];
             $compName = Utils::fixComponentName(
                 ucfirst($tabItem['config']['schema']) .
                 ucfirst($tabItem['config']['type']) . 'Table'
             );
+            $dataSourceCompName = Utils::fixComponentName(
+                ucfirst($tabItem['config']['schema']) .
+                ucfirst($tabItem['config']['type']) . 'TableDataSource'
+            );
+
             foreach ($tabItem['config']['columns'] as $column) {
                 $thTemplate = '<Th></Th>';
                 if ($column['customTitle']) {
@@ -64,33 +69,50 @@ class InGeneratorTabs extends Command
                     }
                 }
                 $tpHead[] = $thTemplate;
+
+                $tdTemplate = '<Td></Td>';
+
+                $tpBody[] = $tdTemplate;
             }
             $tpHeadStr = implode("\n", $tpHead);
+            $tpBodyStr = implode("\n", $tpBody);
 
             $fileName = $generatedPath . '/' . $compName . '.tsx';
-            $localContents = '';
-            if ($fs->exists($fileName)) {
-                $localContents = file_get_contents($fileName);
-            }
-
             $generatedContent = str_replace(
                 [
                     'TP_COMP_NAME',
-                    'TP_THEAD'
+                    'TP_THEAD',
+                    'TP_TBODY',
                 ],
                 [
                     $compName,
-                    $tpHeadStr
+                    $tpHeadStr,
+                    $tpBodyStr,
                 ],
                 $tabTableTemplate
             );
+            Utils::writeOnChanges($fileName, $generatedContent);
 
-            if ($localContents !== $generatedContent) {
-                file_put_contents(
-                    $fileName,
-                    $generatedContent
-                );
-            }
+            $pageSize = isset($tabItem['config']['pageSize']) && $tabItem['config']['pageSize']?$tabItem['config']['pageSize']:20;
+            $dataSourceFileName = $dataSourceGeneratedPath . '/' . $dataSourceCompName . '.tsx';
+            $generatedContent = str_replace(
+                [
+                    'TP_COMP_NAME',
+                    'TP_TABLE_COMP_NAME',
+                    'TP_SCHEMA',
+                    'TP_TYPE',
+                    'TP_PAGE_SIZE',
+                ],
+                [
+                    $dataSourceCompName,
+                    $compName,
+                    $tabItem['config']['schema'],
+                    $tabItem['config']['type'],
+                    $pageSize
+                ],
+                $tabTableDataSourceTemplate
+            );
+            Utils::writeOnChanges($dataSourceFileName, $generatedContent);
         }
 
         return Command::SUCCESS;

@@ -1,0 +1,37 @@
+import React from "react";
+import { useTranslation } from "react-i18next";
+import TP_TABLE_COMP_NAME from "../tables/TP_TABLE_COMP_NAME"
+import { OpenApi } from '@newageerp/nae-react-auth-wrapper';
+import { functions } from '@newageerp/nae-react-ui';
+
+interface Props {
+    data: any,
+}
+
+export default function TP_COMP_NAME(props: Props) {
+    const tab = functions.tabs.getTabFromSchemaAndType('TP_SCHEMA', 'TP_TYPE');
+    const fieldsToReturn = functions.tabs.getTabFieldsToReturn();
+
+    const [getData, data] = OpenApi.useUList('TP_SCHEMA', fieldsToReturn);
+    const { t } = useTranslation();
+
+    const loadData = () => {
+        const filter = [];
+        const page = 1;
+        const pageSize = TP_PAGE_SIZE;
+        const sort = [
+            {key: 'i.id', value: 'ASC'}
+        ];
+        getData(
+            filter,
+            page,
+            pageSize,
+            sort
+        );
+    }
+    useEffect(loadData, []);
+
+    return (
+        <TP_TABLE_COMP_NAME />
+    )
+}
