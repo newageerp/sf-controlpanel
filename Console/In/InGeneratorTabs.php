@@ -139,7 +139,7 @@ class InGeneratorTabs extends Command
                     $tabItem['config']['type'],
                     $pageSize,
                     json_encode($sort),
-                    $filter ? json_encode($filter) : null,
+                    $filter ? json_encode($filter) : 'null',
                 ],
                 $tabTableDataSourceTemplate
             );

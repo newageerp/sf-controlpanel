@@ -13,9 +13,9 @@ export default function TP_COMP_NAME() {
 
     const loadData = () => {
         const predefinedFilter = TP_FILTER;
-        let _filter: any = [{ and: [] }]
+        let filter: any = [{ and: [] }]
         if (!!predefinedFilter) {
-            _filter[0]['and'].push(predefinedFilter);
+            filter[0]['and'].push(predefinedFilter);
         }
         const page = 1;
         const pageSize = TP_PAGE_SIZE;
