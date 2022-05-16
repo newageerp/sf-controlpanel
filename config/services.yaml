@@ -53,6 +53,9 @@ services:
   Newageerp\SfControlpanel\Console\In\InGeneratorMenu:
     tags:
       - { name: 'console.command' }
+  Newageerp\SfControlpanel\Console\In\InGeneratorTabs:
+    tags:
+      - { name: 'console.command' }
   Newageerp\SfControlpanel\Console\In\InRunAll:
     tags:
       - { name: 'console.command' }

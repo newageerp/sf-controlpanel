@@ -1,0 +1,21 @@
+import React from "react";
+import { Table, Td, Th } from "@newageerp/ui.table.base.table";
+
+export default function TP_COMP_NAME() {
+    const { t } = useTranslation();
+
+    return (
+        <Table
+            thead={
+                <thead>
+                    <tr>
+                        TP_THEAD
+                    </tr>
+                </thead>
+            }
+            tbody={
+                <tbody></tbody>
+            }
+        />
+    )
+}

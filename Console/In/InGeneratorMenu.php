@@ -26,13 +26,13 @@ class InGeneratorMenu extends Command
         $fs = new Filesystem();
 
         $menuTemplate = file_get_contents(
-            __DIR__ . '/templates/MenuItem.txt'
+            __DIR__ . '/templates/menu/MenuItem.txt'
         );
         $menuTitleTemplate = file_get_contents(
-            __DIR__ . '/templates/MenuTitle.txt'
+            __DIR__ . '/templates/menu/MenuTitle.txt'
         );
         $menuFolderTemplate = file_get_contents(
-            __DIR__ . '/templates/MenuFolder.txt'
+            __DIR__ . '/templates/menu/MenuFolder.txt'
         );
 
         $menuFile = $_ENV['NAE_SFS_CP_STORAGE_PATH'] . '/menu.json';
