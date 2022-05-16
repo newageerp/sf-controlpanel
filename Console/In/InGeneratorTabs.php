@@ -115,6 +115,11 @@ class InGeneratorTabs extends Command
                 }
             }
 
+            $filter = null;
+            if (isset($tabItem['predefinedFilter'])) {
+                $filter = json_decode($tabItem['predefinedFilter'], true);
+            }
+
             $pageSize = isset($tabItem['config']['pageSize']) && $tabItem['config']['pageSize'] ? $tabItem['config']['pageSize'] : 20;
             $dataSourceFileName = $dataSourceGeneratedPath . '/' . $dataSourceCompName . '.tsx';
             $generatedContent = str_replace(
@@ -125,6 +130,7 @@ class InGeneratorTabs extends Command
                     'TP_TYPE',
                     'TP_PAGE_SIZE',
                     'TP_SORT',
+                    'TP_FILTER',
                 ],
                 [
                     $dataSourceCompName,
@@ -133,6 +139,7 @@ class InGeneratorTabs extends Command
                     $tabItem['config']['type'],
                     $pageSize,
                     json_encode($sort),
+                    $filter ? json_encode($filter) : null,
                 ],
                 $tabTableDataSourceTemplate
             );
