@@ -14,7 +14,7 @@ class PropertiesUtils
         );
     }
 
-    public function getPropertyForPath(string $_path)
+    public function getPropertyForPath(string $_path): ?array
     {
         $path = explode(".", $_path);
         $pathLen = count($path);
@@ -44,7 +44,7 @@ class PropertiesUtils
         return null;
     }
 
-    public function getPropertyForSchema(string $schema, string $key)
+    public function getPropertyForSchema(string $schema, string $key): ?array
     {
         foreach ($this->properties as $property) {
             if ($property['key'] === $key && $property['schema'] === $schema) {
@@ -54,7 +54,7 @@ class PropertiesUtils
         return null;
     }
 
-    public function getPropertyNaeType(array $property)
+    public function getPropertyNaeType(array $property): string
     {
         $isStringArray = $property['type'] === 'array' && $property['format'] === 'string';
         $isArray = $property['type'] === 'array' && !$isStringArray;
@@ -110,8 +110,11 @@ class PropertiesUtils
         return 'string';
     }
 
-    public function getPropertyTableAlignment(array $property)
+    public function getPropertyTableAlignment(?array $property): string
     {
+        if (!$property) {
+            return 'tw3-text-left';
+        }
         $naeType = $this->getPropertyNaeType($property);
 
         if ($naeType === 'float' || $naeType === 'number') {
