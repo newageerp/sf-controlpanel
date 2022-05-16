@@ -3,6 +3,7 @@
 namespace Newageerp\SfControlpanel\Console\In;
 
 use Newageerp\SfControlpanel\Console\PropertiesUtils;
+use Newageerp\SfControlpanel\Console\Utils;
 use Newageerp\SfControlpanel\Service\MenuService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -42,8 +43,11 @@ class InGeneratorTabs extends Command
         }
 
         foreach ($tabItems as $tabItem) {
-            $compName = 'Table' . ucfirst($tabItem['config']['schema']) . ucfirst($tabItem['config']['type']) . 'Table';
             $tpHead = [];
+            $compName = Utils::fixComponentName(
+                ucfirst($tabItem['config']['schema']) .
+                ucfirst($tabItem['config']['type']) . 'Table'
+            );
             foreach ($tabItem['config']['columns'] as $column) {
                 $thTemplate = '<Th></Th>';
                 if ($column['customTitle']) {

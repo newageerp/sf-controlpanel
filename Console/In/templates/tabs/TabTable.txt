@@ -1,5 +1,6 @@
 import React from "react";
 import { Table, Td, Th } from "@newageerp/ui.table.base.table";
+import { useTranslation } from "react-i18next";
 
 export default function TP_COMP_NAME() {
     const { t } = useTranslation();
