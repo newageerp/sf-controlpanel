@@ -60,23 +60,27 @@ class InGeneratorTabs extends Command
             );
 
             foreach ($tabItem['config']['columns'] as $column) {
-                $thTemplate = '<Th></Th>';
+                $colProperty = $this->propertiesUtils->getPropertyForPath($column['path']);
+                $textAlignment = 'textAlignment="' . $this->propertiesUtils->getPropertyTableAlignment($colProperty) . '"';
+                $openTagTh = '<Th ' . $textAlignment . '>';
+                $openTagTd = '<Td ' . $textAlignment . '>';
+
+                $thTemplate = $openTagTh . '</Th>';
                 if ($column['customTitle']) {
-                    $thTemplate = '<Th>{t("' . $column['customTitle'] . '")}</Th>';
+                    $thTemplate = $openTagTh . '{t("' . $column['customTitle'] . '")}</>';
                 } else if ($column['titlePath']) {
                     $prop = $this->propertiesUtils->getPropertyForPath($column['titlePath']);
                     if ($prop) {
-                        $thTemplate = '<Th>{t("' . $prop['title'] . '")}</Th>';
+                        $thTemplate = $openTagTh . '{t("' . $prop['title'] . '")}</Th>';
                     }
                 } else if ($column['path']) {
-                    $prop = $this->propertiesUtils->getPropertyForPath($column['path']);
-                    if ($prop) {
-                        $thTemplate = '<Th>{t("' . $prop['title'] . '")}</Th>';
+                    if ($colProperty) {
+                        $thTemplate = $openTagTh . '{t("' . $colProperty['title'] . '")}</Th>';
                     }
                 }
                 $tpHead[] = $thTemplate;
 
-                $tdTemplate = '<Td></Td>';
+                $tdTemplate = $openTagTd . '</Td>';
 
                 $tpBody[] = $tdTemplate;
             }
