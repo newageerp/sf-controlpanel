@@ -59,7 +59,7 @@ class PropertiesUtils
         if (!isset($property['as'])) {
             $column['as'] = '';
         }
-        if (!isset($property['as'])) {
+        if (!isset($column['as'])) {
             $column['as'] = '';
         }
 
