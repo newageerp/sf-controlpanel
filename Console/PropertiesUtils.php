@@ -123,4 +123,58 @@ class PropertiesUtils
 
         return 'tw3-text-left';
     }
+
+    public function getDefaultPropertyTableValueTemplate(?array $property)
+    {
+        if (!$property) {
+            return '<Fragment/>';
+        }
+
+        $naeType = $this->getPropertyNaeType($property);
+
+        switch ($naeType) {
+            case 'object':
+                return '<Fragment/>';
+                break;
+            case 'string_array':
+                return '<Fragment/>';
+                break;
+            case 'float':
+                return '<Fragment/>';
+                break;
+            case 'number':
+                return '<Fragment/>';
+                break;
+            case 'date':
+                return '<Fragment/>';
+                break;
+            case 'datetime':
+                return '<Fragment/>';
+                break;
+            case 'bool':
+                return '<Fragment/>';
+                break;
+            case 'text':
+                return '<Fragment/>';
+                break;
+            case 'enum_multi_number':
+                return '<Fragment/>';
+                break;
+            case 'enum_multi_text':
+                return '<Fragment/>';
+                break;
+            case 'enum_text':
+                return '<Fragment/>';
+                break;
+            case 'enum_number':
+                return '<Fragment/>';
+                break;
+            case 'array':
+                return '<Fragment/>';
+                break;
+            case 'string':
+                return '<Fragment/>';
+                break;
+        }
+    }
 }

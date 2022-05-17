@@ -50,6 +50,8 @@ class InGeneratorTabs extends Command
         foreach ($tabItems as $tabItem) {
             $tpHead = [];
             $tpBody = [];
+            $tpRowData = [];
+
             $compName = Utils::fixComponentName(
                 ucfirst($tabItem['config']['schema']) .
                 ucfirst($tabItem['config']['type']) . 'Table'
@@ -59,7 +61,8 @@ class InGeneratorTabs extends Command
                 ucfirst($tabItem['config']['type']) . 'TableDataSource'
             );
 
-            foreach ($tabItem['config']['columns'] as $column) {
+
+            foreach ($tabItem['config']['columns'] as $columnIndex => $column) {
                 $colProperty = $this->propertiesUtils->getPropertyForPath($column['path']);
                 $textAlignment = 'textAlignment="' . $this->propertiesUtils->getPropertyTableAlignment($colProperty) . '"';
                 $openTagTh = '<Th ' . $textAlignment . '>';
@@ -83,6 +86,19 @@ class InGeneratorTabs extends Command
                 $tdTemplate = $openTagTd . '</Td>';
 
                 $tpBody[] = $tdTemplate;
+
+                $pathArray = explode(".", $column['path']);
+                $pathArray[0] = 'item';
+
+                $varName = implode(array_map('ucfirst', $pathArray)) . $columnIndex;
+                $varValue = implode(".?", $pathArray);
+                $tpRowData[] = 'const ' . $varName . ' = ' . $varValue;
+                if (count($pathArray) > 2) {
+                    $pathArray[count($pathArray) - 1] = 'id';
+                    $varNameId = implode(array_map('ucfirst', $pathArray)) . $columnIndex . 'Id';
+                    $varValueId = implode(".?", $pathArray);
+                    $tpRowData[] = 'const ' . $varNameId . ' = ' . $varValueId;
+                }
             }
             $tpHeadStr = implode("\n", $tpHead);
             $tpBodyStr = implode("\n", $tpBody);

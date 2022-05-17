@@ -22,8 +22,9 @@ export default function TP_COMP_NAME(props: Props) {
             tbody={
                 <tbody>
                     {data.map((item: any) => {
+                        TP_ROW_DATA
                         return (
-                            <tr key={`row-${item.id}`}>
+                            <tr key={`row-${item?.id}`}>
                                 TP_TBODY
                             </tr>
                         )
