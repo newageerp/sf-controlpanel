@@ -64,13 +64,16 @@ class InGeneratorTabs extends Command
 
 
             foreach ($tabItem['config']['columns'] as $columnIndex => $column) {
+                $tdClassName = [];
+
                 $colProperty = $this->propertiesUtils->getPropertyForPath($column['path']);
+                $colPropertyNaeType = $this->propertiesUtils->getPropertyNaeType($colProperty, $column);
                 $tdTemplateData = $this->propertiesUtils->getDefaultPropertyTableValueTemplate($colProperty, $column);
                 $tpImports[] = $tdTemplateData['import'];
 
                 $textAlignment = 'textAlignment="' . $this->propertiesUtils->getPropertyTableAlignment($colProperty, $column) . '"';
                 $openTagTh = '<Th ' . $textAlignment . '>';
-                $openTagTd = '<Td ' . $textAlignment . '>';
+
 
                 $thTemplate = $openTagTh . '</Th>';
                 if ($column['customTitle']) {
@@ -87,6 +90,11 @@ class InGeneratorTabs extends Command
                 }
                 $tpHead[] = $thTemplate;
 
+                // TD
+                if ($colPropertyNaeType === 'date' || $colPropertyNaeType === 'datetime') {
+                    $tdClassName[] = 'whitespace-nowrap';
+                }
+
                 $pathArray = explode(".", $column['path']);
                 $pathArray[0] = 'item';
 
@@ -100,7 +108,7 @@ class InGeneratorTabs extends Command
                     $tpRowData[] = 'const ' . $varNameId . ' = ' . $varValueId . ';';
                 }
 
-
+                $openTagTd = '<Td ' . $textAlignment . ' className="' . implode(" ", $tdClassName) . '">';
                 $tdTemplate = $openTagTd .
                     str_replace(
                         ['TP_VALUE'],
