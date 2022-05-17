@@ -87,8 +87,6 @@ class InGeneratorTabs extends Command
                 }
                 $tpHead[] = $thTemplate;
 
-                $tpBody[] = $tdTemplate;
-
                 $pathArray = explode(".", $column['path']);
                 $pathArray[0] = 'item';
 
@@ -110,6 +108,8 @@ class InGeneratorTabs extends Command
                         $tdTemplateData['template']
                     )
                     . '</Td>';
+
+                $tpBody[] = $tdTemplate;
             }
             $tpHeadStr = implode("\n", $tpHead);
             $tpBodyStr = implode("\n", $tpBody);
