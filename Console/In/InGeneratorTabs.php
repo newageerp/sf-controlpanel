@@ -67,7 +67,12 @@ class InGeneratorTabs extends Command
                 $tdClassName = [];
 
                 $colProperty = $this->propertiesUtils->getPropertyForPath($column['path']);
-                $colPropertyNaeType = $this->propertiesUtils->getPropertyNaeType($colProperty, $column);
+
+                $colPropertyNaeType = '';
+                if ($colProperty) {
+                    $colPropertyNaeType = $this->propertiesUtils->getPropertyNaeType($colProperty, $column);
+                }
+
                 $tdTemplateData = $this->propertiesUtils->getDefaultPropertyTableValueTemplate($colProperty, $column);
                 $tpImports[] = $tdTemplateData['import'];
 
