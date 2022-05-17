@@ -68,7 +68,7 @@ class InGeneratorTabs extends Command
                 $tdTemplateData = $this->propertiesUtils->getDefaultPropertyTableValueTemplate($colProperty, $column);
                 $tpImports[] = $tdTemplateData['import'];
 
-                $textAlignment = 'textAlignment="' . $this->propertiesUtils->getPropertyTableAlignment($colProperty) . '"';
+                $textAlignment = 'textAlignment="' . $this->propertiesUtils->getPropertyTableAlignment($colProperty, $column) . '"';
                 $openTagTh = '<Th ' . $textAlignment . '>';
                 $openTagTd = '<Td ' . $textAlignment . '>';
 
