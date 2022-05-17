@@ -90,14 +90,14 @@ class InGeneratorTabs extends Command
                 $pathArray = explode(".", $column['path']);
                 $pathArray[0] = 'item';
 
-                $varName = implode(array_map('ucfirst', $pathArray)) . $columnIndex;
-                $varValue = implode(".?", $pathArray);
-                $tpRowData[] = 'const ' . $varName . ' = ' . $varValue;
+                $varName = lcfirst(implode(array_map('ucfirst', $pathArray)) . $columnIndex);
+                $varValue = implode("?.", $pathArray);
+                $tpRowData[] = 'const ' . $varName . ' = ' . $varValue . ';';
                 if (count($pathArray) > 2) {
                     $pathArray[count($pathArray) - 1] = 'id';
-                    $varNameId = implode(array_map('ucfirst', $pathArray)) . $columnIndex . 'Id';
-                    $varValueId = implode(".?", $pathArray);
-                    $tpRowData[] = 'const ' . $varNameId . ' = ' . $varValueId;
+                    $varNameId = lcfirst(implode(array_map('ucfirst', $pathArray)) . $columnIndex . 'Id');
+                    $varValueId = implode("?.", $pathArray);
+                    $tpRowData[] = 'const ' . $varNameId . ' = ' . $varValueId . ';';
                 }
             }
             $tpHeadStr = implode("\n", $tpHead);
