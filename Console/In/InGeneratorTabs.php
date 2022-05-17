@@ -114,6 +114,7 @@ class InGeneratorTabs extends Command
             $tpHeadStr = implode("\n", $tpHead);
             $tpBodyStr = implode("\n", $tpBody);
             $tpRowDataStr = implode("\n", $tpRowData);
+            $tpImportsStr = implode("\n", array_unique($tpImports));
 
             $fileName = $generatedPath . '/' . $compName . '.tsx';
             $generatedContent = str_replace(
@@ -129,6 +130,7 @@ class InGeneratorTabs extends Command
                     $tpHeadStr,
                     $tpBodyStr,
                     $tpRowDataStr,
+                    $tpImportsStr,
                 ],
                 $tabTableTemplate
             );
