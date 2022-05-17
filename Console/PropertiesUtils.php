@@ -127,53 +127,98 @@ class PropertiesUtils
     public function getDefaultPropertyTableValueTemplate(?array $property)
     {
         if (!$property) {
-            return '<Fragment/>';
+            return [
+                "import" => 'import { Fragment } from "react";',
+                "template" => '<Fragment/>'
+            ];
         }
 
         $naeType = $this->getPropertyNaeType($property);
 
         switch ($naeType) {
             case 'object':
-                return '<Fragment/>';
+                return [
+                    "import" => 'import { Fragment } from "react";',
+                    "template" => '<Fragment/>'
+                ];
                 break;
             case 'string_array':
-                return '<Fragment/>';
+                return [
+                    "import" => 'import { Fragment } from "react";',
+                    "template" => '<Fragment/>'
+                ];
                 break;
             case 'float':
-                return '<Fragment/>';
+                return [
+                    "import" => 'import { Float } from "@newageerp/data.table.float";',
+                    "template" => '<Float value={TP_VALUE}/>'
+                ];
                 break;
             case 'number':
-                return '<Fragment/>';
+                return [
+                    "import" => 'import { Int } from "@newageerp/data.table.int";',
+                    "template" => '<Int value={TP_VALUE}/>'
+                ];
                 break;
             case 'date':
-                return '<Fragment/>';
+                return [
+                    "import" => 'import { Fragment } from "react";',
+                    "template" => '<Fragment/>'
+                ];
                 break;
             case 'datetime':
-                return '<Fragment/>';
+                return [
+                    "import" => 'import { Fragment } from "react";',
+                    "template" => '<Fragment/>'
+                ];
                 break;
             case 'bool':
-                return '<Fragment/>';
+                return [
+                    "import" => 'import { Fragment } from "react";',
+                    "template" => '<Fragment/>'
+                ];
                 break;
             case 'text':
-                return '<Fragment/>';
+                return [
+                    "import" => 'import { Fragment } from "react";',
+                    "template" => '<Fragment/>'
+                ];
                 break;
             case 'enum_multi_number':
-                return '<Fragment/>';
+                return [
+                    "import" => 'import { Fragment } from "react";',
+                    "template" => '<Fragment/>'
+                ];
                 break;
             case 'enum_multi_text':
-                return '<Fragment/>';
+                return [
+                    "import" => 'import { Fragment } from "react";',
+                    "template" => '<Fragment/>'
+                ];
                 break;
             case 'enum_text':
-                return '<Fragment/>';
+                return [
+                    "import" => 'import { Fragment } from "react";',
+                    "template" => '<Fragment/>'
+                ];
                 break;
             case 'enum_number':
-                return '<Fragment/>';
+                return [
+                    "import" => 'import { Fragment } from "react";',
+                    "template" => '<Fragment/>'
+                ];
                 break;
             case 'array':
-                return '<Fragment/>';
+                return [
+                    "import" => 'import { Fragment } from "react";',
+                    "template" => '<Fragment/>'
+                ];
                 break;
             case 'string':
-                return '<Fragment/>';
+                return [
+                    "import" => 'import { String } from "@newageerp/data.table.string";',
+                    "template" => '<String value={TP_VALUE}/>'
+                ];
                 break;
         }
     }

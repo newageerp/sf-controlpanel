@@ -51,6 +51,7 @@ class InGeneratorTabs extends Command
             $tpHead = [];
             $tpBody = [];
             $tpRowData = [];
+            $tpImports = [];
 
             $compName = Utils::fixComponentName(
                 ucfirst($tabItem['config']['schema']) .
@@ -64,6 +65,9 @@ class InGeneratorTabs extends Command
 
             foreach ($tabItem['config']['columns'] as $columnIndex => $column) {
                 $colProperty = $this->propertiesUtils->getPropertyForPath($column['path']);
+                $tdTemplateData = $this->propertiesUtils->getDefaultPropertyTableValueTemplate($colProperty);
+                $tpImports[] = $tdTemplateData['import'];
+
                 $textAlignment = 'textAlignment="' . $this->propertiesUtils->getPropertyTableAlignment($colProperty) . '"';
                 $openTagTh = '<Th ' . $textAlignment . '>';
                 $openTagTd = '<Td ' . $textAlignment . '>';
@@ -83,8 +87,6 @@ class InGeneratorTabs extends Command
                 }
                 $tpHead[] = $thTemplate;
 
-                $tdTemplate = $openTagTd . '</Td>';
-
                 $tpBody[] = $tdTemplate;
 
                 $pathArray = explode(".", $column['path']);
@@ -99,6 +101,15 @@ class InGeneratorTabs extends Command
                     $varValueId = implode("?.", $pathArray);
                     $tpRowData[] = 'const ' . $varNameId . ' = ' . $varValueId . ';';
                 }
+
+
+                $tdTemplate = $openTagTd .
+                    str_replace(
+                        ['TP_VALUE'],
+                        [$varName],
+                        $tdTemplateData['template']
+                    )
+                    . '</Td>';
             }
             $tpHeadStr = implode("\n", $tpHead);
             $tpBodyStr = implode("\n", $tpBody);
@@ -111,6 +122,7 @@ class InGeneratorTabs extends Command
                     'TP_THEAD',
                     'TP_TBODY',
                     'TP_ROW_DATA',
+                    'TP_IMPORT'
                 ],
                 [
                     $compName,
