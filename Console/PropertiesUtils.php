@@ -54,8 +54,10 @@ class PropertiesUtils
         return null;
     }
 
-    public function getPropertyNaeType(array $property): string
+    public function getPropertyNaeType(array $property, array $column): string
     {
+        $isStatus = $property['type'] === 'status' || $column['as'] === 'status';
+
         $isStringArray = $property['type'] === 'array' && $property['format'] === 'string';
         $isArray = $property['type'] === 'array' && !$isStringArray;
 
@@ -80,7 +82,25 @@ class PropertiesUtils
             isset($property['enum']) && count($property['enum']) > 0;
         $isEnumInteger = ($property['type'] === 'integer' || $property['type'] === 'number') && isset($property['enum']) && count($property['enum']) > 0;
 
-        if ($isObject) {
+        $isFile = $property['as'] === 'file';
+        $isFileMultiple = $property['as'] === 'fileMultiple';
+        $isColor = $property['as'] === 'color';
+        $isImage = $property['as'] === 'image';
+        $isAudio = $property['as'] === 'audio';
+
+        if ($isStatus) {
+            return 'status';
+        } else if ($isFile) {
+            return 'file';
+        } else if ($isFileMultiple) {
+            return 'fileMultiple';
+        } else if ($isColor) {
+            return 'color';
+        } else if ($isImage) {
+            return 'image';
+        } else if ($isAudio) {
+            return 'audio';
+        } else if ($isObject) {
             return 'object';
         } else if ($isStringArray) {
             return 'string_array';
@@ -110,12 +130,12 @@ class PropertiesUtils
         return 'string';
     }
 
-    public function getPropertyTableAlignment(?array $property): string
+    public function getPropertyTableAlignment(?array $property, ?array $column): string
     {
         if (!$property) {
             return 'tw3-text-left';
         }
-        $naeType = $this->getPropertyNaeType($property);
+        $naeType = $this->getPropertyNaeType($property, $column);
 
         if ($naeType === 'float' || $naeType === 'number') {
             return 'tw3-text-right';
@@ -124,18 +144,54 @@ class PropertiesUtils
         return 'tw3-text-left';
     }
 
-    public function getDefaultPropertyTableValueTemplate(?array $property)
+    public function getDefaultPropertyTableValueTemplate(?array $property, ?array $column)
     {
-        if (!$property) {
+        if (!$property || !$column) {
             return [
                 "import" => 'import { Fragment } from "react";',
                 "template" => '<Fragment/>'
             ];
         }
 
-        $naeType = $this->getPropertyNaeType($property);
+        $naeType = $this->getPropertyNaeType($property, $column);
 
         switch ($naeType) {
+            case 'status':
+                return [
+                    "import" => 'import { Fragment } from "react";',
+                    "template" => '<Fragment/>'
+                ];
+                break;
+            case 'file':
+                return [
+                    "import" => 'import { Fragment } from "react";',
+                    "template" => '<Fragment/>'
+                ];
+                break;
+            case 'fileMultiple':
+                return [
+                    "import" => 'import { Fragment } from "react";',
+                    "template" => '<Fragment/>'
+                ];
+                break;
+            case 'image':
+                return [
+                    "import" => 'import { Fragment } from "react";',
+                    "template" => '<Fragment/>'
+                ];
+                break;
+            case 'audio':
+                return [
+                    "import" => 'import { Fragment } from "react";',
+                    "template" => '<Fragment/>'
+                ];
+                break;
+            case 'color':
+                return [
+                    "import" => 'import { Fragment } from "react";',
+                    "template" => '<Fragment/>'
+                ];
+                break;
             case 'object':
                 return [
                     "import" => 'import { Fragment } from "react";',
@@ -162,14 +218,14 @@ class PropertiesUtils
                 break;
             case 'date':
                 return [
-                    "import" => 'import { Fragment } from "react";',
-                    "template" => '<Fragment/>'
+                    "import" => 'import { Date } from "@newageerp/data.table.date";',
+                    "template" => '<Date value={TP_VALUE}/>'
                 ];
                 break;
             case 'datetime':
                 return [
-                    "import" => 'import { Fragment } from "react";',
-                    "template" => '<Fragment/>'
+                    "import" => 'import { Datetime } from "@newageerp/data.table.datetime";',
+                    "template" => '<Datetime value={TP_VALUE}/>'
                 ];
                 break;
             case 'bool':

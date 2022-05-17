@@ -65,7 +65,7 @@ class InGeneratorTabs extends Command
 
             foreach ($tabItem['config']['columns'] as $columnIndex => $column) {
                 $colProperty = $this->propertiesUtils->getPropertyForPath($column['path']);
-                $tdTemplateData = $this->propertiesUtils->getDefaultPropertyTableValueTemplate($colProperty);
+                $tdTemplateData = $this->propertiesUtils->getDefaultPropertyTableValueTemplate($colProperty, $column);
                 $tpImports[] = $tdTemplateData['import'];
 
                 $textAlignment = 'textAlignment="' . $this->propertiesUtils->getPropertyTableAlignment($colProperty) . '"';
