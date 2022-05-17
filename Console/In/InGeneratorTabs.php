@@ -67,7 +67,7 @@ class InGeneratorTabs extends Command
 
                 $thTemplate = $openTagTh . '</Th>';
                 if ($column['customTitle']) {
-                    $thTemplate = $openTagTh . '{t("' . $column['customTitle'] . '")}</>';
+                    $thTemplate = $openTagTh . '{t("' . $column['customTitle'] . '")}</Th>';
                 } else if ($column['titlePath']) {
                     $prop = $this->propertiesUtils->getPropertyForPath($column['titlePath']);
                     if ($prop) {
