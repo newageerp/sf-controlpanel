@@ -13,10 +13,12 @@ export default function TP_COMP_NAME() {
 
     const loadData = () => {
         const predefinedFilter = TP_FILTER;
-        let filter: any = [{ and: [] }]
+        let _filter: any = [{ and: [] }]
         if (!!predefinedFilter) {
-            filter[0]['and'].push(predefinedFilter);
+            _filter[0]['and'].push(predefinedFilter);
         }
+        let filter = _filter[0]['and'].length > 0 ? _filter : []
+
         const page = 1;
         const pageSize = TP_PAGE_SIZE;
         const sort = TP_SORT;
