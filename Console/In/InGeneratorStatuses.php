@@ -77,17 +77,18 @@ class InGeneratorStatuses extends Command
             }
 
             $tpBadgesStr = implode("\n", $badges);
-            $tpBadgesExportStr = json_encode($badgeVarNames);
+            $tpBadgesExportStr = 'export const ' . $compName . ' = ' . json_encode($badgeVarNames);
 
             $fileName = $generatedPath . '/' . $compName . '.tsx';
             $generatedContent = str_replace(
                 [
-                    'TP_BADGES',
                     'TP_BADGES_EXPORT',
+                    'TP_BADGES',
+
                 ],
                 [
+                    $tpBadgesExportStr,
                     $tpBadgesStr,
-                    $tpBadgesExportStr
                 ],
                 $statusItemsTemplate
             );
