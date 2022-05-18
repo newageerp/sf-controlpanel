@@ -167,7 +167,7 @@ class PropertiesUtils
                 $compName = Utils::fixComponentName(ucfirst($property['schema']) . 'Statuses');
                 return [
                     "import" => 'import { ' . $compName . ' } from "../../statuses/badges/' . $compName . '";',
-                    "template" => '{' . $compName . '(TP_VALUE)}'
+                    "template" => '{' . $compName . '(TP_VALUE, "TP_KEY")}'
                 ];
                 break;
             case 'file':

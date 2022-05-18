@@ -116,8 +116,8 @@ class InGeneratorTabs extends Command
                 $openTagTd = '<Td ' . $textAlignment . ' className="' . implode(" ", $tdClassName) . '">';
                 $tdTemplate = $openTagTd .
                     str_replace(
-                        ['TP_VALUE'],
-                        [$varName],
+                        ['TP_VALUE', 'TP_KEY'],
+                        [$varName, $colProperty ? $colProperty['key'] : ''],
                         $tdTemplateData['template']
                     )
                     . '</Td>';
