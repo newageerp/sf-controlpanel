@@ -393,6 +393,7 @@ class ConfigDbController extends ConfigBaseController
 
         $sql = "SELECT 
                     statuses.id, statuses.text, statuses.entity, statuses.status, statuses.type, statuses.color, statuses.brightness,
+                    entities.slug as entity_slug,
                     entities.slug || ' (' || entities.titleSingle || ')' as entity_title
                 FROM statuses 
                 left join entities on statuses.entity = entities.id
