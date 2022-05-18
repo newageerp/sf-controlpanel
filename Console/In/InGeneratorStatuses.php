@@ -63,7 +63,7 @@ class InGeneratorStatuses extends Command
                     'Badge' .
                     $entityStatus['status']
                 );
-                $badgeVarNames[] = 'if (status === ' . $entityStatus['status'] . ' and type === "' . $entityStatus['type'] . '") {:
+                $badgeVarNames[] = 'if (status === ' . $entityStatus['status'] . ' && type === "' . $entityStatus['type'] . '") {
                     return <' . $statusName . ' />;
                 }
 ';
