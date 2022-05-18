@@ -57,18 +57,23 @@ class InGeneratorStatuses extends Command
             $badges = [];
             $badgeVarNames = [];
             foreach ($entityStatuses as $entityStatus) {
-                $statusName = Utils::fixComponentName(ucfirst($slug) . 'Status' . $entityStatus['status']);
+                $statusName = Utils::fixComponentName(ucfirst($slug) . 'StatusBadge' . $entityStatus['status']);
                 $badgeVarNames[$entityStatus['status']] = $statusName;
                 $badges[] = "
-    export const '.$statusName.' = (
-        <UI.Badges.Badge
-          bgColor={'" . $entityStatus['color'] . "'}
-          brightness={'" . mb_substr($entityStatus['brightness'], 1) . "'}
-          size={'sm'}
-          className={'w-56 float-right'}
-        >
-          {t('" . $entityStatus['text'] . "')}
-        </Badge>);";
+    export const " . $statusName . " = () => {
+        const { t } = useTranslation();
+        
+        return (
+            <UI.Badges.Badge
+              bgColor={'" . $entityStatus['color'] . "'}
+              brightness={" . mb_substr($entityStatus['brightness'], 1) . "}
+              size={'sm'}
+              className={'w-56 float-right'}
+            >
+              {t('" . $entityStatus['text'] . "')}
+            </UI.Badges.Badge>
+        )
+    };";
             }
 
             $tpBadgesStr = implode("\n", $badges);
