@@ -24,8 +24,6 @@ class InGeneratorStatuses extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $fs = new Filesystem();
-
         $statusItemsTemplate = file_get_contents(
             __DIR__ . '/templates/statuses/StatusItems.txt'
         );

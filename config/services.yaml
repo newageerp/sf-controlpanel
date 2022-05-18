@@ -61,6 +61,9 @@ services:
   Newageerp\SfControlpanel\Console\In\InGeneratorStatuses:
     tags:
       - { name: 'console.command' }
+  Newageerp\SfControlpanel\Console\In\InGeneratorEnums:
+    tags:
+      - { name: 'console.command' }
   Newageerp\SfControlpanel\Console\In\InRunAll:
     tags:
       - { name: 'console.command' }

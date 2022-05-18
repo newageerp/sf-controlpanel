@@ -28,6 +28,8 @@ class InRunAll extends Command
             'nae:localconfig:InPathMap',
             'nae:localconfig:InGeneratorMenu',
             'nae:localconfig:InGeneratorTabs',
+            'nae:localconfig:InGeneratorStatuses',
+            'nae:localconfig:InGeneratorEnums'
         ];
 
         foreach ($commands as $commandName) {
