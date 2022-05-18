@@ -261,17 +261,17 @@ class PropertiesUtils
                 ];
                 break;
             case 'enum_text':
-                $compName = Utils::fixComponentName(ucfirst($property['schema']) . 'Enums');
+                $compName = 'get'.Utils::fixComponentName(ucfirst($property['schema']) . 'Enums');
                 return [
                     "import" => 'import { ' . $compName . ' } from "../../enums/view/' . $compName . '";',
-                    "template" => '{get'.$compName.'(TP_VALUE, "TP_KEY")}'
+                    "template" => '{'.$compName.'(TP_VALUE, "TP_KEY")}'
                 ];
                 break;
             case 'enum_number':
-                $compName = Utils::fixComponentName(ucfirst($property['schema']) . 'Enums');
+                $compName = 'get'.Utils::fixComponentName(ucfirst($property['schema']) . 'Enums');
                 return [
                     "import" => 'import { ' . $compName . ' } from "../../enums/view/' . $compName . '";',
-                    "template" => '{get'.$compName.'(TP_VALUE.toString(), "TP_KEY")}'
+                    "template" => '{'.$compName.'(TP_VALUE.toString(), "TP_KEY")}'
                 ];
                 break;
             case 'array':
