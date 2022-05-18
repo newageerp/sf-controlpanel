@@ -4,6 +4,7 @@ namespace Newageerp\SfControlpanel\Console\In;
 
 use Newageerp\SfControlpanel\Console\LocalConfigUtils;
 use Doctrine\ORM\EntityManagerInterface;
+use Newageerp\SfControlpanel\Console\PropertiesUtils;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -15,12 +16,16 @@ class InLocalConfigSyncFieldsConsole extends Command
 
     protected EntityManagerInterface $em;
 
+    protected PropertiesUtils $propertiesUtils;
+
     public function __construct(
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        PropertiesUtils        $propertiesUtils
     )
     {
         parent::__construct();
         $this->em = $em;
+        $this->propertiesUtils = $propertiesUtils;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -183,6 +188,7 @@ class InLocalConfigSyncFieldsConsole extends Command
                 'additionalProperties' => isset($prop['additionalProperties']) ? $prop['additionalProperties'] : [],
                 'enum' => isset($prop['enum']) ? $prop['enum'] : [],
             ];
+            $propPhp['naeType'] = $this->propertiesUtils->getPropertyNaeType($propPhp, []);
             $phpProperties[] = $propPhp;
         }
 
@@ -238,7 +244,7 @@ export const NaeSDbKeys = ' . json_encode($dbFieldsAll, JSON_PRETTY_PRINT);
 
         file_put_contents(
             $phpPropertiesFile,
-            json_encode($phpProperties)
+            json_encode($phpProperties, JSON_UNESCAPED_UNICODE)
         );
 
         return Command::SUCCESS;
