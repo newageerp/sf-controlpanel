@@ -12,7 +12,7 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class InGeneratorEnums extends Command
 {
-    protected static $defaultName = 'nae:localconfig:InGeneratorStatuses';
+    protected static $defaultName = 'nae:localconfig:InGeneratorEnums';
 
     protected MenuService $menuService;
 
