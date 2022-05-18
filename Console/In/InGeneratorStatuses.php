@@ -58,7 +58,10 @@ class InGeneratorStatuses extends Command
             $badgeVarNames = [];
             foreach ($entityStatuses as $entityStatus) {
                 $statusName = Utils::fixComponentName(ucfirst($slug) . 'StatusBadge' . $entityStatus['status']);
-                $badgeVarNames[$entityStatus['status']] = $statusName;
+                $badgeVarNames[] = 'case ' . $entityStatus['status'] . ':
+                    return <' . $statusName . ' />;
+                break;
+';
                 $badges[] = "
     export const " . $statusName . " = () => {
         const { t } = useTranslation();
@@ -77,14 +80,13 @@ class InGeneratorStatuses extends Command
             }
 
             $tpBadgesStr = implode("\n", $badges);
-            $tpBadgesExportStr = 'export const ' . $compName . ' = ' . json_encode($badgeVarNames);
+            $tpBadgesExportStr = implode("\n", $badgeVarNames);
 
             $fileName = $generatedPath . '/' . $compName . '.tsx';
             $generatedContent = str_replace(
                 [
                     'TP_BADGES_EXPORT',
                     'TP_BADGES',
-
                 ],
                 [
                     $tpBadgesExportStr,

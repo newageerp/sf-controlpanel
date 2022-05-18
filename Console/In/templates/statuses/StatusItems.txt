@@ -4,4 +4,6 @@ import { useTranslation } from "react-i18next";
 
 TP_BADGES
 
-TP_BADGES_EXPORT
+export const TP_COMP_NAME = (status: number) => {
+    TP_BADGES_EXPORT
+}
