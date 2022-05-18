@@ -261,15 +261,17 @@ class PropertiesUtils
                 ];
                 break;
             case 'enum_text':
+                $compName = Utils::fixComponentName(ucfirst($property['schema']) . 'Enums');
                 return [
-                    "import" => 'import { Fragment } from "react";',
-                    "template" => '<Fragment/>'
+                    "import" => 'import { ' . $compName . ' } from "../../enums/view/' . $compName . '";',
+                    "template" => '{get'.$compName.'(TP_VALUE, "TP_KEY")}'
                 ];
                 break;
             case 'enum_number':
+                $compName = Utils::fixComponentName(ucfirst($property['schema']) . 'Enums');
                 return [
-                    "import" => 'import { Fragment } from "react";',
-                    "template" => '<Fragment/>'
+                    "import" => 'import { ' . $compName . ' } from "../../enums/view/' . $compName . '";',
+                    "template" => '{get'.$compName.'(TP_VALUE.toString(), "TP_KEY")}'
                 ];
                 break;
             case 'array':

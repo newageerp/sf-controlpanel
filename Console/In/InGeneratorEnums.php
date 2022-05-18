@@ -59,7 +59,7 @@ class InGeneratorEnums extends Command
         foreach ($enums as $slug => $propertyKeys) {
             $compName = Utils::fixComponentName(ucfirst($slug) . 'Enums');
 
-            $tpEnumStr = json_encode($propertyKeys, JSON_PRETTY_PRINT);
+            $tpEnumStr = json_encode($propertyKeys, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 
             $fileName = $generatedPath . '/' . $compName . '.tsx';
             $generatedContent = str_replace(
