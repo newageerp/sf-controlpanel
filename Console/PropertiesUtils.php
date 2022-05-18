@@ -57,13 +57,13 @@ class PropertiesUtils
     public function getPropertyNaeType(array $property, array $column): string
     {
         if (!isset($property['as'])) {
-            $column['as'] = '';
+            $property['as'] = '';
         }
-        if (!isset($column['as'])) {
-            $column['as'] = '';
+        if (!isset($column['type'])) {
+            $column['type'] = '';
         }
 
-        $isStatus = $property['type'] === 'status' || $column['as'] === 'status';
+        $isStatus = $property['as'] === 'status' || $column['type'] === 'status';
 
         $isStringArray = $property['type'] === 'array' && $property['format'] === 'string';
         $isArray = $property['type'] === 'array' && !$isStringArray;
