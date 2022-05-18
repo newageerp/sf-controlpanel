@@ -1,8 +1,8 @@
 import React from "react";
 import { UI } from '@newageerp/nae-react-ui';
 
-export const COMP_NAME = TP_ENUMS;
+export const TP_COMP_NAME = TP_ENUMS;
 
-export const getCOMP_NAME = (type: string, value: any) => {
-    return !!COMP_NAME[type] && !!COMP_NAME[type][value]?COMP_NAME[type][value]:"";
+export const getTP_COMP_NAME = (type: string, value: any) => {
+    return !!TP_COMP_NAME[type] && !!TP_COMP_NAME[type][value]?TP_COMP_NAME[type][value]:"";
 }
