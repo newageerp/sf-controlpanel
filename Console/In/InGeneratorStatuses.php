@@ -87,16 +87,17 @@ class InGeneratorStatuses extends Command
                 [
                     'TP_BADGES_EXPORT',
                     'TP_BADGES',
+                    'TP_COMP_NAME',
                 ],
                 [
                     $tpBadgesExportStr,
                     $tpBadgesStr,
+                    $compName,
                 ],
                 $statusItemsTemplate
             );
             Utils::writeOnChanges($fileName, $generatedContent);
         }
-
 
         return Command::SUCCESS;
     }
