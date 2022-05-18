@@ -164,9 +164,10 @@ class PropertiesUtils
 
         switch ($naeType) {
             case 'status':
+                $compName = Utils::fixComponentName(ucfirst($property['schema']) . 'Statuses');
                 return [
-                    "import" => 'import { Fragment } from "react";',
-                    "template" => '<Fragment/>'
+                    "import" => 'import { ' . $compName . ' } from "../../statuses/badges/' . $compName . '";',
+                    "template" => '{' . $compName . '(TP_VALUE)}'
                 ];
                 break;
             case 'file':

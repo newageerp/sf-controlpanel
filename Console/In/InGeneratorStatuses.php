@@ -57,10 +57,15 @@ class InGeneratorStatuses extends Command
             $badges = [];
             $badgeVarNames = [];
             foreach ($entityStatuses as $entityStatus) {
-                $statusName = Utils::fixComponentName(ucfirst($slug) . 'StatusBadge' . $entityStatus['status']);
-                $badgeVarNames[] = 'case ' . $entityStatus['status'] . ':
+                $statusName = Utils::fixComponentName(
+                    ucfirst($slug) .
+                    ucfirst($entityStatus['type']) .
+                    'Badge' .
+                    $entityStatus['status']
+                );
+                $badgeVarNames[] = 'if (status === ' . $entityStatus['status'] . ' and type === "' . $entityStatus['type'] . '") {:
                     return <' . $statusName . ' />;
-                break;
+                }
 ';
                 $badges[] = "
     export const " . $statusName . " = () => {
