@@ -29,7 +29,6 @@ export default function TP_COMP_NAME() {
     const predefinedFilter : any = TP_FILTER;
 
     const [dataState, setDateState] = useState(defaultState);
-    useEffect(scrollToHeader, [dataState]);
 
     const setActivePage = (page: number) => {
         if (page !== dataState.page) {
@@ -87,6 +86,8 @@ export default function TP_COMP_NAME() {
         );
     }
     useEffect(loadData, [dataState]);
+
+    useEffect(scrollToHeader, [dataResult.data.data]);
 
     const records = dataResult.data.records;
     const pages = Math.ceil(records / pageSize);
