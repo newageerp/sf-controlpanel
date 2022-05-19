@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import TP_TABLE_COMP_NAME from "../tables/TP_TABLE_COMP_NAME"
 import { OpenApi } from '@newageerp/nae-react-auth-wrapper';
 import { functions } from '@newageerp/nae-react-ui';
-import { PageContainer, PageContainerTopMargin } from '@newageerp/ui.paging.base.page-container'
+import { PageContainer, PageContainerMarginTop } from '@newageerp/ui.paging.base.page-container'
 import { SearchToolbar, SearchToolbarMarginBottom } from '@newageerp/ui.components.list.search-toolbar'
 
 export default function TP_COMP_NAME() {
@@ -42,7 +42,7 @@ export default function TP_COMP_NAME() {
         <div>
             <SearchToolbar marginBottom={SearchToolbarMarginBottom['40px'}/>
             <TP_TABLE_COMP_NAME data={dataResult.data.data} />
-            <PageContainer pages={pages} activePage={activePage} setActivePage={setActivePage} topMargin={PageContainerMarginTop['42px']} />
+            <PageContainer pages={pages} activePage={activePage} setActivePage={setActivePage} marginTop={PageContainerMarginTop['42px']} />
         </div>
     )
 }
