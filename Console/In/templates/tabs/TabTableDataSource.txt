@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import TP_TABLE_COMP_NAME from "../tables/TP_TABLE_COMP_NAME"
 import { OpenApi } from '@newageerp/nae-react-auth-wrapper';
 import { functions } from '@newageerp/nae-react-ui';
+import { PageContainer } from '@newageerp/ui.paging.base.page-container'
 
 export default function TP_COMP_NAME() {
     const [activePage, setActivePage] = useState(1);
