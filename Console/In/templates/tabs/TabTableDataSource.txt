@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import TP_TABLE_COMP_NAME from "../tables/TP_TABLE_COMP_NAME"
 import { OpenApi } from '@newageerp/nae-react-auth-wrapper';
@@ -7,6 +7,14 @@ import { PageContainer, PageContainerMarginTop } from '@newageerp/ui.paging.base
 import { SearchToolbar, SearchToolbarMarginBottom } from '@newageerp/ui.components.list.search-toolbar'
 
 export default function TP_COMP_NAME() {
+    const headerRef = useRef(null)
+    const scrollToHeader = () => {
+        if (headerRef && headerRef.current) {
+            // @ts-ignore
+            headerRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+    }
+
     const pageSize = TP_PAGE_SIZE;
 
     const sort = TP_SORT;
@@ -21,6 +29,7 @@ export default function TP_COMP_NAME() {
     const predefinedFilter : any = TP_FILTER;
 
     const [dataState, setDateState] = useState(defaultState);
+    useEffect(scrollToHeader, [dataState]);
 
     const setActivePage = (page: number) => {
         if (page !== dataState.page) {
@@ -83,7 +92,7 @@ export default function TP_COMP_NAME() {
     const pages = Math.ceil(records / pageSize);
 
     return (
-        <div>
+        <div ref={headerRef}>
             <SearchToolbar searchValue={dataState.quickSearch} onSearch={setQuickSearch} marginBottom={SearchToolbarMarginBottom['40px']} />
             <TP_TABLE_COMP_NAME data={dataResult.data.data} />
             <PageContainer pages={pages} activePage={dataState.page} setActivePage={setActivePage} marginTop={PageContainerMarginTop['42px']} />
