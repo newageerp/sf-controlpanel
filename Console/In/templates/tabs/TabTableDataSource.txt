@@ -17,8 +17,8 @@ export default function TP_COMP_NAME() {
         quickSearch: '',
     }
 
-    const quickSearchFields = TP_QUICK_SEARCH;
-    const predefinedFilter = TP_FILTER;
+    const quickSearchFields : any = TP_QUICK_SEARCH;
+    const predefinedFilter : any = TP_FILTER;
 
     const [dataState, setDateState] = useState(defaultState);
 
