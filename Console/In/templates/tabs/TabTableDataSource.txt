@@ -40,7 +40,7 @@ export default function TP_COMP_NAME() {
 
     return (
         <div>
-            <SearchToolbar marginBottom={SearchToolbarMarginBottom['40px'}/>
+            <SearchToolbar marginBottom={SearchToolbarMarginBottom['40px']}/>
             <TP_TABLE_COMP_NAME data={dataResult.data.data} />
             <PageContainer pages={pages} activePage={activePage} setActivePage={setActivePage} marginTop={PageContainerMarginTop['42px']} />
         </div>
