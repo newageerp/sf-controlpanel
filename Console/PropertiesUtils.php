@@ -265,7 +265,7 @@ class PropertiesUtils
                 $compFileName = Utils::fixComponentName(ucfirst($property['schema']) . 'Enums');
                 return [
                     "import" => 'import { ' . $compName . ' } from "../../enums/view/' . $compFileName . '";',
-                    "template" => '{'.$compName.'(TP_VALUE, "TP_KEY")}'
+                    "template" => '{'.$compName.'("TP_KEY", TP_VALUE)}'
                 ];
                 break;
             case 'enum_number':
@@ -273,7 +273,7 @@ class PropertiesUtils
                 $compFileName = Utils::fixComponentName(ucfirst($property['schema']) . 'Enums');
                 return [
                     "import" => 'import { ' . $compName . ' } from "../../enums/view/' . $compFileName . '";',
-                    "template" => '{'.$compName.'(TP_VALUE.toString(), "TP_KEY")}'
+                    "template" => '{'.$compName.'("TP_KEY", TP_VALUE.toString())}'
                 ];
                 break;
             case 'array':
