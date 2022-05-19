@@ -149,9 +149,11 @@ class InGeneratorTabs extends Command
             );
             Utils::writeOnChanges($fileName, $generatedContent);
 
+            // data sort
             $sort = [
                 ['key' => 'i.id', 'value' => 'DESC']
             ];
+
             if (isset($tabItem['sort'])) {
                 $sort = json_decode($tabItem['sort'], true);
             } else {
@@ -161,6 +163,20 @@ class InGeneratorTabs extends Command
                         $df['config']['defaultSort']
                     ) {
                         $sort = json_decode($df['config']['defaultSort'], true);
+                    }
+                }
+            }
+
+            $quickSearch = [];
+            if (isset($tabItem['quickSearchFilterKeys'])) {
+                $quickSearch = json_decode($tabItem['quickSearchFilterKeys'], true);
+            } else {
+                foreach ($defaultItems as $df) {
+                    if ($df['config']['schema'] === $tabItem['config']['schema'] &&
+                        isset($df['config']['defaultQuickSearch']) &&
+                        $df['config']['defaultQuickSearch']
+                    ) {
+                        $quickSearch = json_decode($df['config']['defaultQuickSearch'], true);
                     }
                 }
             }
@@ -181,6 +197,7 @@ class InGeneratorTabs extends Command
                     'TP_PAGE_SIZE',
                     'TP_SORT',
                     'TP_FILTER',
+                    'TP_QUICK_SEARCH'
                 ],
                 [
                     $dataSourceCompName,
@@ -190,6 +207,7 @@ class InGeneratorTabs extends Command
                     $pageSize,
                     json_encode($sort),
                     $filter ? json_encode($filter) : 'null',
+                    json_encode($quickSearch),
                 ],
                 $tabTableDataSourceTemplate
             );

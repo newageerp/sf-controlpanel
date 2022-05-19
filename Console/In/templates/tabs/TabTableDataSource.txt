@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import TP_TABLE_COMP_NAME from "../tables/TP_TABLE_COMP_NAME"
 import { OpenApi } from '@newageerp/nae-react-auth-wrapper';
@@ -7,8 +7,37 @@ import { PageContainer, PageContainerMarginTop } from '@newageerp/ui.paging.base
 import { SearchToolbar, SearchToolbarMarginBottom } from '@newageerp/ui.components.list.search-toolbar'
 
 export default function TP_COMP_NAME() {
-    const [activePage, setActivePage] = useState(1);
     const pageSize = TP_PAGE_SIZE;
+
+    const sort = TP_SORT;
+
+    const defaultState = {
+        page: 1,
+        sort: sort,
+        quickSearch: '',
+    }
+
+    const quickSearchFields = TP_QUICK_SEARCH;
+    const predefinedFilter = TP_FILTER;
+
+    const [dataState, setDateState] = useState(defaultState);
+
+    const setActivePage = (page: number) => {
+        if (page !== dataState.page) {
+            const _state = JSON.parse(JSON.stringify(dataState));
+            _state.page = page;
+            setDateState(_state);
+        }
+    }
+
+    const setQuickSearch = (s: string) => {
+        if (s !== dataState.quickSearch) {
+            const _state = JSON.parse(JSON.stringify(dataState));
+            _state.page = 1;
+            _state.quickSearch = s;
+            setDateState(_state);
+        }
+    }
 
     const tab = functions.tabs.getTabFromSchemaAndType('TP_SCHEMA', 'TP_TYPE');
     const fieldsToReturn = functions.tabs.getTabFieldsToReturn(tab);
@@ -17,32 +46,47 @@ export default function TP_COMP_NAME() {
     const { t } = useTranslation();
 
     const loadData = () => {
-        const predefinedFilter = TP_FILTER;
+
         let _filter: any = [{ and: [] }]
         if (!!predefinedFilter) {
             _filter[0]['and'].push(predefinedFilter);
         }
+
+        if (quickSearchFields) {
+            let _or: any = quickSearchFields.map((s: any) => {
+                if (typeof s === 'string') {
+                    return [s, 'contains', dataState.quickSearch, true]
+                }
+                return [
+                    s.key,
+                    s.method ? s.method : 'contains',
+                    dataState.quickSearch,
+                    s.directSelect
+                ]
+            })
+            _filter[0]['and'].push({ or: _or })
+        }
+
+
         let filter = _filter[0]['and'].length > 0 ? _filter : []
 
-
-        const sort = TP_SORT;
         getData(
             filter,
-            activePage,
+            dataState.page,
             pageSize,
             sort
         );
     }
-    useEffect(loadData, [activePage]);
+    useEffect(loadData, [dataState]);
 
     const records = dataResult.data.records;
     const pages = Math.ceil(records / pageSize);
 
     return (
         <div>
-            <SearchToolbar marginBottom={SearchToolbarMarginBottom['40px']}/>
+            <SearchToolbar searchValue={dataState.quickSearch} onSearch={setQuickSearch} marginBottom={SearchToolbarMarginBottom['40px']} />
             <TP_TABLE_COMP_NAME data={dataResult.data.data} />
-            <PageContainer pages={pages} activePage={activePage} setActivePage={setActivePage} marginTop={PageContainerMarginTop['42px']} />
+            <PageContainer pages={pages} activePage={dataState.page} setActivePage={setActivePage} marginTop={PageContainerMarginTop['42px']} />
         </div>
     )
 }
