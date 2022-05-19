@@ -27,7 +27,7 @@ export default function TP_COMP_NAME() {
         const sort = TP_SORT;
         getData(
             filter,
-            page,
+            activePage,
             pageSize,
             sort
         );
