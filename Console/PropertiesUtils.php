@@ -184,14 +184,14 @@ class PropertiesUtils
                 break;
             case 'image':
                 return [
-                    "import" => 'import { Fragment } from "react";',
-                    "template" => '<Fragment/>'
+                    "import" => 'import { Image } from "@newageerp/data.table.image";',
+                    "template" => '<Image value={TP_VALUE}/>'
                 ];
                 break;
             case 'audio':
                 return [
-                    "import" => 'import { Fragment } from "react";',
-                    "template" => '<Fragment/>'
+                    "import" => 'import { Audio } from "@newageerp/data.table.audio";',
+                    "template" => '<Audio value={TP_VALUE}/>'
                 ];
                 break;
             case 'color':
@@ -238,14 +238,14 @@ class PropertiesUtils
                 break;
             case 'bool':
                 return [
-                    "import" => 'import { Fragment } from "react";',
-                    "template" => '<Fragment/>'
+                    "import" => 'import { Bool } from "@newageerp/data.table.bool";',
+                    "template" => '<Bool value={TP_VALUE}/>'
                 ];
                 break;
             case 'text':
                 return [
-                    "import" => 'import { Fragment } from "react";',
-                    "template" => '<Fragment/>'
+                    "import" => 'import { Text } from "@newageerp/data.table.text";',
+                    "template" => '<Text value={TP_VALUE}/>'
                 ];
                 break;
             case 'enum_multi_number':

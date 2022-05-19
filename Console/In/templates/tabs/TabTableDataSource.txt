@@ -1,10 +1,13 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import { useTranslation } from "react-i18next";
 import TP_TABLE_COMP_NAME from "../tables/TP_TABLE_COMP_NAME"
 import { OpenApi } from '@newageerp/nae-react-auth-wrapper';
 import { functions } from '@newageerp/nae-react-ui';
 
 export default function TP_COMP_NAME() {
+    const [activePage, setActivePage] = useState(1);
+    const pageSize = TP_PAGE_SIZE;
+
     const tab = functions.tabs.getTabFromSchemaAndType('TP_SCHEMA', 'TP_TYPE');
     const fieldsToReturn = functions.tabs.getTabFieldsToReturn(tab);
 
@@ -19,8 +22,7 @@ export default function TP_COMP_NAME() {
         }
         let filter = _filter[0]['and'].length > 0 ? _filter : []
 
-        const page = 1;
-        const pageSize = TP_PAGE_SIZE;
+
         const sort = TP_SORT;
         getData(
             filter,
@@ -31,7 +33,13 @@ export default function TP_COMP_NAME() {
     }
     useEffect(loadData, []);
 
+    const records = dataResult.data.records;
+    const pages = Math.ceil(records / pageSize);
+
     return (
-        <TP_TABLE_COMP_NAME data={dataResult.data.data} />
+        <div>
+            <TP_TABLE_COMP_NAME data={dataResult.data.data} />
+            <PageContainer pages={pages} activePage={activePage} setActivePage={setActivePage} />
+        </div>
     )
 }
