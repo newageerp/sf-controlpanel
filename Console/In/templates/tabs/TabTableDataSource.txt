@@ -32,7 +32,7 @@ export default function TP_COMP_NAME() {
             sort
         );
     }
-    useEffect(loadData, []);
+    useEffect(loadData, [activePage]);
 
     const records = dataResult.data.records;
     const pages = Math.ceil(records / pageSize);
