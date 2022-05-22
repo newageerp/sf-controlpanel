@@ -2,6 +2,8 @@
 
 namespace Newageerp\SfControlpanel\Controller;
 
+use SQLite3;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,6 +14,31 @@ use Symfony\Component\HttpFoundation\Request;
 class ConfigDbController extends ConfigBaseController
 {
     /**
+     * @Route(path="/truncateAllConfig", methods={"GET"})
+     */
+    public function truncateAllConfig(Request $request): JsonResponse
+    {
+//        $request = $this->transformJsonBody($request);
+
+        copy(
+            $this->getLocalDbFile(),
+            $this->getLocalDbFile() . 'backup' . time();
+    )
+
+        $db = new SQLite3($this->getLocalDbFile());
+
+        $db->query('TRUNCATE TABLE variables');
+        $db->query('TRUNCATE TABLE user_permissions');
+        $db->query('TRUNCATE TABLE pdfs');
+        $db->query('TRUNCATE TABLE statuses');
+        $db->query('TRUNCATE TABLE entities');
+        $db->query('TRUNCATE TABLE properties');
+        $db->query('TRUNCATE TABLE enums');
+
+        return $this->json(['data' => 'ok']);
+    }
+
+    /**
      * @Route(path="/runSqlSelect", methods={"POST"})
      * @OA\Post (operationId="NaeConfigDbRunSqlSelect")
      */
@@ -19,7 +46,7 @@ class ConfigDbController extends ConfigBaseController
     {
         $request = $this->transformJsonBody($request);
 
-        $db = new \SQLite3($this->getLocalDbFile());
+        $db = new SQLite3($this->getLocalDbFile());
 
         $sql = $request->get('sql');
         $result = $db->query($sql);
@@ -40,7 +67,7 @@ class ConfigDbController extends ConfigBaseController
     {
         $request = $this->transformJsonBody($request);
 
-        $db = new \SQLite3($this->getLocalDbFile());
+        $db = new SQLite3($this->getLocalDbFile());
 
         $sql = $request->get('sql');
 
@@ -68,7 +95,7 @@ class ConfigDbController extends ConfigBaseController
 
         $element = $request->get('element');
 
-        $db = new \SQLite3($this->getLocalDbFile(), SQLITE3_OPEN_READWRITE);
+        $db = new SQLite3($this->getLocalDbFile(), SQLITE3_OPEN_READWRITE);
 
         if ($element['id'] === 0) {
             $sql = "insert into variables (`text`, slug) values (:text, :slug)";
@@ -100,7 +127,7 @@ class ConfigDbController extends ConfigBaseController
 
         $id = $request->get('id');
 
-        $db = new \SQLite3($this->getLocalDbFile(), SQLITE3_OPEN_READWRITE);
+        $db = new SQLite3($this->getLocalDbFile(), SQLITE3_OPEN_READWRITE);
 
         $sql = "delete from variables where id = :id";
 
@@ -120,7 +147,7 @@ class ConfigDbController extends ConfigBaseController
     {
         $request = $this->transformJsonBody($request);
 
-        $db = new \SQLite3($this->getLocalDbFile());
+        $db = new SQLite3($this->getLocalDbFile());
 
         $sql = "SELECT 
                     variables.id, variables.`text`, variables.slug
@@ -154,7 +181,7 @@ class ConfigDbController extends ConfigBaseController
 
         $element = $request->get('element');
 
-        $db = new \SQLite3($this->getLocalDbFile(), SQLITE3_OPEN_READWRITE);
+        $db = new SQLite3($this->getLocalDbFile(), SQLITE3_OPEN_READWRITE);
 
         if ($element['id'] === 0) {
             $sql = "insert into user_permissions (`title`, slug) values (:title, :slug)";
@@ -186,7 +213,7 @@ class ConfigDbController extends ConfigBaseController
 
         $id = $request->get('id');
 
-        $db = new \SQLite3($this->getLocalDbFile(), SQLITE3_OPEN_READWRITE);
+        $db = new SQLite3($this->getLocalDbFile(), SQLITE3_OPEN_READWRITE);
 
         $sql = "delete from user_permissions where id = :id";
 
@@ -206,7 +233,7 @@ class ConfigDbController extends ConfigBaseController
     {
         $request = $this->transformJsonBody($request);
 
-        $db = new \SQLite3($this->getLocalDbFile());
+        $db = new SQLite3($this->getLocalDbFile());
 
         $sql = "SELECT 
                     user_permissions.id, user_permissions.title as title, user_permissions.slug as slug
@@ -241,7 +268,7 @@ class ConfigDbController extends ConfigBaseController
 
         $element = $request->get('element');
 
-        $db = new \SQLite3($this->getLocalDbFile(), SQLITE3_OPEN_READWRITE);
+        $db = new SQLite3($this->getLocalDbFile(), SQLITE3_OPEN_READWRITE);
 
         if ($element['id'] === 0) {
             $sql = "insert into pdfs (`title`, template, sort, skipList, entity, skipWithoutSign) values (:title, :template, :sort, :skipList, :entity, :skipWithoutSign)";
@@ -277,7 +304,7 @@ class ConfigDbController extends ConfigBaseController
 
         $id = $request->get('id');
 
-        $db = new \SQLite3($this->getLocalDbFile(), SQLITE3_OPEN_READWRITE);
+        $db = new SQLite3($this->getLocalDbFile(), SQLITE3_OPEN_READWRITE);
 
         $sql = "delete from pdfs where id = :id";
 
@@ -297,7 +324,7 @@ class ConfigDbController extends ConfigBaseController
     {
         $request = $this->transformJsonBody($request);
 
-        $db = new \SQLite3($this->getLocalDbFile());
+        $db = new SQLite3($this->getLocalDbFile());
 
         $sql = "SELECT 
                     pdfs.id, pdfs.title, pdfs.template, pdfs.sort, pdfs.skipList, pdfs.entity, pdfs.skipWithoutSign,
@@ -333,7 +360,7 @@ class ConfigDbController extends ConfigBaseController
 
         $element = $request->get('element');
 
-        $db = new \SQLite3($this->getLocalDbFile(), SQLITE3_OPEN_READWRITE);
+        $db = new SQLite3($this->getLocalDbFile(), SQLITE3_OPEN_READWRITE);
 
         if ($element['id'] === 0) {
             $sql = "insert into statuses (`text`, status, entity, type, color, brightness) values (:text, :status, :entity, :type, :color, :brightness)";
@@ -369,7 +396,7 @@ class ConfigDbController extends ConfigBaseController
 
         $id = $request->get('id');
 
-        $db = new \SQLite3($this->getLocalDbFile(), SQLITE3_OPEN_READWRITE);
+        $db = new SQLite3($this->getLocalDbFile(), SQLITE3_OPEN_READWRITE);
 
         $sql = "delete from statuses where id = :id";
 
@@ -389,7 +416,7 @@ class ConfigDbController extends ConfigBaseController
     {
         $request = $this->transformJsonBody($request);
 
-        $db = new \SQLite3($this->getLocalDbFile());
+        $db = new SQLite3($this->getLocalDbFile());
 
         $sql = "SELECT 
                     statuses.id, statuses.text, statuses.entity, statuses.status, statuses.type, statuses.color, statuses.brightness,
@@ -422,7 +449,7 @@ class ConfigDbController extends ConfigBaseController
 
         $element = $request->get('element');
 
-        $db = new \SQLite3($this->getLocalDbFile(), SQLITE3_OPEN_READWRITE);
+        $db = new SQLite3($this->getLocalDbFile(), SQLITE3_OPEN_READWRITE);
 
         $sql = "update entities set titleSingle = :titleSingle, titlePlural = :titlePlural, required = :required, scopes = :scopes where id = :id";
 
@@ -447,7 +474,7 @@ class ConfigDbController extends ConfigBaseController
     {
         $request = $this->transformJsonBody($request);
 
-        $db = new \SQLite3($this->getLocalDbFile());
+        $db = new SQLite3($this->getLocalDbFile());
 
         $sql = "SELECT 
                     entities.id,
@@ -485,7 +512,7 @@ class ConfigDbController extends ConfigBaseController
 
         $element = $request->get('element');
 
-        $db = new \SQLite3($this->getLocalDbFile(), SQLITE3_OPEN_READWRITE);
+        $db = new SQLite3($this->getLocalDbFile(), SQLITE3_OPEN_READWRITE);
 
         $sql = "update properties set title = :title, description = :description where id = :id";
 
@@ -511,9 +538,9 @@ class ConfigDbController extends ConfigBaseController
         $key = $request->get('key');
         $value = $request->get('value');
 
-        $db = new \SQLite3($this->getLocalDbFile(), SQLITE3_OPEN_READWRITE);
+        $db = new SQLite3($this->getLocalDbFile(), SQLITE3_OPEN_READWRITE);
 
-        $sql = "update properties set ".$key." = :val where id = :id";
+        $sql = "update properties set " . $key . " = :val where id = :id";
 
         $stmt = $db->prepare($sql);
 
@@ -535,7 +562,7 @@ class ConfigDbController extends ConfigBaseController
 
         $id = $request->get('id');
 
-        $db = new \SQLite3($this->getLocalDbFile(), SQLITE3_OPEN_READWRITE);
+        $db = new SQLite3($this->getLocalDbFile(), SQLITE3_OPEN_READWRITE);
 
         $sql = "delete from properties where id = :id";
 
@@ -557,7 +584,7 @@ class ConfigDbController extends ConfigBaseController
         $rSchema = (int)$request->get('schema');
         $schema = $rSchema ? $rSchema : 0;
 
-        $db = new \SQLite3($this->getLocalDbFile());
+        $db = new SQLite3($this->getLocalDbFile());
 
         $sql = "SELECT 
                     properties.id,
@@ -609,7 +636,7 @@ class ConfigDbController extends ConfigBaseController
     {
         $request = $this->transformJsonBody($request);
 
-        $db = new \SQLite3($this->getLocalDbFile());
+        $db = new SQLite3($this->getLocalDbFile());
 
         $sql = "SELECT 
                     enums.id, enums.title, enums.value, enums.entity, enums.property, enums.sort,
@@ -645,7 +672,7 @@ class ConfigDbController extends ConfigBaseController
 
         $id = $request->get('id');
 
-        $db = new \SQLite3($this->getLocalDbFile(), SQLITE3_OPEN_READWRITE);
+        $db = new SQLite3($this->getLocalDbFile(), SQLITE3_OPEN_READWRITE);
 
         $sql = "delete from enums where id = :id";
 
@@ -666,7 +693,7 @@ class ConfigDbController extends ConfigBaseController
 
         $element = $request->get('element');
 
-        $db = new \SQLite3($this->getLocalDbFile(), SQLITE3_OPEN_READWRITE);
+        $db = new SQLite3($this->getLocalDbFile(), SQLITE3_OPEN_READWRITE);
         $db->busyTimeout(5 * 1000);
 
         if ($element['id'] === 0) {
@@ -699,7 +726,7 @@ class ConfigDbController extends ConfigBaseController
      */
     public function test()
     {
-        $db = new \SQLite3($this->getLocalDbFile());
+        $db = new SQLite3($this->getLocalDbFile());
 
         $sql = "SELECT name FROM sqlite_master WHERE type='table';";
         $result = $db->query($sql);
