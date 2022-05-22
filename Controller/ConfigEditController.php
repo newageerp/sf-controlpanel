@@ -15,7 +15,11 @@ class ConfigEditController extends ConfigBaseController
 {
     protected function getLocalStorageFile()
     {
-        return $this->getLocalStorage() . '/edit.json';
+        $file = $this->getLocalStorage() . '/edit.json';
+        if (!file_exists($file)) {
+            file_put_contents($file, json_encode([]));
+        }
+        return $file;
     }
 
     protected function saveBuilder($data)

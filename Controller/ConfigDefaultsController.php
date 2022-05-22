@@ -15,7 +15,11 @@ class ConfigDefaultsController extends ConfigBaseController
 {
     protected function getLocalStorageFile()
     {
-        return $this->getLocalStorage() . '/defaults.json';
+        $file = $this->getLocalStorage() . '/defaults.json';
+        if (!file_exists($file)) {
+            file_put_contents($file, json_encode([]));
+        }
+        return $file;
     }
 
     protected function saveBuilder($data) {

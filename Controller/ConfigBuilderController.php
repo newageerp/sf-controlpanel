@@ -26,7 +26,11 @@ class ConfigBuilderController extends ConfigBaseController
 
     protected function getLocalStorageFile()
     {
-        return $this->getLocalStorage() . '/builder.json';
+        $file = $this->getLocalStorage() . '/builder.json';
+        if (!file_exists($file)) {
+            file_put_contents($file, json_encode([]));
+        }
+        return $file;
     }
 
     /**

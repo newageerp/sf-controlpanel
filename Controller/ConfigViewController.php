@@ -15,7 +15,11 @@ class ConfigViewController extends ConfigBaseController
 {
     protected function getLocalStorageFile()
     {
-        return $this->getLocalStorage() . '/view.json';
+        $file = $this->getLocalStorage() . '/view.json';
+        if (!file_exists($file)) {
+            file_put_contents($file, json_encode([]));
+        }
+        return $file;
     }
 
     protected function saveBuilder($data) {

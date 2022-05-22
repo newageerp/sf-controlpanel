@@ -15,7 +15,11 @@ class ConfigTabsController extends ConfigBaseController
 {
     protected function getLocalStorageFile()
     {
-        return $this->getLocalStorage() . '/tabs.json';
+        $file = $this->getLocalStorage() . '/tabs.json';
+        if (!file_exists($file)) {
+            file_put_contents($file, json_encode([]));
+        }
+        return $file;
     }
 
     protected function saveBuilder($data)
