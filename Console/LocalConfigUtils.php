@@ -12,7 +12,7 @@ class LocalConfigUtils
 
     public static function getDocJsonPath()
     {
-        return $_ENV['NAE_SFFILES_STORAGE_PUBLIC_DIR'] . '/doc.json';
+        return $_ENV['NAE_SFS_FRONT_URL'] . '/app/doc.json';
     }
 
     public static function getFrontendConfigPath()
