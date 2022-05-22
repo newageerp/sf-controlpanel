@@ -27,13 +27,13 @@ class ConfigDbController extends ConfigBaseController
 
         $db = new SQLite3($this->getLocalDbFile());
 
-        $db->query('TRUNCATE TABLE variables');
-        $db->query('TRUNCATE TABLE user_permissions');
-        $db->query('TRUNCATE TABLE pdfs');
-        $db->query('TRUNCATE TABLE statuses');
-        $db->query('TRUNCATE TABLE entities');
-        $db->query('TRUNCATE TABLE properties');
-        $db->query('TRUNCATE TABLE enums');
+        $db->query('DELETE FROM variables');
+        $db->query('DELETE FROM user_permissions');
+        $db->query('DELETE FROM pdfs');
+        $db->query('DELETE FROM statuses');
+        $db->query('DELETE FROM entities');
+        $db->query('DELETE FROM properties');
+        $db->query('DELETE FROM enums');
 
         return $this->json(['data' => 'ok']);
     }
