@@ -20,7 +20,7 @@ class OutRunAll extends Command
     {
         $commands = [
             'cache:clear',
-            'nae:localconfig:OutCacheDocJson',
+//            'nae:localconfig:OutCacheDocJson',
             'nae:localconfig:OutLocalConfigBuildMock',
             'nae:localconfig:OutLocalConfigSyncSchemas',
             'nae:localconfig:OutLocalConfigSyncProperties',
