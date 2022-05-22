@@ -62,6 +62,10 @@ class InGeneratorTabs extends Command
                 ucfirst($tabItem['config']['type']) . 'TableDataSource'
             );
 
+            if ($tabItem['config']['allowMultipleSelection']) {
+                $tpHead[] = '<Th><input type="checkbox" /></Th>';
+                $tpBody[] = '<Th><input type="checkbox" /></Th>';
+            }
 
             foreach ($tabItem['config']['columns'] as $columnIndex => $column) {
                 $tdClassName = [];
