@@ -22,8 +22,8 @@ class ConfigDbController extends ConfigBaseController
 
         copy(
             $this->getLocalDbFile(),
-            $this->getLocalDbFile() . 'backup' . time();
-    )
+            $this->getLocalDbFile() . 'backup' . time()
+        );
 
         $db = new SQLite3($this->getLocalDbFile());
 
