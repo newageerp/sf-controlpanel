@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState, Fragment } from "react";
 import { Table, Td, Th } from "@newageerp/ui.table.base.table";
 import { useTranslation } from "react-i18next";
 import { Icon, IconType } from '@newageerp/ui.icons.base.icon'
 import { IconList } from '@newageerp/ui.icons.base.icon-list'
 import { OpenApi } from "@newageerp/nae-react-auth-wrapper";
+import { TwTextColors } from "@newageerp/ui.styles.tailwind";
+
 TP_IMPORT
 
 interface Props {
@@ -30,7 +32,8 @@ export default function TP_COMP_NAME(props: Props) {
 
     const doMultipleRemove = () => {
         doRemove({
-            ids: selectedIds
+            ids: selectedIds,
+            schema: 'TP_SCHEMA'
         }).then(() => {
             setSelectedIds([]);
             props.doReload();

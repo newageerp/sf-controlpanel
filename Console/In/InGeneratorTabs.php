@@ -141,7 +141,8 @@ class InGeneratorTabs extends Command
                     'TP_THEAD',
                     'TP_TBODY',
                     'TP_ROW_DATA',
-                    'TP_IMPORT'
+                    'TP_IMPORT',
+                    'TP_SCHEMA'
                 ],
                 [
                     $compName,
@@ -149,6 +150,7 @@ class InGeneratorTabs extends Command
                     $tpBodyStr,
                     $tpRowDataStr,
                     $tpImportsStr,
+                    $tabItem['config']['schema']
                 ],
                 $tabTableTemplate
             );
