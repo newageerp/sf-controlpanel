@@ -1,0 +1,22 @@
+import React, { Fragment } from 'react'
+import { TP_HOOK_NAME } from '../../../Components/Hooks/TP_HOOK_NAME';
+import { PropsId } from '../../../UserComponents/ModelsCacheData/types';
+
+export default function TP_COMP_NAME(props: PropsId) {
+    const element = TP_HOOK_NAME(props.id);
+    if (!element) {
+        return (<Fragment/>);
+    }
+
+    const isShowBadge = element.badges['TP_SLUG'];
+
+    if (!isShowBadge) {
+        return (<Fragment/>);
+    }
+
+    return (
+        <Fragment>
+
+        </Fragment>
+    )
+}

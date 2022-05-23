@@ -29,7 +29,8 @@ class InRunAll extends Command
             'nae:localconfig:InGeneratorMenu',
             'nae:localconfig:InGeneratorTabs',
             'nae:localconfig:InGeneratorStatuses',
-            'nae:localconfig:InGeneratorEnums'
+            'nae:localconfig:InGeneratorEnums',
+            'nae:localconfig:InGeneratorBadges'
         ];
 
         foreach ($commands as $commandName) {
