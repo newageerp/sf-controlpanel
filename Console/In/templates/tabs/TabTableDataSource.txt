@@ -95,7 +95,7 @@ export default function TP_COMP_NAME() {
     return (
         <div ref={headerRef}>
             <SearchToolbar searchValue={dataState.quickSearch} onSearch={setQuickSearch} marginBottom={SearchToolbarMarginBottom['40px']} />
-            <TP_TABLE_COMP_NAME data={dataResult.data.data} />
+            <TP_TABLE_COMP_NAME data={dataResult.data.data} doReload={loadData} />
             <PageContainer pages={pages} activePage={dataState.page} setActivePage={setActivePage} marginTop={PageContainerMarginTop['42px']} />
         </div>
     )

@@ -64,7 +64,8 @@ class InGeneratorTabs extends Command
 
             if ($tabItem['config']['allowMultipleSelection']) {
                 $tpHead[] = '<Th><input type="checkbox" /></Th>';
-                $tpBody[] = '<Th><input type="checkbox" /></Th>';
+                $tpBody[] = '<Td><input type="checkbox" checked={isChecked} onClick={() => toggleSelect(item?.id)} /></Td>';
+                $tpRowData[] = 'const isChecked = selectedIds.indexOf(item?.id) >= 0;';
             }
 
             foreach ($tabItem['config']['columns'] as $columnIndex => $column) {
