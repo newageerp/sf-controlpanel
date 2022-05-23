@@ -26,6 +26,8 @@ services:
     arguments: [ ]
   Newageerp\SfControlpanel\Controller\ConfigMenuTitleController:
     arguments: [ ]
+  Newageerp\SfControlpanel\Controller\ConfigBadgeController:
+    arguments: [ ]
   Newageerp\SfControlpanel\Service\MenuService:
     arguments: [ ]
   Newageerp\SfControlpanel\Console\PropertiesUtils:
