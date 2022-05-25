@@ -6,12 +6,25 @@ class PropertiesUtils
 {
     protected array $properties = [];
 
-    public function __construct()
+    protected EntitiesUtils $entitiesUtils;
+
+    public function __construct(EntitiesUtils $entitiesUtils)
     {
         $this->properties = json_decode(
             file_get_contents(LocalConfigUtils::getPhpCachePath() . '/properties.json'),
             true
         );
+        $this->entitiesUtils = $entitiesUtils;
+    }
+
+    public function getClassNameForPath(string $path): string
+    {
+        $className = "";
+        $property = $this->getPropertyForPath($path);
+        if ($property) {
+            $className = $this->entitiesUtils->getClassNameBySlug($property['format']);
+        }
+        return $className;
     }
 
     public function getPropertyForPath(string $_path): ?array
@@ -261,19 +274,19 @@ class PropertiesUtils
                 ];
                 break;
             case 'enum_text':
-                $compName = 'get'.Utils::fixComponentName(ucfirst($property['schema']) . 'Enums');
+                $compName = 'get' . Utils::fixComponentName(ucfirst($property['schema']) . 'Enums');
                 $compFileName = Utils::fixComponentName(ucfirst($property['schema']) . 'Enums');
                 return [
                     "import" => 'import { ' . $compName . ' } from "../../enums/view/' . $compFileName . '";',
-                    "template" => '{'.$compName.'("TP_KEY", TP_VALUE)}'
+                    "template" => '{' . $compName . '("TP_KEY", TP_VALUE)}'
                 ];
                 break;
             case 'enum_number':
-                $compName = 'get'.Utils::fixComponentName(ucfirst($property['schema']) . 'Enums');
+                $compName = 'get' . Utils::fixComponentName(ucfirst($property['schema']) . 'Enums');
                 $compFileName = Utils::fixComponentName(ucfirst($property['schema']) . 'Enums');
                 return [
                     "import" => 'import { ' . $compName . ' } from "../../enums/view/' . $compFileName . '";',
-                    "template" => '{'.$compName.'("TP_KEY", TP_VALUE.toString())}'
+                    "template" => '{' . $compName . '("TP_KEY", TP_VALUE.toString())}'
                 ];
                 break;
             case 'array':

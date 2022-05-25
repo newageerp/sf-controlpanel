@@ -1,0 +1,9 @@
+export function |TEMPLATE|(props: PropsLink) {
+  const element = |SELECTOR|(props.id ? props.id : -1);
+  if (!element) {
+      return <Fragment />
+  }
+
+  return <Fragment/>
+}
+

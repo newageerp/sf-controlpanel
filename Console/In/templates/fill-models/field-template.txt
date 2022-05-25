@@ -1,0 +1,47 @@
+export function |TEMPLATE|(props: PropsLink) {
+  const element = |SELECTOR|(props.id ? props.id : -1);
+  if (!element) {
+      return <Fragment />
+  }
+
+  const fieldProperty = functions.properties.getPropertyForPath(\`\${NaeSSchemaMap.|SCHEMA|.schema}.|FIELD|\`);
+  if (!fieldProperty) {
+    return <Fragment/>
+  }
+
+  if (props.link) {
+    return (
+      <UI.Buttons.SchemaMultiLink
+          id={props.id}
+          schema={NaeSSchemaMap.|SCHEMA|.schema}
+          className={"text-left"}
+          buttonsNl={!props.linkInline}
+          onClickDef="popup"
+      >
+        <UI.Content.ViewContentValue element={element} property={fieldProperty}/>
+      </UI.Buttons.SchemaMultiLink>
+    )
+  }
+
+  return (
+      <Fragment>
+        <UI.Content.ViewContentValue element={element} property={fieldProperty}/>
+      </Fragment>
+  )
+}
+
+export function |TEMPLATE|Context() {
+  const parentElement = Hooks.useBuilderWidget().element;
+
+  const element = |SELECTOR|(!!parentElement && parentElement.id ? parentElement.id : -1);
+  if (!element) {
+      return <Fragment />
+  }
+
+  return (
+      <Fragment>
+          {element.|FIELD|}
+      </Fragment>
+  )
+}
+

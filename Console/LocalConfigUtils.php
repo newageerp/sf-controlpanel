@@ -15,6 +15,20 @@ class LocalConfigUtils
         return $_ENV['NAE_SFS_FRONT_URL'] . '/app/doc.json';
     }
 
+    public static function getFrontendHooksPath()
+    {
+        return $_ENV['NAE_SFS_ROOT_PATH'] . '/front-hooks';
+    }
+    public static function getFrontendModelsPath()
+    {
+        return $_ENV['NAE_SFS_ROOT_PATH'] . '/front-models';
+    }
+    public static function getFrontendModelsCachePath()
+    {
+        return $_ENV['NAE_SFS_ROOT_PATH'] . '/front-models-cache';
+    }
+
+
     public static function getFrontendConfigPath()
     {
         return $_ENV['NAE_SFS_ROOT_PATH'] . '/front-end-config';

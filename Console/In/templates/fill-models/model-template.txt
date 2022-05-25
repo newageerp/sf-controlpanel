@@ -1,0 +1,47 @@
+import { Model, fk, many, attr } from "redux-orm";
+import { NaeSSchemaMap } from "../../config/NaeSSchema";
+
+class |MODELNAME|Model extends Model {
+  static reducer(action, |MODELNAME|Model, session) {
+    switch (action.type) {
+      case "UPSERT_" + NaeSSchemaMap.|MODELNAME|.schema:
+        action.payload.forEach((payload) => {
+          const dbData = |MODELNAME|Model.withId(payload.id);
+
+          const upsertData = payload;
+          if (dbData) {
+            const keys = Object.keys(upsertData);
+            let needChange = false;
+            keys.map((key) => {
+              if (
+                JSON.stringify(upsertData[key]) !== JSON.stringify(dbData[key])
+              ) {
+                needChange = true;
+              }
+            });
+
+            if (!needChange) {
+              return;
+            }
+          }
+
+          |MODELNAME|Model.upsert(payload);
+        });
+        break;
+    }
+    // Return value is ignored.
+    return session.state;
+  }
+
+  toString() {
+    return this.id;
+  }
+  // Declare any static or instance methods you need.
+}
+|MODELNAME|Model.modelName = "|MODELNAME|Model";
+
+|MODELNAME|Model.fields = {
+  id: attr(),
+};
+
+export default |MODELNAME|Model;

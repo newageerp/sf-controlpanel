@@ -1,0 +1,12 @@
+export function |TEMPLATE|(props: PropsId) {
+  const element = |SELECTOR|(props.id?props.id:-1);
+  if (!element || !element.|FIELD| || !element.|FIELD|.|FIELDB|) {
+      return <Fragment />
+  }
+  return (
+      <Fragment>
+          {element.|FIELD|.|FIELDB|.|FIELDC|}
+      </Fragment>
+  )
+}
+

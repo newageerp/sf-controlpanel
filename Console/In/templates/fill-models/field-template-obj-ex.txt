@@ -1,0 +1,9 @@
+export function |TEMPLATE|(props: PropsLink) {
+  const element = |SELECTOR|(props.id?props.id:-1);
+  if (!element || !element.|FIELD|) {
+      return <Fragment />
+  }
+  return (
+      <|TEMPLATEB| id={element.|FIELD|.id} link={props.link} linkInline={props.linkInline}/>
+  )
+}
