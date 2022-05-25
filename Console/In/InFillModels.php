@@ -21,8 +21,7 @@ class InFillModels extends Command
     public function __construct(
         PropertiesUtils $propertiesUtils,
         EntitiesUtils   $entitiesUtils,
-    )
-    {
+    ) {
         parent::__construct();
         $this->propertiesUtils = $propertiesUtils;
         $this->entitiesUtils = $entitiesUtils;
@@ -30,8 +29,6 @@ class InFillModels extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $finder = new Finder();
-
         $modelTemplate = file_get_contents(
             __DIR__ . '/templates/fill-models/model-template.txt'
         );
@@ -62,7 +59,7 @@ class InFillModels extends Command
                 __DIR__ . '/templates/fill-models/field-template-obj.txt'
             ),
             'fieldObjB' => file_get_contents(
-                __DIR__ . '/templates/fill-models/field-template-b.txt'
+                __DIR__ . '/templates/fill-models/field-template-obj-b.txt'
             ),
             'fieldObjEx' => file_get_contents(
                 __DIR__ . '/templates/fill-models/field-template-obj-ex.txt'
@@ -84,7 +81,8 @@ class InFillModels extends Command
         );
 
         // CREATE MODELS
-        $files = $finder->files()->name('*Model.js')->in($modelsDir);
+        $finder = new Finder();
+        $files = $finder->files()->in($modelsDir)->name('*Model.js');
         $modelClasses = [];
         foreach ($files as $file) {
             $modelClasses[] = str_replace('Model.js', '', $file->getFilename());
@@ -105,26 +103,28 @@ class InFillModels extends Command
         }
 
         // FILL ORM.js
+        $finder = new Finder();
         $files = $finder->files()->name('*Model.js')->in($modelsDir);
         $modelClasses = [];
         foreach ($files as $file) {
             $modelClasses[] = str_replace('Model.js', '', $file->getFilename());
         }
+        sort($modelClasses);
 
         $modelsImport = implode(
-            "",
+            PHP_EOL,
             array_map(
                 function ($m) {
-                    return 'import ' . $m . 'Model from "./' . $m . 'Model';
+                    return 'import ' . $m . 'Model from "./' . $m . 'Model"';
                 },
                 $modelClasses
             )
         );
         $modelsList = implode(
-            "",
+            PHP_EOL,
             array_map(
                 function ($m) {
-                    return $m . 'Model';
+                    return $m . 'Model,';
                 },
                 $modelClasses
             )
@@ -174,78 +174,86 @@ class InFillModels extends Command
                     $defaultItem = $_defaultItem;
                 }
             }
-            if (
-                !$defaultItem ||
-                !isset($defaultItem['config']['fields']) ||
-                count($defaultItem['config']['fields']) === 0
-            ) {
-                continue;
-            }
+
             $o = [
                 ["key" => "id", "type" => "number"],
-                ["key" => "scopes", "type" => ""],
-                ["key" => "badges", "type" => ""],
+                ["key" => "scopes", "type" => "any"],
+                ["key" => "badges", "type" => "any"],
             ];
-            foreach ($defaultItem['config']['fields'] as $c) {
-                $pathSplit = explode(".", $c);
+            if (
+                !(!$defaultItem ||
+                    !isset($defaultItem['config']['fields'])
+                    || count($defaultItem['config']['fields']) === 0
+                )
+            ) {
+                foreach ($defaultItem['config']['fields'] as $c) {
+                    $pathSplit = explode(".", $c['path']);
 
-                $pathA = array_slice($pathSplit, 1);
-                if (count($pathA) === 1) {
-                    $path = implode(".", $pathA);
-                    $o[] = [
-                        'key' => $path,
-                        'type' => $this->getTypeForProperty($c),
-                        'path' => $c
-                    ];
-                } else {
-                    $pathAB = array_slice($pathA, 1);
-                    if (count($pathAB) === 1) {
-                        $path = implode(".", $pathAB);
-                        $className = $this->propertiesUtils->getClassNameForPath(
-                            implode(".", array_slice($pathSplit, 0, 2)),
-                        );
-                        $o = $this->checkForExistingObjectKey(
-                            $o,
-                            $pathA[0],
-                            [
-                                "key" => $path,
-                                "type" => $this->getTypeForProperty(implode(".", array_slice($pathSplit, 0, 3))),
-                                "path" => implode(".", array_slice($pathSplit, 0, 3)),
-                            ],
-                            $className,
-                            implode(".", array_slice($pathSplit, 0, 2)),
-                        );
+                    $pathA = array_slice($pathSplit, 1);
+                    if (count($pathA) === 1) {
+                        $path = implode(".", $pathA);
+                        if ($path !== 'badges' && $path !== 'scopes') {
+                            $o[] = [
+                                'key' => $path,
+                                'type' => $this->getTypeForProperty(implode(".", array_slice($pathSplit, 0, 2))),
+                                'path' => implode(".", array_slice($pathSplit, 0, 2))
+                            ];
+                        }
                     } else {
-                        $pathABC = array_slice($pathAB, 1);
-                        if (count($pathABC) === 1) {
-                            $classNameA = $this->propertiesUtils->getClassNameForPath(
+                        $pathAB = array_slice($pathA, 1);
+                        if (count($pathAB) === 1) {
+                            $path = implode(".", $pathAB);
+                            $className = $this->propertiesUtils->getClassNameForPath(
                                 implode(".", array_slice($pathSplit, 0, 2)),
                             );
                             $o = $this->checkForExistingObjectKey(
                                 $o,
                                 $pathA[0],
-                                null,
-                                $classNameA,
-                                implode(".", array_slice($pathSplit, 0, 2))
-                            );
-                            $oB = array_filter($o, function ($e) use ($pathA) {
-                                return $e['key'] === $pathA[0];
-                            })[0];;
-                            $classNameB = $this->propertiesUtils->getClassNameForPath(
-                                implode(".", array_slice($pathSplit, 0, 3))
-                            );
-                            $path = implode(".", $pathABC);
-                            $oB['fields'] = $this->checkForExistingObjectKey(
-                                $oB['fields'],
-                                $pathAB[0],
                                 [
                                     "key" => $path,
-                                    "type" => $this->getTypeForProperty(implode(".", array_slice($pathSplit, 0, 4))),
-                                    "path" => implode(".", array_slice($pathSplit, 0, 4)),
+                                    "type" => $this->getTypeForProperty(implode(".", array_slice($pathSplit, 0, 3))),
+                                    "path" => implode(".", array_slice($pathSplit, 0, 3)),
                                 ],
-                                $classNameB,
-                                implode(".", array_slice($pathSplit, 0, 3))
+                                $className,
+                                implode(".", array_slice($pathSplit, 0, 2)),
                             );
+                        } else {
+                            $pathABC = array_slice($pathAB, 1);
+
+                            if (count($pathABC) === 1) {
+                                $classNameA = $this->propertiesUtils->getClassNameForPath(
+                                    implode(".", array_slice($pathSplit, 0, 2)),
+                                );
+                                $o = $this->checkForExistingObjectKey(
+                                    $o,
+                                    $pathA[0],
+                                    null,
+                                    $classNameA,
+                                    implode(".", array_slice($pathSplit, 0, 2))
+                                );
+
+                                foreach ($o as &$oB) {
+                                    if ($oB['key'] === $pathA[0]) {
+                                        $classNameB = $this->propertiesUtils->getClassNameForPath(
+                                            implode(".", array_slice($pathSplit, 0, 3))
+                                        );
+                                        $path = implode(".", $pathABC);
+
+
+                                        $oB['fields'] = $this->checkForExistingObjectKey(
+                                            $oB['fields'],
+                                            $pathAB[0],
+                                            [
+                                                "key" => $path,
+                                                "type" => $this->getTypeForProperty(implode(".", array_slice($pathSplit, 0, 4))),
+                                                "path" => implode(".", array_slice($pathSplit, 0, 4)),
+                                            ],
+                                            $classNameB,
+                                            implode(".", array_slice($pathSplit, 0, 3))
+                                        );
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -258,6 +266,7 @@ class InFillModels extends Command
             if ($m === 'Queue') {
                 continue;
             }
+
 
             $o = $modelProperties[$m];
 
@@ -312,7 +321,7 @@ class InFillModels extends Command
             },' . PHP_EOL;
                         } else {
                             if (!in_array($f['key'], $objectFields)) {
-                                $objectStruct .= $f['key'] . ': ' . $f['type.'] . ',' . PHP_EOL;
+                                $objectStruct .= $f['key'] . ': ' . $f['type'] . ',' . PHP_EOL;
                                 $oFields[] = $el['key'] . '.' . $f['key'];
                             }
                         }
@@ -404,27 +413,48 @@ import { " . $selectorsJoin . " } from '../../Components/Models/ormSelectors';
 
         $componentsContent .= PHP_EOL . PHP_EOL;
 
+        $pathByComponent = [];
+
         foreach ($models as $m) {
             $fields = $modelProperties[$m];
 
-            $componentsContent .= $this->addFieldTemplateEmpty($m, $templates['fieldEmpty']);
+            $slug = $this->entitiesUtils->getSlugByClassName($m);
+
+            // if ($m === 'Cargo') {
+            //     var_dump($fields);
+            //     exit();
+            // }
+            $t = $this->addFieldTemplateEmpty($m, $templates['fieldEmpty']);
+            $componentsContent .= $t['content'];
 
             foreach ($fields as $el) {
-                if ($el['key'] === 'id' && $el['type'] === 'ChildId') {
+                if (
+                    $el['key'] === 'id' ||
+                    $el['key'] === 'scopes' ||
+                    $el['key'] === 'badges' ||
+                    $el['type'] === '|ChildId|'
+                ) {
                     continue;
                 }
 
                 if ($el['type'] === "object") {
+                    // if ($m === 'Cargo') {
+                    //     var_dump($el);
+                    // }
                     foreach ($el['fields'] as $elB) {
                         if ($elB['key'] === 'id' && $elB['type'] === 'ChildId') {
                             continue;
                         }
 
                         if ($elB['type'] === "object") {
+                            // if ($m === 'Cargo') {
+                            //     var_dump($elB);
+                            // }
                             foreach ($elB['fields'] as $elC) {
                                 if ($elC['key'] === 'id' && $elC['type'] === 'ChildId') {
                                     continue;
                                 }
+
 
                                 if ($elC['type'] === "object") {
                                 } else {
@@ -444,7 +474,7 @@ import { " . $selectorsJoin . " } from '../../Components/Models/ormSelectors';
                                     }
 
                                     if (in_array($elC['key'], $objectFieldsB)) {
-                                        $componentsContent .= $this->addFieldObjExBTemplate(
+                                        $t = $this->addFieldObjExBTemplate(
                                             $m,
                                             $el['schema'],
                                             $el['key'],
@@ -453,14 +483,20 @@ import { " . $selectorsJoin . " } from '../../Components/Models/ormSelectors';
                                             $elB['schema'],
                                             $templates['fieldObjExB']
                                         );
+                                        $componentsContent .= $t['content'];
+                                        $elPath = $slug . '.' . $el['key'] . '.' . $elB['key'] . '.' . $elC['key'];
+                                        $pathByComponent[$elPath] = $t['comp'];
                                     } else {
-                                        $componentsContent .= $this->addFieldObjBTemplate(
+                                        $t = $this->addFieldObjBTemplate(
                                             $m,
                                             $el['key'],
                                             $elB['key'],
                                             $elC['key'],
                                             $templates['fieldObjB']
                                         );
+                                        $componentsContent .= $t['content'];
+                                        $elPath = $slug . '.' . $el['key'] . '.' . $elB['key'] . '.' . $elC['key'];
+                                        $pathByComponent[$elPath] = $t['comp'];
                                     }
                                 }
                             }
@@ -481,38 +517,61 @@ import { " . $selectorsJoin . " } from '../../Components/Models/ormSelectors';
                             }
 
                             if (in_array($elB['key'], $objectFields)) {
-                                $componentsContent .= $this->addFieldObjExTemplate(
+                                $t = $this->addFieldObjExTemplate(
                                     $m,
                                     $el['key'],
                                     $elB['key'],
                                     $el['schema'],
                                     $templates['fieldObjEx'],
                                 );
+                                $componentsContent .= $t['content'];
+
+                                $elPath = $slug . '.' . $el['key'] . '.' . $elB['key'];
+                                $pathByComponent[$elPath] = $t['comp'];
                             } else {
-                                $componentsContent .= $this->addFieldObjTemplate(
+                                $t = $this->addFieldObjTemplate(
                                     $m,
                                     $el['key'],
                                     $elB['key'],
                                     $templates['fieldObj']
                                 );
+
+                                $componentsContent .= $t['content'];
+                                $elPath = $slug . '.' . $el['key'] . '.' . $elB['key'];
+                                $pathByComponent[$elPath] = $t['comp'];
                             }
                         }
                     }
                 } else {
                     $property = $this->propertiesUtils->getPropertyForPath($el['path']);
 
-                    if (isset($property['enum'])) {
-                        $componentsContent .= $this->addFieldTemplateEnum($m, $el['key'], $templates['fieldEnum']);
+                    if (isset($property['enum']) && count($property['enum']) > 0) {
+                        $t = $this->addFieldTemplateEnum($m, $el['key'], $templates['fieldEnum']);
                     } else if ($property['type'] === "string" && $property['format'] === "date") {
-                        $componentsContent .= $this->addFieldTemplateDate($m, $el['key'], $templates['fieldDate']);
+                        $t = $this->addFieldTemplateDate($m, $el['key'], $templates['fieldDate']);
                     } else if ($property['type'] === "string" && $property['format'] === "text") {
-                        $componentsContent .= $this->addFieldTemplateText($m, $el['key'], $templates['fieldText']);
+                        $t = $this->addFieldTemplateText($m, $el['key'], $templates['fieldText']);
                     } else {
-                        $componentsContent .= $this->addFieldTemplate($m, $el['key'], $templates['field']);
+                        $t = $this->addFieldTemplate($m, $el['key'], $templates['field']);
                     }
+                    $componentsContent .= $t['content'];
+                    $pathByComponent[$el['path']] = $t['comp'];
                 }
             }
         }
+
+        $componentsContent .= ' export const getFieldNaeViewByPath = (path: string, id: number) => {' . PHP_EOL;
+
+        foreach ($pathByComponent as $path => $comp) {
+            $componentsContent .= '
+    if (path === \''.$path.'\') {
+        return <'.$comp.' id={id}/>;
+    }';
+        }
+
+        $componentsContent .= '
+}' . PHP_EOL;
+
         file_put_contents($compFile, $componentsContent);
 
         $hooksDir = LocalConfigUtils::getFrontendHooksPath();
@@ -561,8 +620,8 @@ import { " . $selectorsJoin . " } from '../../Components/Models/ormSelectors';
             $dataVar = $m . 'DataNae';
 
             if (
-                mb_strpos($socketFileContent, $selector) !== false ||
-                mb_strpos($socketFileContent, ' ' . $dataVar . ' ') !== false
+                mb_strpos($socketFileContent, $selector) === false ||
+                mb_strpos($socketFileContent, ' ' . $dataVar . ' ') === false
             ) {
                 $dataLine = 'const ' . $m . 'DataNae = useSelector(state => ' . $selector . '(state));
 // ADD SELECTOR HERE';
@@ -574,7 +633,7 @@ import { " . $selectorsJoin . " } from '../../Components/Models/ormSelectors';
             }
 
             $checkLine = 'if (data.schema === NaeSSchemaMap.' . $m . '.className) {
-  dataToCheck = $' . $m . 'DataNae;
+  dataToCheck = ' . $m . 'DataNae;
   fields = I' . $m . 'FieldsNae;
 }
 // SCHEMA CHECK FINISH';
@@ -627,11 +686,18 @@ import { " . $selectorsJoin . " } from '../../Components/Models/ormSelectors';
         $field,
         $className,
         $propertyPath
-    )
-    {
+    ) {
+        // var_dump($key);
+        // var_dump($field);
+        // var_dump($className);
+        // var_dump($propertyPath);
+
         $isFilter = count(array_filter($o, function ($o) use ($key) {
                 return $o['key'] === $key;
             })) > 0;
+
+        // var_dump($isFilter);
+        // var_dump('-------');
 
         if ($isFilter) {
             if ($field && $field['key'] !== "id") {
@@ -667,152 +733,213 @@ import { " . $selectorsJoin . " } from '../../Components/Models/ormSelectors';
         return $o;
     }
 
-    public function addFieldTemplateEmpty($model, $template)
+    public function addFieldTemplateEmpty($model, $template): array
     {
         $key = "empty";
 
-        return str_replace(
-            ['|FIELD|', '|TEMPLATE|', '|SELECTOR|', '|SCHEMA|'],
-            [$key, $model . '' . ucfirst($key) . 'FieldNae', 'use' . $model . 'HookNae', $model],
-            $template
-        );
+        $compName = $model . '' . ucfirst($key) . 'FieldNae';
+
+        return [
+            'content' => str_replace(
+                ['|FIELD|', '|TEMPLATE|', '|SELECTOR|', '|SCHEMA|'],
+                [
+                    $key,
+                    $compName,
+                    'use' . $model . 'HookNae',
+                    $model
+                ],
+                $template
+            ),
+            'comp' => $compName
+        ];
     }
 
     public function addFieldObjExBTemplate(
-        $model, $modelB, $key, $keyB, $keyC, $schema, $template
-    )
-    {
-        return str_replace(
-            ["|TEMPLATEC|", "|FIELD|", "|FIELDB|", "|TEMPLATE|", "|SELECTOR|", "|SELECTORB|"],
-            [
-                $schema . ucfirst($keyC) . 'FieldNae',
-                $key,
-                $keyB,
-                $model . ucfirst($key) . 'REL' . ucfirst($keyB,) . ucfirst($keyC) . 'FieldNae',
-                'use' . $model . 'HookNae',
-                'use' . $modelB . 'HookNae',
-            ],
-            $template
-        );
+        $model,
+        $modelB,
+        $key,
+        $keyB,
+        $keyC,
+        $schema,
+        $template
+    ): array {
+        $compName = $schema . ucfirst($keyC) . 'FieldNae';
 
+        return [
+            'content' => str_replace(
+                ["|TEMPLATEC|", "|FIELD|", "|FIELDB|", "|TEMPLATE|", "|SELECTOR|", "|SELECTORB|"],
+                [
+                    $compName,
+                    $key,
+                    $keyB,
+                    $model . ucfirst($key) . 'REL' . ucfirst($keyB,) . ucfirst($keyC) . 'FieldNae',
+                    'use' . $model . 'HookNae',
+                    'use' . $modelB . 'HookNae',
+                ],
+                $template
+            ),
+            'comp' => $compName
+        ];
     }
 
     public function addFieldObjBTemplate(
-        $model, $key, $keyB, $keyC, $template
-    )
-    {
-        return str_replace(
-            ["|FIELDC|", "|FIELDB|", "|FIELD|", "|TEMPLATE|", "|SELECTOR|"],
-            [$keyC, $keyB, $key,
-                $model . ucfirst($key) . ucfirst($keyB,) . ucfirst($keyC) . 'FieldNae',
-                'use' . $model . 'HookNae'
-            ],
-            $template
-        );
+        $model,
+        $key,
+        $keyB,
+        $keyC,
+        $template
+    ): array {
+        $compName = $model . ucfirst($key) . ucfirst($keyB,) . ucfirst($keyC) . 'FieldNae';
+
+        return [
+            'content' => str_replace(
+                ["|FIELDC|", "|FIELDB|", "|FIELD|", "|TEMPLATE|", "|SELECTOR|"],
+                [
+                    $keyC,
+                    $keyB,
+                    $key,
+                    $compName,
+                    'use' . $model . 'HookNae'
+                ],
+                $template
+            ),
+            'comp' => $compName
+        ];
     }
 
     public function addFieldObjExTemplate(
-        $model, $key, $keyB, $schema, $template
-    )
-    {
-        return str_replace(
-            [
-                "|TEMPLATEB|",
-                "|FIELD|",
-                "|TEMPLATE|",
-                "|SELECTOR|",
-            ],
-            [
-                $schema . ucfirst($keyB) . 'FieldNae',
-                $key,
-                $model . ucfirst($key) . 'REL' . ucfirst($keyB,) . 'FieldNae',
-                'use' . $model . 'HookNae',
-            ],
-            $template
-        );
+        $model,
+        $key,
+        $keyB,
+        $schema,
+        $template
+    ): array {
+        $compName = $model . ucfirst($key) . 'REL' . ucfirst($keyB,) . 'FieldNae';
+
+        return [
+            'content' => str_replace(
+                [
+                    "|TEMPLATEB|",
+                    "|FIELD|",
+                    "|TEMPLATE|",
+                    "|SELECTOR|",
+                ],
+                [
+                    $schema . ucfirst($keyB) . 'FieldNae',
+                    $key,
+                    $compName,
+                    'use' . $model . 'HookNae',
+                ],
+                $template
+            ),
+            'comp' => $compName
+        ];
     }
 
-    public function addFieldObjTemplate($model, $key, $keyB, $template)
+    public function addFieldObjTemplate($model, $key, $keyB, $template): array
     {
-        return str_replace(
-            ["|FIELDB|", "|FIELD|", "|TEMPLATE|", "|SELECTOR|"],
-            [$keyB, $key,
-                $model . ucfirst($key) . ucfirst($keyB) . 'FieldNae',
-                'use' . $model . 'HookNae',
-            ],
-            $template
-        );
+        $compName = $model . ucfirst($key) . ucfirst($keyB) . 'FieldNae';
+        return [
+            'content' => str_replace(
+                ["|FIELDB|", "|FIELD|", "|TEMPLATE|", "|SELECTOR|"],
+                [
+                    $keyB, $key,
+                    $compName,
+                    'use' . $model . 'HookNae',
+                ],
+                $template
+            ),
+            'comp' => $compName
+        ];
     }
 
-    public function addFieldTemplateEnum($model, $key, $template)
+    public function addFieldTemplateEnum($model, $key, $template): array
     {
-        return str_replace(
-            ["|SCHEMA|", "|FIELD|", "|TEMPLATE|", "|SELECTOR|"],
-            [
-                $model,
-                $key,
-                $model . ucfirst($key) . 'FieldNae',
-                'use' . $model . 'HookNae',
+        $compName = $model . ucfirst($key) . 'FieldNae';
 
-            ],
-            $template
-        );
+        return [
+            'content' => str_replace(
+                ["|SCHEMA|", "|FIELD|", "|TEMPLATE|", "|SELECTOR|"],
+                [
+                    $model,
+                    $key,
+                    $compName,
+                    'use' . $model . 'HookNae',
+                ],
+                $template
+            ),
+            'comp' => $compName
+        ];
     }
 
-    public function addFieldTemplateDate($model, $key, $template)
+    public function addFieldTemplateDate($model, $key, $template): array
     {
-        return str_replace(
-            [
-                "|FIELD|",
-                "|TEMPLATE|",
-                "|SELECTOR|",
-                "|SCHEMA|",
-            ],
-            [
-                $key,
-                $model . ucfirst($key) . 'FieldNae',
-                'use' . $model . 'HookNae',
-                $model
-            ],
-            $template
-        );
+        $compName = $model . ucfirst($key) . 'FieldNae';
+
+        return [
+            'content' => str_replace(
+                [
+                    "|FIELD|",
+                    "|TEMPLATE|",
+                    "|SELECTOR|",
+                    "|SCHEMA|",
+                ],
+                [
+                    $key,
+                    $compName,
+                    'use' . $model . 'HookNae',
+                    $model
+                ],
+                $template
+            ),
+            'comp' => $compName
+        ];
     }
 
-    public function addFieldTemplateText($model, $key, $template)
+    public function addFieldTemplateText($model, $key, $template): array
     {
-        return str_replace(
-            [
-                "|FIELD|",
-                "|TEMPLATE|",
-                "|SELECTOR|",
-                "|SCHEMA|",
-            ],
-            [
-                $key,
-                $model . ucfirst($key) . 'FieldNae',
-                'use' . $model . 'HookNae',
-                $model
-            ],
-            $template
-        );
+        $compName = $model . ucfirst($key) . 'FieldNae';
+
+        return [
+            'content' => str_replace(
+                [
+                    "|FIELD|",
+                    "|TEMPLATE|",
+                    "|SELECTOR|",
+                    "|SCHEMA|",
+                ],
+                [
+                    $key,
+                    $compName,
+                    'use' . $model . 'HookNae',
+                    $model
+                ],
+                $template
+            ),
+            'comp' => $compName
+        ];
     }
 
-    public function addFieldTemplate($model, $key, $template)
+    public function addFieldTemplate($model, $key, $template): array
     {
-        return str_replace(
-            [
-                "|FIELD|",
-                "|TEMPLATE|",
-                "|SELECTOR|",
-                "|SCHEMA|",
-            ],
-            [
-                $key,
-                $model . ucfirst($key) . 'FieldNae',
-                'use' . $model . 'HookNae',
-                $model
-            ],
-            $template
-        );
+        $compName = $model . ucfirst($key) . 'FieldNae';
+        return [
+            'content' => str_replace(
+                [
+                    "|FIELD|",
+                    "|TEMPLATE|",
+                    "|SELECTOR|",
+                    "|SCHEMA|",
+                ],
+                [
+                    $key,
+                    $compName,
+                    'use' . $model . 'HookNae',
+                    $model
+                ],
+                $template
+            ),
+            'comp' => $compName
+        ];
     }
 }

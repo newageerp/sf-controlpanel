@@ -31,7 +31,7 @@ class InGeneratorBadges extends Command
         );
 
         foreach ($badgeItems as $badgeItem) {
-            $generatedPath = Utils::generatedPath('badges/'.$badgeItem['config']['schema']);
+            $generatedPath = Utils::generatedPath('badges/' . $badgeItem['config']['schema']);
 
             $compName = Utils::fixComponentName(
                 ucfirst($badgeItem['config']['schema']) .
@@ -42,16 +42,28 @@ class InGeneratorBadges extends Command
 
             $hookName = EntitiesUtils::elementHook($badgeItem['config']['schema']);
 
+            $badgeContent = '';
+            if (isset($badgeItem['config']['path']) && $badgeItem['config']['path']) {
+                $badgeContent = '{getFieldNaeViewByPath("' . $badgeItem['config']['path'] . '", element.id)}';
+            }
+            if (isset($badgeItem['config']['text'])) {
+                $badgeContent = $badgeItem['config']['text'];
+            }
+
             $generatedContent = str_replace(
                 [
                     'TP_COMP_NAME',
                     'TP_HOOK_NAME',
                     'TP_SLUG',
+                    'TP_VARIANT',
+                    'TP_BADGE_CONTENT',
                 ],
                 [
                     $compName,
                     $hookName,
                     $badgeItem['config']['slug'],
+                    $badgeItem['config']['bgColor'],
+                    $badgeContent,
                 ],
                 $statusItemsTemplate
             );

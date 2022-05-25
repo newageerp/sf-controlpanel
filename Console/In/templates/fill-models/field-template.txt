@@ -4,7 +4,7 @@ export function |TEMPLATE|(props: PropsLink) {
       return <Fragment />
   }
 
-  const fieldProperty = functions.properties.getPropertyForPath(\`\${NaeSSchemaMap.|SCHEMA|.schema}.|FIELD|\`);
+  const fieldProperty = functions.properties.getPropertyForPath(`${NaeSSchemaMap.|SCHEMA|.schema}.|FIELD|`);
   if (!fieldProperty) {
     return <Fragment/>
   }
