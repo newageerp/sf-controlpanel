@@ -3,7 +3,6 @@ import { TP_HOOK_NAME } from '../../../Components/Hooks/TP_HOOK_NAME';
 import { PropsId } from '../../../UserComponents/ModelsCacheData/types';
 import { getFieldNaeViewByPath } from '../../../UserComponents/ModelsCacheData/ModelFields';
 import { Badge } from '@newageerp/ui.badges.base.badge';
-import { getFieldNaeViewByPath } from '../../../UserComponents/ModelsCacheData/ModelFields';
 
 export default function TP_COMP_NAME(props: PropsId) {
     const element = TP_HOOK_NAME(props.id);
