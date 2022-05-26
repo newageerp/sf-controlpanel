@@ -64,7 +64,7 @@ class InGeneratorBadges extends Command
                     $compName,
                     $hookName,
                     $badgeItem['config']['slug'],
-                    $badgeItem['config']['bgColor'],
+                    $badgeItem['config']['bgColor'] ?? '',
                     $badgeContent,
                     $path,
                 ],
