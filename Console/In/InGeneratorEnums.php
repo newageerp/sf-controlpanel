@@ -34,6 +34,7 @@ class InGeneratorEnums extends Command
 
         $sql = "SELECT 
                     enums.id, enums.title, enums.value, enums.entity, enums.property, enums.sort,
+       enums.badge_variant as badgeVariant,
        entities.slug as entity_slug,
                     entities.slug || ' (' || entities.titleSingle || ')' as entity_title,
        properties.key as property_key,
@@ -46,28 +47,35 @@ class InGeneratorEnums extends Command
         $result = $db->query($sql);
 
         $enums = [];
+        $enumsColors = [];
         while ($data = $result->fetchArray(SQLITE3_ASSOC)) {
             if (!isset($enums[$data['entity_slug']])) {
                 $enums[$data['entity_slug']] = [];
+                $enumsColors[$data['entity_slug']] = [];
             }
             if (!isset($enums[$data['entity_slug']][$data['property_key']])) {
                 $enums[$data['entity_slug']][$data['property_key']] = [];
+                $enumsColors[$data['entity_slug']][$data['property_key']] = [];
             }
             $enums[$data['entity_slug']][$data['property_key']][$data['value']] = $data['title'];
+            $enumsColors[$data['entity_slug']][$data['property_key']][$data['value']] = $data['badgeVariant'];
         }
 
         foreach ($enums as $slug => $propertyKeys) {
             $compName = Utils::fixComponentName(ucfirst($slug) . 'Enums');
 
             $tpEnumStr = json_encode($propertyKeys, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+            $tpEnumColorsStr = json_encode($enumsColors[$slug], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 
             $fileName = $generatedPath . '/' . $compName . '.tsx';
             $generatedContent = str_replace(
                 [
+                    'TP_ENUMS_COLORS',
                     'TP_ENUMS',
                     'TP_COMP_NAME',
                 ],
                 [
+                    $tpEnumColorsStr,
                     $tpEnumStr,
                     $compName,
                 ],

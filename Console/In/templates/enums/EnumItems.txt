@@ -1,6 +1,8 @@
 import React from "react";
 import { UI } from '@newageerp/nae-react-ui';
 
+export const TP_COMP_NAMEColors: any = TP_ENUMS_COLORS;
+
 export const TP_COMP_NAME: any = TP_ENUMS;
 
 export const getTP_COMP_NAME = (type: string, value: any) => {

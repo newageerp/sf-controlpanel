@@ -4,6 +4,7 @@ import { PropsId } from '../../../UserComponents/ModelsCacheData/types';
 import { getFieldNaeViewByPath } from '../../../UserComponents/ModelsCacheData/ModelFields';
 import { Badge, BadgeSize } from '@newageerp/ui.badges.base.badge';
 import { functions } from "@newageerp/nae-react-ui";
+TP_IMPORT
 
 interface Props extends PropsId {
     size?: BadgeSize | string
