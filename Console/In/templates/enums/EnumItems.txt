@@ -8,3 +8,7 @@ export const TP_COMP_NAME: any = TP_ENUMS;
 export const getTP_COMP_NAME = (type: string, value: any) => {
     return !!TP_COMP_NAME[type] && !!TP_COMP_NAME[type][value]?TP_COMP_NAME[type][value]:"";
 }
+
+export const getTP_COMP_NAMEColors = (type: string, value: any) => {
+    return !!TP_COMP_NAMEColors[type] && !!TP_COMP_NAMEColors[type][value]?TP_COMP_NAMEColors[type][value]:"";
+}
