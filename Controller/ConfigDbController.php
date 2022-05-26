@@ -640,6 +640,7 @@ class ConfigDbController extends ConfigBaseController
 
         $sql = "SELECT 
                     enums.id, enums.title, enums.value, enums.entity, enums.property, enums.sort,
+                    enums.badge_variant as badgeVariant,
                     entities.slug || ' (' || entities.titleSingle || ')' as entity_title,
                     properties.key || ' (' || properties.title || ')' as property_title
                 FROM enums 
@@ -697,9 +698,9 @@ class ConfigDbController extends ConfigBaseController
         $db->busyTimeout(5 * 1000);
 
         if ($element['id'] === 0) {
-            $sql = "insert into enums (title, value, sort, entity, property) values (:title, :value, :sort, :entity, :property)";
+            $sql = "insert into enums (title, value, sort, entity, property, badge_variant) values (:title, :value, :sort, :entity, :property, :badgeVariant)";
         } else {
-            $sql = "update enums set title = :title, value = :value, sort = :sort, entity = :entity, property = :property where id = :id";
+            $sql = "update enums set title = :title, value = :value, sort = :sort, entity = :entity, property = :property, badge_variant = :badgeVariant where id = :id";
         }
 
         $stmt = $db->prepare($sql);
@@ -710,6 +711,7 @@ class ConfigDbController extends ConfigBaseController
 
         $stmt->bindValue(':title', $element['title']);
         $stmt->bindValue(':value', $element['value']);
+        $stmt->bindValue(':badgeVariant', $element['badgeVariant']);
         $stmt->bindValue(':sort', $element['sort'], SQLITE3_INTEGER);
         $stmt->bindValue(':entity', $element['entity'], SQLITE3_INTEGER);
         $stmt->bindValue(':property', $element['property'], SQLITE3_INTEGER);
