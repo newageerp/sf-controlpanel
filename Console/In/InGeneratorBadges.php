@@ -63,14 +63,14 @@ class InGeneratorBadges extends Command
                     $pathA = explode(".", $badgeItem['config']['path']);
                     $lastPath = $pathA[count($pathA) - 1];
 
-                    $compName = Utils::fixComponentName(ucfirst($property['schema']) . 'Enums');
-                    $funcName = 'get' . $compName;
-                    $funcNameColors = 'get' . $compName . 'Colors';
+                    $enumCompName = Utils::fixComponentName(ucfirst($property['schema']) . 'Enums');
+                    $funcName = 'get' . $enumCompName;
+                    $funcNameColors = 'get' . $enumCompName . 'Colors';
 
                     $badgeContent = $funcName . '("' . $lastPath . '", element["' . $lastPath . '"])';
                     $badgeVariant = $funcNameColors . '("' . $lastPath . '", element["' . $lastPath . '"])';
 
-                    $imports[] = 'import { ' . $funcName . ', ' . $funcNameColors . ' } from "../../enums/view/' . $compName . '";';
+                    $imports[] = 'import { ' . $funcName . ', ' . $funcNameColors . ' } from "../../enums/view/' . $enumCompName . '";';
                 }
             }
             if (isset($badgeItem['config']['text'])) {
