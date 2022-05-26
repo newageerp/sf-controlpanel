@@ -22,25 +22,8 @@ export default function TP_COMP_NAME(props: Props) {
         return (<Fragment/>);
     }
 
-    let property = functions.properties.getPropertyForPath('TP_PATH');
-    let badgeVariant = 'TP_VARIANT';
-    let badgeContent = TP_BADGE_CONTENT;
-
-    if (!!property && !!property.enum) {
-        const keyPath = 'TP_PATH'.split('.').splice(1).join(".");
-        let enumValue = -1;
-        try {
-            enumValue = keyPath.split('.').reduce((previous, current) => previous[current], element);
-        } catch (e) {
-
-        }
-        const filteredEnums = property.enum.filter((e: any) => e.value === enumValue);
-        if (filteredEnums.length > 0) {
-            const filteredEnum = filteredEnums[0];
-            badgeVariant = filteredEnum.badgeVariant;
-            badgeContent = filteredEnum.label;
-        }
-    }
+    const badgeVariant = TP_VARIANT;
+    const badgeContent = TP_BADGE_CONTENT;
 
     return (
         <Badge variant={badgeVariant} size={props.size}>

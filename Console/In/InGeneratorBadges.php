@@ -3,6 +3,7 @@
 namespace Newageerp\SfControlpanel\Console\In;
 
 use Newageerp\SfControlpanel\Console\EntitiesUtils;
+use Newageerp\SfControlpanel\Console\PropertiesUtils;
 use Newageerp\SfControlpanel\Console\Utils;
 use Newageerp\SfControlpanel\Service\MenuService;
 use Symfony\Component\Console\Command\Command;
@@ -13,9 +14,12 @@ class InGeneratorBadges extends Command
 {
     protected static $defaultName = 'nae:localconfig:InGeneratorBadges';
 
-    public function __construct(MenuService $menuService)
+    protected PropertiesUtils $propertiesUtils;
+
+    public function __construct(PropertiesUtils $propertiesUtils)
     {
         parent::__construct();
+        $this->propertiesUtils = $propertiesUtils;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -31,6 +35,8 @@ class InGeneratorBadges extends Command
         );
 
         foreach ($badgeItems as $badgeItem) {
+            $imports = [];
+
             $generatedPath = Utils::generatedPath('badges/' . $badgeItem['config']['schema']);
 
             $compName = Utils::fixComponentName(
@@ -43,13 +49,35 @@ class InGeneratorBadges extends Command
             $hookName = EntitiesUtils::elementHook($badgeItem['config']['schema']);
 
             $badgeContent = '';
-            $path = $badgeItem['config']['path'] ?? '';
+            $badgeVariant = '';
+            $property = null;
+
+            if (isset($badgeItem['config']['bgColor'])) {
+                $badgeVariant = '"' . $badgeItem['config']['bgColor'] . '"';
+            }
+
             if (isset($badgeItem['config']['path']) && $badgeItem['config']['path']) {
                 $badgeContent = 'getFieldNaeViewByPath("' . $badgeItem['config']['path'] . '", element.id)';
+                $property = $this->propertiesUtils->getPropertyForPath($badgeItem['config']['path']);
+                if (isset($property['enum']) && $property['enum']) {
+                    $pathA = $badgeItem['config']['path'];
+                    $lastPath = $pathA[count($pathA) - 1];
+
+                    $compName = Utils::fixComponentName(ucfirst($property['schema']) . 'Enums');
+                    $funcName = 'get' . $compName;
+                    $funcNameColors = 'get' . $compName . 'Colors';
+
+                    $badgeContent = $funcName . '("' . $lastPath . '", element["' . $lastPath . '"])';
+                    $badgeVariant = $funcNameColors . '("' . $lastPath . '", element["' . $lastPath . '"])';
+
+                    $imports[] = 'import { ' . $funcName . ', ' . $funcNameColors . ' } from "../../enums/view/' . $compName . '";';
+                }
             }
             if (isset($badgeItem['config']['text'])) {
                 $badgeContent = '"' . $badgeItem['config']['text'] . '"';
             }
+
+            $importsStr = implode("\n", $imports);
 
             $generatedContent = str_replace(
                 [
@@ -58,15 +86,15 @@ class InGeneratorBadges extends Command
                     'TP_SLUG',
                     'TP_VARIANT',
                     'TP_BADGE_CONTENT',
-                    'TP_PATH'
+                    'TP_IMPORT',
                 ],
                 [
                     $compName,
                     $hookName,
                     $badgeItem['config']['slug'],
-                    $badgeItem['config']['bgColor'] ?? '',
+                    $badgeVariant,
                     $badgeContent,
-                    $path,
+                    $importsStr,
                 ],
                 $statusItemsTemplate
             );
