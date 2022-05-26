@@ -43,11 +43,12 @@ class InGeneratorBadges extends Command
             $hookName = EntitiesUtils::elementHook($badgeItem['config']['schema']);
 
             $badgeContent = '';
+            $path = $badgeItem['config']['path'] ?? '';
             if (isset($badgeItem['config']['path']) && $badgeItem['config']['path']) {
-                $badgeContent = '{getFieldNaeViewByPath("' . $badgeItem['config']['path'] . '", element.id)}';
+                $badgeContent = 'getFieldNaeViewByPath("' . $badgeItem['config']['path'] . '", element.id)';
             }
             if (isset($badgeItem['config']['text'])) {
-                $badgeContent = $badgeItem['config']['text'];
+                $badgeContent = '"' . $badgeItem['config']['text'] . '"';
             }
 
             $generatedContent = str_replace(
@@ -57,6 +58,7 @@ class InGeneratorBadges extends Command
                     'TP_SLUG',
                     'TP_VARIANT',
                     'TP_BADGE_CONTENT',
+                    'TP_PATH'
                 ],
                 [
                     $compName,
@@ -64,6 +66,7 @@ class InGeneratorBadges extends Command
                     $badgeItem['config']['slug'],
                     $badgeItem['config']['bgColor'],
                     $badgeContent,
+                    $path,
                 ],
                 $statusItemsTemplate
             );

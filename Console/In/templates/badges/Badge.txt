@@ -3,6 +3,7 @@ import { TP_HOOK_NAME } from '../../../Components/Hooks/TP_HOOK_NAME';
 import { PropsId } from '../../../UserComponents/ModelsCacheData/types';
 import { getFieldNaeViewByPath } from '../../../UserComponents/ModelsCacheData/ModelFields';
 import { Badge, BadgeSize } from '@newageerp/ui.badges.base.badge';
+import { functions } from "@newageerp/nae-react-ui";
 
 interface Props extends PropsId {
     size?: BadgeSize | string
@@ -20,9 +21,29 @@ export default function TP_COMP_NAME(props: Props) {
         return (<Fragment/>);
     }
 
+    let property = functions.properties.getPropertyForPath('TP_PATH');
+    let badgeVariant = 'TP_VARIANT';
+    let badgeContent = TP_BADGE_CONTENT;
+
+    if (!!property && !!property.enum) {
+        const keyPath = 'TP_PATH'.split('.').splice(1).join(".");
+        let enumValue = -1;
+        try {
+            enumValue = keyPath.split('.').reduce((previous, current) => previous[current], element);
+        } catch (e) {
+
+        }
+        const filteredEnums = property.enum.filter((e: any) => e.value === enumValue);
+        if (filteredEnums.length > 0) {
+            const filteredEnum = filteredEnums[0];
+            badgeVariant = filteredEnum.badgeVariant;
+            badgeContent = filteredEnum.label;
+        }
+    }
+
     return (
-        <Badge variant={'TP_VARIANT'} size={props.size}>
-            TP_BADGE_CONTENT
+        <Badge variant={badgeVariant} size={props.size}>
+            {badgeContent}
         </Badge>
     )
 }
