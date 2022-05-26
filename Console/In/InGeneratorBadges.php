@@ -60,7 +60,7 @@ class InGeneratorBadges extends Command
                 $badgeContent = 'getFieldNaeViewByPath("' . $badgeItem['config']['path'] . '", element.id)';
                 $property = $this->propertiesUtils->getPropertyForPath($badgeItem['config']['path']);
                 if (isset($property['enum']) && $property['enum']) {
-                    $pathA = $badgeItem['config']['path'];
+                    $pathA = explode(".", $badgeItem['config']['path']);
                     $lastPath = $pathA[count($pathA) - 1];
 
                     $compName = Utils::fixComponentName(ucfirst($property['schema']) . 'Enums');
