@@ -5,7 +5,8 @@ import { UIConfig } from '@newageerp/nae-react-ui';
 import TP_COMP_NAME from '../forms-wide/TP_COMP_NAME';
 
 interface Props {
-    id: number | string
+    id: number | string,
+    compact?: boolean,
 }
 
 export default function TP_COMP_NAME_DATA_SOURCE(props: Props) {
@@ -75,7 +76,7 @@ export default function TP_COMP_NAME_DATA_SOURCE(props: Props) {
 
     return (
         <Fragment>
-            <TP_COMP_NAME element={element} onChange={updateElement} />
+            <TP_COMP_NAME element={element} onChange={updateElement} compact={props.compact} />
         </Fragment>
     )
 }

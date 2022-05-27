@@ -42,7 +42,8 @@ class InGeneratorEditForms extends Command
         $generatedPathDataSource = Utils::generatedPath('editforms/forms-wide-data-source');
 
         foreach ($editItems as $editItem) {
-            $tpRows = [];
+            $tpCompactRows = [];
+            $tpWideRows = [];
             $tpImports = [];
 
             $compName = Utils::fixComponentName(
@@ -86,22 +87,28 @@ class InGeneratorEditForms extends Command
                 }
 
                 $content = '<WideRow' . $labelInner . ' control={' . $fieldTemplate . '}/>';
-                $tpRows[] = $content;
+                $tpWideRows[] = $content;
+
+                $content = '<CompactRow' . $labelInner . ' control={' . $fieldTemplate . '}/>';
+                $tpCompactRows[] = $content;
             }
 
-            $tpRowsStr = implode("\n", $tpRows);
+            $tpWideRowsStr = implode("\n", $tpWideRows);
+            $tpCompactRowsStr = implode("\n", $tpCompactRows);
             $tpImportsStr = implode("\n", array_unique($tpImports));
 
             $fileName = $generatedPath . '/' . $compName . '.tsx';
             $generatedContent = str_replace(
                 [
                     'TP_COMP_NAME',
-                    'TP_ROWS',
+                    'TP_COMPACT_ROWS',
+                    'TP_WIDE_ROWS',
                     'TP_IMPORT'
                 ],
                 [
                     $compName,
-                    $tpRowsStr,
+                    $tpCompactRowsStr,
+                    $tpWideRowsStr,
                     $tpImportsStr,
                 ],
                 $editFormTemplate

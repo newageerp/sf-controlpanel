@@ -1,20 +1,29 @@
 import React, {Fragment} from 'react';
-import { Wide, WideRow, Label } from '@newageerp/ui.form.base.form-pack';
+import { Wide, WideRow, Compact, CompactRow, Label } from '@newageerp/ui.form.base.form-pack';
 import { useTranslation } from 'react-i18next'
 TP_IMPORT
 
 interface Props {
     element: any;
     onChange: (key: string, value: any) => void,
+    compact?: boolean,
 }
 
 export default function TP_COMP_NAME(props: Props) {
     const { element, onChange } = props;
     const { t } = useTranslation();
 
+    if (props.compact) {
+        return (
+            <Compact>
+                TP_COMPACT_ROWS
+            </Compact>
+        )
+    }
+
     return (
         <Wide>
-            TP_ROWS
+            TP_WIDE_ROWS
         </Wide>
     )
 }
