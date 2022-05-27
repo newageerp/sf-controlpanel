@@ -1,6 +1,7 @@
-import React, {Fragment} from 'react';
+import React, {Fragment, useState, useEffect} from 'react';
 import { useTranslation } from 'react-i18next'
 import { UIConfig } from '@newageerp/nae-react-ui';
+import TP_COMP_NAME from '../forms-wide/TP_COMP_NAME';
 
 interface Props {
     id: number | string
@@ -43,7 +44,7 @@ export default function TP_COMP_NAME_DATA_SOURCE(props: Props) {
             setHasChanges(true)
             _el[key] = val
 
-            _el = UIConfig.onEditElementUpdate(props.schema, key, val, _el)
+            _el = UIConfig.onEditElementUpdate('TP_SCHEMA', key, val, _el)
 
             setElement(_el)
         }
@@ -57,7 +58,7 @@ export default function TP_COMP_NAME_DATA_SOURCE(props: Props) {
                 _hasChanges = true
                 _el[k] = updates[k]
 
-                _el = UIConfig.onEditElementUpdate(props.schema, k, updates[k], _el)
+                _el = UIConfig.onEditElementUpdate('TP_SCHEMA', k, updates[k], _el)
             }
         })
 

@@ -112,14 +112,14 @@ class InGeneratorEditForms extends Command
             $fileName = $generatedPathDataSource . '/' . $compNameDataSource . '.tsx';
             $generatedContent = str_replace(
                 [
-                    'TP_COMP_NAME',
                     'TP_COMP_NAME_DATA_SOURCE',
+                    'TP_COMP_NAME',
                     'TP_SCHEMA',
                     'TP_FIELDS_TO_RETURN'
                 ],
                 [
-                    $compName,
                     $compNameDataSource,
+                    $compName,
                     $editItem['config']['schema'],
                     json_encode($fieldsToReturn, JSON_PRETTY_PRINT),
                 ],
