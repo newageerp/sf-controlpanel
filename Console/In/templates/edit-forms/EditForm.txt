@@ -1,8 +1,15 @@
 import React, {Fragment} from 'react';
-
 import { Wide, WideRow } from '@newageerp/ui.form.base.form-pack';
+TP_IMPORT
+
+interface Props {
+    element: any;
+    onChange: (key: string, value: any) => void,
+}
 
 export default function TP_COMP_NAME(props: Props) {
+    const { element, onChange } = props;
+
     return (
         <Wide>
             TP_ROWS

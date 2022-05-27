@@ -54,22 +54,35 @@ class InGeneratorEditForms extends Command
                     $fieldPropertyNaeType = $this->propertiesUtils->getPropertyNaeType($fieldProperty, $field);
                 }
 
-                $tdTemplateData = $this->propertiesUtils->getDefaultPropertyTableValueTemplate($fieldProperty, $field);
-                $tpImports[] = $tdTemplateData['import'];
+                $fieldTemplateData = $this->propertiesUtils->getDefaultPropertyEditValueTemplate($fieldProperty, $field);
+                $tpImports[] = $fieldTemplateData['import'];
 
+                $tpValue = 'element.' . $fieldProperty['key'];
+                $tpOnChange = '(e: any) => onChange(\'' . $fieldProperty['key'] . '\', e.target.value)';
+
+                $fieldTemplate = str_replace(
+                    ['TP_VALUE', 'TP_ON_CHANGE'],
+                    [$tpValue, $tpOnChange],
+                    $fieldTemplateData['template']
+                );
+
+                $content = '<WideRow>'.$fieldTemplate.'</WideRow>';
             }
 
             $tpRowsStr = implode("\n", $tpRows);
+            $tpImportsStr = implode("\n", array_unique($tpImports));
 
             $fileName = $generatedPath . '/' . $compName . '.tsx';
             $generatedContent = str_replace(
                 [
                     'TP_COMP_NAME',
-                    'TP_ROWS'
+                    'TP_ROWS',
+                    'TP_IMPORT'
                 ],
                 [
                     $compName,
                     $tpRowsStr,
+                    $tpImportsStr,
                 ],
                 $editFormTemplate
             );

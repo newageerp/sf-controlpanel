@@ -311,4 +311,31 @@ class PropertiesUtils
                 break;
         }
     }
+
+
+    public function getDefaultPropertyEditValueTemplate(?array $property, ?array $column)
+    {
+        if (!$property || !$column) {
+            return [
+                "import" => '',
+                "template" => '<Fragment/>'
+            ];
+        }
+
+        $naeType = $this->getPropertyNaeType($property, $column);
+
+        switch ($naeType) {
+            case 'string':
+                return [
+                    "import" => 'import { Input } from "@newageerp/ui.form.base.form-pack";',
+                    "template" => '<Input onChange={TP_ON_CHANGE} value={TP_VALUE}/>'
+                ];
+                break;
+            default :
+                return [
+                    "import" => '',
+                    "template" => '<Fragment/>'
+                ];
+        }
+    }
 }
