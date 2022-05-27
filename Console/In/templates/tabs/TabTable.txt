@@ -19,7 +19,7 @@ interface Props {
 }
 
 export default function TP_COMP_NAME(props: Props) {
-    const { data } = props;
+    const { data, navigate } = props;
     const { t } = useTranslation();
 
     const [doRemove, doRemoveData] = OpenApi.useURequest('NAEURemoveMultiple');
