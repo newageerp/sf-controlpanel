@@ -38,8 +38,8 @@ class InGeneratorEditForms extends Command
             true
         );
 
-        $generatedPath = Utils::generatedPath('editforms/forms-wide');
-        $generatedPathDataSource = Utils::generatedPath('editforms/forms-wide-data-source');
+        $generatedPath = Utils::generatedPath('editforms/forms');
+        $generatedPathDataSource = Utils::generatedPath('editforms/forms-data-source');
 
         foreach ($editItems as $editItem) {
             $tpCompactRows = [];
@@ -48,11 +48,11 @@ class InGeneratorEditForms extends Command
 
             $compName = Utils::fixComponentName(
                 ucfirst($editItem['config']['schema']) .
-                ucfirst($editItem['config']['type']) . 'WideForm'
+                ucfirst($editItem['config']['type']) . 'Form'
             );
             $compNameDataSource = Utils::fixComponentName(
                 ucfirst($editItem['config']['schema']) .
-                ucfirst($editItem['config']['type']) . 'WideFormDataSource'
+                ucfirst($editItem['config']['type']) . 'FormDataSource'
             );
 
             $fieldsToReturn = [];
