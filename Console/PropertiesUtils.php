@@ -328,7 +328,7 @@ class PropertiesUtils
             case 'string':
                 return [
                     "import" => 'import { Input } from "@newageerp/ui.form.base.form-pack";',
-                    "template" => '<Input onChange={TP_ON_CHANGE} value={TP_VALUE}/>'
+                    "template" => '<Input onChange={TP_ON_CHANGE_STRING} value={TP_VALUE}/>'
                 ];
                 break;
             case 'float':
