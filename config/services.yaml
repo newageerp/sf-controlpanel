@@ -76,6 +76,9 @@ services:
   Newageerp\SfControlpanel\Console\In\InFillModels:
     tags:
       - { name: 'console.command' }
+  Newageerp\SfControlpanel\Console\In\InGeneratorEditForms:
+    tags:
+      - { name: 'console.command' }
   Newageerp\SfControlpanel\Console\In\InRunAll:
     tags:
       - { name: 'console.command' }

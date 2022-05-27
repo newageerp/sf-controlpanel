@@ -1,0 +1,11 @@
+import React, {Fragment} from 'react';
+
+import { Wide, WideRow } from '@newageerp/ui.form.base.form-pack';
+
+export default function TP_COMP_NAME(props: Props) {
+    return (
+        <Wide>
+            TP_ROWS
+        </Wide>
+    )
+}
