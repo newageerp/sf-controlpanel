@@ -331,6 +331,24 @@ class PropertiesUtils
                     "template" => '<Input onChange={TP_ON_CHANGE} value={TP_VALUE}/>'
                 ];
                 break;
+            case 'float':
+                return [
+                    "import" => 'import { InputFloat } from "@newageerp/ui.form.base.form-pack";',
+                    "template" => '<InputFloat onChangeFloat={TP_ON_CHANGE} value={TP_VALUE}/>'
+                ];
+                break;
+            case 'number':
+                return [
+                    "import" => 'import { InputInt } from "@newageerp/ui.form.base.form-pack";',
+                    "template" => '<InputInt onChangeInt={TP_ON_CHANGE} value={TP_VALUE}/>'
+                ];
+                break;
+            case 'date':
+                return [
+                    "import" => 'import { Datepicker } from "@newageerp/ui.form.base.form-pack";',
+                    "template" => '<Datepicker value={TP_VALUE} onChange={TP_ON_CHANGE}/>'
+                ];
+                break;
             default :
                 return [
                     "import" => '',

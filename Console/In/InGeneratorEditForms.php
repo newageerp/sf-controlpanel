@@ -73,11 +73,12 @@ class InGeneratorEditForms extends Command
                 $tpImports[] = $fieldTemplateData['import'];
 
                 $tpValue = 'element.' . $fieldProperty['key'];
-                $tpOnChange = '(e: any) => onChange(\'' . $fieldProperty['key'] . '\', e.target.value)';
+                $tpOnChange = '(e: any) => onChange(\'' . $fieldProperty['key'] . '\', e)';
+                $tpOnChangeString = '(e: any) => onChange(\'' . $fieldProperty['key'] . '\', e.target.value)';
 
                 $fieldTemplate = str_replace(
-                    ['TP_VALUE', 'TP_ON_CHANGE'],
-                    [$tpValue, $tpOnChange],
+                    ['TP_VALUE', 'TP_ON_CHANGE_STRING', 'TP_ON_CHANGE'],
+                    [$tpValue, $tpOnChangeString, $tpOnChange],
                     $fieldTemplateData['template']
                 );
 
