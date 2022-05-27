@@ -67,6 +67,7 @@ class InGeneratorEditForms extends Command
                 );
 
                 $content = '<WideRow>'.$fieldTemplate.'</WideRow>';
+                $tpRows[] = $content;
             }
 
             $tpRowsStr = implode("\n", $tpRows);
