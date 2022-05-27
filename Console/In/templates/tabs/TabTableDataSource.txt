@@ -7,7 +7,11 @@ import { PageContainer, PageContainerMarginTop } from '@newageerp/ui.paging.base
 import { SearchToolbar, SearchToolbarMarginBottom } from '@newageerp/ui.components.list.search-toolbar'
 import { SortingItem } from '@newageerp/ui.components.list.sort-controller';
 
-export default function TP_COMP_NAME() {
+interface Props {
+    navigate?: (schema: string, id: number | string, el: any) => void
+}
+
+export default function TP_COMP_NAME(props: Props) {
     const headerRef = useRef(null)
     const scrollToHeader = () => {
         if (headerRef && headerRef.current) {
@@ -121,7 +125,12 @@ export default function TP_COMP_NAME() {
                 }
                 marginBottom={SearchToolbarMarginBottom['40px']}
             />
-            <TP_TABLE_COMP_NAME data={dataResult.data.data} doReload={loadData} className={`${dataResult.loading?'tw3-animate-pulse':''}`} />
+            <TP_TABLE_COMP_NAME
+                data={dataResult.data.data}
+                doReload={loadData}
+                className={`${dataResult.loading?'tw3-animate-pulse':''}`}
+                navigate={props.navigate}
+            />
             <PageContainer pages={pages} activePage={dataState.page} setActivePage={setActivePage} marginTop={PageContainerMarginTop['42px']} />
         </div>
     )

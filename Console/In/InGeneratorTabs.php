@@ -119,16 +119,20 @@ class InGeneratorTabs extends Command
                     $tpRowData[] = 'const ' . $varNameId . ' = ' . $varValueId . ';';
                 }
 
-                $wrapStart = $column['link'] > 0 ? "<UI.Buttons.SchemaMultiLink
-                                id={" . ($varNameId ?: 'item.id') . "}
-                                schema={'" . $colProperty['schema'] . "'}
-                                className={'text-left'}
-                                onClick={() => navigate('" . $colProperty['schema'] . "', " . ($varNameId ?: 'item.id') . ", item)}
-                                buttonsNl={false}
-                                onClickDef={'" . ($column['link'] === 10 ? 'main' : 'popup') . "'}
-                               >" : '';
+                $wrapStart = $column['link'] > 0 ? "
+<UI.Buttons.SchemaMultiLink
+    id={" . ($varNameId ?: 'item.id') . "}
+    schema={'" . $colProperty['schema'] . "'}
+    className={'text-left'}
+    onClick={() => navigate('" . $colProperty['schema'] . "', " . ($varNameId ?: 'item.id') . ", item)}
+    buttonsNl={false}
+    onClickDef={'" . ($column['link'] === 10 ? 'main' : 'popup') . "'}
+>
+" : '';
 
-                $wrapFinish = $column['link'] > 0 ? '</UI.Buttons.SchemaMultiLink>' : '';
+                $wrapFinish = $column['link'] > 0 ? '
+</UI.Buttons.SchemaMultiLink>
+' : '';
 
                 $openTagTd = '<Td ' . $textAlignment . ' className="' . implode(" ", $tdClassName) . '">';
                 $tdTemplate = $openTagTd .
