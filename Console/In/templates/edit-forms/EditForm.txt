@@ -8,7 +8,7 @@ interface Props {
     onChange: (key: string, value: any) => void,
     compact?: boolean,
 
-    onSave: (element: any, isNew: boolean, schema: string) => void,
+    onSave: () => void,
     onCancel: () => void,
 }
 

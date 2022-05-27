@@ -58,7 +58,9 @@ class InGeneratorEditForms extends Command
             $fieldsToReturn = [];
 
             foreach ($editItem['config']['fields'] as $fieldIndex => $field) {
-                $fieldProperty = $this->propertiesUtils->getPropertyForPath($field['path']);
+                $pathA = explode(".", $field['path']);
+                $path = $pathA[0] . '.' . $pathA[1];
+                $fieldProperty = $this->propertiesUtils->getPropertyForPath($path);
 
                 $fieldPropertyNaeType = '';
                 if ($fieldProperty) {
@@ -67,6 +69,9 @@ class InGeneratorEditForms extends Command
                     $pathArray = explode(".", $field['path']);
                     array_shift($pathArray);
                     $fieldsToReturn[] = implode(".", $pathArray);
+                    if (count($pathArray) > 2) {
+                        $fieldsToReturn[] = $path . '.id';
+                    }
                 }
 
                 $fieldTemplateData = $this->propertiesUtils->getDefaultPropertyEditValueTemplate($fieldProperty, $field);
@@ -93,6 +98,8 @@ class InGeneratorEditForms extends Command
                 $content = '<CompactRow' . $labelInner . ' control={' . $fieldTemplate . '}/>';
                 $tpCompactRows[] = $content;
             }
+
+            $fieldsToReturn[] = array_values(array_unique($fieldsToReturn));
 
             $tpWideRowsStr = implode("\n", $tpWideRows);
             $tpCompactRowsStr = implode("\n", $tpCompactRows);

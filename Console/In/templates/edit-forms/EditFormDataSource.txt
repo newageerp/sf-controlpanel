@@ -110,7 +110,7 @@ export default function TP_COMP_NAME_DATA_SOURCE(props: Props) {
                 element={element}
                 onChange={updateElement}
                 compact={props.compact}
-                onSave={props.onSave}
+                onSave={doSave}
                 onCancel={props.onCancel}
             />
         </Fragment>
