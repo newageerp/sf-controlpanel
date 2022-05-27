@@ -12,6 +12,7 @@ TP_IMPORT
 interface Props {
     data: any,
     doReload: () => void,
+    className?: string,
 }
 
 export default function TP_COMP_NAME(props: Props) {
@@ -73,6 +74,7 @@ export default function TP_COMP_NAME(props: Props) {
             <Button confirmation={true} bgColor={TwBackgroundColors.white} onClick={doMultipleRemove}><Icon type={IconType.Solid} icon={IconList.trash} ping={doRemoveData.loading} /></Button>
         </div>}
         <Table
+            className={props.className}
             thead={
                 <thead>
                     <tr>

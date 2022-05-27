@@ -27,10 +27,10 @@ class ConfigPropertiesController extends ConfigBaseController
         foreach ($rels as $relProperty) {
             $relSchemaProperties = $this->schemaPropetiesForSort($relProperty['format'], $propertiesUtils);
             foreach ($relSchemaProperties as $relSchemaProperty) {
-                $key = explode(".", $relSchemaProperty['key']);
+                $key = explode(".", $relSchemaProperty['value']);
                 $title = $relProperty['title'] . ' -> ' . $relSchemaProperty['label'];
                 $schemaProperties[] = [
-                    'key' => 'i.' . $relProperty['key'] . '.' . $key[1],
+                    'value' => 'i.' . $relProperty['key'] . '.' . $key[1],
                     'label' => $title,
                 ];
             }
@@ -74,7 +74,7 @@ class ConfigPropertiesController extends ConfigBaseController
         $schemaProperties = array_map(
             function ($property) {
                 return [
-                    'key' => 'i.' . $property['key'],
+                    'value' => 'i.' . $property['key'],
                     'label' => $property['title'],
                 ];
             },

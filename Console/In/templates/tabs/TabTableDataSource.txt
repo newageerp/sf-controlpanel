@@ -92,7 +92,7 @@ export default function TP_COMP_NAME() {
             filter,
             dataState.page,
             pageSize,
-            sort
+            sort.filter((s: SortingItem) => s.key !== ''),
         );
     }
     useEffect(loadData, [dataState]);
@@ -121,7 +121,7 @@ export default function TP_COMP_NAME() {
                 }
                 marginBottom={SearchToolbarMarginBottom['40px']}
             />
-            <TP_TABLE_COMP_NAME data={dataResult.data.data} doReload={loadData} />
+            <TP_TABLE_COMP_NAME data={dataResult.data.data} doReload={loadData} `${dataResult.loaging?'tw3-animate-pulse':''}` />
             <PageContainer pages={pages} activePage={dataState.page} setActivePage={setActivePage} marginTop={PageContainerMarginTop['42px']} />
         </div>
     )
