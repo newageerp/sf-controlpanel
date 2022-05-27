@@ -3,7 +3,8 @@ import { useTranslation } from 'react-i18next'
 import { OpenApi } from '@newageerp/nae-react-auth-wrapper';
 import { UIConfig } from '@newageerp/nae-react-ui';
 import { SquareButton } from '@newageerp/ui.buttons.base.square-button';
-import { useTranslation } from 'react-i18next'
+import { TwBackgroundColors } from '@newageerp/ui.styles.tailwind';
+
 import TP_COMP_NAME from '../forms/TP_COMP_NAME';
 
 interface Props {
