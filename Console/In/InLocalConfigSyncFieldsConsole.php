@@ -76,7 +76,11 @@ class InLocalConfigSyncFieldsConsole extends Command
         properties.dbType,
         entities.slug as entity_slug, 
         entities.className as entity_className,
-        properties.entity
+        properties.entity,
+       properties.available_sort,
+       properties.available_filter,
+       properties.available_group,
+       properties.available_total
         
         from properties
         left join entities on entities.id = properties.entity ';
@@ -105,6 +109,13 @@ class InLocalConfigSyncFieldsConsole extends Command
             }
 
             $propertiesKeys[$data['entity_slug']][$data['key']] = $data['key'];
+
+            $available = [
+                'sort' => $data['available_sort'],
+                'filter' => $data['available_filter'],
+                'group' => $data['available_group'],
+                'total' => $data['available_total'],
+            ];
 
             $prop = [
                 'schema' => $data['entity_slug'],
@@ -184,9 +195,10 @@ class InLocalConfigSyncFieldsConsole extends Command
                 'schema' => $prop['schema'],
                 'isDb' => $prop['isDb'],
                 'dbType' => $prop['dbType'],
-                'as' => isset($prop['as']) ? $prop['as'] : '',
-                'additionalProperties' => isset($prop['additionalProperties']) ? $prop['additionalProperties'] : [],
-                'enum' => isset($prop['enum']) ? $prop['enum'] : [],
+                'as' => $prop['as'] ?? '',
+                'additionalProperties' => $prop['additionalProperties'] ?? [],
+                'enum' => $prop['enum'] ?? [],
+                'available' => $available,
             ];
             $propPhp['naeType'] = $this->propertiesUtils->getPropertyNaeType($propPhp, []);
             $phpProperties[] = $propPhp;

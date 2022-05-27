@@ -24,7 +24,14 @@ class ConfigPropertiesController extends ConfigBaseController
         $schemaProperties = array_filter(
             $propertiesUtils->getProperties(),
             function ($property) use ($schema) {
-                return $property['schema'] === $schema && $property['isDb'] && !!$property['title'];
+                return ($property['schema'] === $schema &&
+                    isset($property['isDb']) &&
+                    $property['isDb'] &&
+                    isset($property['available']) &&
+                    $property['available']['sort'] &&
+                    $property['type'] !== 'rel' &&
+                    $property['type'] !== 'array'
+                );
             }
         );
         $hasId = count(array_filter(
@@ -36,7 +43,7 @@ class ConfigPropertiesController extends ConfigBaseController
         if (!$hasId) {
             $schemaProperties[] = [
                 'key' => 'id',
-                'label' => 'ID'
+                'title' => 'ID'
             ];
         }
         $schemaProperties = array_map(
@@ -49,6 +56,6 @@ class ConfigPropertiesController extends ConfigBaseController
             $schemaProperties
         );
 
-        return $this->json(['data' => $schemaProperties]);
+        return $this->json(['data' => array_values($schemaProperties)]);
     }
 }
