@@ -92,7 +92,7 @@ export default function TP_COMP_NAME() {
             filter,
             dataState.page,
             pageSize,
-            sort.filter((s: SortingItem) => s.key !== ''),
+            dataState.sort.filter((s: SortingItem) => s.key !== ''),
         );
     }
     useEffect(loadData, [dataState]);
