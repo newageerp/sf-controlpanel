@@ -1,0 +1,75 @@
+import React, {Fragment} from 'react';
+import { useTranslation } from 'react-i18next'
+import { UIConfig } from '@newageerp/nae-react-ui';
+
+interface Props {
+    id: number | string
+}
+
+export default function TP_COMP_NAME_DATA_SOURCE(props: Props) {
+    const [hasChanges, setHasChanges] = useState(false)
+    const [element, setElement] = useState<any>(null)
+
+    let fieldsToReturn: string[] = TP_FIELDS_TO_RETURN;
+    const [schemaGetData, schemaGetDataParams] = UIConfig.useUList(
+        'TP_SCHEMA',
+        fieldsToReturn
+    );
+    const getData = () => {
+        if (props.id === 'new') {
+            schemaGetData(
+                { empty: true },
+                1,
+                1,
+                undefined,
+                undefined,
+                {} // TODO
+            )
+        } else {
+            schemaGetData([{ and: [['i.id', 'eq', props.id, true]] }], 1, 1)
+        }
+    }
+    useEffect(getData, [])
+
+    useEffect(() => {
+        if (schemaGetDataParams.data.records === 1) {
+            setElement(schemaGetDataParams.data.data[0])
+        }
+    }, [schemaGetDataParams.data.data])
+
+    const updateElement = (key: string, val: any) => {
+        let _el = JSON.parse(JSON.stringify(element))
+        if (val !== _el[key]) {
+            setHasChanges(true)
+            _el[key] = val
+
+            _el = UIConfig.onEditElementUpdate(props.schema, key, val, _el)
+
+            setElement(_el)
+        }
+    }
+
+    const updateElementBatch = (updates: any) => {
+        let _el = JSON.parse(JSON.stringify(element))
+        let _hasChanges = false
+        Object.keys(updates).forEach((k: string) => {
+            if (updates[k] !== _el[k]) {
+                _hasChanges = true
+                _el[k] = updates[k]
+
+                _el = UIConfig.onEditElementUpdate(props.schema, k, updates[k], _el)
+            }
+        })
+
+        if (_hasChanges) {
+            setHasChanges(true)
+            setElement(_el)
+        }
+    }
+
+    return (
+        <Fragment>
+            <TP_COMP_NAME element={element} onChange={updateElement} />
+        </Fragment>
+    )
+}

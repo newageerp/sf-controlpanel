@@ -28,6 +28,9 @@ class InGeneratorEditForms extends Command
         $editFormTemplate = file_get_contents(
             __DIR__ . '/templates/edit-forms/EditForm.txt'
         );
+        $editFormDataSourceTemplate = file_get_contents(
+            __DIR__ . '/templates/edit-forms/EditFormDataSource.txt'
+        );
 
         $editsFile = $_ENV['NAE_SFS_CP_STORAGE_PATH'] . '/edit.json';
         $editItems = json_decode(
@@ -35,7 +38,8 @@ class InGeneratorEditForms extends Command
             true
         );
 
-        $generatedPath = Utils::generatedPath('editforms/forms');
+        $generatedPath = Utils::generatedPath('editforms/forms-wide');
+        $generatedPathDataSource = Utils::generatedPath('editforms/forms-wide-data-source');
 
         foreach ($editItems as $editItem) {
             $tpRows = [];
@@ -43,8 +47,14 @@ class InGeneratorEditForms extends Command
 
             $compName = Utils::fixComponentName(
                 ucfirst($editItem['config']['schema']) .
-                ucfirst($editItem['config']['type']) . 'Form'
+                ucfirst($editItem['config']['type']) . 'WideForm'
             );
+            $compNameDataSource = Utils::fixComponentName(
+                ucfirst($editItem['config']['schema']) .
+                ucfirst($editItem['config']['type']) . 'WideFormDataSource'
+            );
+
+            $fieldsToReturn = [];
 
             foreach ($editItem['config']['fields'] as $fieldIndex => $field) {
                 $fieldProperty = $this->propertiesUtils->getPropertyForPath($field['path']);
@@ -52,6 +62,10 @@ class InGeneratorEditForms extends Command
                 $fieldPropertyNaeType = '';
                 if ($fieldProperty) {
                     $fieldPropertyNaeType = $this->propertiesUtils->getPropertyNaeType($fieldProperty, $field);
+
+                    $pathArray = explode(".", $field['path']);
+                    array_shift($pathArray);
+                    $fieldsToReturn[] = implode(".", $pathArray);
                 }
 
                 $fieldTemplateData = $this->propertiesUtils->getDefaultPropertyEditValueTemplate($fieldProperty, $field);
@@ -94,6 +108,24 @@ class InGeneratorEditForms extends Command
             );
             Utils::writeOnChanges($fileName, $generatedContent);
 
+            // DATA SOURCE
+            $fileName = $generatedPathDataSource . '/' . $compNameDataSource . '.tsx';
+            $generatedContent = str_replace(
+                [
+                    'TP_COMP_NAME',
+                    'TP_COMP_NAME_DATA_SOURCE',
+                    'TP_SCHEMA',
+                    'TP_FIELDS_TO_RETURN'
+                ],
+                [
+                    $compName,
+                    $compNameDataSource,
+                    $editItem['config']['schema'],
+                    json_encode($fieldsToReturn, JSON_PRETTY_PRINT),
+                ],
+                $editFormTemplate
+            );
+            Utils::writeOnChanges($fileName, $generatedContent);
         }
 
         return Command::SUCCESS;
