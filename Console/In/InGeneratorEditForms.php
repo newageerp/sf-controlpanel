@@ -81,7 +81,7 @@ class InGeneratorEditForms extends Command
                 );
 
                 $labelInner = '';
-                if ($field['hideLabel']) {
+                if (!$field['hideLabel']) {
                     $labelInner = ' label={<Label>{t(\'' . $fieldProperty['title'] . '\')}</Label>}';
                 }
 
