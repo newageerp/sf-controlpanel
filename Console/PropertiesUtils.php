@@ -176,7 +176,7 @@ class PropertiesUtils
     {
         if (!$property || !$column) {
             return [
-                "import" => 'import { Fragment } from "react";',
+                "import" => '',
                 "template" => '<Fragment/>'
             ];
         }
@@ -193,13 +193,13 @@ class PropertiesUtils
                 break;
             case 'file':
                 return [
-                    "import" => 'import { Fragment } from "react";',
+                    "import" => '',
                     "template" => '<Fragment/>'
                 ];
                 break;
             case 'fileMultiple':
                 return [
-                    "import" => 'import { Fragment } from "react";',
+                    "import" => '',
                     "template" => '<Fragment/>'
                 ];
                 break;
@@ -217,19 +217,19 @@ class PropertiesUtils
                 break;
             case 'color':
                 return [
-                    "import" => 'import { Fragment } from "react";',
+                    "import" => '',
                     "template" => '<Fragment/>'
                 ];
                 break;
             case 'object':
                 return [
-                    "import" => 'import { Fragment } from "react";',
+                    "import" => '',
                     "template" => '<Fragment/>'
                 ];
                 break;
             case 'string_array':
                 return [
-                    "import" => 'import { Fragment } from "react";',
+                    "import" => '',
                     "template" => '<Fragment/>'
                 ];
                 break;
@@ -271,13 +271,13 @@ class PropertiesUtils
                 break;
             case 'enum_multi_number':
                 return [
-                    "import" => 'import { Fragment } from "react";',
+                    "import" => '',
                     "template" => '<Fragment/>'
                 ];
                 break;
             case 'enum_multi_text':
                 return [
-                    "import" => 'import { Fragment } from "react";',
+                    "import" => '',
                     "template" => '<Fragment/>'
                 ];
                 break;
@@ -299,7 +299,7 @@ class PropertiesUtils
                 break;
             case 'array':
                 return [
-                    "import" => 'import { Fragment } from "react";',
+                    "import" => '',
                     "template" => '<Fragment/>'
                 ];
                 break;
