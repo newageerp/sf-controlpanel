@@ -123,7 +123,7 @@ class InGeneratorEditForms extends Command
                     $editItem['config']['schema'],
                     json_encode($fieldsToReturn, JSON_PRETTY_PRINT),
                 ],
-                $editFormTemplate
+                $editFormDataSourceTemplate
             );
             Utils::writeOnChanges($fileName, $generatedContent);
         }
