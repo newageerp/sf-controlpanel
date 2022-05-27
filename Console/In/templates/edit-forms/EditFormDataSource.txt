@@ -68,6 +68,10 @@ export default function TP_COMP_NAME_DATA_SOURCE(props: Props) {
         }
     }
 
+    if (!element) {
+        return <Fragment/>
+    }
+
     return (
         <Fragment>
             <TP_COMP_NAME element={element} onChange={updateElement} />
