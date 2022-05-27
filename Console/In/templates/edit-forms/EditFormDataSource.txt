@@ -106,12 +106,13 @@ export default function TP_COMP_NAME_DATA_SOURCE(props: Props) {
 
     return (
         <Fragment>
-            <TP_COMP_NAME element={element} onChange={updateElement} compact={props.compact} />
-
-            <div className='tw3-flex tw3-gap-4 tw3-justify-end'>
-                <SquareButton onClick={props.onCancel} bgColor={TwBackgroundColors.slate200}>{t('Atšaukti')}</SquareButton>
-                <SquareButton onClick={doSave} bgColor={TwBackgroundColors.sky400}>{t('Išsaugoti')}</SquareButton>
-            </div>
+            <TP_COMP_NAME
+                element={element}
+                onChange={updateElement}
+                compact={props.compact}
+                onSave={props.onSave}
+                onCancel={props.onCancel}
+            />
         </Fragment>
     )
 }

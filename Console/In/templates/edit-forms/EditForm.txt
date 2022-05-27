@@ -1,5 +1,5 @@
 import React, {Fragment} from 'react';
-import { Wide, WideRow, Compact, CompactRow, Label } from '@newageerp/ui.form.base.form-pack';
+import { Wide, WideToolbar, WideRow, Compact, CompactToolbar, CompactRow, Label } from '@newageerp/ui.form.base.form-pack';
 import { useTranslation } from 'react-i18next'
 TP_IMPORT
 
@@ -7,6 +7,9 @@ interface Props {
     element: any;
     onChange: (key: string, value: any) => void,
     compact?: boolean,
+
+    onSave: (element: any, isNew: boolean, schema: string) => void,
+    onCancel: () => void,
 }
 
 export default function TP_COMP_NAME(props: Props) {
@@ -17,6 +20,7 @@ export default function TP_COMP_NAME(props: Props) {
         return (
             <Compact>
                 TP_COMPACT_ROWS
+                <CompactToolbar onSave={props.onSave} onCancel={props.onCancel} />
             </Compact>
         )
     }
@@ -24,6 +28,7 @@ export default function TP_COMP_NAME(props: Props) {
     return (
         <Wide>
             TP_WIDE_ROWS
+            <WideToolbar onSave={props.onSave} onCancel={props.onCancel} />
         </Wide>
     )
 }
