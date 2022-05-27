@@ -2,16 +2,45 @@ import React, {Fragment, useState, useEffect} from 'react';
 import { useTranslation } from 'react-i18next'
 import { OpenApi } from '@newageerp/nae-react-auth-wrapper';
 import { UIConfig } from '@newageerp/nae-react-ui';
+import { SquareButton } from '@newageerp/ui.buttons.base.square-button';
+import { useTranslation } from 'react-i18next'
 import TP_COMP_NAME from '../forms/TP_COMP_NAME';
 
 interface Props {
     id: number | string,
     compact?: boolean,
+
+    onSave: (element: any, isNew: boolean, schema: string) => void,
+    onCancel: () => void,
+
+    fieldsToReturnOnSave?: string[]
 }
 
 export default function TP_COMP_NAME_DATA_SOURCE(props: Props) {
+    const { t } = useTranslation();
+
     const [hasChanges, setHasChanges] = useState(false)
     const [element, setElement] = useState<any>(null)
+
+    const [saveData, saveDataParams] = OpenApi.useUSave(
+        'TP_SCHEMA',
+        props.fieldsToReturnOnSave ? props.fieldsToReturnOnSave : ['id']
+    );
+    const doSave = () => {
+        if (saveDataParams.loading) {
+            return
+        }
+        const isNew = props.id === 'new'
+        setHasChanges(false)
+        saveData(element, props.id).then((res: any) => {
+            if (res) {
+                if (res.error) {
+                } else {
+                    props.onSave(res.data.element, isNew, 'TP_SCHEMA');
+                }
+            }
+        })
+    }
 
     let fieldsToReturn: string[] = TP_FIELDS_TO_RETURN;
     const [schemaGetData, schemaGetDataParams] = OpenApi.useUList(
@@ -77,6 +106,11 @@ export default function TP_COMP_NAME_DATA_SOURCE(props: Props) {
     return (
         <Fragment>
             <TP_COMP_NAME element={element} onChange={updateElement} compact={props.compact} />
+
+            <div className='tw3-flex tw3-gap-4 tw3-justify-end'>
+                <SquareButton onClick={props.onCancel} bgColor={TwBackgroundColors.slate200}>{t('Atšaukti')}</SquareButton>
+                <SquareButton onClick={doSave} bgColor={TwBackgroundColors.sky400}>{t('Išsaugoti')}</SquareButton>
+            </div>
         </Fragment>
     )
 }
