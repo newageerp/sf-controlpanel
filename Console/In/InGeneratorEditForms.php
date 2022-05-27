@@ -66,7 +66,12 @@ class InGeneratorEditForms extends Command
                     $fieldTemplateData['template']
                 );
 
-                $content = '<WideRow>'.$fieldTemplate.'</WideRow>';
+                $labelInner = '';
+                if ($field['hideLabel']) {
+                    $labelInner = ' label={<Label>{t(\'' . $fieldProperty['title'] . '\')}</Label>}';
+                }
+
+                $content = '<WideRow' . $labelInner . ' control={' . $fieldTemplate . '}/>';
                 $tpRows[] = $content;
             }
 

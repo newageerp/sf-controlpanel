@@ -1,5 +1,6 @@
 import React, {Fragment} from 'react';
-import { Wide, WideRow } from '@newageerp/ui.form.base.form-pack';
+import { Wide, WideRow, Label } from '@newageerp/ui.form.base.form-pack';
+import { useTranslation } from 'react-i18next'
 TP_IMPORT
 
 interface Props {
@@ -9,6 +10,7 @@ interface Props {
 
 export default function TP_COMP_NAME(props: Props) {
     const { element, onChange } = props;
+    const { t } = useTranslation();
 
     return (
         <Wide>
