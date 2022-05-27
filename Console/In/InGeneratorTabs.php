@@ -62,7 +62,7 @@ class InGeneratorTabs extends Command
                 ucfirst($tabItem['config']['type']) . 'TableDataSource'
             );
 
-            if ($tabItem['config']['allowMultipleSelection']) {
+            if (isset($tabItem['config']['allowMultipleSelection']) && $tabItem['config']['allowMultipleSelection']) {
                 $tpHead[] = '<Th><input checked={isCheckedAll} onChange={toggleSelectAll} type="checkbox" /></Th>';
                 $tpBody[] = '<Td><input type="checkbox" checked={isChecked} onClick={() => toggleSelect(item?.id)} /></Td>';
                 $tpRowData[] = 'const isChecked = selectedIds.indexOf(item?.id) >= 0;';
