@@ -5,6 +5,7 @@ import { OpenApi } from '@newageerp/nae-react-auth-wrapper';
 import { functions } from '@newageerp/nae-react-ui';
 import { PageContainer, PageContainerMarginTop } from '@newageerp/ui.paging.base.page-container'
 import { SearchToolbar, SearchToolbarMarginBottom } from '@newageerp/ui.components.list.search-toolbar'
+import { SortingItem } from '@newageerp/ui.components.list.sort-controller';
 
 export default function TP_COMP_NAME() {
     const headerRef = useRef(null)
@@ -43,6 +44,15 @@ export default function TP_COMP_NAME() {
             const _state = JSON.parse(JSON.stringify(dataState));
             _state.page = 1;
             _state.quickSearch = s;
+            setDateState(_state);
+        }
+    }
+
+    const setSort = (sort: SortingItem[]) => {
+        if (sort !== dataState.sort) {
+            const _state = JSON.parse(JSON.stringify(dataState));
+            _state.page = 1;
+            _state.sort = sort;
             setDateState(_state);
         }
     }
@@ -94,7 +104,23 @@ export default function TP_COMP_NAME() {
 
     return (
         <div ref={headerRef}>
-            <SearchToolbar searchValue={dataState.quickSearch} onSearch={setQuickSearch} marginBottom={SearchToolbarMarginBottom['40px']} />
+            <SearchToolbar
+                search={
+                    {
+                      searchValue: dataState.quickSearch,
+                      onSearch: setQuickSearch
+                    }
+                }
+                sort={
+                    {
+                      onSort: setSort,
+                      sort: dataState.sort,
+                      defaultSort: sort,
+                      schema: 'TP_SCHEMA'
+                    }
+                }
+                marginBottom={SearchToolbarMarginBottom['40px']}
+            />
             <TP_TABLE_COMP_NAME data={dataResult.data.data} doReload={loadData} />
             <PageContainer pages={pages} activePage={dataState.page} setActivePage={setActivePage} marginTop={PageContainerMarginTop['42px']} />
         </div>
