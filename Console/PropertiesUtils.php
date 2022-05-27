@@ -17,6 +17,14 @@ class PropertiesUtils
         $this->entitiesUtils = $entitiesUtils;
     }
 
+    /**
+     * @return array|mixed
+     */
+    public function getProperties(): mixed
+    {
+        return $this->properties;
+    }
+
     public function getClassNameForPath(string $path): string
     {
         $className = "";
