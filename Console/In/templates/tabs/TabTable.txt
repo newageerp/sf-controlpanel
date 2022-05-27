@@ -6,6 +6,7 @@ import { IconList } from '@newageerp/ui.icons.base.icon-list'
 import { OpenApi } from "@newageerp/nae-react-auth-wrapper";
 import { TwTextColors, TwBackgroundColors } from "@newageerp/ui.styles.tailwind";
 import { Button } from "@newageerp/ui.buttons.base.button";
+import { UI } from "@newageerp/nae-react-ui";
 
 TP_IMPORT
 
