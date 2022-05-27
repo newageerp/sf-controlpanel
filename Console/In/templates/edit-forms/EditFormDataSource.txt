@@ -1,5 +1,6 @@
 import React, {Fragment, useState, useEffect} from 'react';
 import { useTranslation } from 'react-i18next'
+import { OpenApi } from '@newageerp/nae-react-auth-wrapper';
 import { UIConfig } from '@newageerp/nae-react-ui';
 import TP_COMP_NAME from '../forms-wide/TP_COMP_NAME';
 
@@ -12,7 +13,7 @@ export default function TP_COMP_NAME_DATA_SOURCE(props: Props) {
     const [element, setElement] = useState<any>(null)
 
     let fieldsToReturn: string[] = TP_FIELDS_TO_RETURN;
-    const [schemaGetData, schemaGetDataParams] = UIConfig.useUList(
+    const [schemaGetData, schemaGetDataParams] = OpenApi.useUList(
         'TP_SCHEMA',
         fieldsToReturn
     );
