@@ -74,7 +74,7 @@ export default function TP_COMP_NAME(props: Props) {
             _filter[0]['and'].push(predefinedFilter);
         }
 
-        if (quickSearchFields) {
+        if (quickSearchFields && !!dataState.quickSearch) {
             let _or: any = quickSearchFields.map((s: any) => {
                 if (typeof s === 'string') {
                     return [s, 'contains', dataState.quickSearch, true]
