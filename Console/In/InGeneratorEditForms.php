@@ -2,6 +2,7 @@
 
 namespace Newageerp\SfControlpanel\Console\In;
 
+use Newageerp\SfControlpanel\Console\EntitiesUtils;
 use Newageerp\SfControlpanel\Console\PropertiesUtils;
 use Newageerp\SfControlpanel\Console\Utils;
 use Newageerp\SfControlpanel\Service\MenuService;
@@ -17,10 +18,16 @@ class InGeneratorEditForms extends Command
 
     protected PropertiesUtils $propertiesUtils;
 
-    public function __construct(PropertiesUtils $propertiesUtils)
+    protected EntitiesUtils $entitiesUtils;
+
+    public function __construct(
+        PropertiesUtils $propertiesUtils,
+        EntitiesUtils   $entitiesUtils,
+    )
     {
         parent::__construct();
         $this->propertiesUtils = $propertiesUtils;
+        $this->entitiesUtils = $entitiesUtils;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -62,6 +69,7 @@ class InGeneratorEditForms extends Command
                 $path = $pathA[0] . '.' . $pathA[1];
                 $fieldProperty = $this->propertiesUtils->getPropertyForPath($path);
                 $fieldObjectProperty = null;
+                $objectSort = [];
                 $fieldPropertyNaeType = '';
                 if ($fieldProperty) {
                     $fieldPropertyNaeType = $this->propertiesUtils->getPropertyNaeType($fieldProperty, $field);
@@ -75,6 +83,9 @@ class InGeneratorEditForms extends Command
                     }
 
                     $fieldObjectProperty = $this->propertiesUtils->getPropertyForPath($objectPath);
+                    if ($fieldObjectProperty) {
+                        $objectSort = $this->entitiesUtils->getDefaultSortForSchema($fieldObjectProperty['schema']);
+                    }
                 }
 
                 $fieldTemplateData = $this->propertiesUtils->getDefaultPropertyEditValueTemplate($fieldProperty, $field);
@@ -90,6 +101,8 @@ class InGeneratorEditForms extends Command
                 $tpOnChange = '(e: any) => onChange(\'' . $fieldProperty['key'] . '\', e)';
                 $tpOnChangeString = '(e: any) => onChange(\'' . $fieldProperty['key'] . '\', e.target.value)';
 
+                $tpObjectSortStr = json_encode($objectSort, JSON_PRETTY_PRINT);
+
                 $fieldTemplate = str_replace(
                     [
                         'TP_VALUE',
@@ -98,7 +111,8 @@ class InGeneratorEditForms extends Command
                         'TP_SCHEMA',
                         'TP_KEY',
                         'TP_OBJECT_SCHEMA',
-                        'TP_OBJECT_KEY'
+                        'TP_OBJECT_KEY',
+                        'TP_OBJECT_SORT'
                     ],
                     [
                         $tpValue,
@@ -108,6 +122,7 @@ class InGeneratorEditForms extends Command
                         $fieldProperty['key'],
                         $fieldObjectProperty ? $fieldObjectProperty['schema'] : '',
                         $fieldObjectProperty ? $fieldObjectProperty['key'] : '',
+                        $tpObjectSortStr,
                     ],
                     $fieldTemplateData['template']
                 );
