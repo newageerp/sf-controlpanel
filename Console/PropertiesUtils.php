@@ -358,7 +358,7 @@ class PropertiesUtils
                         'import { ' . $compName . ' } from "../../enums/view/' . $compFileName . '";',
                         'import { SelectAdvId } from "@newageerp/ui.form.base.form-pack";'
                     ],
-                    "template" => '<SelectAdvId options={' . $compName . '[\'TP_KEY\']} selectedId={TP_VALUE} onSelectId={TP_ON_CHANGE} />'
+                    "template" => '<SelectAdvId withIcon={true} options={' . $compName . '[\'TP_KEY\']} selectedId={TP_VALUE} onSelectId={TP_ON_CHANGE} />'
                 ];
                 break;
             default :
