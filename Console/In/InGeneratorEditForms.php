@@ -61,17 +61,20 @@ class InGeneratorEditForms extends Command
                 $pathA = explode(".", $field['path']);
                 $path = $pathA[0] . '.' . $pathA[1];
                 $fieldProperty = $this->propertiesUtils->getPropertyForPath($path);
-
+                $fieldObjectProperty = null;
                 $fieldPropertyNaeType = '';
                 if ($fieldProperty) {
                     $fieldPropertyNaeType = $this->propertiesUtils->getPropertyNaeType($fieldProperty, $field);
 
                     $pathArray = explode(".", $field['path']);
                     array_shift($pathArray);
-                    $fieldsToReturn[] = implode(".", $pathArray);
+                    $objectPath = implode(".", $pathArray);
+                    $fieldsToReturn[] = $objectPath;
                     if (count($pathArray) >= 2) {
                         $fieldsToReturn[] = $path . '.id';
                     }
+
+                    $fieldObjectProperty = $this->propertiesUtils->getPropertyForPath($objectPath);
                 }
 
                 $fieldTemplateData = $this->propertiesUtils->getDefaultPropertyEditValueTemplate($fieldProperty, $field);
@@ -92,13 +95,19 @@ class InGeneratorEditForms extends Command
                         'TP_VALUE',
                         'TP_ON_CHANGE_STRING',
                         'TP_ON_CHANGE',
-                        'TP_KEY'
+                        'TP_SCHEMA',
+                        'TP_KEY',
+                        'TP_OBJECT_SCHEMA',
+                        'TP_OBJECT_KEY'
                     ],
                     [
                         $tpValue,
                         $tpOnChangeString,
                         $tpOnChange,
+                        $fieldProperty['schema'],
                         $fieldProperty['key'],
+                        $fieldObjectProperty ? $fieldObjectProperty['schema'] : '',
+                        $fieldObjectProperty ? $fieldObjectProperty['key'] : '',
                     ],
                     $fieldTemplateData['template']
                 );

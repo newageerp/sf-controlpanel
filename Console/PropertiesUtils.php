@@ -361,6 +361,21 @@ class PropertiesUtils
                     "template" => '<SelectAdvId withIcon={true} options={' . $compName . '[\'TP_KEY\']} selectedId={TP_VALUE} onSelectId={TP_ON_CHANGE} />'
                 ];
                 break;
+            case 'object':
+                return [
+                    "import" => 'import { SelectAdvData } from "@newageerp/ui.form.base.form-pack";',
+                    "template" => '<SelectAdvData 
+                        withIcon={true}
+                        schema="TP_OBJECT_SCHEMA"
+                        field="TP_OBJECT_KEY"
+                        selectedId={TP_VALUE}
+                        onSelectId={TP_ON_CHANGE}
+                        parentElement={element}
+                        parentSchema={"TP_SCHEMA"}
+                        />'
+                ];
+                break;
+                break;
             default :
                 return [
                     "import" => '',
