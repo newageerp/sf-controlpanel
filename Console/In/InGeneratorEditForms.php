@@ -69,7 +69,7 @@ class InGeneratorEditForms extends Command
                     $pathArray = explode(".", $field['path']);
                     array_shift($pathArray);
                     $fieldsToReturn[] = implode(".", $pathArray);
-                    if (count($pathArray) > 2) {
+                    if (count($pathArray) >= 2) {
                         $fieldsToReturn[] = $path . '.id';
                     }
                 }
@@ -88,8 +88,18 @@ class InGeneratorEditForms extends Command
                 $tpOnChangeString = '(e: any) => onChange(\'' . $fieldProperty['key'] . '\', e.target.value)';
 
                 $fieldTemplate = str_replace(
-                    ['TP_VALUE', 'TP_ON_CHANGE_STRING', 'TP_ON_CHANGE'],
-                    [$tpValue, $tpOnChangeString, $tpOnChange],
+                    [
+                        'TP_VALUE',
+                        'TP_ON_CHANGE_STRING',
+                        'TP_ON_CHANGE',
+                        'TP_KEY'
+                    ],
+                    [
+                        $tpValue,
+                        $tpOnChangeString,
+                        $tpOnChange,
+                        $fieldProperty['key'],
+                    ],
                     $fieldTemplateData['template']
                 );
 
@@ -105,7 +115,7 @@ class InGeneratorEditForms extends Command
                 $tpCompactRows[] = $content;
             }
 
-            $fieldsToReturn[] = array_values(array_unique($fieldsToReturn));
+            $fieldsToReturn = array_values(array_unique($fieldsToReturn));
 
             $tpWideRowsStr = implode("\n", $tpWideRows);
             $tpCompactRowsStr = implode("\n", $tpCompactRows);
