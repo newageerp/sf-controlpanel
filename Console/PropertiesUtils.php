@@ -372,6 +372,7 @@ class PropertiesUtils
                         onSelectId={TP_ON_CHANGE}
                         parentElement={element}
                         parentSchema={"TP_SCHEMA"}
+                        sort={TP_OBJECT_SORT}
                         />'
                 ];
                 break;
