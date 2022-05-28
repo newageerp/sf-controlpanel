@@ -48,15 +48,22 @@ class InGeneratorEnums extends Command
 
         $enums = [];
         $enumsColors = [];
+        $enumsOptions = [];
         while ($data = $result->fetchArray(SQLITE3_ASSOC)) {
             if (!isset($enums[$data['entity_slug']])) {
                 $enums[$data['entity_slug']] = [];
                 $enumsColors[$data['entity_slug']] = [];
+                $enumsOptions[$data['entity_slug']] = [];
             }
             if (!isset($enums[$data['entity_slug']][$data['property_key']])) {
                 $enums[$data['entity_slug']][$data['property_key']] = [];
                 $enumsColors[$data['entity_slug']][$data['property_key']] = [];
+                $enumsOptions[$data['entity_slug']][$data['property_key']] = [];
             }
+            $enumsOptions[$data['entity_slug']][$data['property_key']][] = [
+                'value' => $data['value'],
+                'label' => $data['title'],
+            ];
             $enums[$data['entity_slug']][$data['property_key']][$data['value']] = $data['title'];
             $enumsColors[$data['entity_slug']][$data['property_key']][$data['value']] = $data['badgeVariant'];
         }
@@ -66,16 +73,19 @@ class InGeneratorEnums extends Command
 
             $tpEnumStr = json_encode($propertyKeys, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
             $tpEnumColorsStr = json_encode($enumsColors[$slug], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+            $tpEnumOptionsStr = json_encode($enumsOptions[$slug], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 
             $fileName = $generatedPath . '/' . $compName . '.tsx';
             $generatedContent = str_replace(
                 [
                     'TP_ENUMS_COLORS',
+                    'TP_ENUMS_OPTIONS',
                     'TP_ENUMS',
                     'TP_COMP_NAME',
                 ],
                 [
                     $tpEnumColorsStr,
+                    $tpEnumOptionsStr,
                     $tpEnumStr,
                     $compName,
                 ],

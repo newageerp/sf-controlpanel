@@ -75,7 +75,13 @@ class InGeneratorEditForms extends Command
                 }
 
                 $fieldTemplateData = $this->propertiesUtils->getDefaultPropertyEditValueTemplate($fieldProperty, $field);
-                $tpImports[] = $fieldTemplateData['import'];
+                $importTmp = $fieldTemplateData['import'];
+                if (!is_array($importTmp)) {
+                    $importTmp = [$importTmp];
+                }
+                foreach ($importTmp as $import) {
+                    $tpImports[] = $import;
+                }
 
                 $tpValue = 'element.' . $fieldProperty['key'];
                 $tpOnChange = '(e: any) => onChange(\'' . $fieldProperty['key'] . '\', e)';

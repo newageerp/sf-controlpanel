@@ -349,6 +349,18 @@ class PropertiesUtils
                     "template" => '<Datepicker value={TP_VALUE} onChange={TP_ON_CHANGE}/>'
                 ];
                 break;
+            case 'enum_text':
+            case 'enum_number':
+                $compName = Utils::fixComponentName(ucfirst($property['schema']) . 'EnumsOptions');
+                $compFileName = Utils::fixComponentName(ucfirst($property['schema']) . 'Enums');
+                return [
+                    "import" => [
+                        'import { ' . $compName . ' } from "../../enums/view/' . $compFileName . '";',
+                        'import { SelectAdvId } from "@newageerp/ui.form.base.form-pack";'
+                    ],
+                    "template" => '<SelectAdvId options={' . $compName . '[\'TP_KEY\']} selectedId={TP_VALUE} onSelectId={TP_ON_CHANGE} />'
+                ];
+                break;
             default :
                 return [
                     "import" => '',
