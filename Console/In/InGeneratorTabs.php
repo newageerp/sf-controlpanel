@@ -128,7 +128,7 @@ class InGeneratorTabs extends Command
         if (navigate) {
             navigate('" . $colProperty['schema'] . "', " . ($varNameId ?: 'item.id') . ", item);
         }
-    }
+    }}
     buttonsNl={false}
     onClickDef={'" . ($column['link'] === 10 ? 'main' : 'popup') . "'}
 >
