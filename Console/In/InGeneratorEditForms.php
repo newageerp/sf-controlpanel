@@ -65,9 +65,9 @@ class InGeneratorEditForms extends Command
             $fieldsToReturn = [];
 
             foreach ($editItem['config']['fields'] as $fieldIndex => $field) {
-                if (isset($field['type']) && $field['type'] === 'separartor') {
+                if (isset($field['type']) && $field['type'] === 'separator') {
 
-                } else {
+                } else if (isset($field['path']) && $field['path']) {
                     $pathA = explode(".", $field['path']);
                     $path = $pathA[0] . '.' . $pathA[1];
                     $fieldProperty = $this->propertiesUtils->getPropertyForPath($path);
