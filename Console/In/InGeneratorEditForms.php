@@ -65,78 +65,82 @@ class InGeneratorEditForms extends Command
             $fieldsToReturn = [];
 
             foreach ($editItem['config']['fields'] as $fieldIndex => $field) {
-                $pathA = explode(".", $field['path']);
-                $path = $pathA[0] . '.' . $pathA[1];
-                $fieldProperty = $this->propertiesUtils->getPropertyForPath($path);
-                $fieldObjectProperty = null;
-                $objectSort = [];
-                $fieldPropertyNaeType = '';
-                if ($fieldProperty) {
-                    $fieldPropertyNaeType = $this->propertiesUtils->getPropertyNaeType($fieldProperty, $field);
+                if (isset($field['type']) && $field['type'] === 'separartor') {
 
-                    $pathArray = explode(".", $field['path']);
-                    array_shift($pathArray);
-                    $objectPath = implode(".", $pathArray);
-                    $fieldsToReturn[] = $objectPath;
-                    if (count($pathArray) >= 2) {
-                        $fieldsToReturn[] = $path . '.id';
+                } else {
+                    $pathA = explode(".", $field['path']);
+                    $path = $pathA[0] . '.' . $pathA[1];
+                    $fieldProperty = $this->propertiesUtils->getPropertyForPath($path);
+                    $fieldObjectProperty = null;
+                    $objectSort = [];
+                    $fieldPropertyNaeType = '';
+                    if ($fieldProperty) {
+                        $fieldPropertyNaeType = $this->propertiesUtils->getPropertyNaeType($fieldProperty, $field);
+
+                        $pathArray = explode(".", $field['path']);
+                        array_shift($pathArray);
+                        $objectPath = implode(".", $pathArray);
+                        $fieldsToReturn[] = $objectPath;
+                        if (count($pathArray) >= 2) {
+                            $fieldsToReturn[] = $path . '.id';
+                        }
+
+                        $fieldObjectProperty = $this->propertiesUtils->getPropertyForPath($objectPath);
+                        if ($fieldObjectProperty) {
+                            $objectSort = $this->entitiesUtils->getDefaultSortForSchema($fieldObjectProperty['schema']);
+                        }
                     }
 
-                    $fieldObjectProperty = $this->propertiesUtils->getPropertyForPath($objectPath);
-                    if ($fieldObjectProperty) {
-                        $objectSort = $this->entitiesUtils->getDefaultSortForSchema($fieldObjectProperty['schema']);
+                    $fieldTemplateData = $this->propertiesUtils->getDefaultPropertyEditValueTemplate($fieldProperty, $field);
+                    $importTmp = $fieldTemplateData['import'];
+                    if (!is_array($importTmp)) {
+                        $importTmp = [$importTmp];
                     }
+                    foreach ($importTmp as $import) {
+                        $tpImports[] = $import;
+                    }
+
+                    $tpValue = 'element.' . $fieldProperty['key'];
+                    $tpOnChange = '(e: any) => onChange(\'' . $fieldProperty['key'] . '\', e)';
+                    $tpOnChangeString = '(e: any) => onChange(\'' . $fieldProperty['key'] . '\', e.target.value)';
+
+                    $tpObjectSortStr = json_encode($objectSort, JSON_PRETTY_PRINT);
+
+                    $fieldTemplate = str_replace(
+                        [
+                            'TP_VALUE',
+                            'TP_ON_CHANGE_STRING',
+                            'TP_ON_CHANGE',
+                            'TP_SCHEMA',
+                            'TP_KEY',
+                            'TP_OBJECT_SCHEMA',
+                            'TP_OBJECT_KEY',
+                            'TP_OBJECT_SORT'
+                        ],
+                        [
+                            $tpValue,
+                            $tpOnChangeString,
+                            $tpOnChange,
+                            $fieldProperty['schema'],
+                            $fieldProperty['key'],
+                            $fieldObjectProperty ? $fieldObjectProperty['schema'] : '',
+                            $fieldObjectProperty ? $fieldObjectProperty['key'] : '',
+                            $tpObjectSortStr,
+                        ],
+                        $fieldTemplateData['template']
+                    );
+
+                    $labelInner = '';
+                    if (!$field['hideLabel']) {
+                        $labelInner = ' label={<Label>{t(\'' . $fieldProperty['title'] . '\')}</Label>}';
+                    }
+
+                    $content = '<WideRow' . $labelInner . ' control={' . $fieldTemplate . '}/>';
+                    $tpWideRows[] = $content;
+
+                    $content = '<CompactRow' . $labelInner . ' control={' . $fieldTemplate . '}/>';
+                    $tpCompactRows[] = $content;
                 }
-
-                $fieldTemplateData = $this->propertiesUtils->getDefaultPropertyEditValueTemplate($fieldProperty, $field);
-                $importTmp = $fieldTemplateData['import'];
-                if (!is_array($importTmp)) {
-                    $importTmp = [$importTmp];
-                }
-                foreach ($importTmp as $import) {
-                    $tpImports[] = $import;
-                }
-
-                $tpValue = 'element.' . $fieldProperty['key'];
-                $tpOnChange = '(e: any) => onChange(\'' . $fieldProperty['key'] . '\', e)';
-                $tpOnChangeString = '(e: any) => onChange(\'' . $fieldProperty['key'] . '\', e.target.value)';
-
-                $tpObjectSortStr = json_encode($objectSort, JSON_PRETTY_PRINT);
-
-                $fieldTemplate = str_replace(
-                    [
-                        'TP_VALUE',
-                        'TP_ON_CHANGE_STRING',
-                        'TP_ON_CHANGE',
-                        'TP_SCHEMA',
-                        'TP_KEY',
-                        'TP_OBJECT_SCHEMA',
-                        'TP_OBJECT_KEY',
-                        'TP_OBJECT_SORT'
-                    ],
-                    [
-                        $tpValue,
-                        $tpOnChangeString,
-                        $tpOnChange,
-                        $fieldProperty['schema'],
-                        $fieldProperty['key'],
-                        $fieldObjectProperty ? $fieldObjectProperty['schema'] : '',
-                        $fieldObjectProperty ? $fieldObjectProperty['key'] : '',
-                        $tpObjectSortStr,
-                    ],
-                    $fieldTemplateData['template']
-                );
-
-                $labelInner = '';
-                if (!$field['hideLabel']) {
-                    $labelInner = ' label={<Label>{t(\'' . $fieldProperty['title'] . '\')}</Label>}';
-                }
-
-                $content = '<WideRow' . $labelInner . ' control={' . $fieldTemplate . '}/>';
-                $tpWideRows[] = $content;
-
-                $content = '<CompactRow' . $labelInner . ' control={' . $fieldTemplate . '}/>';
-                $tpCompactRows[] = $content;
             }
 
             $fieldsToReturn = array_values(array_unique($fieldsToReturn));
