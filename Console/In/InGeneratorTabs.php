@@ -124,7 +124,11 @@ class InGeneratorTabs extends Command
     id={" . ($varNameId ?: 'item.id') . "}
     schema={'" . $colProperty['schema'] . "'}
     className={'text-left'}
-    onClick={() => navigate('" . $colProperty['schema'] . "', " . ($varNameId ?: 'item.id') . ", item)}
+    onClick={() => {
+        if (navigate) {
+            navigate('" . $colProperty['schema'] . "', " . ($varNameId ?: 'item.id') . ", item);
+        }
+    }
     buttonsNl={false}
     onClickDef={'" . ($column['link'] === 10 ? 'main' : 'popup') . "'}
 >
