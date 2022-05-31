@@ -214,6 +214,23 @@ class InGeneratorTabs extends Command
             if (isset($tabItem['config']['predefinedFilter'])) {
                 $filter = json_decode($tabItem['config']['predefinedFilter'], true);
             }
+            $otherTabs = null;
+            if (isset($tabItem['config']['tabGroup'])) {
+                $otherTabs = array_map(
+                    function ($t) {
+                        return [
+                            'value' => $t['config']['type'],
+                            'label' => isset($t['config']['tabGroupTitle']) && $t['config']['tabGroupTitle'] ? $t['config']['tabGroupTitle'] : $t['config']['title']
+                        ];
+                    },
+                    array_filter(
+                        $tabItems,
+                        function ($t) use ($tabItem) {
+                            return $t['config']['schema'] === $tabItem['config']['schema'] && $t['config']['tabGroup'] === $tabItem['config']['tabGroup'];
+                        }
+                    )
+                );
+            }
 
             $pageSize = isset($tabItem['config']['pageSize']) && $tabItem['config']['pageSize'] ? $tabItem['config']['pageSize'] : 20;
             $dataSourceFileName = $dataSourceGeneratedPath . '/' . $dataSourceCompName . '.tsx';
@@ -228,6 +245,7 @@ class InGeneratorTabs extends Command
                     'TP_FILTER',
                     'TP_QUICK_SEARCH',
                     'TP_CREATABLE',
+                    'TP_OTHER_TABS'
                 ],
                 [
                     $dataSourceCompName,
@@ -239,6 +257,7 @@ class InGeneratorTabs extends Command
                     $filter ? json_encode($filter) : 'null',
                     json_encode($quickSearch),
                     isset($tabItem['config']['disableCreate']) && $tabItem['config']['disableCreate'] ? 'false' : 'true',
+                    $otherTabs && count($otherTabs) > 0 ? json_encode($otherTabs) : 'null'
                 ],
                 $tabTableDataSourceTemplate
             );

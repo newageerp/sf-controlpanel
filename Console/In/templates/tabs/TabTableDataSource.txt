@@ -15,6 +15,8 @@ interface Props {
 export default function TP_COMP_NAME(props: Props) {
     const history = useHistory()
 
+    const otherTabs = TP_OTHER_TABS;
+
     const headerRef = useRef(null)
     const scrollToHeader = () => {
         if (headerRef && headerRef.current) {
@@ -80,6 +82,10 @@ export default function TP_COMP_NAME(props: Props) {
         }
     }
 
+    const navigateToTab = (type: string) => {
+        history.push(`/u/TP_SCHEMA/${type}/list`)
+    }
+
     const onCreate = () => {
         history.push('/u/TP_SCHEMA/main/edit/new')
     }
@@ -142,6 +148,15 @@ export default function TP_COMP_NAME(props: Props) {
                     }
                 }
                 marginBottom={SearchToolbarMarginBottom['40px']}
+                tabSwitch={
+                    otherTabs?
+                    {
+                        options: otherTabs,
+                        currentTab: 'TP_TYPE',
+                        onTabSwitch: navigateToTab
+                    }:
+                    undefined
+                }
             />
             <TP_TABLE_COMP_NAME
                 data={dataResult.data.data}
