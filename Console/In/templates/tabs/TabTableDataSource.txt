@@ -6,12 +6,15 @@ import { functions } from '@newageerp/nae-react-ui';
 import { PageContainer, PageContainerMarginTop } from '@newageerp/ui.paging.base.page-container'
 import { SearchToolbar, SearchToolbarMarginBottom } from '@newageerp/ui.components.list.search-toolbar'
 import { SortingItem } from '@newageerp/ui.components.list.sort-controller';
+import { useHistory } from 'react-router-dom'
 
 interface Props {
     navigate?: (schema: string, id: number | string, el: any) => void
 }
 
 export default function TP_COMP_NAME(props: Props) {
+    const history = useHistory()
+
     const headerRef = useRef(null)
     const scrollToHeader = () => {
         if (headerRef && headerRef.current) {
@@ -68,6 +71,14 @@ export default function TP_COMP_NAME(props: Props) {
 
     const [getData, dataResult] = OpenApi.useUList('TP_SCHEMA', fieldsToReturn);
     const { t } = useTranslation();
+
+    const navigate = (schema: string, id: number | string, el: any) => {
+        if (props.navigate) {
+            props.navigate(schema, id, el);
+        } else {
+            history.push('/u/TP_SCHEMA/main/view/' + id);
+        }
+    }
 
     const onCreate = () => {
         history.push('/u/TP_SCHEMA/main/edit/new')
@@ -136,7 +147,7 @@ export default function TP_COMP_NAME(props: Props) {
                 data={dataResult.data.data}
                 doReload={loadData}
                 className={`${dataResult.loading?'tw3-animate-pulse':''}`}
-                navigate={props.navigate}
+                navigate={navigate}
             />
             <PageContainer pages={pages} activePage={dataState.page} setActivePage={setActivePage} marginTop={PageContainerMarginTop['42px']} />
         </div>
