@@ -76,7 +76,7 @@ export default function TP_COMP_NAME(props: Props) {
         if (props.navigate) {
             props.navigate(schema, id, el);
         } else {
-            history.push('/u/TP_SCHEMA/main/view/' + id);
+            history.push(`/u/${schema}/main/view/${id}`);
         }
     }
 
