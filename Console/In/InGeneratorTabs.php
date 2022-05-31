@@ -165,7 +165,6 @@ class InGeneratorTabs extends Command
                     'TP_ROW_DATA',
                     'TP_IMPORT',
                     'TP_SCHEMA',
-                    'TP_CREATABLE'
                 ],
                 [
                     $compName,
@@ -174,7 +173,6 @@ class InGeneratorTabs extends Command
                     $tpRowDataStr,
                     $tpImportsStr,
                     $tabItem['config']['schema'],
-                    isset($tabItem['config']['disableCreate']) && $tabItem['config']['disableCreate'] ? 'false' : 'true'
                 ],
                 $tabTableTemplate
             );
@@ -228,7 +226,8 @@ class InGeneratorTabs extends Command
                     'TP_PAGE_SIZE',
                     'TP_SORT',
                     'TP_FILTER',
-                    'TP_QUICK_SEARCH'
+                    'TP_QUICK_SEARCH',
+                    'TP_CREATABLE',
                 ],
                 [
                     $dataSourceCompName,
@@ -239,6 +238,7 @@ class InGeneratorTabs extends Command
                     json_encode($sort),
                     $filter ? json_encode($filter) : 'null',
                     json_encode($quickSearch),
+                    isset($tabItem['config']['disableCreate']) && $tabItem['config']['disableCreate'] ? 'false' : 'true',
                 ],
                 $tabTableDataSourceTemplate
             );
