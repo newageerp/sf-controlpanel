@@ -216,20 +216,23 @@ class InGeneratorTabs extends Command
             }
             $otherTabs = null;
             if (isset($tabItem['config']['tabGroup'])) {
-                $otherTabs = array_map(
-                    function ($t) {
-                        return [
-                            'value' => $t['config']['type'],
-                            'label' => isset($t['config']['tabGroupTitle']) && $t['config']['tabGroupTitle'] ? $t['config']['tabGroupTitle'] : $t['config']['title']
-                        ];
-                    },
-                    array_filter(
-                        $tabItems,
-                        function ($t) use ($tabItem) {
-                            return $t['config']['schema'] === $tabItem['config']['schema'] && $t['config']['tabGroup'] === $tabItem['config']['tabGroup'];
-                        }
-                    )
-                );
+                $otherTabs =
+                    array_values(
+                        array_map(
+                            function ($t) {
+                                return [
+                                    'value' => $t['config']['type'],
+                                    'label' => isset($t['config']['tabGroupTitle']) && $t['config']['tabGroupTitle'] ? $t['config']['tabGroupTitle'] : $t['config']['title']
+                                ];
+                            },
+                            array_filter(
+                                $tabItems,
+                                function ($t) use ($tabItem) {
+                                    return $t['config']['schema'] === $tabItem['config']['schema'] && $t['config']['tabGroup'] === $tabItem['config']['tabGroup'];
+                                }
+                            )
+                        )
+                    );
             }
 
             $pageSize = isset($tabItem['config']['pageSize']) && $tabItem['config']['pageSize'] ? $tabItem['config']['pageSize'] : 20;
