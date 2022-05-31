@@ -211,8 +211,8 @@ class InGeneratorTabs extends Command
             }
 
             $filter = null;
-            if (isset($tabItem['predefinedFilter'])) {
-                $filter = json_decode($tabItem['predefinedFilter'], true);
+            if (isset($tabItem['config']['predefinedFilter'])) {
+                $filter = json_decode($tabItem['config']['predefinedFilter'], true);
             }
 
             $pageSize = isset($tabItem['config']['pageSize']) && $tabItem['config']['pageSize'] ? $tabItem['config']['pageSize'] : 20;
