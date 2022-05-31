@@ -30,6 +30,8 @@ export default function TP_COMP_NAME(props: Props) {
         quickSearch: '',
     }
 
+    const isCreatable = TP_CREATABLE;
+
     const quickSearchFields : any = TP_QUICK_SEARCH;
     const predefinedFilter : any = TP_FILTER;
 
@@ -66,6 +68,10 @@ export default function TP_COMP_NAME(props: Props) {
 
     const [getData, dataResult] = OpenApi.useUList('TP_SCHEMA', fieldsToReturn);
     const { t } = useTranslation();
+
+    const onCreate = () => {
+        history.push('/u/TP_SCHEMA/main/edit/new')
+    }
 
     const loadData = () => {
 
@@ -109,6 +115,7 @@ export default function TP_COMP_NAME(props: Props) {
     return (
         <div ref={headerRef}>
             <SearchToolbar
+                onCreate={isCreatable?onCreate:undefined}
                 search={
                     {
                       searchValue: dataState.quickSearch,

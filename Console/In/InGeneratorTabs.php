@@ -164,7 +164,8 @@ class InGeneratorTabs extends Command
                     'TP_TBODY',
                     'TP_ROW_DATA',
                     'TP_IMPORT',
-                    'TP_SCHEMA'
+                    'TP_SCHEMA',
+                    'TP_CREATABLE'
                 ],
                 [
                     $compName,
@@ -172,7 +173,8 @@ class InGeneratorTabs extends Command
                     $tpBodyStr,
                     $tpRowDataStr,
                     $tpImportsStr,
-                    $tabItem['config']['schema']
+                    $tabItem['config']['schema'],
+                    isset($tabItem['config']['disableCreate']) && $tabItem['config']['disableCreate'] ? 'false' : 'true'
                 ],
                 $tabTableTemplate
             );
