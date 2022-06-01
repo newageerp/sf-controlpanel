@@ -46,6 +46,7 @@ class InGeneratorTabs extends Command
 
         $generatedPath = Utils::generatedPath('tabs/tables');
         $dataSourceGeneratedPath = Utils::generatedPath('tabs/tables-data-source');
+        $dataSourceRelGeneratedPath = Utils::generatedPath('tabs/tables-rel-data-source');
 
         foreach ($tabItems as $tabItem) {
             $tpHead = [];
@@ -236,35 +237,104 @@ class InGeneratorTabs extends Command
             }
 
             $pageSize = isset($tabItem['config']['pageSize']) && $tabItem['config']['pageSize'] ? $tabItem['config']['pageSize'] : 20;
-            $dataSourceFileName = $dataSourceGeneratedPath . '/' . $dataSourceCompName . '.tsx';
-            $generatedContent = str_replace(
-                [
-                    'TP_COMP_NAME',
-                    'TP_TABLE_COMP_NAME',
-                    'TP_SCHEMA',
-                    'TP_TYPE',
-                    'TP_PAGE_SIZE',
-                    'TP_SORT',
-                    'TP_FILTER',
-                    'TP_QUICK_SEARCH',
-                    'TP_CREATABLE',
-                    'TP_OTHER_TABS'
-                ],
-                [
-                    $dataSourceCompName,
-                    $compName,
-                    $tabItem['config']['schema'],
-                    $tabItem['config']['type'],
-                    $pageSize,
-                    json_encode($sort),
-                    $filter ? json_encode($filter) : 'null',
-                    json_encode($quickSearch),
-                    isset($tabItem['config']['disableCreate']) && $tabItem['config']['disableCreate'] ? 'false' : 'true',
-                    $otherTabs && count($otherTabs) > 0 ? json_encode($otherTabs, JSON_UNESCAPED_UNICODE) : 'null'
-                ],
-                $tabTableDataSourceTemplate
-            );
-            Utils::writeOnChanges($dataSourceFileName, $generatedContent);
+
+            if (isset($tabItem['config']['generateForRel']) && $tabItem['config']['generateForRel']) {
+                $relProperties = $this->propertiesUtils->getArraySchemasForTarget(
+                    $tabItem['config']['schema']
+                );
+                foreach ($relProperties as $relProperty) {
+                    $mapped = null;
+                    if (isset($relProperty['additionalProperties'])) {
+                        foreach ($relProperty['additionalProperties'] as $adProp) {
+                            if (isset($adProp['mapped'])) {
+                                $mapped = $adProp['mapped'];
+                            }
+                        }
+                    }
+                    if (!$mapped) {
+                        continue;
+                    }
+
+                    $dataSourceRelCompName = Utils::fixComponentName(
+                        ucfirst($tabItem['config']['schema']) .
+                        ucfirst($tabItem['config']['type']) .
+                        'TableDataSourceBy' .
+                        ucfirst($relProperty['schema'])
+                    );
+
+                    $relFilter = [
+                        'i.'.$mapped,
+                        '=',
+                        'props.relId',
+                        true
+                    ];
+
+                    $dataSourceFileName = $dataSourceRelGeneratedPath . '/' . $dataSourceRelCompName . '.tsx';
+                    $generatedContent = str_replace(
+                        [
+                            'TP_COMP_NAME',
+                            'TP_TABLE_COMP_NAME',
+                            'TP_SCHEMA',
+                            'TP_TYPE',
+                            'TP_PAGE_SIZE',
+                            'TP_SORT',
+                            'TP_FILTER',
+                            'TP_QUICK_SEARCH',
+                            'TP_CREATABLE',
+                            'TP_OTHER_TABS',
+                            'TP_REL_FILTER'
+                        ],
+                        [
+                            $dataSourceRelCompName,
+                            $compName,
+                            $tabItem['config']['schema'],
+                            $tabItem['config']['type'],
+                            $pageSize,
+                            json_encode($sort),
+                            $filter ? json_encode($filter) : 'null',
+                            json_encode($quickSearch),
+                            isset($tabItem['config']['disableCreate']) && $tabItem['config']['disableCreate'] ? 'false' : 'true',
+                            $otherTabs && count($otherTabs) > 0 ? json_encode($otherTabs, JSON_UNESCAPED_UNICODE) : 'null',
+                            str_replace('"props.relId"', 'props.relId', json_encode($relFilter))
+                        ],
+                        $tabTableDataSourceTemplate
+                    );
+
+                    Utils::writeOnChanges($dataSourceFileName, $generatedContent);
+                }
+            } else {
+                $dataSourceFileName = $dataSourceGeneratedPath . '/' . $dataSourceCompName . '.tsx';
+                $generatedContent = str_replace(
+                    [
+                        'TP_COMP_NAME',
+                        'TP_TABLE_COMP_NAME',
+                        'TP_SCHEMA',
+                        'TP_TYPE',
+                        'TP_PAGE_SIZE',
+                        'TP_SORT',
+                        'TP_FILTER',
+                        'TP_QUICK_SEARCH',
+                        'TP_CREATABLE',
+                        'TP_OTHER_TABS',
+                        'TP_REL_FILTER',
+                    ],
+                    [
+                        $dataSourceCompName,
+                        $compName,
+                        $tabItem['config']['schema'],
+                        $tabItem['config']['type'],
+                        $pageSize,
+                        json_encode($sort),
+                        $filter ? json_encode($filter) : 'null',
+                        json_encode($quickSearch),
+                        isset($tabItem['config']['disableCreate']) && $tabItem['config']['disableCreate'] ? 'false' : 'true',
+                        $otherTabs && count($otherTabs) > 0 ? json_encode($otherTabs, JSON_UNESCAPED_UNICODE) : 'null',
+                        null,
+                    ],
+                    $tabTableDataSourceTemplate
+                );
+                Utils::writeOnChanges($dataSourceFileName, $generatedContent);
+            }
         }
 
         return Command::SUCCESS;

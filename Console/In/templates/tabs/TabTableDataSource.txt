@@ -11,6 +11,7 @@ import { useHistory } from 'react-router-dom'
 interface Props {
     navigate?: (schema: string, id: number | string, el: any) => void,
     dataProcessing?: (data: any[]) => any[],
+    relId?: number,
 }
 
 export default function TP_COMP_NAME(props: Props) {
@@ -40,6 +41,7 @@ export default function TP_COMP_NAME(props: Props) {
 
     const quickSearchFields : any = TP_QUICK_SEARCH;
     const predefinedFilter : any = TP_FILTER;
+    const relFilter : any = TP_REL_FILTER;
 
     const [dataState, setDateState] = useState(defaultState);
 
@@ -96,6 +98,9 @@ export default function TP_COMP_NAME(props: Props) {
         let _filter: any = [{ and: [] }]
         if (!!predefinedFilter) {
             _filter[0]['and'].push(predefinedFilter);
+        }
+        if (!!relFilter) {
+            _filter[0]['and'].push(relFilter);
         }
 
         if (quickSearchFields && !!dataState.quickSearch) {

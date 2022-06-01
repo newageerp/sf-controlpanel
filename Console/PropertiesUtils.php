@@ -25,6 +25,15 @@ class PropertiesUtils
         return $this->properties;
     }
 
+    public function getArraySchemasForTarget(string $target) {
+        return array_filter(
+            $this->properties,
+            function ($item) use ($target) {
+                return $item['type'] === 'array' && $item['format'] === $target;
+            }
+        );
+    }
+
     public function getClassNameForPath(string $path): string
     {
         $className = "";
