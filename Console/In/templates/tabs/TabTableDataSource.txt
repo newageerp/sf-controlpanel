@@ -9,7 +9,8 @@ import { SortingItem } from '@newageerp/ui.components.list.sort-controller';
 import { useHistory } from 'react-router-dom'
 
 interface Props {
-    navigate?: (schema: string, id: number | string, el: any) => void
+    navigate?: (schema: string, id: number | string, el: any) => void,
+    dataProcessing?: (data: any[]) => any[],
 }
 
 export default function TP_COMP_NAME(props: Props) {
@@ -129,6 +130,15 @@ export default function TP_COMP_NAME(props: Props) {
     const records = dataResult.data.records;
     const pages = Math.ceil(records / pageSize);
 
+    const dataProcessing = (data: any[]) => {
+        if (props.dataProcessing) {
+            return props.dataProcessing(data);
+        }
+        return data;
+    }
+
+    const dataToRender = dataProcessing(dataResult.data.data);
+
     return (
         <div ref={headerRef}>
             <SearchToolbar
@@ -159,7 +169,7 @@ export default function TP_COMP_NAME(props: Props) {
                 }
             />
             <TP_TABLE_COMP_NAME
-                data={dataResult.data.data}
+                data={dataToRender}
                 doReload={loadData}
                 className={`${dataResult.loading?'tw3-animate-pulse':''}`}
                 navigate={navigate}
