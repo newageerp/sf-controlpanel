@@ -183,7 +183,7 @@ class InGeneratorTabs extends Command
                 ['key' => 'i.id', 'value' => 'DESC']
             ];
 
-            if (isset($tabItem['config']['sort'])) {
+            if (isset($tabItem['config']['sort']) && $tabItem['config']['sort']) {
                 $sort = json_decode($tabItem['config']['sort'], true);
             } else {
                 foreach ($defaultItems as $df) {
