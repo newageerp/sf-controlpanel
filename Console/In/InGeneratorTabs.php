@@ -31,6 +31,9 @@ class InGeneratorTabs extends Command
         $tabTableDataSourceTemplate = file_get_contents(
             __DIR__ . '/templates/tabs/TabTableDataSource.txt'
         );
+        $tabTableDataSourceRelTemplate = file_get_contents(
+            __DIR__ . '/templates/tabs/TabTableDataSourceRel.txt'
+        );
 
         $defaultsFile = $_ENV['NAE_SFS_CP_STORAGE_PATH'] . '/defaults.json';
         $defaultItems = json_decode(
@@ -297,7 +300,7 @@ class InGeneratorTabs extends Command
                             $otherTabs && count($otherTabs) > 0 ? json_encode($otherTabs, JSON_UNESCAPED_UNICODE) : 'null',
                             str_replace('"props.relId"', 'props.relId', json_encode($relFilter))
                         ],
-                        $tabTableDataSourceTemplate
+                        $tabTableDataSourceRelTemplate
                     );
 
                     Utils::writeOnChanges($dataSourceFileName, $generatedContent);
@@ -316,7 +319,6 @@ class InGeneratorTabs extends Command
                         'TP_QUICK_SEARCH',
                         'TP_CREATABLE',
                         'TP_OTHER_TABS',
-                        'TP_REL_FILTER',
                     ],
                     [
                         $dataSourceCompName,
@@ -329,7 +331,6 @@ class InGeneratorTabs extends Command
                         json_encode($quickSearch),
                         isset($tabItem['config']['disableCreate']) && $tabItem['config']['disableCreate'] ? 'false' : 'true',
                         $otherTabs && count($otherTabs) > 0 ? json_encode($otherTabs, JSON_UNESCAPED_UNICODE) : 'null',
-                        'null',
                     ],
                     $tabTableDataSourceTemplate
                 );

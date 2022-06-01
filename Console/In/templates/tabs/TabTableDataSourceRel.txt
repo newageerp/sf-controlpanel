@@ -11,6 +11,8 @@ import { useHistory } from 'react-router-dom'
 interface Props {
     navigate?: (schema: string, id: number | string, el: any) => void,
     dataProcessing?: (data: any[]) => any[],
+    relId?: number,
+    hideSearchBar?: boolean
 }
 
 export default function TP_COMP_NAME(props: Props) {
@@ -40,6 +42,7 @@ export default function TP_COMP_NAME(props: Props) {
 
     const quickSearchFields : any = TP_QUICK_SEARCH;
     const predefinedFilter : any = TP_FILTER;
+    const relFilter : any = TP_REL_FILTER;
 
     const [dataState, setDateState] = useState(defaultState);
 
@@ -97,6 +100,9 @@ export default function TP_COMP_NAME(props: Props) {
         if (!!predefinedFilter) {
             _filter[0]['and'].push(predefinedFilter);
         }
+        if (!!relFilter) {
+            _filter[0]['and'].push(relFilter);
+        }
 
         if (quickSearchFields && !!dataState.quickSearch) {
             let _or: any = quickSearchFields.map((s: any) => {
@@ -141,39 +147,43 @@ export default function TP_COMP_NAME(props: Props) {
 
     return (
         <div ref={headerRef}>
-            <SearchToolbar
-                onCreate={isCreatable?onCreate:undefined}
-                search={
-                    {
-                      searchValue: dataState.quickSearch,
-                      onSearch: setQuickSearch
+            {!props.hideSearchBar &&
+                <SearchToolbar
+                    onCreate={isCreatable?onCreate:undefined}
+                    search={
+                        {
+                          searchValue: dataState.quickSearch,
+                          onSearch: setQuickSearch
+                        }
                     }
-                }
-                sort={
-                    {
-                      onSort: setSort,
-                      sort: dataState.sort,
-                      defaultSort: sort,
-                      schema: 'TP_SCHEMA'
+                    sort={
+                        {
+                          onSort: setSort,
+                          sort: dataState.sort,
+                          defaultSort: sort,
+                          schema: 'TP_SCHEMA'
+                        }
                     }
-                }
-                marginBottom={SearchToolbarMarginBottom['40px']}
-                tabSwitch={
-                    otherTabs?
-                    {
-                        options: otherTabs,
-                        currentTab: 'TP_TYPE',
-                        onTabSwitch: navigateToTab
-                    }:
-                    undefined
-                }
-            />
-            <TP_TABLE_COMP_NAME
-                data={dataToRender}
-                doReload={loadData}
-                className={`${dataResult.loading?'tw3-animate-pulse':''}`}
-                navigate={navigate}
-            />
+                    marginBottom={SearchToolbarMarginBottom['40px']}
+                    tabSwitch={
+                        otherTabs?
+                        {
+                            options: otherTabs,
+                            currentTab: 'TP_TYPE',
+                            onTabSwitch: navigateToTab
+                        }:
+                        undefined
+                    }
+                />
+            }
+            <div className="overflow-x-auto">
+                <TP_TABLE_COMP_NAME
+                    data={dataToRender}
+                    doReload={loadData}
+                    className={`${dataResult.loading?'tw3-animate-pulse':''}`}
+                    navigate={navigate}
+                />
+            </div>
             <PageContainer pages={pages} activePage={dataState.page} setActivePage={setActivePage} marginTop={PageContainerMarginTop['42px']} />
         </div>
     )
