@@ -197,8 +197,8 @@ class InGeneratorTabs extends Command
             }
 
             $quickSearch = [];
-            if (isset($tabItem['quickSearchFilterKeys'])) {
-                $quickSearch = json_decode($tabItem['quickSearchFilterKeys'], true);
+            if (isset($tabItem['config']['quickSearchFilterKeys'])) {
+                $quickSearch = json_decode($tabItem['config']['quickSearchFilterKeys'], true);
             } else {
                 foreach ($defaultItems as $df) {
                     if ($df['config']['schema'] === $tabItem['config']['schema'] &&
