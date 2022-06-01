@@ -215,7 +215,7 @@ class InGeneratorTabs extends Command
                 $filter = json_decode($tabItem['config']['predefinedFilter'], true);
             }
             $otherTabs = null;
-            if (isset($tabItem['config']['tabGroup'])) {
+            if (isset($tabItem['config']['tabGroup']) && $tabItem['config']['tabGroup']) {
                 $otherTabs =
                     array_values(
                         array_map(
@@ -260,7 +260,7 @@ class InGeneratorTabs extends Command
                     $filter ? json_encode($filter) : 'null',
                     json_encode($quickSearch),
                     isset($tabItem['config']['disableCreate']) && $tabItem['config']['disableCreate'] ? 'false' : 'true',
-                    $otherTabs && count($otherTabs) > 0 ? json_encode($otherTabs) : 'null'
+                    $otherTabs && count($otherTabs) > 0 ? json_encode($otherTabs, JSON_UNESCAPED_UNICODE) : 'null'
                 ],
                 $tabTableDataSourceTemplate
             );
