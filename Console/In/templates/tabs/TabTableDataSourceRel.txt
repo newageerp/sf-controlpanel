@@ -12,7 +12,8 @@ interface Props {
     navigate?: (schema: string, id: number | string, el: any) => void,
     dataProcessing?: (data: any[]) => any[],
     relId?: number,
-    hideSearchBar?: boolean
+    hideSearchBar?: boolean,
+    hidePaging?: boolean,
 }
 
 export default function TP_COMP_NAME(props: Props) {
@@ -184,7 +185,9 @@ export default function TP_COMP_NAME(props: Props) {
                     navigate={navigate}
                 />
             </div>
-            <PageContainer pages={pages} activePage={dataState.page} setActivePage={setActivePage} marginTop={PageContainerMarginTop['42px']} />
+            {!props.hidePaging &&
+                <PageContainer pages={pages} activePage={dataState.page} setActivePage={setActivePage} marginTop={PageContainerMarginTop['42px']} />
+            }
         </div>
     )
 }
