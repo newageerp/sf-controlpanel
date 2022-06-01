@@ -329,7 +329,7 @@ class InGeneratorTabs extends Command
                         json_encode($quickSearch),
                         isset($tabItem['config']['disableCreate']) && $tabItem['config']['disableCreate'] ? 'false' : 'true',
                         $otherTabs && count($otherTabs) > 0 ? json_encode($otherTabs, JSON_UNESCAPED_UNICODE) : 'null',
-                        null,
+                        'null',
                     ],
                     $tabTableDataSourceTemplate
                 );
