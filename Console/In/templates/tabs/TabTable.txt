@@ -11,7 +11,7 @@ import { UI } from "@newageerp/nae-react-ui";
 TP_IMPORT
 
 export interface TableSelectedProps {
-    onSelect: (number[]) => void,
+    onSelect: (selectedIds: number[]) => void,
     toolbarContent: any
 }
 
