@@ -57,6 +57,19 @@ class InGeneratorRoutes extends Command
                 </Route>';
         }
 
+        foreach ($editItems as $editItem) {
+            $compNameDataSource = Utils::fixComponentName(
+                ucfirst($editItem['config']['schema']) .
+                ucfirst($editItem['config']['type']) . 'FormDataSource'
+            );
+            $imports[] = 'import ' . $compNameDataSource . ' from "../editforms/forms-data-source/' . $compNameDataSource . '"';
+
+            $routes[] = '
+                <Route path={"/u/'.$tabItem['config']['schema'].'/'.$tabItem['config']['type'].'/edit/:id"}>
+                    <' . $compNameDataSource . ' />
+                </Route>';
+        }
+
         $fileName = $generatedPath . '/AppRoutes.tsx';
         $generatedContent = str_replace(
             [
