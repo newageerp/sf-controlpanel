@@ -14,6 +14,7 @@ interface Props {
     relId?: number,
     hideSearchBar?: boolean,
     hidePaging?: boolean,
+
 }
 
 export default function TP_COMP_NAME(props: Props) {

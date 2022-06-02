@@ -10,12 +10,19 @@ import { UI } from "@newageerp/nae-react-ui";
 
 TP_IMPORT
 
+export interface TableSelectedProps {
+    onSelect: (number[]) => void,
+    toolbarContent: any
+}
+
 interface Props {
     data: any,
     doReload: () => void,
     className?: string,
 
-    navigate?: (schema: string, id: number | string, el: any) => void
+    navigate?: (schema: string, id: number | string, el: any) => void,
+
+    selection?: TableSelectedProps
 }
 
 export default function TP_COMP_NAME(props: Props) {
