@@ -5,6 +5,7 @@ namespace Newageerp\SfControlpanel\Console\In;
 use Newageerp\SfControlpanel\Console\EntitiesUtils;
 use Newageerp\SfControlpanel\Console\LocalConfigUtils;
 use Newageerp\SfControlpanel\Console\PropertiesUtils;
+use Newageerp\SfControlpanel\Console\Utils;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -21,7 +22,8 @@ class InFillModels extends Command
     public function __construct(
         PropertiesUtils $propertiesUtils,
         EntitiesUtils   $entitiesUtils,
-    ) {
+    )
+    {
         parent::__construct();
         $this->propertiesUtils = $propertiesUtils;
         $this->entitiesUtils = $entitiesUtils;
@@ -29,11 +31,15 @@ class InFillModels extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $loader = new \Twig\Loader\FilesystemLoader(dirname(__DIR__, 2) . '/templates');
+        $twig = new \Twig\Environment($loader, [
+            'cache' => '/tmp',
+        ]);
+        $ormjsTemplate = $twig->load('front-models/ormjs.html.twig');
+        $ormSelectorsJsTemplate = $twig->load('front-models/ormSelectorsJs.html.twig');
+
         $modelTemplate = file_get_contents(
             __DIR__ . '/templates/fill-models/model-template.txt'
-        );
-        $ormTemplate = file_get_contents(
-            __DIR__ . '/templates/fill-models/orm-template.txt'
         );
         $hookTemplate = file_get_contents(
             __DIR__ . '/templates/fill-models/hook-template.txt'
@@ -120,32 +126,31 @@ class InFillModels extends Command
                 $modelClasses
             )
         );
-        $modelsList = implode(
-            PHP_EOL,
+        $modelsList =
             array_map(
                 function ($m) {
                     return $m . 'Model,';
                 },
                 $modelClasses
-            )
-        );
-        $ormPath = $modelsDir . '/orm.js';
-        $ormOrgContents = file_get_contents($ormPath);
-        $ormContents = str_replace(
-            ['|MODELSLIST|', '|MODELSIMPORT|'],
-            [$modelsList, $modelsImport],
-            $ormTemplate
-        );
-        if ($ormOrgContents !== $ormContents) {
-            file_put_contents(
-                $ormPath,
-                $ormContents
             );
-        }
+        $ormPath = $modelsDir . '/orm.js';
+
+        $ormContents = $ormjsTemplate->render(
+            [
+                'imports' => $modelsImport,
+                'models' => $modelsList
+            ]
+        );
+        Utils::writeOnChanges($ormPath, $ormContents);
 
         // FILL ormSelectors
         $selectorsPath = $modelsDir . "/ormSelectors.js";
-        $orgSelectorsContent = $selectorsContent = file_get_contents($selectorsPath);
+        if (file_exists($selectorsPath)) {
+            $selectorsContent = file_get_contents($selectorsPath);
+        } else {
+            $selectorsContent = $ormSelectorsJsTemplate->render([]);
+        }
+
 
         foreach ($modelClasses as $m) {
             $selector = 'Selector' . $m . 'Nae';
@@ -153,12 +158,7 @@ class InFillModels extends Command
                 $selectorsContent .= 'export const ' . $selector . ' = createSelector(orm.' . $m . 'Model);' . PHP_EOL;
             }
         }
-        if ($orgSelectorsContent !== $selectorsContent) {
-            file_put_contents(
-                $selectorsPath,
-                $selectorsContent
-            );
-        }
+        Utils::writeOnChanges($selectorsPath, $selectorsContent);
 
         // FILL HOOKS
         $hooksDir = LocalConfigUtils::getFrontendHooksPath();
@@ -564,8 +564,8 @@ import { " . $selectorsJoin . " } from '../../Components/Models/ormSelectors';
 
         foreach ($pathByComponent as $path => $comp) {
             $componentsContent .= '
-    if (path === \''.$path.'\') {
-        return <'.$comp.' id={id}/>;
+    if (path === \'' . $path . '\') {
+        return <' . $comp . ' id={id}/>;
     }';
         }
 
@@ -686,7 +686,8 @@ import { " . $selectorsJoin . " } from '../../Components/Models/ormSelectors';
         $field,
         $className,
         $propertyPath
-    ) {
+    )
+    {
         // var_dump($key);
         // var_dump($field);
         // var_dump($className);
@@ -762,7 +763,8 @@ import { " . $selectorsJoin . " } from '../../Components/Models/ormSelectors';
         $keyC,
         $schema,
         $template
-    ): array {
+    ): array
+    {
         $compName = $schema . ucfirst($keyC) . 'FieldNae';
 
         return [
@@ -788,7 +790,8 @@ import { " . $selectorsJoin . " } from '../../Components/Models/ormSelectors';
         $keyB,
         $keyC,
         $template
-    ): array {
+    ): array
+    {
         $compName = $model . ucfirst($key) . ucfirst($keyB,) . ucfirst($keyC) . 'FieldNae';
 
         return [
@@ -813,7 +816,8 @@ import { " . $selectorsJoin . " } from '../../Components/Models/ormSelectors';
         $keyB,
         $schema,
         $template
-    ): array {
+    ): array
+    {
         $compName = $model . ucfirst($key) . 'REL' . ucfirst($keyB,) . 'FieldNae';
 
         return [
