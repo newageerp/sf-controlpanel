@@ -1,0 +1,103 @@
+import { functions, UI } from '@newageerp/nae-react-ui';
+import React, { Fragment, useEffect, useState } from 'react'
+import { useSelector } from 'react-redux';
+import { {% for schema in checks %}Selector{{ selector }}Nae,{% endfor %} } from "../Models/ormSelectors"
+import { NaeSSchemaMap } from '../../config/NaeSSchema';
+import { useDataCache } from './DataCacheProvider';
+
+{% for schema in checks %}
+import { I{{ schema }}FieldsNae } from 'use{{ schema }}HookNae';
+{% endfor %}
+
+import { useRecoilValue } from 'recoil';
+import { OpenApi } from '@newageerp/nae-react-auth-wrapper';
+
+export default function DataCacheSocketComponent() {
+    const userState: any = useRecoilValue(OpenApi.naeUserState);
+
+    const { addToQueue } = useDataCache();
+    const [socketItem, setSocketItem] = useState();
+
+    {% for schema in checks %}
+        const {{ schema }}DataNae = useSelector(state => Selector{{ schema }}Nae(state));
+    {% endfor %}
+
+    const onSocketDoRequest = (data: any) => {
+        let fields = ['id'];
+        let dataToCheck = [];
+        let schema = functions.schemas.getSchemaByClassName(data.schema);
+
+        {% for schema in checks %}
+        if (data.schema === NaeSSchemaMap.{{ schema }}.className) {
+            dataToCheck = {{ schema }}DataNae;
+            fields = I{{ schema }}FieldsNae;
+        }
+        {% endfor %}
+
+        dataToCheck = dataToCheck.map((el: any) => el.id);
+
+        if (dataToCheck.indexOf(data.id) >= 0) {
+            const item = {
+                elementId: data.id,
+                schema: schema,
+                fields: fields,
+            }
+            addToQueue(item);
+        }
+    }
+
+    const onForceSocketDoRequest = (data: any) => {
+        if (data.schema === NaeSSchemaMap.Note.className) {
+            const item = {
+                elementId: data.id,
+                schema: NaeSSchemaMap.Note.schema,
+                fields: INoteFieldsNae,
+            }
+            addToQueue(item);
+        }
+    }
+
+    useEffect(() => {
+        if (socketItem) {
+            onSocketDoRequest(socketItem);
+        }
+    }, [socketItem]);
+
+    useEffect(() => {
+        UI.Socket.Service.addCallback(
+            "data-update-all",
+            "data-update-all",
+            setSocketItem
+        );
+        return () => {
+            UI.Socket.Service.removeCallback(
+                "data-update-all",
+                "data-update-all"
+            );
+        };
+    }, []);
+
+    useEffect(() => {
+        UI.Socket.Service.subscribe(`notes-${userState.id}`);
+        UI.Socket.Service.subscribe(`notes-${userState.permissionGroup}`);
+
+        UI.Socket.Service.addCallback(
+            `notes-create`,
+            `notes-create`,
+            onForceSocketDoRequest
+        );
+        return () => {
+            UI.Socket.Service.unsubscribe(`notes-${userState.id}`);
+            UI.Socket.Service.unsubscribe(`notes-${userState.permissionGroup}`);
+
+            UI.Socket.Service.removeCallback(
+                `notes-create`,
+                `notes-create`,
+            );
+        };
+    }, [userState]);
+
+    return (
+        <Fragment />
+    )
+}

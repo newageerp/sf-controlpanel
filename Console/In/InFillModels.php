@@ -37,6 +37,7 @@ class InFillModels extends Command
         ]);
         $ormjsTemplate = $twig->load('front-models/ormjs.html.twig');
         $ormSelectorsJsTemplate = $twig->load('front-models/ormSelectorsJs.html.twig');
+        $dataCacheSocketTemplate = $twig->load('front-models/DataCacheSocketComponent.html.twig');
 
         $modelTemplate = file_get_contents(
             __DIR__ . '/templates/fill-models/model-template.txt'
@@ -129,7 +130,7 @@ class InFillModels extends Command
         $modelsList =
             array_map(
                 function ($m) {
-                    return $m . 'Model,';
+                    return $m . 'Model';
                 },
                 $modelClasses
             );
@@ -576,84 +577,12 @@ import { " . $selectorsJoin . " } from '../../Components/Models/ormSelectors';
 
         $hooksDir = LocalConfigUtils::getFrontendHooksPath();
         $socketCheckFilePath = $hooksDir . '/DataCacheSocketComponent.tsx';
-        $socketFileContent = file_get_contents($socketCheckFilePath);
-
-        $allSelectors = array_map(
-            function ($m) {
-                return 'Selector' . $m . 'Nae';
-            },
-            $models
+        $socketFileContent = $dataCacheSocketTemplate->render(
+            [
+                'checks' => $models,
+            ]
         );
-        $allSelectorsStr = implode(", ", $allSelectors);
-
-        $selectorLine = 'import { ' . $allSelectorsStr . ' } from "../Models/ormSelectors" ';
-
-        $socketFileContentB = [];
-        $socketFileContentA = explode("\n", $socketFileContent);
-        $socketFileContentA[3] = $selectorLine;
-
-        $isStop = false;
-        foreach ($socketFileContentA as $line) {
-
-            if (
-                mb_strpos($line, 'A CHECK FINISH') !== false ||
-                mb_strpos($line, 'ADD IMPORT FIELDS FINISH') !== false
-            ) {
-                $isStop = false;
-            }
-
-            if (!$isStop) {
-                $socketFileContentB[] = $line;
-            }
-
-            if (
-                mb_strpos($line, 'SCHEMA CHECK START') !== false ||
-                mb_strpos($line, 'ADD IMPORT FIELDS START') !== false
-            ) {
-                $isStop = true;
-            }
-        }
-        $socketFileContent = implode("\n", $socketFileContentB);
-
-        foreach ($models as $m) {
-            $selector = 'Selector' . $m . 'Nae';
-            $dataVar = $m . 'DataNae';
-
-            if (
-                mb_strpos($socketFileContent, $selector) === false ||
-                mb_strpos($socketFileContent, ' ' . $dataVar . ' ') === false
-            ) {
-                $dataLine = 'const ' . $m . 'DataNae = useSelector(state => ' . $selector . '(state));
-// ADD SELECTOR HERE';
-                $socketFileContent = str_replace(
-                    "// ADD SELECTOR HERE",
-                    $dataLine,
-                    $socketFileContent,
-                );
-            }
-
-            $checkLine = 'if (data.schema === NaeSSchemaMap.' . $m . '.className) {
-  dataToCheck = ' . $m . 'DataNae;
-  fields = I' . $m . 'FieldsNae;
-}
-// SCHEMA CHECK FINISH';
-            $socketFileContent = str_replace(
-
-                "// SCHEMA CHECK FINISH",
-                $checkLine,
-                $socketFileContent,
-            );
-
-            $importFieldsLine = 'import { I' . $m . 'FieldsNae } from \'./use' . $m . 'HookNae\';
-    // ADD IMPORT FIELDS FINISH';
-            $socketFileContent = str_replace(
-                "// ADD IMPORT FIELDS FINISH",
-                $importFieldsLine,
-                $socketFileContent,
-            );
-        }
-
-        file_put_contents($socketCheckFilePath, $socketFileContent);
+        Utils::writeOnChanges($socketCheckFilePath, $socketFileContent);
 
         return Command::SUCCESS;
     }
