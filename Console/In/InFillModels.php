@@ -39,6 +39,7 @@ class InFillModels extends Command
         $ormSelectorsJsTemplate = $twig->load('front-models/ormSelectorsJs.html.twig');
         $dataCacheSocketTemplate = $twig->load('front-models/DataCacheSocketComponent.html.twig');
         $dataCacheProviderTemplate = $twig->load('front-models/DataCacheProvider.html.twig');
+        $queueModelTemplate = $twig->load('front-models/QueueModel.html.twig');
 
         $modelTemplate = file_get_contents(
             __DIR__ . '/templates/fill-models/model-template.txt'
@@ -108,6 +109,11 @@ class InFillModels extends Command
                     )
                 );
             }
+        }
+        $queueModelFile = $modelsDir . '/QueueModel.js';
+        if (!file_exists($queueModelFile)) {
+            $queueModelContent = $queueModelTemplate->render([]);
+            Utils::writeOnChanges($queueModelFile, $queueModelContent);
         }
 
         // FILL ORM.js
@@ -576,18 +582,26 @@ import { " . $selectorsJoin . " } from '../../Components/Models/ormSelectors';
 
         file_put_contents($compFile, $componentsContent);
 
+        $hasNotes = class_exists('App\Entity\Note');
+        $hasUsers = class_exists('App\Entity\User');
+
         $hooksDir = LocalConfigUtils::getFrontendHooksPath();
         $socketCheckFilePath = $hooksDir . '/DataCacheSocketComponent.tsx';
         $socketFileContent = $dataCacheSocketTemplate->render(
             [
                 'checks' => $models,
+                'hasNotes' => $hasNotes,
+                'hasUsers' => $hasUsers,
             ]
         );
         Utils::writeOnChanges($socketCheckFilePath, $socketFileContent);
 
         $socketProviderFilePath = $hooksDir . '/DataCacheProvider.tsx';
         $socketProviderFileContent = $dataCacheProviderTemplate->render(
-
+            [
+                'hasNotes' => $hasNotes,
+                'hasUsers' => $hasUsers,
+            ]
         );
         if (!file_exists($socketProviderFilePath)) {
             Utils::writeOnChanges($socketProviderFilePath, $socketProviderFileContent);

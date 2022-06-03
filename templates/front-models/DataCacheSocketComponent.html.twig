@@ -47,6 +47,7 @@ export default function DataCacheSocketComponent() {
     }
 
     const onForceSocketDoRequest = (data: any) => {
+        {% if hasNotes %}
         if (data.schema === NaeSSchemaMap.Note.className) {
             const item = {
                 elementId: data.id,
@@ -55,6 +56,7 @@ export default function DataCacheSocketComponent() {
             }
             addToQueue(item);
         }
+        {% endif %}
     }
 
     useEffect(() => {
@@ -77,6 +79,7 @@ export default function DataCacheSocketComponent() {
         };
     }, []);
 
+{% if hasNotes %}
     useEffect(() => {
         UI.Socket.Service.subscribe(`notes-${userState.id}`);
         UI.Socket.Service.subscribe(`notes-${userState.permissionGroup}`);
@@ -96,7 +99,7 @@ export default function DataCacheSocketComponent() {
             );
         };
     }, [userState]);
-
+{% endif %}
     return (
         <Fragment />
     )

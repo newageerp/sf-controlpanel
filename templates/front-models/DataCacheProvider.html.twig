@@ -1,19 +1,17 @@
 import { UI } from "@newageerp/nae-react-ui";
 import React, { useContext, useEffect, useState } from "react";
 import { useSelector, useDispatch } from 'react-redux'
-import { CaspianQueueSelector } from "../Models/ormSelectors";
+import { QueueQueueSelector } from "../Models/ormSelectors";
 import { useTranslation } from 'react-i18next';
 import { OpenApi } from '@newageerp/nae-react-auth-wrapper';
 import { NaeSSchemaMap } from '../../config/NaeSSchema';
 import { useRecoilValue } from 'recoil';
+{% if hasNotes %}
 import { INoteFieldsNae } from './useNoteHookNae';
-import { IAdrClassFieldsNae } from './useAdrClassHookNae';
-import { ICargoStatusFieldsNae } from "./useCargoStatusHookNae";
-import { ITerminalFieldsNae } from './useTerminalHookNae';
-import { IUnloadAddressFieldsNae } from './useUnloadAddressHookNae';
-import { IOutgoingDocumentsChangePurposeFieldsNae } from './useOutgoingDocumentsChangePurposeHookNae';
+{% endif %}
+{% if hasUsers %}
 import { IUserFieldsNae } from './useUserHookNae';
-
+{% endif %}
 export interface DataCacheProviderValue {
 queue: QueueItem[],
 addToQueue: (item: QueueItem) => void,
@@ -40,12 +38,15 @@ interface QueueItem {
 }
 
 const cacheData = (userState: any) => ([
+    {% if hasUsers %}
     {
         schema: NaeSSchemaMap.User.schema,
         page: 1,
         pageSize: 200,
         fieldsToReturn: IUserFieldsNae,
     },
+    {% endif %}
+    {% if hasNotes %}
     {
         schema: NaeSSchemaMap.Note.schema,
         page: 1,
@@ -65,6 +66,7 @@ const cacheData = (userState: any) => ([
             }
         ]
     },
+    {% endif %}
 ]);
 
 export const DataCacheProvider = (props: DataCacheProps) => {
@@ -75,7 +77,7 @@ export const DataCacheProvider = (props: DataCacheProps) => {
     const dispatch = useDispatch();
 
     // const [queue, setQueue] = useState<QueueItem[]>([]);
-    const queue = useSelector(state => CaspianQueueSelector(state));
+    const queue = useSelector(state => QueueQueueSelector(state));
     const [isLoading, setIsLoading] = useState(false);
     const [isQueueLoading, setIsQueueLoading] = useState(false);
 

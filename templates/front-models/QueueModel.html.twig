@@ -1,0 +1,47 @@
+import { Model, fk, many, attr } from "redux-orm";
+
+class QueueModel extends Model {
+    static reducer(action, QueueModel, session) {
+        switch (action.type) {
+            case "UPSERT_QUEUE":
+                addToQueueModel(action.payload, QueueModel);
+                break;
+            case "REMOVE_QUEUE":
+                action.payload.map((payload) => {
+                    QueueModel.withId(payload.id).delete(action);
+                });
+                break;
+        }
+        // Return value is ignored.
+        return session.state;
+    }
+
+    toString() {
+        return `${this.id}`;
+    }
+}
+QueueModel.modelName = "QueueModel";
+
+QueueModel.fields = {
+    id: attr(),
+};
+
+export const addToQueueModel = (payload, qModel) => {
+    const dbData = qModel.withId(payload.id);
+    const upsertData = payload;
+    if (dbData) {
+        const keys = Object.keys(upsertData);
+        let needChange = false;
+        keys.map((key) => {
+            if (JSON.stringify(upsertData[key]) !== JSON.stringify(dbData[key])) {
+                needChange = true;
+            }
+        });
+        if (!needChange) {
+            return;
+        }
+    }
+    qModel.upsert(upsertData);
+};
+
+export default QueueModel;
