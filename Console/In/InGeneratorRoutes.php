@@ -28,12 +28,11 @@ class InGeneratorRoutes extends Command
             'cache' => '/tmmp',
         ]);
 
-        $editRouteWrapperTemplate = $twig->load('routes/edit-route-wrapper.html.twig');
-        $routeWrappersPath = Utils::generatedPath('routes/wrappers');
+        $editRoutesWrapperTemplate = $twig->load('routes/edit-route-wrapper.html.twig');
+        $editRoutesTemplate = $twig->load('routes/app-routes.html.twig');
 
-        $routesTemplate = file_get_contents(
-            __DIR__ . '/templates/routes/Routes.txt'
-        );
+        $generatedRoutesWrappersPath = Utils::generatedPath('routes/wrappers');
+        $generatedRoutesPath = Utils::generatedPath('routes');
 
         $tabsFile = $_ENV['NAE_SFS_CP_STORAGE_PATH'] . '/tabs.json';
         $tabItems = json_decode(
@@ -46,9 +45,7 @@ class InGeneratorRoutes extends Command
             true
         );
 
-        $generatedPath = Utils::generatedPath('routes');
-
-        $routes = [];
+        $listComponents = [];
 
         $imports = [];
 
@@ -59,12 +56,14 @@ class InGeneratorRoutes extends Command
             );
             $imports[] = 'import ' . $dataSourceCompName . ' from "../tabs/tables-data-source/' . $dataSourceCompName . '"';
 
-            $routes[] = '
-                <Route path={"/u/' . $tabItem['config']['schema'] . '/' . $tabItem['config']['type'] . '/list/"}>
-                    <' . $dataSourceCompName . ' />
-                </Route>';
+            $listComponents[] = [
+                'schema' => $tabItem['config']['schema'],
+                'type' => $tabItem['config']['type'],
+                'compName' => $dataSourceCompName
+            ];
         }
 
+        $editComponents = [];
         foreach ($editItems as $editItem) {
             $compNameDataSource = Utils::fixComponentName(
                 ucfirst($editItem['config']['schema']) .
@@ -72,29 +71,26 @@ class InGeneratorRoutes extends Command
             );
             $imports[] = 'import ' . $compNameDataSource . ' from "../editforms/forms-data-source/' . $compNameDataSource . '"';
 
-            $routes[] = '
-                <Route path={"/u/' . $tabItem['config']['schema'] . '/' . $tabItem['config']['type'] . '/edit/:id"}>
-                    <' . $compNameDataSource . ' />
-                </Route>';
+            $editComponents[] = [
+                'schema' => $editItem['config']['schema'],
+                'type' => $editItem['config']['type'],
+                'compName' => $compNameDataSource
+            ];
         }
 
-        $fileName = $generatedPath . '/AppRoutes.tsx';
-        $generatedContent = str_replace(
+        $generatedContent = $editRoutesTemplate->render(
             [
-                'TP_ROUTES',
-                'TP_IMPORTS',
-            ],
-            [
-                implode("\n", $routes),
-                implode("\n", $imports),
-            ],
-            $routesTemplate
+                'imports' => $imports,
+                'listComponents' => $listComponents,
+                'editComponents' => $editComponents,
+            ]
         );
+        $fileName = $generatedRoutesPath . '/AppRoutes.tsx';
         Utils::writeOnChanges($fileName, $generatedContent);
 
         // EDIT ROW WRAPPER
-        $generatedContent = $editRouteWrapperTemplate->render();
-        $fileName = $routeWrappersPath . '/DefaultEditRouteWrapper.tsx';
+        $generatedContent = $editRoutesWrapperTemplate->render();
+        $fileName = $generatedRoutesWrappersPath . '/DefaultEditRouteWrapper.tsx';
         Utils::writeOnChanges($fileName, $generatedContent);
 
         return Command::SUCCESS;

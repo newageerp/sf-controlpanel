@@ -1,0 +1,30 @@
+import React, { Fragment } from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+{% for import in imports %}
+    {{ import }}
+{% endfor %}
+
+export default function AppRoutes() {
+    return (
+        <Fragment>
+            {% for component in listComponents %}
+                <Route path={"/u/{{ component.schema }}/{{ component.type }}/list/"}>
+                    <{{ component.compName }} />
+                </Route>
+            {% endfor %}
+            {% for component in editComponents %}
+                <Route path={"/u/{{ component.schema }}/{{ component.type }}/edit/:id"}>
+                    <DefaultEditRouteWrapper
+                        render={
+                            (
+                                id: string,
+                                onSave: (element: any, isNew: boolean, schema: string) => void,
+                                onCancel: () => void,
+                            ) => <{{ component.compName }} id={id} onSave={onSave} onCancel={onCancel} />
+                        }
+                    />
+                </Route>
+            {% endfor %}
+        </Fragment>
+    )
+}
