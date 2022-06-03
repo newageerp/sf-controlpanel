@@ -1,7 +1,7 @@
 import { functions, UI } from '@newageerp/nae-react-ui';
 import React, { Fragment, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
-import { {% for schema in checks %}Selector{{ selector }}Nae,{% endfor %} } from "../Models/ormSelectors"
+import { {% for schema in checks %}Selector{{ schema }}Nae,{% endfor %} } from "../Models/ormSelectors"
 import { NaeSSchemaMap } from '../../config/NaeSSchema';
 import { useDataCache } from './DataCacheProvider';
 
