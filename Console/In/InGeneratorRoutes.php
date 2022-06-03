@@ -23,6 +23,14 @@ class InGeneratorRoutes extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $loader = new \Twig\Loader\FilesystemLoader(dirname(__DIR__, 3).'/templates');
+        $twig = new \Twig\Environment($loader, [
+            'cache' => '/tmmp',
+        ]);
+
+        $editRouteWrapperTemplate = $twig->load('routes/edit-route-wrapper.html.twig');
+        $routeWrappersPath = Utils::generatedPath('routes/wrappers');
+
         $routesTemplate = file_get_contents(
             __DIR__ . '/templates/routes/Routes.txt'
         );
@@ -82,6 +90,11 @@ class InGeneratorRoutes extends Command
             ],
             $routesTemplate
         );
+        Utils::writeOnChanges($fileName, $generatedContent);
+
+        // EDIT ROW WRAPPER
+        $generatedContent = $editRouteWrapperTemplate->render();
+        $fileName = $routeWrappersPath . '/DefaultEditRouteWrapper.tsx';
         Utils::writeOnChanges($fileName, $generatedContent);
 
         return Command::SUCCESS;
