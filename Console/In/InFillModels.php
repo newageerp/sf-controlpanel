@@ -33,7 +33,7 @@ class InFillModels extends Command
     {
         $loader = new \Twig\Loader\FilesystemLoader(dirname(__DIR__, 2) . '/templates');
         $twig = new \Twig\Environment($loader, [
-            'cache' => '/tmp',
+            'cache' => '/tmp/smarty',
         ]);
         $ormjsTemplate = $twig->load('front-models/ormjs.html.twig');
         $ormSelectorsJsTemplate = $twig->load('front-models/ormSelectorsJs.html.twig');

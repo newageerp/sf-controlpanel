@@ -25,6 +25,13 @@ class InGeneratorTabs extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $loader = new \Twig\Loader\FilesystemLoader(dirname(__DIR__, 2) . '/templates');
+        $twig = new \Twig\Environment($loader, [
+            'cache' => '/tmp/smarty',
+        ]);
+
+        $defaultSearchToolbarTemplate = $twig->load('tabs/DefaultSearchToolbar.html.twig');
+
         $tabTableTemplate = file_get_contents(
             __DIR__ . '/templates/tabs/TabTable.txt'
         );
@@ -336,6 +343,13 @@ class InGeneratorTabs extends Command
                 );
                 Utils::writeOnChanges($dataSourceFileName, $generatedContent);
             }
+        }
+
+        $generatedPath = Utils::generatedPath('tabs');
+        $defaultSearchToolbarFile = $generatedPath.'/DefaultSearchToolbar.tsx';
+        if (!file_exists($defaultSearchToolbarFile)) {
+            $contents = $defaultSearchToolbarTemplate->render([]);
+            Utils::writeOnChanges($defaultSearchToolbarFile, $contents);
         }
 
         return Command::SUCCESS;

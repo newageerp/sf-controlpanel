@@ -1,0 +1,21 @@
+import React from 'react'
+import { SearchToolbar, SearchToolbarMarginBottom, SearchToolbarQuickSearchProps, SearchToolbarSortProps, SearchToolbarTabSwitchProps } from '@newageerp/ui.components.list.search-toolbar'
+
+interface Props {
+    onCreate?: () => void,
+    search?: SearchToolbarQuickSearchProps,
+    sort?: SearchToolbarSortProps,
+    tabSwitch?: SearchToolbarTabSwitchProps
+}
+
+export default function DefaultSearchTolbar(props: Props) {
+    return (
+        <SearchToolbar
+                onCreate={props.onCreate}
+                search={props.search}
+                sort={props.sort}
+                marginBottom={SearchToolbarMarginBottom['40px']}
+                tabSwitch={props.tabSwitch}
+        />
+    )
+}
