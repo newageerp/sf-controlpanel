@@ -38,6 +38,7 @@ class InFillModels extends Command
         $ormjsTemplate = $twig->load('front-models/ormjs.html.twig');
         $ormSelectorsJsTemplate = $twig->load('front-models/ormSelectorsJs.html.twig');
         $dataCacheSocketTemplate = $twig->load('front-models/DataCacheSocketComponent.html.twig');
+        $dataCacheProviderTemplate = $twig->load('front-models/DataCacheProvider.html.twig');
 
         $modelTemplate = file_get_contents(
             __DIR__ . '/templates/fill-models/model-template.txt'
@@ -583,6 +584,12 @@ import { " . $selectorsJoin . " } from '../../Components/Models/ormSelectors';
             ]
         );
         Utils::writeOnChanges($socketCheckFilePath, $socketFileContent);
+
+        $socketProviderFilePath = $hooksDir . '/DataCacheProvider.tsx';
+        $socketProviderFileContent = $dataCacheProviderTemplate->render(
+
+        );
+        Utils::writeOnChanges($socketProviderFilePath, $socketProviderFileContent);
 
         return Command::SUCCESS;
     }

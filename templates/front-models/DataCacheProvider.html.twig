@@ -1,0 +1,186 @@
+import { UI } from "@newageerp/nae-react-ui";
+import React, { useContext, useEffect, useState } from "react";
+import { useSelector, useDispatch } from 'react-redux'
+import { CaspianQueueSelector } from "../Models/ormSelectors";
+import { useTranslation } from 'react-i18next';
+import { OpenApi } from '@newageerp/nae-react-auth-wrapper';
+import { NaeSSchemaMap } from '../../config/NaeSSchema';
+import { useRecoilValue } from 'recoil';
+import { INoteFieldsNae } from './useNoteHookNae';
+import { IAdrClassFieldsNae } from './useAdrClassHookNae';
+import { ICargoStatusFieldsNae } from "./useCargoStatusHookNae";
+import { ITerminalFieldsNae } from './useTerminalHookNae';
+import { IUnloadAddressFieldsNae } from './useUnloadAddressHookNae';
+import { IOutgoingDocumentsChangePurposeFieldsNae } from './useOutgoingDocumentsChangePurposeHookNae';
+import { IUserFieldsNae } from './useUserHookNae';
+
+export interface DataCacheProviderValue {
+queue: QueueItem[],
+addToQueue: (item: QueueItem) => void,
+}
+
+export const DataCacheContext = React.createContext<DataCacheProviderValue>(
+    {
+        queue: [],
+        addToQueue: (item: QueueItem) => { console.log('addToQueue', item) },
+    }
+);
+
+export const useDataCache = () => useContext(DataCacheContext);
+
+export interface DataCacheProps {
+    children: any;
+    }
+
+interface QueueItem {
+    id?: string,
+    schema: string,
+    elementId: number,
+    fields: string[]
+}
+
+const cacheData = (userState: any) => ([
+    {
+        schema: NaeSSchemaMap.User.schema,
+        page: 1,
+        pageSize: 200,
+        fieldsToReturn: IUserFieldsNae,
+    },
+    {
+        schema: NaeSSchemaMap.Note.schema,
+        page: 1,
+        pageSize: 200,
+        fieldsToReturn: INoteFieldsNae,
+        filters: [
+            {
+                "and": [
+                    {
+                        "or": [
+                            ['i.notify', 'JSON_CONTAINS', userState.id.toString(), true],
+                            ['i.notify', 'JSON_CONTAINS', `"${userState.permissionGroup}"`, true],
+                        ]
+                    },
+                    ['i.notifyAccept', 'JSON_NOT_CONTAINS', userState.id.toString(), true],
+                ]
+            }
+        ]
+    },
+]);
+
+export const DataCacheProvider = (props: DataCacheProps) => {
+    const userState: any = useRecoilValue(OpenApi.naeUserState);
+
+    const { t } = useTranslation();
+
+    const dispatch = useDispatch();
+
+    // const [queue, setQueue] = useState<QueueItem[]>([]);
+    const queue = useSelector(state => CaspianQueueSelector(state));
+    const [isLoading, setIsLoading] = useState(false);
+    const [isQueueLoading, setIsQueueLoading] = useState(false);
+
+    const [isCaching, setIsCaching] = useState(true);
+    const [preloadCache] = OpenApi.useURequest('NAEUMultipleList');
+    const isLoggedIn = !!userState && userState.id > 0;
+    useEffect(() => {
+        if (!userState || !userState.id) {
+            return;
+        }
+        preloadCache({
+            data: cacheData(userState)
+        }).then((res: any) => {
+        const keys = Object.keys(res.data);
+        keys.forEach(k => {
+            dispatch({
+                type: "UPSERT_" + k,
+                payload: res.data[k].data
+            })
+        })
+        setIsCaching(false);
+        })
+    }, [userState]);
+
+    const loadElements = (items: QueueItem[]) => {
+    setIsLoading(true)
+
+    let loadCacheData: any = {};
+    items.forEach((item) => {
+        if (!(item.schema in loadCacheData)) {
+            loadCacheData[item.schema] = {
+                schema: item.schema,
+                ids: [],
+                fieldsToReturn: item.fields
+            };
+        }
+        loadCacheData[item.schema].ids.push(item.elementId);
+    })
+    const requestCacheData: any[] = [];
+    Object.keys(loadCacheData).forEach(k => {
+        const _data = loadCacheData[k];
+
+        requestCacheData.push(
+            {
+                schema: _data.schema,
+                page: 1,
+                pageSize: _data.ids.length,
+                fieldsToReturn: _data.fieldsToReturn,
+                filters: [{ and: [["i.id", "in", _data.ids, true]] }]
+            }
+        );
+    })
+
+    preloadCache({
+        data: requestCacheData
+    }).then((res: any) => {
+        const keys = Object.keys(res.data);
+        keys.forEach(k => {
+            dispatch({
+                type: "UPSERT_" + k,
+                payload: res.data[k].data
+            })
+        })
+        setIsLoading(false);
+        })
+    }
+
+    const addToQueue = (item: QueueItem) => {
+        item.id = item.schema + "-" + item.elementId;
+
+        dispatch({
+            type: "UPSERT_QUEUE",
+            payload: item
+        })
+    }
+
+    useEffect(() => {
+        if (!isLoading && !isQueueLoading) {
+            if (queue.length > 0) {
+                loadElements(queue);
+                dispatch(
+                    {
+                        type: "REMOVE_QUEUE",
+                        payload: queue
+                    }
+                )
+            }
+        }
+    }, [isLoading, isQueueLoading, queue]);
+
+    return (
+        <DataCacheContext.Provider
+                value={{
+                queue,
+                addToQueue,
+                }}
+        >
+            {isCaching && isLoggedIn ?
+
+            <div className={"w-96 mx-auto mt-8 flex justify-center flex-wrap gap-8"}>
+            <UI.Typography.H3 className="w-full text-center">{t('Kraunami duomenys...')}</UI.Typography.H3>
+            <UI.Loader.Logo />
+            </div>
+
+            : props.children}
+        </DataCacheContext.Provider>
+    );
+};
