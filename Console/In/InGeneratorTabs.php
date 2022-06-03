@@ -31,12 +31,10 @@ class InGeneratorTabs extends Command
         ]);
 
         $defaultSearchToolbarTemplate = $twig->load('tabs/DefaultSearchToolbar.html.twig');
+        $tableDataSourceTemplate = $twig->load('tabs/TableDataSource.html.twig');
 
         $tabTableTemplate = file_get_contents(
             __DIR__ . '/templates/tabs/TabTable.txt'
-        );
-        $tabTableDataSourceTemplate = file_get_contents(
-            __DIR__ . '/templates/tabs/TabTableDataSource.txt'
         );
         $tabTableDataSourceRelTemplate = file_get_contents(
             __DIR__ . '/templates/tabs/TabTableDataSourceRel.txt'
@@ -314,32 +312,19 @@ class InGeneratorTabs extends Command
                 }
             } else {
                 $dataSourceFileName = $dataSourceGeneratedPath . '/' . $dataSourceCompName . '.tsx';
-                $generatedContent = str_replace(
+                $generatedContent = $tableDataSourceTemplate->render(
                     [
-                        'TP_COMP_NAME',
-                        'TP_TABLE_COMP_NAME',
-                        'TP_SCHEMA',
-                        'TP_TYPE',
-                        'TP_PAGE_SIZE',
-                        'TP_SORT',
-                        'TP_FILTER',
-                        'TP_QUICK_SEARCH',
-                        'TP_CREATABLE',
-                        'TP_OTHER_TABS',
-                    ],
-                    [
-                        $dataSourceCompName,
-                        $compName,
-                        $tabItem['config']['schema'],
-                        $tabItem['config']['type'],
-                        $pageSize,
-                        json_encode($sort),
-                        $filter ? json_encode($filter) : 'null',
-                        json_encode($quickSearch),
-                        isset($tabItem['config']['disableCreate']) && $tabItem['config']['disableCreate'] ? 'false' : 'true',
-                        $otherTabs && count($otherTabs) > 0 ? json_encode($otherTabs, JSON_UNESCAPED_UNICODE) : 'null',
-                    ],
-                    $tabTableDataSourceTemplate
+                        'tpCompName' => $dataSourceCompName,
+                        'tpTableCompName' => $compName,
+                        'schema' => $tabItem['config']['schema'],
+                        'type' => $tabItem['config']['type'],
+                        'pageSize' => $pageSize,
+                        'sort' => json_encode($sort),
+                        'filter' => $filter ? json_encode($filter) : 'null',
+                        'quickSearch' => json_encode($quickSearch),
+                        'creatable' => isset($tabItem['config']['disableCreate']) && $tabItem['config']['disableCreate'] ? 'false' : 'true',
+                        'otherTabs' => $otherTabs && count($otherTabs) > 0 ? json_encode($otherTabs, JSON_UNESCAPED_UNICODE) : 'null'
+                    ]
                 );
                 Utils::writeOnChanges($dataSourceFileName, $generatedContent);
             }
