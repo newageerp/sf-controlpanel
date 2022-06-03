@@ -125,14 +125,11 @@ class InFillModels extends Command
         }
         sort($modelClasses);
 
-        $modelsImport = implode(
-            PHP_EOL,
-            array_map(
+        $modelsImport = array_map(
                 function ($m) {
                     return 'import ' . $m . 'Model from "./' . $m . 'Model"';
                 },
                 $modelClasses
-            )
         );
         $modelsList =
             array_map(
@@ -145,8 +142,7 @@ class InFillModels extends Command
 
         $ormContents = $ormjsTemplate->render(
             [
-                'imports' => $modelsImport,
-                'models' => $modelsList
+                'models' => $modelClasses,
             ]
         );
         Utils::writeOnChanges($ormPath, $ormContents);

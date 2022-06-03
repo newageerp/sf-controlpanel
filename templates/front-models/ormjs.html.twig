@@ -1,6 +1,6 @@
 import { ORM } from "redux-orm";
-{% for import in imports %}
-{{ import|raw }}
+{% for model in models %}
+import {{ model }}Model from "./{{ model }}Model"
 {% endfor %}
 
 export const orm = new ORM({
@@ -10,7 +10,7 @@ export const orm = new ORM({
 });
 orm.register(
 {% for model in models %}
-    {{ model }},
+    {{ model }}Model,
 {% endfor %}
 );
 

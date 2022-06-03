@@ -1,7 +1,7 @@
 import { UI } from "@newageerp/nae-react-ui";
 import React, { useContext, useEffect, useState } from "react";
 import { useSelector, useDispatch } from 'react-redux'
-import { QueueQueueSelector } from "../Models/ormSelectors";
+import { SelectorQueueNae } from "../Models/ormSelectors";
 import { useTranslation } from 'react-i18next';
 import { OpenApi } from '@newageerp/nae-react-auth-wrapper';
 import { NaeSSchemaMap } from '../../config/NaeSSchema';
@@ -28,7 +28,7 @@ export const useDataCache = () => useContext(DataCacheContext);
 
 export interface DataCacheProps {
     children: any;
-    }
+}
 
 interface QueueItem {
     id?: string,
@@ -77,7 +77,7 @@ export const DataCacheProvider = (props: DataCacheProps) => {
     const dispatch = useDispatch();
 
     // const [queue, setQueue] = useState<QueueItem[]>([]);
-    const queue = useSelector(state => QueueQueueSelector(state));
+    const queue = useSelector(state => SelectorQueueNae(state));
     const [isLoading, setIsLoading] = useState(false);
     const [isQueueLoading, setIsQueueLoading] = useState(false);
 
