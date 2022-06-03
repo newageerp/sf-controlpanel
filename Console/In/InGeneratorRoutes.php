@@ -25,7 +25,7 @@ class InGeneratorRoutes extends Command
     {
         $loader = new \Twig\Loader\FilesystemLoader(dirname(__DIR__, 2) . '/templates');
         $twig = new \Twig\Environment($loader, [
-            'cache' => '/tmmp',
+            'cache' => '/tmp',
         ]);
 
         $editRoutesWrapperTemplate = $twig->load('routes/edit-route-wrapper.html.twig');
