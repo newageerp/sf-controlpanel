@@ -4,6 +4,15 @@ namespace Newageerp\SfControlpanel\Console;
 use Symfony\Component\Filesystem\Filesystem;
 class Utils
 {
+    public static function customFolderPath(string $folder) {
+        $fs = new Filesystem();
+        $generatedPath = LocalConfigUtils::getFrontendGeneratedPath() . '/_custom/'.$folder;
+        if (!$fs->exists($generatedPath)) {
+            $fs->mkdir($generatedPath);
+        }
+        return $generatedPath;
+    }
+
     public static function generatedPath(string $folder) {
         $fs = new Filesystem();
         $generatedPath = LocalConfigUtils::getFrontendGeneratedPath() . '/'.$folder;

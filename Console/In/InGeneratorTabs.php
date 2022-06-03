@@ -56,6 +56,8 @@ class InGeneratorTabs extends Command
         $dataSourceGeneratedPath = Utils::generatedPath('tabs/tables-data-source');
         $dataSourceRelGeneratedPath = Utils::generatedPath('tabs/tables-rel-data-source');
 
+        $dataSourceCustomGeneratedPath = Utils::customFolderPath('tabs/tables-data-source');
+
         foreach ($tabItems as $tabItem) {
             $tpHead = [];
             $tpBody = [];
@@ -271,7 +273,7 @@ class InGeneratorTabs extends Command
                     );
 
                     $relFilter = [
-                        'i.'.$mapped,
+                        'i.' . $mapped,
                         '=',
                         'props.relId',
                         true
@@ -311,6 +313,13 @@ class InGeneratorTabs extends Command
                     Utils::writeOnChanges($dataSourceFileName, $generatedContent);
                 }
             } else {
+                $customToolbarStart = file_exists(
+                    $dataSourceCustomGeneratedPath . '/' . $dataSourceCompName . 'ToolbarStartContent.tsx'
+                );
+                $customToolbarEnd = file_exists(
+                    $dataSourceCustomGeneratedPath . '/' . $dataSourceCompName . 'ToolbarEndContent.tsx'
+                );
+
                 $dataSourceFileName = $dataSourceGeneratedPath . '/' . $dataSourceCompName . '.tsx';
                 $generatedContent = $tableDataSourceTemplate->render(
                     [
@@ -323,19 +332,21 @@ class InGeneratorTabs extends Command
                         'filter' => $filter ? json_encode($filter) : 'null',
                         'quickSearch' => json_encode($quickSearch),
                         'creatable' => isset($tabItem['config']['disableCreate']) && $tabItem['config']['disableCreate'] ? 'false' : 'true',
-                        'otherTabs' => $otherTabs && count($otherTabs) > 0 ? json_encode($otherTabs, JSON_UNESCAPED_UNICODE) : 'null'
+                        'otherTabs' => $otherTabs && count($otherTabs) > 0 ? json_encode($otherTabs, JSON_UNESCAPED_UNICODE) : 'null',
+
+                        'customToolbarStart' => $customToolbarStart,
+                        'customToolbarEnd' => $customToolbarEnd,
                     ]
                 );
                 Utils::writeOnChanges($dataSourceFileName, $generatedContent);
             }
         }
 
+        // DefaultSearchToolbar
         $generatedPath = Utils::generatedPath('tabs');
-        $defaultSearchToolbarFile = $generatedPath.'/DefaultSearchToolbar.tsx';
-        if (!file_exists($defaultSearchToolbarFile)) {
-            $contents = $defaultSearchToolbarTemplate->render([]);
-            Utils::writeOnChanges($defaultSearchToolbarFile, $contents);
-        }
+        $defaultSearchToolbarFile = $generatedPath . '/DefaultSearchToolbar.tsx';
+        $contents = $defaultSearchToolbarTemplate->render([]);
+        Utils::writeOnChanges($defaultSearchToolbarFile, $contents);
 
         return Command::SUCCESS;
     }

@@ -5,7 +5,9 @@ interface Props {
     onCreate?: () => void,
     search?: SearchToolbarQuickSearchProps,
     sort?: SearchToolbarSortProps,
-    tabSwitch?: SearchToolbarTabSwitchProps
+    tabSwitch?: SearchToolbarTabSwitchProps,
+    toolbarStartContent?: ReactNode,
+    toolbarEndContent?: ReactNode,
 }
 
 export default function DefaultSearchToolbar(props: Props) {
@@ -16,6 +18,8 @@ export default function DefaultSearchToolbar(props: Props) {
             sort={props.sort}
             marginBottom={SearchToolbarMarginBottom['40px']}
             tabSwitch={props.tabSwitch}
+            toolbarStartContent={props.toolbarStartContent}
+            toolbarEndContent={props.toolbarEndContent}
         />
     )
 }

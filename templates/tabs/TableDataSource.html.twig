@@ -4,10 +4,16 @@ import {{ tpTableCompName }} from "../tables/{{ tpTableCompName }}"
 import { OpenApi } from '@newageerp/nae-react-auth-wrapper';
 import { functions } from '@newageerp/nae-react-ui';
 import { PageContainer, PageContainerMarginTop } from '@newageerp/ui.paging.base.page-container'
-import { SearchToolbar, SearchToolbarMarginBottom } from '@newageerp/ui.components.list.search-toolbar'
 import { SortingItem } from '@newageerp/ui.components.list.sort-controller';
 import { useHistory } from 'react-router-dom'
 import DefaultSearchToolbar from "../DefaultSearchToolbar";
+
+{% if customToolbarStart %}
+import {{ tpCompName }}ToolbarStartContent from "../../_custom/tabs/tables-data-source/{{ tpCompName }}ToolbarStartContent";
+{% endif %}
+{% if customToolbarEnd %}
+    import {{ tpCompName }}ToolbarEndContent from "../../_custom/tabs/tables-data-source/{{ tpCompName }}ToolbarEndContent";
+{% endif %}
 
 interface Props {
     navigate?: (schema: string, id: number | string, el: any) => void,
@@ -164,6 +170,12 @@ export default function {{ tpCompName }}(props: Props) {
                         }:
                         undefined
                     }
+                    {% if customToolbarStart %}
+                    toolbarStartContent={<{{ tpCompName }}ToolbarStartContent />}
+                    {% endif %}
+                    {% if customToolbarEnd %}
+                    toolbarEndContent={<{{ tpCompName }}ToolbarEndContent />}
+                    {% endif %}
                 />
             <{{ tpTableCompName }}
                     data={dataToRender}
