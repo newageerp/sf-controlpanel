@@ -6,7 +6,7 @@ import { NaeSSchemaMap } from '../../config/NaeSSchema';
 import { useDataCache } from './DataCacheProvider';
 
 {% for schema in checks %}
-import { I{{ schema }}FieldsNae } from 'use{{ schema }}HookNae';
+import { I{{ schema }}FieldsNae } from './use{{ schema }}HookNae';
 {% endfor %}
 
 import { useRecoilValue } from 'recoil';
