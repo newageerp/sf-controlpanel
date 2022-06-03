@@ -589,7 +589,9 @@ import { " . $selectorsJoin . " } from '../../Components/Models/ormSelectors';
         $socketProviderFileContent = $dataCacheProviderTemplate->render(
 
         );
-        Utils::writeOnChanges($socketProviderFilePath, $socketProviderFileContent);
+        if (!file_exists($socketProviderFilePath)) {
+            Utils::writeOnChanges($socketProviderFilePath, $socketProviderFileContent);
+        }
 
         return Command::SUCCESS;
     }
