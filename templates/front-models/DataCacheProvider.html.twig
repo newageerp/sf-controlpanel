@@ -168,16 +168,18 @@ export const DataCacheProvider = (props: DataCacheProps) => {
 
     return (
         <DataCacheContext.Provider
-                value={{
-                queue,
-                addToQueue,
-                }}
+            value={
+                {
+                    queue,
+                    addToQueue,
+                }
+            }
         >
             {isCaching && isLoggedIn ?
 
             <div className={"w-96 mx-auto mt-8 flex justify-center flex-wrap gap-8"}>
-            <UI.Typography.H3 className="w-full text-center">{t('Kraunami duomenys...')}</UI.Typography.H3>
-            <UI.Loader.Logo />
+                <UI.Typography.H3 className="w-full text-center">{t('Kraunami duomenys...')}</UI.Typography.H3>
+                <UI.Loader.Logo />
             </div>
 
             : props.children}
