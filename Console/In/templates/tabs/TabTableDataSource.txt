@@ -7,6 +7,7 @@ import { PageContainer, PageContainerMarginTop } from '@newageerp/ui.paging.base
 import { SearchToolbar, SearchToolbarMarginBottom } from '@newageerp/ui.components.list.search-toolbar'
 import { SortingItem } from '@newageerp/ui.components.list.sort-controller';
 import { useHistory } from 'react-router-dom'
+import DefaultSearchToolbar from "../DefaultSearchToolbar";
 
 interface Props {
     navigate?: (schema: string, id: number | string, el: any) => void,
@@ -141,7 +142,7 @@ export default function TP_COMP_NAME(props: Props) {
 
     return (
         <div ref={headerRef}>
-            <SearchToolbar
+            <DefaultSearchToolbar
                 onCreate={isCreatable?onCreate:undefined}
                 search={
                     {
@@ -157,7 +158,6 @@ export default function TP_COMP_NAME(props: Props) {
                       schema: 'TP_SCHEMA'
                     }
                 }
-                marginBottom={SearchToolbarMarginBottom['40px']}
                 tabSwitch={
                     otherTabs?
                     {

@@ -8,14 +8,14 @@ interface Props {
     tabSwitch?: SearchToolbarTabSwitchProps
 }
 
-export default function DefaultSearchTolbar(props: Props) {
+export default function DefaultSearchToolbar(props: Props) {
     return (
         <SearchToolbar
-                onCreate={props.onCreate}
-                search={props.search}
-                sort={props.sort}
-                marginBottom={SearchToolbarMarginBottom['40px']}
-                tabSwitch={props.tabSwitch}
+            onCreate={props.onCreate}
+            search={props.search}
+            sort={props.sort}
+            marginBottom={SearchToolbarMarginBottom['40px']}
+            tabSwitch={props.tabSwitch}
         />
     )
 }
