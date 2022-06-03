@@ -23,7 +23,7 @@ class InGeneratorRoutes extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $loader = new \Twig\Loader\FilesystemLoader(dirname(__DIR__, 3).'/templates');
+        $loader = new \Twig\Loader\FilesystemLoader(dirname(__DIR__, 2) . '/templates');
         $twig = new \Twig\Environment($loader, [
             'cache' => '/tmmp',
         ]);
@@ -60,7 +60,7 @@ class InGeneratorRoutes extends Command
             $imports[] = 'import ' . $dataSourceCompName . ' from "../tabs/tables-data-source/' . $dataSourceCompName . '"';
 
             $routes[] = '
-                <Route path={"/u/'.$tabItem['config']['schema'].'/'.$tabItem['config']['type'].'/list/"}>
+                <Route path={"/u/' . $tabItem['config']['schema'] . '/' . $tabItem['config']['type'] . '/list/"}>
                     <' . $dataSourceCompName . ' />
                 </Route>';
         }
@@ -73,7 +73,7 @@ class InGeneratorRoutes extends Command
             $imports[] = 'import ' . $compNameDataSource . ' from "../editforms/forms-data-source/' . $compNameDataSource . '"';
 
             $routes[] = '
-                <Route path={"/u/'.$tabItem['config']['schema'].'/'.$tabItem['config']['type'].'/edit/:id"}>
+                <Route path={"/u/' . $tabItem['config']['schema'] . '/' . $tabItem['config']['type'] . '/edit/:id"}>
                     <' . $compNameDataSource . ' />
                 </Route>';
         }
