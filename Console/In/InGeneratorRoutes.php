@@ -35,15 +35,21 @@ class InGeneratorRoutes extends Command
         $generatedRoutesPath = Utils::generatedPath('routes');
 
         $tabsFile = $_ENV['NAE_SFS_CP_STORAGE_PATH'] . '/tabs.json';
-        $tabItems = json_decode(
-            file_get_contents($tabsFile),
-            true
-        );
+        $tabItems = [];
+        if (file_exists($tabsFile)) {
+            $tabItems = json_decode(
+                file_get_contents($tabsFile),
+                true
+            );
+        }
         $editsFile = $_ENV['NAE_SFS_CP_STORAGE_PATH'] . '/edit.json';
-        $editItems = json_decode(
-            file_get_contents($editsFile),
-            true
-        );
+        $editItems = [];
+        if (file_exists($editsFile)) {
+            $editItems = json_decode(
+                file_get_contents($editsFile),
+                true
+            );
+        }
 
         $listComponents = [];
 

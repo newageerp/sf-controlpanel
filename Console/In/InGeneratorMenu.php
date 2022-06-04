@@ -36,10 +36,13 @@ class InGeneratorMenu extends Command
         );
 
         $menuFile = $_ENV['NAE_SFS_CP_STORAGE_PATH'] . '/menu.json';
-        $menuItems = json_decode(
-            file_get_contents($menuFile),
-            true
-        );
+        $menuItems = [];
+        if (file_exists($menuFile)) {
+            $menuItems = json_decode(
+                file_get_contents($menuFile),
+                true
+            );
+        }
 
         $generatedPath = LocalConfigUtils::getFrontendGeneratedPath() . '/menu/items';
         if (!$fs->exists($generatedPath)) {
@@ -83,10 +86,13 @@ class InGeneratorMenu extends Command
 
         // MENU TITLE
         $menuTitleFile = $_ENV['NAE_SFS_CP_STORAGE_PATH'] . '/menu-title.json';
-        $menuTitleItems = json_decode(
-            file_get_contents($menuTitleFile),
-            true
-        );
+        $menuTitleItems = [];
+        if (file_exists($menuTitleFile)) {
+            $menuTitleItems = json_decode(
+                file_get_contents($menuTitleFile),
+                true
+            );
+        }
 
         $generatedPath = LocalConfigUtils::getFrontendGeneratedPath() . '/menu/titles';
         if (!$fs->exists($generatedPath)) {
@@ -154,7 +160,7 @@ class InGeneratorMenu extends Command
                             $tpChilds .= "
                 <" . $menuCompName . " forceSkipIcon={true}/>";
 
-                            $tpImports .= "import " .$menuCompName." from \"../items/" . $menuCompName . "\" " . PHP_EOL;
+                            $tpImports .= "import " . $menuCompName . " from \"../items/" . $menuCompName . "\" " . PHP_EOL;
                         }
                     }
                 }

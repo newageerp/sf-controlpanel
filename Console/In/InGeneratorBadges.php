@@ -29,10 +29,13 @@ class InGeneratorBadges extends Command
         );
 
         $badgeFile = $_ENV['NAE_SFS_CP_STORAGE_PATH'] . '/badge.json';
-        $badgeItems = json_decode(
-            file_get_contents($badgeFile),
-            true
-        );
+        $badgeItems = [];
+        if (file_exists($badgeFile)) {
+            $badgeItems = json_decode(
+                file_get_contents($badgeFile),
+                true
+            );
+        }
 
         foreach ($badgeItems as $badgeItem) {
             $imports = [];

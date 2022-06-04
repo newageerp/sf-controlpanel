@@ -47,10 +47,13 @@ class InGeneratorTabs extends Command
         );
 
         $tabsFile = $_ENV['NAE_SFS_CP_STORAGE_PATH'] . '/tabs.json';
-        $tabItems = json_decode(
-            file_get_contents($tabsFile),
-            true
-        );
+        $tabItems = [];
+        if (file_exists($tabsFile)) {
+            $tabItems = json_decode(
+                file_get_contents($tabsFile),
+                true
+            );
+        }
 
         $generatedPath = Utils::generatedPath('tabs/tables');
         $dataSourceGeneratedPath = Utils::generatedPath('tabs/tables-data-source');

@@ -40,10 +40,13 @@ class InGeneratorEditForms extends Command
         );
 
         $editsFile = $_ENV['NAE_SFS_CP_STORAGE_PATH'] . '/edit.json';
-        $editItems = json_decode(
-            file_get_contents($editsFile),
-            true
-        );
+        $editItems = [];
+        if (file_exists($editsFile)) {
+            $editItems = json_decode(
+                file_get_contents($editsFile),
+                true
+            );
+        }
 
         $generatedPath = Utils::generatedPath('editforms/forms');
         $generatedPathDataSource = Utils::generatedPath('editforms/forms-data-source');
