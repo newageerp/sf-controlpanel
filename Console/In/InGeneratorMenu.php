@@ -130,10 +130,13 @@ class InGeneratorMenu extends Command
 
         // MENU FOLDER
         $menuFolderFile = $_ENV['NAE_SFS_CP_STORAGE_PATH'] . '/menu-folder.json';
-        $menuFolderItems = json_decode(
-            file_get_contents($menuFolderFile),
-            true
-        );
+        $menuFolderItems = [];
+        if (file_exists($menuFolderFile)) {
+            $menuFolderItems = json_decode(
+                file_get_contents($menuFolderFile),
+                true
+            );
+        }
 
         $generatedPath = LocalConfigUtils::getFrontendGeneratedPath() . '/menu/folders';
         if (!$fs->exists($generatedPath)) {
