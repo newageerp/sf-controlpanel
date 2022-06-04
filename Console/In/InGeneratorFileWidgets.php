@@ -65,6 +65,7 @@ class InGeneratorFileWidgets extends Command
             $content = $fileWidgetTemplate->render([
                 'compName' => $compName,
                 'files' => $widgetItems,
+                'schema' => $schema
             ]);
             Utils::writeOnChanges($fileName, $content);
         }
