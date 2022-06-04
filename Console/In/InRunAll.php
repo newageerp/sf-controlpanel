@@ -33,7 +33,8 @@ class InRunAll extends Command
             'nae:localconfig:InGeneratorBadges',
             'nae:localconfig:InGeneratorEditForms',
             'nae:localconfig:InFillModels',
-            'nae:localconfig:InGeneratorRoutes'
+            'nae:localconfig:InGeneratorRoutes',
+            'nae:localconfig:InGeneratorFileWidgets'
         ];
 
         foreach ($commands as $commandName) {
