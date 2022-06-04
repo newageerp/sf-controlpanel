@@ -28,6 +28,8 @@ services:
     arguments: [ ]
   Newageerp\SfControlpanel\Controller\ConfigBadgeController:
     arguments: [ ]
+  Newageerp\SfControlpanel\Controller\ConfigFilesWidgetController:
+    arguments: [ ]
   Newageerp\SfControlpanel\Controller\ConfigPropertiesController:
     arguments: [ ]
   Newageerp\SfControlpanel\Service\MenuService:
