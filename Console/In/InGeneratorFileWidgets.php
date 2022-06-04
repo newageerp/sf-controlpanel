@@ -51,13 +51,13 @@ class InGeneratorFileWidgets extends Command
         foreach ($widgetItemsBySchema as $schema => $items) {
             $compName = Utils::fixComponentName($schema) . 'FilesWidget';
             usort($items, function ($i1, $i2) {
-                return $i1['sort'] <=> $i2['sort'];
+                return $i1['config']['sort'] <=> $i2['config']['sort'];
             });
             $widgetItems = [];
             foreach ($items as $item) {
                 $widgetItems[] = [
-                    'title' => $item['title'],
-                    'type' => $item['type'],
+                    'title' => $item['config']['title'],
+                    'type' => $item['config']['type'],
                 ];
             }
 
