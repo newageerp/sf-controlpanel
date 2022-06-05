@@ -22,7 +22,7 @@ interface Props {
 export default function {{ tpCompName }}(props: Props) {
     const history = useHistory()
 
-    const otherTabs = {{ otherTabs }};
+    const otherTabs = {{ otherTabs|raw }};
 
     const headerRef = useRef(null)
     const scrollToHeader = () => {
