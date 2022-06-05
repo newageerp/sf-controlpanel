@@ -56,6 +56,9 @@ class InGeneratorRoutes extends Command
         $imports = [];
 
         foreach ($tabItems as $tabItem) {
+            if (isset($tabItem['config']['generateForRel']) && $tabItem['config']['generateForRel']) {
+                continue;
+            }
             $dataSourceCompName = Utils::fixComponentName(
                 ucfirst($tabItem['config']['schema']) .
                 ucfirst($tabItem['config']['type']) . 'TableDataSource'
