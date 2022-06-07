@@ -25,7 +25,8 @@ class PropertiesUtils
         return $this->properties;
     }
 
-    public function getArraySchemasForTarget(string $target) {
+    public function getArraySchemasForTarget(string $target)
+    {
         return array_filter(
             $this->properties,
             function ($item) use ($target) {
@@ -391,6 +392,51 @@ class PropertiesUtils
                     "import" => '',
                     "template" => '<Fragment/>'
                 ];
+        }
+    }
+
+    public function getDefaultPropertySearchComparison(?array $property, ?array $column): string
+    {
+        if (!$property || !$column) {
+            return 'no';
+        }
+
+        $naeType = $this->getPropertyNaeType($property, $column);
+
+        switch ($naeType) {
+            case 'enum_text':
+            case 'enum_number':
+            case 'bool':
+            case 'status':
+            case 'enum_multi_number':
+            case 'enum_multi_text':
+                return 'enum';
+                break;
+            case 'fileMultiple':
+            case 'file':
+            case 'object':
+            case 'string_array':
+            case 'array':
+                return 'no';
+                break;
+            case 'audio':
+            case 'image':
+            case 'color':
+            case 'text':
+            case 'string':
+                return 'string';
+                break;
+
+            case 'number':
+            case 'float':
+                return 'number';
+                break;
+            case 'datetime':
+            case 'date':
+                return 'date';
+                break;
+            default:
+                return 'no';
         }
     }
 }

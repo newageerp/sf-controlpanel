@@ -30,7 +30,7 @@ class ConfigPropertiesController extends ConfigBaseController
             'id' => 'main',
             'title' => $title,
             'isActive' => true,
-            'items' => array_values($mainProperties)
+            'items' => array_values($mainProperties),
         ];
 
 
@@ -149,10 +149,12 @@ class ConfigPropertiesController extends ConfigBaseController
         );
 
         $schemaProperties = array_map(
-            function ($property) {
+            function ($property) use ($propertiesUtils) {
+                $type = $propertiesUtils->getDefaultPropertySearchComparison($property, []);
                 return [
                     'id' => 'i.' . $property['key'],
                     'title' => $property['title'],
+                    'type' => $type,
                 ];
             },
             $schemaProperties
