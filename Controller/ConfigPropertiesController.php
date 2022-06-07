@@ -30,7 +30,7 @@ class ConfigPropertiesController extends ConfigBaseController
             'id' => 'main',
             'title' => $title,
             'isActive' => true,
-            'items' => $mainProperties
+            'items' => array_values($mainProperties)
         ];
 
 
@@ -52,7 +52,7 @@ class ConfigPropertiesController extends ConfigBaseController
                 'id' => 'rel-' . $relProperty['format'],
                 'title' => $relProperty['title'],
                 'isActive' => false,
-                'items' => $relProperties
+                'items' => array_values($relProperties)
             ];
         }
 
