@@ -2,6 +2,7 @@
 
 namespace Newageerp\SfControlpanel\Controller;
 
+use Newageerp\SfControlpanel\Console\EntitiesUtils;
 use Newageerp\SfControlpanel\Console\PropertiesUtils;
 use Symfony\Component\Routing\Annotation\Route;
 use OpenApi\Annotations as OA;
@@ -15,13 +16,21 @@ class ConfigPropertiesController extends ConfigBaseController
     /**
      * @Route(path="/for-filter", methods={"POST"})
      */
-    public function getPropertiesForFilter(Request $request, PropertiesUtils $propertiesUtils)
+    public function getPropertiesForFilter(Request $request, PropertiesUtils $propertiesUtils, EntitiesUtils $entitiesUtils)
     {
         $request = $this->transformJsonBody($request);
 
         $schema = $request->get('schema');
+        $title = $entitiesUtils->getTitleBySlug($schema);
 
-        $schemaProperties = $this->schemaPropetiesForFilter($schema, $propertiesUtils);
+        $schemaProperties = array_map(
+            function ($item) use ($title) {
+                $itemNew = $item;
+                $itemNew['group'] = $title;
+                return $itemNew;
+            },
+            $this->schemaPropetiesForFilter($schema, $propertiesUtils)
+        );
 
         $rels = $this->relPropertiesForFilter($schema, $propertiesUtils);
         foreach ($rels as $relProperty) {

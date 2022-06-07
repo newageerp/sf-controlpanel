@@ -20,6 +20,16 @@ class EntitiesUtils
         );
     }
 
+    public function getTitleBySlug(string $slug)
+    {
+        foreach ($this->entities as $entity) {
+            if ($entity['schema'] === $slug) {
+                return $entity['title'];
+            }
+        }
+        return '';
+    }
+
     public function getClassNameBySlug(string $slug)
     {
         foreach ($this->entities as $entity) {
