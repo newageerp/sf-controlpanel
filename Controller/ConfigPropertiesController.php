@@ -23,31 +23,41 @@ class ConfigPropertiesController extends ConfigBaseController
         $schema = $request->get('schema');
         $title = $entitiesUtils->getTitleBySlug($schema);
 
-        $schemaProperties = array_map(
-            function ($item) use ($title) {
-                $itemNew = $item;
-                $itemNew['group'] = $title;
-                return $itemNew;
-            },
-            $this->schemaPropetiesForFilter($schema, $propertiesUtils)
-        );
+        $output = [];
+
+        $mainProperties = $this->schemaPropetiesForFilter($schema, $propertiesUtils);
+        $output[] = [
+            'id' => 'main',
+            'title' => $title,
+            'isActive' => true,
+            'items' => $mainProperties
+        ];
+
 
         $rels = $this->relPropertiesForFilter($schema, $propertiesUtils);
         foreach ($rels as $relProperty) {
             $relSchemaProperties = $this->schemaPropetiesForSort($relProperty['format'], $propertiesUtils);
+
+            $relProperties = [];
             foreach ($relSchemaProperties as $relSchemaProperty) {
                 $key = explode(".", $relSchemaProperty['value']);
                 $title = $relSchemaProperty['label'];
-                $schemaProperties[] = [
-                    'value' => 'i.' . $relProperty['key'] . '.' . $key[1],
-                    'label' => $title,
-                    'group' => $relProperty['title'],
+                $relProperties[] = [
+                    'id' => 'i.' . $relProperty['key'] . '.' . $key[1],
+                    'title' => $title,
                 ];
             }
+
+            $output[] = [
+                'id' => 'rel-' . $relProperty['format'],
+                'title' => $relProperty['title'],
+                'isActive' => false,
+                'items' => $relProperties
+            ];
         }
 
 
-        return $this->json(['data' => array_values($schemaProperties)]);
+        return $this->json(['data' => $output]);
     }
 
     /**
@@ -141,8 +151,8 @@ class ConfigPropertiesController extends ConfigBaseController
         $schemaProperties = array_map(
             function ($property) {
                 return [
-                    'value' => 'i.' . $property['key'],
-                    'label' => $property['title'],
+                    'id' => 'i.' . $property['key'],
+                    'title' => $property['title'],
                 ];
             },
             $schemaProperties
