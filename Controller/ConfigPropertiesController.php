@@ -28,10 +28,11 @@ class ConfigPropertiesController extends ConfigBaseController
             $relSchemaProperties = $this->schemaPropetiesForSort($relProperty['format'], $propertiesUtils);
             foreach ($relSchemaProperties as $relSchemaProperty) {
                 $key = explode(".", $relSchemaProperty['value']);
-                $title = $relProperty['title'] . ' -> ' . $relSchemaProperty['label'];
+                $title = $relSchemaProperty['label'];
                 $schemaProperties[] = [
                     'value' => 'i.' . $relProperty['key'] . '.' . $key[1],
                     'label' => $title,
+                    'group' => $relProperty['title'],
                 ];
             }
         }
