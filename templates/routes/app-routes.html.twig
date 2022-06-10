@@ -5,7 +5,7 @@ import DefaultEditRouteWrapper from "./wrappers/DefaultEditRouteWrapper";
     {{ import|raw }}
 {% endfor %}
 
-export default function ListRoutes() {
+export function ListRoutes() {
     return (
         <Fragment>
             {% for component in listComponents %}
@@ -17,7 +17,7 @@ export default function ListRoutes() {
     )
 }
 
-export default function EditRoutes() {
+export function EditRoutes() {
     return (
         <Fragment>
             {% for component in editComponents %}
