@@ -72,9 +72,9 @@ class ConfigViewController extends ConfigBaseController
         $output = [];
 
         try {
-            if (!($user = $this->findUser($request))) {
-                throw new \Exception('Invalid user');
-            }
+//            if (!($user = $this->findUser($request))) {
+//                throw new \Exception('Invalid user');
+//            }
 
             $item = $request->get('item');
             if (!isset($item['id']) || !$item['id']) {
@@ -117,9 +117,9 @@ class ConfigViewController extends ConfigBaseController
         $output = [];
 
         try {
-            if (!($user = $this->findUser($request))) {
-                throw new \Exception('Invalid user');
-            }
+//            if (!($user = $this->findUser($request))) {
+//                throw new \Exception('Invalid user');
+//            }
 
             $id = $request->get('id');
 
