@@ -5,7 +5,7 @@ import DefaultEditRouteWrapper from "./wrappers/DefaultEditRouteWrapper";
     {{ import|raw }}
 {% endfor %}
 
-export default function AppRoutes() {
+export default function ListRoutes() {
     return (
         <Fragment>
             {% for component in listComponents %}
@@ -13,19 +13,35 @@ export default function AppRoutes() {
                     <{{ component.compName }} />
                 </Route>
             {% endfor %}
+        </Fragment>
+    )
+}
+
+export default function EditRoutes() {
+    return (
+        <Fragment>
             {% for component in editComponents %}
                 <Route path={"/u/{{ component.schema }}/{{ component.type }}/edit/:id"}>
                     <DefaultEditRouteWrapper
-                        render={
+                            render={
                             (
-                                id: string,
-                                onSave: (element: any, isNew: boolean, schema: string) => void,
-                                onCancel: () => void,
-                            ) => <{{ component.compName }} id={id} onSave={onSave} onCancel={onCancel} />
+                            id: string,
+                            onSave: (element: any, isNew: boolean, schema: string) => void,
+                        onCancel: () => void,
+                        ) => <{{ component.compName }} id={id} onSave={onSave} onCancel={onCancel} />
                         }
-                    />
+                        />
                 </Route>
             {% endfor %}
+        </Fragment>
+    )
+}
+
+export default function AppRoutes() {
+    return (
+        <Fragment>
+            <ListRoutes/>
+            <EditRoutes/>
         </Fragment>
     )
 }
