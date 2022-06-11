@@ -211,7 +211,7 @@ class InGeneratorTabs extends Command
             }
 
             $quickSearch = [];
-            if (isset($tabItem['config']['quickSearchFilterKeys'])) {
+            if (isset($tabItem['config']['quickSearchFilterKeys']) && $tabItem['config']['quickSearchFilterKeys']) {
                 $quickSearch = json_decode($tabItem['config']['quickSearchFilterKeys'], true);
             } else {
                 foreach ($defaultItems as $df) {
@@ -324,6 +324,7 @@ class InGeneratorTabs extends Command
                 );
 
                 $dataSourceFileName = $dataSourceGeneratedPath . '/' . $dataSourceCompName . '.tsx';
+                var_dump($quickSearch);
                 $generatedContent = $tableDataSourceTemplate->render(
                     [
                         'tpCompName' => $dataSourceCompName,
