@@ -155,6 +155,7 @@ class ConfigPropertiesController extends ConfigBaseController
                     'id' => 'i.' . $property['key'],
                     'title' => $property['title'],
                     'type' => $type,
+                    'options' => $propertiesUtils->getDefaultPropertySearchOptions($property, [])
                 ];
             },
             $schemaProperties
