@@ -165,18 +165,24 @@ export default function {{ tpCompName }}(props: Props) {
                         undefined
                     }
                     sort={
+                        !!sort?
                         {
                             onSort: setSort,
                             sort: dataState.sort,
                             defaultSort: sort,
                             schema: '{{ schema }}',
                         }
+                        :
+                        undefined
                     }
-                    extendedSearch={{
-                        search: dataState.detailedSearch
-                        onSearch: setDetailedSearch,
-                        schema: '{{ schema }}'
-                    }}
+                    extendedSearch={
+                        1 === 1?
+                        {
+                            search: dataState.detailedSearch
+                            onSearch: setDetailedSearch,
+                            schema: '{{ schema }}'
+                        }:undefined
+                    }
                     tabSwitch={
                         otherTabs?
                         {
