@@ -130,6 +130,22 @@ export default function {{ tpCompName }}(props: Props) {
 
         let filter = _filter[0]['and'].length > 0 ? _filter : []
 
+        if (!!dataState.detailedSearch && dataState.detailedSearch.length > 0) {
+            dataState.detailedSearch.forEach((_f: any) => {
+                const orFilter : any = {"or": []}
+                _f.filter.forEach((_subF: any) => {
+                    const andFilter : any = {"and": []}
+                    _subF.items.forEach((itemFilter: any) => {
+                        andFilter.and.push(
+                            [itemFilter.selectedFilter.id, itemFilter.selectedComparison.value, itemFilter.filterValue]
+                        )
+                    })
+                    orFilter.or.push(andFilter);
+                })
+                filter.push(orFilter);
+            })
+        }
+
         getData(
             filter,
             dataState.page,
