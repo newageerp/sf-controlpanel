@@ -39,6 +39,7 @@ export default function {{ tpCompName }}(props: Props) {
         page: 1,
         sort: sort,
         quickSearch: '',
+        detailedSearch: []
     }
 
     const isCreatable = {{ creatable }};
@@ -70,6 +71,15 @@ export default function {{ tpCompName }}(props: Props) {
             const _state = JSON.parse(JSON.stringify(dataState));
             _state.page = 1;
             _state.sort = sort;
+            setDateState(_state);
+        }
+    }
+
+    const setDetailedSearch = (detailedSearch) => {
+        if (detailedSearch !== dataState.detailedSearch) {
+            const _state = JSON.parse(JSON.stringify(dataState));
+            _state.page = 1;
+            _state.detailedSearch = detailedSearch;
             setDateState(_state);
         }
     }
@@ -147,10 +157,12 @@ export default function {{ tpCompName }}(props: Props) {
             <DefaultSearchToolbar
                     onCreate={isCreatable?onCreate:undefined}
                     search={
+                        !!quickSearch?
                         {
                             searchValue: dataState.quickSearch,
                             onSearch: setQuickSearch
-                        }
+                        }:
+                        undefined
                     }
                     sort={
                         {
@@ -160,6 +172,11 @@ export default function {{ tpCompName }}(props: Props) {
                             schema: '{{ schema }}',
                         }
                     }
+                    extendedSearch={{
+                        search: dataState.detailedSearch
+                        onSearch: setDetailedSearch,
+                        schema: '{{ schema }}'
+                    }}
                     tabSwitch={
                         otherTabs?
                         {
