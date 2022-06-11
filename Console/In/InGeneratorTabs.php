@@ -324,7 +324,6 @@ class InGeneratorTabs extends Command
                 );
 
                 $dataSourceFileName = $dataSourceGeneratedPath . '/' . $dataSourceCompName . '.tsx';
-                var_dump($quickSearch);
                 $generatedContent = $tableDataSourceTemplate->render(
                     [
                         'tpCompName' => $dataSourceCompName,

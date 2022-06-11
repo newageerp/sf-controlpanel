@@ -397,11 +397,11 @@ class PropertiesUtils
 
     public function getDefaultPropertySearchComparison(?array $property, ?array $column): string
     {
-        if (!$property || !$column) {
+        if (!$property) {
             return 'no';
         }
 
-        $naeType = $this->getPropertyNaeType($property, $column);
+        $naeType = $this->getPropertyNaeType($property, $column ?: []);
 
         switch ($naeType) {
             case 'enum_text':
