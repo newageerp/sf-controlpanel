@@ -7,6 +7,7 @@ import { PageContainer, PageContainerMarginTop } from '@newageerp/ui.paging.base
 import { SortingItem } from '@newageerp/ui.components.list.sort-controller';
 import { useHistory } from 'react-router-dom'
 import DefaultSearchToolbar from "../DefaultSearchToolbar";
+import {TypeItemFilters} from '@newageerp/ui.components.list.filter-container'
 {% if customToolbarStart %}
 import {{ tpCompName }}ToolbarStartContent from "../../_custom/tabs/tables-data-source/{{ tpCompName }}ToolbarStartContent";
 {% endif %}
@@ -75,7 +76,7 @@ export default function {{ tpCompName }}(props: Props) {
         }
     }
 
-    const setDetailedSearch = (detailedSearch) => {
+    const setDetailedSearch = (detailedSearch: TypeItemFilters) => {
         if (detailedSearch !== dataState.detailedSearch) {
             const _state = JSON.parse(JSON.stringify(dataState));
             _state.page = 1;
@@ -157,7 +158,7 @@ export default function {{ tpCompName }}(props: Props) {
             <DefaultSearchToolbar
                     onCreate={isCreatable?onCreate:undefined}
                     search={
-                        !!quickSearch?
+                        !!quickSearchFields?
                         {
                             searchValue: dataState.quickSearch,
                             onSearch: setQuickSearch
