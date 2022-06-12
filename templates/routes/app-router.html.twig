@@ -17,7 +17,7 @@ export interface AppRouterProps {
 }
 
 export default function AppRouter(props: AppRouterProps) {
-    const location = useLocation();
+    const [isUserDataLoading, setIsUserDataLoading] = useState(true);
 
     const getUserData = () => {
         axios.post('/app/nae-core/auth/get').then(res => {
@@ -28,7 +28,7 @@ export default function AppRouter(props: AppRouterProps) {
         });
     }
 
-    const [userState, setUserState] = useRecoilState(naeUserState)
+    const [userState, setUserState] = useRecoilState(OpenApi.naeUserState)
 
     const [loadData, loadDataParams] = OpenApi.useURequest('NAEPing');
     useEffect(loadData, []);
