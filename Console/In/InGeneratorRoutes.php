@@ -33,9 +33,13 @@ class InGeneratorRoutes extends Command
 
         $appRouterTemplate = $twig->load('routes/app-router.html.twig');
         $routesWrapperTemplate = $twig->load('routes/routes-wrapper.html.twig');
+        $userSpaceWrapperTemplate = $twig->load('routes/user-space-wrapper.html.twig');
+        $customLeftMenuTemplate = $twig->load('routes/custom-left-menu.html.twig');
 
         $generatedRoutesWrappersPath = Utils::generatedPath('routes/wrappers');
         $generatedRoutesPath = Utils::generatedPath('routes');
+
+        $customMenuPath = Utils::customFolderPath('menu');
 
         $tabsFile = $_ENV['NAE_SFS_CP_STORAGE_PATH'] . '/tabs.json';
         $tabItems = [];
@@ -114,6 +118,18 @@ class InGeneratorRoutes extends Command
         $generatedContent = $routesWrapperTemplate->render();
         $fileName = $generatedRoutesWrappersPath . '/RoutesWrapper.tsx';
         Utils::writeOnChanges($fileName, $generatedContent);
+
+        // UserSpaceWrapper
+        $generatedContent = $userSpaceWrapperTemplate->render();
+        $fileName = $generatedRoutesWrappersPath . '/UserSpaceWrapper.tsx';
+        Utils::writeOnChanges($fileName, $generatedContent);
+
+        // Custom left menu
+        $customMenuFileName = $customMenuPath.'/LeftMenu.tsx';
+        if (!file_exists($customMenuFileName)) {
+            $generatedContent = $customLeftMenuTemplate->render();
+            Utils::writeOnChanges($customMenuFileName, $generatedContent);
+        }
 
         return Command::SUCCESS;
     }

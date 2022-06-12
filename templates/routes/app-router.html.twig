@@ -1,6 +1,8 @@
 import { OpenApi } from '@newageerp/nae-react-auth-wrapper';
 import React, { useEffect } from 'react'
 import { BrowserRouter as Router, Switch } from 'react-router-dom';
+import { Redirect, useLocation } from 'react-router-dom'
+import 'axios' from 'axios'
 
 export interface AppRouterRoute {
     path: string
@@ -9,12 +11,33 @@ export interface AppRouterRoute {
 }
 
 export interface AppRouterProps {
-    children?: any,
+    noAuthRoutes?: any,
+    authRoutes?: any,
 }
 
 export default function AppRouter(props: AppRouterProps) {
+    const location = useLocation();
+
+    const getUserData = () => {
+        axios.post('/app/nae-core/auth/get').then(res => {
+            if (res.status === 200) {
+                setUserState(res.data)
+            }
+        });
+    }
+
+    const [userState, setUserState] = useRecoilState(naeUserState)
+
     const [loadData, loadDataParams] = OpenApi.useURequest('NAEPing');
     useEffect(loadData, []);
+
+    useEffect(getUserData, [])
+
+    const isLoggedIn = !!userState && ('id' in userState);
+
+    if (getUserDataParams.loading) {
+        return <Fragment />
+    }
 
     if (loadDataParams.loading || loadDataParams.data.data.length === 0) {
         return <div>Loading...</div>
@@ -23,7 +46,8 @@ export default function AppRouter(props: AppRouterProps) {
     return (
         <Router>
             <Switch>
-                {props.children}
+                {props.noAuthRoutes}
+                {isLoggedIn && props.authRoutes}
             </Switch>
         </Router>
     )

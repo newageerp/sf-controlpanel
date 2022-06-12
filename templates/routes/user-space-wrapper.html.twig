@@ -1,0 +1,17 @@
+import React from "react";
+import { LayoutLeftMenu } from "@newageerp/ui.layout.base.layout-left-menu";
+import LeftMenu from "../../_custom/menu/LeftMenu";
+
+interface Props {
+        children?: any
+}
+
+function UserSpaceWrapper(props: Props) {
+        return (
+        <LayoutLeftMenu leftSideContent={<LeftMenu />}>
+                {props.children}
+        </LayoutLeftMenu>
+        );
+}
+
+export default UserSpaceWrapper;
