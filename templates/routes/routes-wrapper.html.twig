@@ -2,6 +2,12 @@ import * as React from 'react'
 import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { RecoilRoot } from 'recoil'
+import { I18nextProvider } from 'react-i18next'
+
+interface Props {
+    i18n?: any
+    children: any
+}
 
 export const RoutesWrapper = ({ i18n, children }: Props) => {
     return (

@@ -1,6 +1,6 @@
+import { OpenApi } from '@newageerp/nae-react-auth-wrapper';
 import React, { useEffect } from 'react'
 import { BrowserRouter as Router, Switch } from 'react-router-dom';
-import { useURequest } from './OpenApi/useURequest';
 
 export interface AppRouterRoute {
     path: string
@@ -12,8 +12,8 @@ export interface AppRouterProps {
     children?: any,
 }
 
-export default function AppRouter(props: AppRoutesProps) {
-    const [loadData, loadDataParams] = useURequest('NAEPing');
+export default function AppRouter(props: AppRouterProps) {
+    const [loadData, loadDataParams] = OpenApi.useURequest('NAEPing');
     useEffect(loadData, []);
 
     if (loadDataParams.loading || loadDataParams.data.data.length === 0) {
