@@ -1,8 +1,9 @@
 import { OpenApi } from '@newageerp/nae-react-auth-wrapper';
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { BrowserRouter as Router, Switch } from 'react-router-dom';
 import { Redirect, useLocation } from 'react-router-dom'
-import 'axios' from 'axios'
+import axios from 'axios'
+import { useRecoilState } from 'recoil';
 
 export interface AppRouterRoute {
     path: string
@@ -23,6 +24,7 @@ export default function AppRouter(props: AppRouterProps) {
             if (res.status === 200) {
                 setUserState(res.data)
             }
+            setIsUserDataLoading(false);
         });
     }
 
@@ -35,11 +37,7 @@ export default function AppRouter(props: AppRouterProps) {
 
     const isLoggedIn = !!userState && ('id' in userState);
 
-    if (getUserDataParams.loading) {
-        return <Fragment />
-    }
-
-    if (loadDataParams.loading || loadDataParams.data.data.length === 0) {
+    if (loadDataParams.loading || loadDataParams.data.data.length === 0 || isUserDataLoading) {
         return <div>Loading...</div>
     }
 
