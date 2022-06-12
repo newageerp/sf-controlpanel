@@ -31,6 +31,9 @@ class InGeneratorRoutes extends Command
         $editRoutesWrapperTemplate = $twig->load('routes/edit-route-wrapper.html.twig');
         $editRoutesTemplate = $twig->load('routes/app-routes.html.twig');
 
+        $appRouterTemplate = $twig->load('routes/app-router.html.twig');
+        $routesWrapperTemplate = $twig->load('routes/routes-wrapper.html.twig');
+
         $generatedRoutesWrappersPath = Utils::generatedPath('routes/wrappers');
         $generatedRoutesPath = Utils::generatedPath('routes');
 
@@ -100,6 +103,16 @@ class InGeneratorRoutes extends Command
         // EDIT ROW WRAPPER
         $generatedContent = $editRoutesWrapperTemplate->render();
         $fileName = $generatedRoutesWrappersPath . '/DefaultEditRouteWrapper.tsx';
+        Utils::writeOnChanges($fileName, $generatedContent);
+
+        // AppRouter
+        $generatedContent = $appRouterTemplate->render();
+        $fileName = $generatedRoutesWrappersPath . '/AppRouter.tsx';
+        Utils::writeOnChanges($fileName, $generatedContent);
+
+        // RoutesWrapper
+        $generatedContent = $routesWrapperTemplate->render();
+        $fileName = $generatedRoutesWrappersPath . '/RoutesWrapper.tsx';
         Utils::writeOnChanges($fileName, $generatedContent);
 
         return Command::SUCCESS;
