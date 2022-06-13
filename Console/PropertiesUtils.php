@@ -126,7 +126,9 @@ class PropertiesUtils
         $isImage = $property['as'] === 'image';
         $isAudio = $property['as'] === 'audio';
 
-        if ($isStatus) {
+        if ($column && isset($column['customTemplate'])) {
+            return $column['customTemplate'];
+        } else if ($isStatus) {
             return 'status';
         } else if ($isFile) {
             return 'file';
@@ -175,7 +177,7 @@ class PropertiesUtils
         }
         $naeType = $this->getPropertyNaeType($property, $column);
 
-        if ($naeType === 'float' || $naeType === 'number') {
+        if ($naeType === 'float' || $naeType === 'number' || $naeType === 'seconds-to-time') {
             return 'tw3-text-right';
         }
 
@@ -194,6 +196,12 @@ class PropertiesUtils
         $naeType = $this->getPropertyNaeType($property, $column);
 
         switch ($naeType) {
+            case 'seconds-to-time':
+                return [
+                    "import" => 'import { Image } from "@newageerp/data.table.seconds-to-time";',
+                    "template" => '<SecondsToTime seconds={TP_VALUE}/>'
+                ];
+                break;
             case 'status':
                 $compName = Utils::fixComponentName(ucfirst($property['schema']) . 'Statuses');
                 return [
