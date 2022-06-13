@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import {{ tpTableCompName }} from "../tables/{{ tpTableCompName }}"
 import { OpenApi } from '@newageerp/nae-react-auth-wrapper';
-import { functions } from '@newageerp/nae-react-ui';
+import { functions, UI } from '@newageerp/nae-react-ui';
 import { PageContainer, PageContainerMarginTop } from '@newageerp/ui.paging.base.page-container'
 import { SortingItem } from '@newageerp/ui.components.list.sort-controller';
 import { useHistory } from 'react-router-dom'
@@ -200,13 +200,17 @@ export default function {{ tpCompName }}(props: Props) {
     const dataToRender = dataProcessing(dataResult.data.data);
 
     return (
-    <LayoutToolbar
-        toolbar={
-            <Toolbar>
-                <ToolbarTitle>{{ toolbarTitle }}</ToolbarTitle>
-            </Toolbar>
-        }
-    >
+<Fragment>
+{#    <LayoutToolbar#}
+{#        toolbar={#}
+{#            <Toolbar>#}
+{#                <ToolbarTitle>{{ toolbarTitle }}</ToolbarTitle>#}
+{#            </Toolbar>#}
+{#        }#}
+{#    >#}
+    <UI.Toolbar.Toolbar>
+        <UI.Typography.H3 className={"text-nsecondary-200"}>{{ toolbarTitle }}</UI.Typography.H3>
+    </UI.Toolbar.Toolbar>
         <div ref={headerRef}>
             <DefaultSearchToolbar
                     onCreate={isCreatable?onCreate:undefined}
@@ -264,6 +268,7 @@ export default function {{ tpCompName }}(props: Props) {
             />
             <PageContainer pages={pages} activePage={dataState.page} setActivePage={setActivePage} marginTop={PageContainerMarginTop['42px']} />
         </div>
-    </LayoutToolbar>
+{#    </LayoutToolbar>#}
+</Fragment>
     )
 }
