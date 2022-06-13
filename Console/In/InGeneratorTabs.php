@@ -170,6 +170,8 @@ class InGeneratorTabs extends Command
                     $customComponentName = end($componentNameA);
                     $componentNamePath = $tabCustomComponentsGeneratedPath . '/' . $column['componentName'] . '.tsx';
                     if (!file_exists($componentNamePath)) {
+                        Utils::customFolderPath('tabs/components/' . implode("/", array_slice($componentNameA, 0, -1)));
+
                         $generatedContent = $customColumnFunctionTemplate->render(['compName' => $customComponentName]);
                         Utils::writeOnChanges($componentNamePath, $generatedContent);
                     }
