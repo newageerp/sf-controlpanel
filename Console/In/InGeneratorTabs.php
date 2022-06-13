@@ -32,6 +32,7 @@ class InGeneratorTabs extends Command
 
         $defaultSearchToolbarTemplate = $twig->load('tabs/DefaultSearchToolbar.html.twig');
         $tableDataSourceTemplate = $twig->load('tabs/TableDataSource.html.twig');
+        $customColumnFunctionTemplate = $twig->load('tabs/CustomColumnFunction.html.twig');
 
         $tabTableTemplate = file_get_contents(
             __DIR__ . '/templates/tabs/TabTable.txt'
@@ -60,6 +61,7 @@ class InGeneratorTabs extends Command
         $dataSourceRelGeneratedPath = Utils::generatedPath('tabs/tables-rel-data-source');
 
         $dataSourceCustomGeneratedPath = Utils::customFolderPath('tabs/tables-data-source');
+        $tabCustomComponentsGeneratedPath = Utils::customFolderPath('tabs/components');
 
         foreach ($tabItems as $tabItem) {
             $tpHead = [];
@@ -162,6 +164,25 @@ class InGeneratorTabs extends Command
                     ) .
                     $wrapFinish .
                     '</Td>';
+
+                if (isset($column['componentName']) && $column['componentName']) {
+                    $componentNameA = explode("/", $column['componentName']);
+                    $customComponentName = end($componentNameA);
+                    $componentNamePath = $tabCustomComponentsGeneratedPath . '/' . $column['componentName'] . '.tsx';
+                    if (!file_exists($componentNamePath)) {
+                        $generatedContent = $customColumnFunctionTemplate->render(['compName' => $customComponentName]);
+                        Utils::writeOnChanges($componentNamePath, $generatedContent);
+                    }
+
+                    $tpImports[] = 'import ' . $customComponentName . ' from "../../_custom/tabs/components/' . $column['componentName'] . '"';
+
+                    $tdTemplate = $openTagTd .
+                        $wrapStart .
+                        '<' . $customComponentName . ' item={item} value={' . $varName . '} />'
+                        .
+                        $wrapFinish .
+                        '</Td>';
+                }
 
                 $tpBody[] = $tdTemplate;
             }
