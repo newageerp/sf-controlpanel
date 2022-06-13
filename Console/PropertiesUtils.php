@@ -198,7 +198,7 @@ class PropertiesUtils
         switch ($naeType) {
             case 'seconds-to-time':
                 return [
-                    "import" => 'import { Image } from "@newageerp/data.table.seconds-to-time";',
+                    "import" => 'import { SecondsToTime } from "@newageerp/data.table.seconds-to-time";',
                     "template" => '<SecondsToTime seconds={TP_VALUE}/>'
                 ];
                 break;
