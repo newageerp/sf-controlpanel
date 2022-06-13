@@ -2,6 +2,7 @@
 
 namespace Newageerp\SfControlpanel\Console\In;
 
+use Newageerp\SfControlpanel\Console\EntitiesUtils;
 use Newageerp\SfControlpanel\Console\PropertiesUtils;
 use Newageerp\SfControlpanel\Console\Utils;
 use Newageerp\SfControlpanel\Service\MenuService;
@@ -17,10 +18,13 @@ class InGeneratorTabs extends Command
 
     protected PropertiesUtils $propertiesUtils;
 
-    public function __construct(PropertiesUtils $propertiesUtils)
+    protected EntitiesUtils $entitiesUtils;
+
+    public function __construct(PropertiesUtils $propertiesUtils, EntitiesUtils $entitiesUtils)
     {
         parent::__construct();
         $this->propertiesUtils = $propertiesUtils;
+        $this->entitiesUtils = $entitiesUtils;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -362,6 +366,8 @@ class InGeneratorTabs extends Command
                         'quickSearch' => json_encode($quickSearch),
                         'creatable' => isset($tabItem['config']['disableCreate']) && $tabItem['config']['disableCreate'] ? 'false' : 'true',
                         'otherTabs' => $otherTabs && count($otherTabs) > 0 ? json_encode($otherTabs, JSON_UNESCAPED_UNICODE) : 'null',
+
+                        'toolbarTitle' => $this->entitiesUtils->getTitlePluralBySlug($tabItem['config']['schema']),
 
                         'customToolbarStart' => $customToolbarStart,
                         'customToolbarEnd' => $customToolbarEnd,

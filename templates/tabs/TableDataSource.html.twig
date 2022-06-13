@@ -8,6 +8,10 @@ import { SortingItem } from '@newageerp/ui.components.list.sort-controller';
 import { useHistory } from 'react-router-dom'
 import DefaultSearchToolbar from "../DefaultSearchToolbar";
 import {TypeItemFilters} from '@newageerp/ui.components.list.filter-container'
+import { LayoutToolbar } from "@newageerp/ui.layout.base.layout-toolbar";
+import { Toolbar } from "@newageerp/ui.layout.base.toolbar";
+import { ToolbarTitle } from "@newageerp/ui.texts.base.toolbar-title";
+
 {% if customToolbarStart %}
 import {{ tpCompName }}ToolbarStartContent from "../../_custom/tabs/tables-data-source/{{ tpCompName }}ToolbarStartContent";
 {% endif %}
@@ -196,6 +200,13 @@ export default function {{ tpCompName }}(props: Props) {
     const dataToRender = dataProcessing(dataResult.data.data);
 
     return (
+    <LayoutToolbar
+        toolbar={
+            <Toolbar>
+                <ToolbarTitle>{{ toolbarTitle }}</ToolbarTitle>
+            </Toolbar>
+        }
+    >
         <div ref={headerRef}>
             <DefaultSearchToolbar
                     onCreate={isCreatable?onCreate:undefined}
@@ -253,5 +264,6 @@ export default function {{ tpCompName }}(props: Props) {
             />
             <PageContainer pages={pages} activePage={dataState.page} setActivePage={setActivePage} marginTop={PageContainerMarginTop['42px']} />
         </div>
+    </LayoutToolbar>
     )
 }
