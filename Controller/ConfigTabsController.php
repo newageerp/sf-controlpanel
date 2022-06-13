@@ -33,7 +33,6 @@ class ConfigTabsController extends ConfigBaseController
 
     /**
      * @Route(path="/tablesDataSourceSearchToolbarCustom", methods={"POST"})
-     * @OA\Post (operationId="NaeConfigTabList")
      */
     public function tablesDataSourceSearchToolbarCustom(Request $request)
     {
