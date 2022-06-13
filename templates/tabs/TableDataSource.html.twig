@@ -26,6 +26,13 @@ interface Props {
 export default function {{ tpCompName }}(props: Props) {
     const history = useHistory()
 
+    const [extraFilter, setExtraFilter] = useState({});
+    const onAddExtraFilter = (key: string, data: any) => {
+        const _extraFilter = JSON.parse(JSON.stringify(extraFilter));
+        _extraFilter[key] = data;
+        setExtraFilter(_extraFilter);
+    }
+
     const otherTabs = {{ otherTabs|raw }};
 
     const headerRef = useRef(null)
@@ -213,13 +220,13 @@ export default function {{ tpCompName }}(props: Props) {
                         undefined
                     }
                     {% if customToolbarStart %}
-                    toolbarStartContent={<{{ tpCompName }}ToolbarStartContent />}
+                    toolbarStartContent={<{{ tpCompName }}ToolbarStartContent onAddExtraFilter={onAddExtraFilter} />}
                     {% endif %}
                     {% if customToolbarEnd %}
-                    toolbarEndContent={<{{ tpCompName }}ToolbarEndContent />}
+                    toolbarEndContent={<{{ tpCompName }}ToolbarEndContent onAddExtraFilter={onAddExtraFilter} />}
                     {% endif %}
                     {% if customToolbarMiddle %}
-                    toolbarMiddleContent={<{{ tpCompName }}ToolbarMiddleContent />}
+                    toolbarMiddleContent={<{{ tpCompName }}ToolbarMiddleContent onAddExtraFilter={onAddExtraFilter} />}
                     {% endif %}
                 />
             <{{ tpTableCompName }}
