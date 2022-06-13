@@ -26,11 +26,16 @@ interface Props {
 export default function {{ tpCompName }}(props: Props) {
     const history = useHistory()
 
-    const [extraFilter, setExtraFilter] = useState({});
     const onAddExtraFilter = (key: string, data: any) => {
-        const _extraFilter = JSON.parse(JSON.stringify(extraFilter));
+        const _extraFilter = JSON.parse(JSON.stringify(dataState.extraFilter));
         _extraFilter[key] = data;
-        setExtraFilter(_extraFilter);
+
+        if (_extraFilter !== dataState.extraFilter) {
+            const _state = JSON.parse(JSON.stringify(dataState));
+            _state.page = 1;
+            _state.extraFilter = _extraFilter;
+            setDateState(_state);
+        }
     }
 
     const otherTabs = {{ otherTabs|raw }};
@@ -46,11 +51,12 @@ export default function {{ tpCompName }}(props: Props) {
     const pageSize = {{ pageSize }};
     const sort = {{ sort|raw }};
 
-    const defaultState = {
+    const defaultState : any = {
         page: 1,
         sort: sort,
         quickSearch: '',
-        detailedSearch: []
+        detailedSearch: [],
+        extraFilter: {},
     }
 
     const isCreatable = {{ creatable }};
@@ -153,6 +159,16 @@ export default function {{ tpCompName }}(props: Props) {
                     orFilter.or.push(andFilter);
                 })
                 filter.push(orFilter);
+            })
+        }
+
+        if (!!dataState.extraFilter) {
+            const keys = Object.keys(dataState.extraFilter);
+            keys.forEach((k) => {
+                const fV = dataState.extraFilter[k];
+                if (!!fV) {
+                    filter.push(fV);
+                }
             })
         }
 
