@@ -8,6 +8,7 @@ interface Props {
     tabSwitch?: SearchToolbarTabSwitchProps,
     toolbarStartContent?: ReactNode,
     toolbarEndContent?: ReactNode,
+    toolbarMiddleContent?: ReactNode,
     extendedSearch?: SearchToolbarExtendedSearchProps,
 }
 
@@ -22,6 +23,8 @@ export default function DefaultSearchToolbar(props: Props) {
             toolbarStartContent={props.toolbarStartContent}
             toolbarEndContent={props.toolbarEndContent}
             extendedSearch={props.extendedSearch}
-        />
+        >
+            {props.toolbarMiddleContent}
+        </SearchToolbar>
     )
 }

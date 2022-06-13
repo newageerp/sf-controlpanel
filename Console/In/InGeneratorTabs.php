@@ -322,6 +322,9 @@ class InGeneratorTabs extends Command
                 $customToolbarEnd = file_exists(
                     $dataSourceCustomGeneratedPath . '/' . $dataSourceCompName . 'ToolbarEndContent.tsx'
                 );
+                $customToolbarMiddle = file_exists(
+                    $dataSourceCustomGeneratedPath . '/' . $dataSourceCompName . 'ToolbarMiddleContent.tsx'
+                );
 
                 $dataSourceFileName = $dataSourceGeneratedPath . '/' . $dataSourceCompName . '.tsx';
                 $generatedContent = $tableDataSourceTemplate->render(
@@ -339,6 +342,7 @@ class InGeneratorTabs extends Command
 
                         'customToolbarStart' => $customToolbarStart,
                         'customToolbarEnd' => $customToolbarEnd,
+                        'customToolbarMiddle' => $customToolbarMiddle,
                     ]
                 );
                 Utils::writeOnChanges($dataSourceFileName, $generatedContent);

@@ -2,6 +2,7 @@
 
 namespace Newageerp\SfControlpanel\Controller;
 
+use Newageerp\SfControlpanel\Console\Utils;
 use Symfony\Component\Routing\Annotation\Route;
 use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,6 +29,40 @@ class ConfigTabsController extends ConfigBaseController
             $this->getLocalStorageFile(),
             json_encode($data)
         );
+    }
+
+    /**
+     * @Route(path="/tablesDataSourceSearchToolbarCustom", methods={"POST"})
+     * @OA\Post (operationId="NaeConfigTabList")
+     */
+    public function tablesDataSourceSearchToolbarCustom(Request $request)
+    {
+        $request = $this->transformJsonBody($request);
+
+        $schema = $request->get('schema');
+        $type = $request->get('type');
+
+        $variant = $request->get('variant');
+
+        $dataSourceCustomGeneratedPath = Utils::customFolderPath('tabs/tables-data-source');
+        $dataSourceCompName = Utils::fixComponentName(ucfirst($schema) . ucfirst($type) . 'TableDataSource');
+
+        $path = '';
+        if ($variant === 'start') {
+            $path = $dataSourceCustomGeneratedPath . '/' . $dataSourceCompName . 'ToolbarStartContent.tsx';
+        } else if ($variant === 'end') {
+            $path = $dataSourceCustomGeneratedPath . '/' . $dataSourceCompName . 'ToolbarEndContent.tsx';
+        } else if ($variant === 'middle') {
+            $path = $dataSourceCustomGeneratedPath . '/' . $dataSourceCompName . 'ToolbarMiddleContent.tsx';
+        }
+
+        if ($path && !file_exists($path)) {
+            file_put_contents($path, '// TODO');
+        }
+
+        $output = ['data' => []];
+
+        return $this->json($output);
     }
 
     /**

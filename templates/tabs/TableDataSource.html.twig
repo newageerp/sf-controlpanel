@@ -215,6 +215,9 @@ export default function {{ tpCompName }}(props: Props) {
                     {% if customToolbarEnd %}
                     toolbarEndContent={<{{ tpCompName }}ToolbarEndContent />}
                     {% endif %}
+                    {% if customToolbarMiddle %}
+                    toolbarMiddleContent={<{{ tpCompName }}ToolbarMiddleContent />}
+                    {% endif %}
                 />
             <{{ tpTableCompName }}
                     data={dataToRender}
