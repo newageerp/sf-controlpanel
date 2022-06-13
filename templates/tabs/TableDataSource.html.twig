@@ -209,7 +209,7 @@ export default function {{ tpCompName }}(props: Props) {
 {#        }#}
 {#    >#}
     <UI.Toolbar.Toolbar>
-        <UI.Typography.H3 className={"text-nsecondary-200"}>{{ toolbarTitle }}</UI.Typography.H3>
+        <UI.Typography.H3Toolbar>{% if toolbarTitle != "" %}{{ toolbarTitle }}{% else %}{" "}{% endif %}</UI.Typography.H3Toolbar>
     </UI.Toolbar.Toolbar>
         <div ref={headerRef}>
             <DefaultSearchToolbar
