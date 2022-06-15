@@ -36,13 +36,11 @@ class InGeneratorTabs extends Command
 
         $defaultSearchToolbarTemplate = $twig->load('tabs/DefaultSearchToolbar.html.twig');
         $tableDataSourceTemplate = $twig->load('tabs/TableDataSource.html.twig');
+        $tableDataSourceRelTemplate = $twig->load('tabs/TableDataSourceRel.html.twig');
         $customColumnFunctionTemplate = $twig->load('tabs/CustomColumnFunction.html.twig');
 
         $tabTableTemplate = file_get_contents(
             __DIR__ . '/templates/tabs/TabTable.txt'
-        );
-        $tabTableDataSourceRelTemplate = file_get_contents(
-            __DIR__ . '/templates/tabs/TabTableDataSourceRel.txt'
         );
 
         $defaultsFile = $_ENV['NAE_SFS_CP_STORAGE_PATH'] . '/defaults.json';
@@ -310,34 +308,22 @@ class InGeneratorTabs extends Command
                     ];
 
                     $dataSourceFileName = $dataSourceRelGeneratedPath . '/' . $dataSourceRelCompName . '.tsx';
-                    $generatedContent = str_replace(
+                    $generatedContent = $tableDataSourceRelTemplate->render(
                         [
-                            'TP_COMP_NAME',
-                            'TP_TABLE_COMP_NAME',
-                            'TP_SCHEMA',
-                            'TP_TYPE',
-                            'TP_PAGE_SIZE',
-                            'TP_SORT',
-                            'TP_FILTER',
-                            'TP_QUICK_SEARCH',
-                            'TP_CREATABLE',
-                            'TP_OTHER_TABS',
-                            'TP_REL_FILTER'
-                        ],
-                        [
-                            $dataSourceRelCompName,
-                            $compName,
-                            $tabItem['config']['schema'],
-                            $tabItem['config']['type'],
-                            $pageSize,
-                            json_encode($sort),
-                            $filter ? json_encode($filter) : 'null',
-                            json_encode($quickSearch),
-                            isset($tabItem['config']['disableCreate']) && $tabItem['config']['disableCreate'] ? 'false' : 'true',
-                            $otherTabs && count($otherTabs) > 0 ? json_encode($otherTabs, JSON_UNESCAPED_UNICODE) : 'null',
-                            str_replace('"props.relId"', 'props.relId', json_encode($relFilter))
-                        ],
-                        $tabTableDataSourceRelTemplate
+                            'tpCompName' => $dataSourceRelCompName,
+                            'tpTableCompName' => $compName,
+                            'schema' => $tabItem['config']['schema'],
+                            'type' => $tabItem['config']['type'],
+                            'pageSize' => $pageSize,
+                            'sort' => json_encode($sort),
+                            'filter' => $filter ? json_encode($filter) : 'null',
+                            'quickSearch' => json_encode($quickSearch),
+                            'creatable' => isset($tabItem['config']['disableCreate']) && $tabItem['config']['disableCreate'] ? 'false' : 'true',
+                            'otherTabs' => $otherTabs && count($otherTabs) > 0 ? json_encode($otherTabs, JSON_UNESCAPED_UNICODE) : 'null',
+                            'relFilter' => str_replace('"props.relId"', 'props.relId', json_encode($relFilter)),
+                            'mappedField' => $mapped,
+                            'relSchema' => $relProperty['schema']
+                        ]
                     );
 
                     Utils::writeOnChanges($dataSourceFileName, $generatedContent);

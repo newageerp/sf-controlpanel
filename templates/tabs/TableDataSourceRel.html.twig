@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import TP_TABLE_COMP_NAME from "../tables/TP_TABLE_COMP_NAME"
+import {{ tpTableCompName }} from "../tables/{{ tpTableCompName }}"
 import { OpenApi } from '@newageerp/nae-react-auth-wrapper';
 import { functions } from '@newageerp/nae-react-ui';
 import { PageContainer, PageContainerMarginTop } from '@newageerp/ui.paging.base.page-container'
 import { SearchToolbar, SearchToolbarMarginBottom } from '@newageerp/ui.components.list.search-toolbar'
 import { SortingItem } from '@newageerp/ui.components.list.sort-controller';
 import { useHistory } from 'react-router-dom'
+import { v4 as uuidv4 } from 'uuid'
 
 interface Props {
     navigate?: (schema: string, id: number | string, el: any) => void,
@@ -14,13 +15,12 @@ interface Props {
     relId?: number,
     hideSearchBar?: boolean,
     hidePaging?: boolean,
-
 }
 
-export default function TP_COMP_NAME(props: Props) {
+export default function {{ tpCompName }}(props: Props) {
     const history = useHistory()
 
-    const otherTabs = TP_OTHER_TABS;
+    const otherTabs = {{ otherTabs|raw }};
 
     const headerRef = useRef(null)
     const scrollToHeader = () => {
@@ -30,9 +30,9 @@ export default function TP_COMP_NAME(props: Props) {
         }
     }
 
-    const pageSize = TP_PAGE_SIZE;
+    const pageSize = {{ pageSize }};
 
-    const sort = TP_SORT;
+    const sort = {{ sort|raw }};
 
     const defaultState = {
         page: 1,
@@ -40,11 +40,11 @@ export default function TP_COMP_NAME(props: Props) {
         quickSearch: '',
     }
 
-    const isCreatable = TP_CREATABLE;
+    const isCreatable = {{ creatable }};
 
-    const quickSearchFields : any = TP_QUICK_SEARCH;
-    const predefinedFilter : any = TP_FILTER;
-    const relFilter : any = TP_REL_FILTER;
+    const quickSearchFields : any = {{ quickSearch|raw }};
+    const predefinedFilter : any = {{ filter|raw }};
+    const relFilter : any = {{ relFilter|raw }};
 
     const [dataState, setDateState] = useState(defaultState);
 
@@ -74,10 +74,10 @@ export default function TP_COMP_NAME(props: Props) {
         }
     }
 
-    const tab = functions.tabs.getTabFromSchemaAndType('TP_SCHEMA', 'TP_TYPE');
+    const tab = functions.tabs.getTabFromSchemaAndType('{{ schema }}', '{{ type }}');
     const fieldsToReturn = functions.tabs.getTabFieldsToReturn(tab);
 
-    const [getData, dataResult] = OpenApi.useUList('TP_SCHEMA', fieldsToReturn);
+    const [getData, dataResult] = OpenApi.useUList('{{ schema }}', fieldsToReturn);
     const { t } = useTranslation();
 
     const navigate = (schema: string, id: number | string, el: any) => {
@@ -89,11 +89,11 @@ export default function TP_COMP_NAME(props: Props) {
     }
 
     const navigateToTab = (type: string) => {
-        history.push(`/u/TP_SCHEMA/${type}/list`)
+        history.push(`/u/{{ schema }}/${type}/list`)
     }
 
     const onCreate = () => {
-        history.push('/u/TP_SCHEMA/main/edit/new')
+        history.push('/u/{{ schema }}/main/edit/new')
     }
 
     const loadData = () => {
@@ -121,7 +121,6 @@ export default function TP_COMP_NAME(props: Props) {
             _filter[0]['and'].push({ or: _or })
         }
 
-
         let filter = _filter[0]['and'].length > 0 ? _filter : []
 
         getData(
@@ -133,7 +132,7 @@ export default function TP_COMP_NAME(props: Props) {
     }
     useEffect(loadData, [dataState]);
 
-    useEffect(scrollToHeader, [dataResult.data.data]);
+{#    useEffect(scrollToHeader, [dataResult.data.data]);#}
 
     const records = dataResult.data.records;
     const pages = Math.ceil(records / pageSize);
@@ -147,6 +146,32 @@ export default function TP_COMP_NAME(props: Props) {
 
     const dataToRender = dataProcessing(dataResult.data.data);
 
+    useEffect(() => {
+        if (props.relId > 0) {
+            setSocketId(props.relId + '-' + uuidv4())
+        }
+    }, [props.relId])
+
+    useEffect(() => {
+        if (socketId) {
+            SocketService.subscribeToList(
+                {
+                    key: socketId,
+                    data: {
+                        "contact.carrier.id": props.relId
+                    }
+                },
+                loadData
+            )
+        }
+
+        return () => {
+            if (socketId && props.socketSubscribe) {
+                SocketService.unSubscribeFromList({ key: socketId })
+            }
+        }
+    }, [socketId])
+
     return (
         <div ref={headerRef}>
             {!props.hideSearchBar &&
@@ -154,16 +179,16 @@ export default function TP_COMP_NAME(props: Props) {
                     onCreate={isCreatable?onCreate:undefined}
                     search={
                         {
-                          searchValue: dataState.quickSearch,
-                          onSearch: setQuickSearch
+                            searchValue: dataState.quickSearch,
+                            onSearch: setQuickSearch
                         }
                     }
                     sort={
                         {
-                          onSort: setSort,
-                          sort: dataState.sort,
-                          defaultSort: sort,
-                          schema: 'TP_SCHEMA'
+                            onSort: setSort,
+                            sort: dataState.sort,
+                            defaultSort: sort,
+                            schema: '{{ schema }}'
                         }
                     }
                     marginBottom={SearchToolbarMarginBottom['40px']}
@@ -171,7 +196,7 @@ export default function TP_COMP_NAME(props: Props) {
                         otherTabs?
                         {
                             options: otherTabs,
-                            currentTab: 'TP_TYPE',
+                            currentTab: '{{ type }}',
                             onTabSwitch: navigateToTab
                         }:
                         undefined
@@ -179,11 +204,11 @@ export default function TP_COMP_NAME(props: Props) {
                 />
             }
             <div className="overflow-x-auto">
-                <TP_TABLE_COMP_NAME
-                    data={dataToRender}
-                    doReload={loadData}
-                    className={`${dataResult.loading?'tw3-animate-pulse':''}`}
-                    navigate={navigate}
+                <{{ tpTableCompName }}
+                        data={dataToRender}
+                        doReload={loadData}
+                        className={`${dataResult.loading?'tw3-animate-pulse':''}`}
+                        navigate={navigate}
                 />
             </div>
             {!props.hidePaging &&
