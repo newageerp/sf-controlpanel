@@ -160,7 +160,7 @@ export default function {{ tpCompName }}(props: Props) {
                 {
                     key: socketId,
                     data: {
-                        "{{ relSchema }}.{{ socketId }}.id": props.relId
+                        "{{ relSchema }}.{{ mappedField }}.id": props.relId
                     }
                 },
                 loadData
