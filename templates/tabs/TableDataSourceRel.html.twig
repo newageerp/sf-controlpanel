@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import {{ tpTableCompName }} from "../tables/{{ tpTableCompName }}"
 import { OpenApi } from '@newageerp/nae-react-auth-wrapper';
-import { functions } from '@newageerp/nae-react-ui';
+import { functions, UI } from '@newageerp/nae-react-ui';
 import { PageContainer, PageContainerMarginTop } from '@newageerp/ui.paging.base.page-container'
 import { SearchToolbar, SearchToolbarMarginBottom } from '@newageerp/ui.components.list.search-toolbar'
 import { SortingItem } from '@newageerp/ui.components.list.sort-controller';
@@ -19,6 +19,8 @@ interface Props {
 
 export default function {{ tpCompName }}(props: Props) {
     const history = useHistory()
+
+    const [socketId, setSocketId] = useState('')
 
     const otherTabs = {{ otherTabs|raw }};
 
@@ -147,18 +149,18 @@ export default function {{ tpCompName }}(props: Props) {
     const dataToRender = dataProcessing(dataResult.data.data);
 
     useEffect(() => {
-        if (props.relId > 0) {
+        if (!!props.relId && props.relId > 0) {
             setSocketId(props.relId + '-' + uuidv4())
         }
     }, [props.relId])
 
     useEffect(() => {
         if (socketId) {
-            SocketService.subscribeToList(
+            UI.Socket.Service.subscribeToList(
                 {
                     key: socketId,
                     data: {
-                        "contact.carrier.id": props.relId
+                        "{{ relSchema }}.{{ socketId }}.id": props.relId
                     }
                 },
                 loadData
@@ -166,8 +168,8 @@ export default function {{ tpCompName }}(props: Props) {
         }
 
         return () => {
-            if (socketId && props.socketSubscribe) {
-                SocketService.unSubscribeFromList({ key: socketId })
+            if (socketId) {
+                UI.Socket.Service.unSubscribeFromList({ key: socketId })
             }
         }
     }, [socketId])
