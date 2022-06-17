@@ -5,6 +5,8 @@ import axios from 'axios'
 import { PropsId } from '../../../UserComponents/ModelsCacheData/types';
 import { PopupPdf } from '@newageerp/ui.popups.base.popup-pdf';
 import { PdfWindow } from '@newageerp/ui.files.pdf.pdf-window';
+import { MailsForm } from '@newageerp/ui.mails.mails-form';
+import { PopupMail } from '@newageerp/ui.popups.base.popup-mail';
 
 type PdfResponse = {
     url: string,
@@ -28,6 +30,7 @@ const loadPdfData = async (id: number, template: string) => {
 export const {{ compName }}Item = (props: {{ compName }}ItemProps) => {
     const [pdfData, setPdfData] = useState<PdfResponse>();
     const [showPdf, setShowPdf] = useState(false);
+    const [showEmail, setShowEmail] = useState(false);
 
     const onDownload = async () => {
         let urlToOpen = "";
@@ -67,9 +70,19 @@ export const {{ compName }}Item = (props: {{ compName }}ItemProps) => {
         }
     }
 
+    const onSend = async () => {
+        if (!pdfData) {
+            const _pdfData: PdfResponse = await loadPdfData(props.id, props.template);
+            setPdfData(_pdfData);
+            setShowEmail(true);
+        } else {
+            setShowEmail(true);
+        }
+    }
+
     return (
     <Fragment>
-        <PdfLine title={props.title} onDownload={onDownload} onPrint={onPrint} onClick={onClick} />
+        <PdfLine title={props.title} onDownload={onDownload} onPrint={onPrint} onClick={onClick} onSend={onSend} />
         {showPdf && !!pdfData &&
             <PopupPdf onClose={() => setShowPdf(false)}>
                 <PdfWindow
@@ -78,6 +91,27 @@ export const {{ compName }}Item = (props: {{ compName }}ItemProps) => {
                     onEmail={() => {}}
                 />
             </PopupPdf>
+        }
+        {showEmail && !!pdfData &&
+            <PopupMail onClose={() => setShowEmail(false)}>
+                <MailsForm
+                    onBack={() => setShowEmail(false)}
+                    extraData={{
+                        id: props.id,
+                        pdf: true,
+                        schema: '{{ schema }}',
+                        template: 'pdf',
+                    }}
+                    files={
+                        [
+                            {
+                                name: pdfData.fileName,
+                                link: pdfData.downloadUrl
+                            }
+                        ]
+                    }
+                />
+            </PopupMail>
         }
     </Fragment>);
 }
