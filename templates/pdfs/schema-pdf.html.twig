@@ -22,7 +22,7 @@ const loadPdfData = async (id: number, template: string) => {
     return res.data;
 }
 
-export const PdfCalculationItem = (props: {{ compName }}ItemProps) => {
+export const {{ compName }}Item = (props: {{ compName }}ItemProps) => {
     const [pdfData, setPdfData] = useState<PdfResponse>();
 
     const onDownload = async () => {
@@ -58,7 +58,7 @@ export const PdfCalculationItem = (props: {{ compName }}ItemProps) => {
 
 {% for pdf in pdfs %}
     export const {{  pdf.compName  }} = (props: PropsId) => {
-        return (<PdfCalculationItem title="{{ pdf.title }}" template="{{ pdf.template }}" id={props.id} />);
+        return (<{{ compName }}Item title="{{ pdf.title }}" template="{{ pdf.template }}" id={props.id} />);
     }
 {% endfor %}
 
