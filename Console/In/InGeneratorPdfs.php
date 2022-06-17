@@ -53,23 +53,18 @@ class InGeneratorPdfs extends Command
             ];
         }
 
-        usort($pdfs, function ($pdfA, $pdfB) {
-            if ($pdfA['sort'] < $pdfB['sort']) {
-                return -1;
-            }
-            if ($pdfA['sort'] > $pdfB['sort']) {
-                return 1;
-            }
-            if ($pdfA['schema'] < $pdfB['schema']) {
-                return -1;
-            }
-            if ($pdfA['schema'] > $pdfB['schema']) {
-                return 1;
-            }
-            return 0;
-        });
-
         foreach ($pdfs as $slug => $list) {
+            usort($list, function ($pdfA, $pdfB) {
+                if ($pdfA['sort'] < $pdfB['sort']) {
+                    return -1;
+                }
+                if ($pdfA['sort'] > $pdfB['sort']) {
+                    return 1;
+                }
+                return 0;
+            });
+
+
             $compName = 'Pdf'.ucfirst($slug);
 
             $fileName = $generatedPath . '/' . $compName . '.tsx';
