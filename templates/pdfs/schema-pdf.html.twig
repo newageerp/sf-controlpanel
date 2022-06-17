@@ -31,12 +31,15 @@ export const {{ compName }}Item = (props: {{ compName }}ItemProps) => {
     const [pdfData, setPdfData] = useState<PdfResponse>();
     const [showPdf, setShowPdf] = useState(false);
     const [showEmail, setShowEmail] = useState(false);
+    const [isLoading, setLoading] = useState(false);
 
     const onDownload = async () => {
         let urlToOpen = "";
         if (!pdfData) {
+            setLoading(true);
             const _pdfData: PdfResponse = await loadPdfData(props.id, props.template);
             setPdfData(_pdfData);
+            setLoading(false);
             urlToOpen = _pdfData.downloadUrl;
         } else {
             urlToOpen = pdfData.downloadUrl;
@@ -49,7 +52,9 @@ export const {{ compName }}Item = (props: {{ compName }}ItemProps) => {
     const onPrint = async () => {
         let urlToOpen = "";
         if (!pdfData) {
+            setLoading(true);
             const _pdfData: PdfResponse = await loadPdfData(props.id, props.template);
+            setLoading(false);
             setPdfData(_pdfData);
             urlToOpen = _pdfData.printUrl;
         } else {
@@ -62,7 +67,9 @@ export const {{ compName }}Item = (props: {{ compName }}ItemProps) => {
 
     const onClick = async () => {
         if (!pdfData) {
+            setLoading(true);
             const _pdfData: PdfResponse = await loadPdfData(props.id, props.template);
+            setLoading(false);
             setPdfData(_pdfData);
             setShowPdf(true);
         } else {
@@ -72,7 +79,9 @@ export const {{ compName }}Item = (props: {{ compName }}ItemProps) => {
 
     const onSend = async () => {
         if (!pdfData) {
+            setLoading(true);
             const _pdfData: PdfResponse = await loadPdfData(props.id, props.template);
+            setLoading(false);
             setPdfData(_pdfData);
             setShowEmail(true);
         } else {
@@ -82,7 +91,7 @@ export const {{ compName }}Item = (props: {{ compName }}ItemProps) => {
 
     return (
     <Fragment>
-        <PdfLine title={props.title} onDownload={onDownload} onPrint={onPrint} onClick={onClick} onSend={onSend} />
+        <PdfLine title={props.title} onDownload={onDownload} onPrint={onPrint} onClick={onClick} onSend={onSend} loading={isLoading} />
         {showPdf && !!pdfData &&
             <PopupPdf onClose={() => setShowPdf(false)}>
                 <PdfWindow
