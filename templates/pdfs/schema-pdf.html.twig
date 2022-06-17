@@ -3,6 +3,8 @@ import { PdfLinesContainer } from '@newageerp/ui.components.element.pdf-lines-co
 import { PdfLine } from '@newageerp/ui.components.element.pdf-line';
 import axios from 'axios'
 import { PropsId } from '../../../UserComponents/ModelsCacheData/types';
+import { PopupPdf } from '@newageerp/ui.popups.base.popup-pdf';
+import { PdfWindow } from '@newageerp/ui.files.pdf.pdf-window';
 
 type PdfResponse = {
     url: string,
@@ -24,6 +26,7 @@ const loadPdfData = async (id: number, template: string) => {
 
 export const {{ compName }}Item = (props: {{ compName }}ItemProps) => {
     const [pdfData, setPdfData] = useState<PdfResponse>();
+    const [showPdf, setShowPdf] = useState(false);
 
     const onDownload = async () => {
         let urlToOpen = "";
@@ -53,7 +56,29 @@ export const {{ compName }}Item = (props: {{ compName }}ItemProps) => {
         }
     }
 
-    return (<PdfLine title={props.title} onDownload={onDownload} onPrint={onPrint} />);
+    const onClick = async () => {
+        if (!pdfData) {
+            const _pdfData: PdfResponse = await loadPdfData(props.id, props.template);
+            setPdfData(_pdfData);
+            setShowPdf(true);
+        } else {
+            setShowPdf(true);
+        }
+    }
+
+    return (
+    <Fragment>
+        <PdfLine title={props.title} onDownload={onDownload} onPrint={onPrint} />
+        {showPdf && !!pdfData &&
+            <PopupPdf onClose={() => setShowPdf(false)}>
+                <PdfWindow
+                    pdf={pdfData}
+                    onBack={() => setShowPdf(false)}
+                    onEmail={() => {}}
+                />
+            </PopupPdf>
+        }
+    </Fragment>);
 }
 
 {% for pdf in pdfs %}
