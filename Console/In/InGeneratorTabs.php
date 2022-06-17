@@ -168,24 +168,43 @@ class InGeneratorTabs extends Command
                     '</Td>';
 
                 if (isset($column['componentName']) && $column['componentName']) {
-                    $componentNameA = explode("/", $column['componentName']);
-                    $customComponentName = end($componentNameA);
-                    $componentNamePath = $tabCustomComponentsGeneratedPath . '/' . $column['componentName'] . '.tsx';
-                    if (!file_exists($componentNamePath)) {
-                        Utils::customFolderPath('tabs/components/' . implode("/", array_slice($componentNameA, 0, -1)));
+                    if (mb_strpos($column['componentName'], 'pdf:') === 0) {
+                        $pdfTemplateA = explode(":", $column['componentName']);
+                        $pdfTemplate = end($pdfTemplateA);
 
-                        $generatedContent = $customColumnFunctionTemplate->render(['compName' => $customComponentName]);
-                        Utils::writeOnChanges($componentNamePath, $generatedContent);
+                        $pdfComponentBase = 'Pdf' . Utils::fixComponentName($tabItem['config']['schema']);
+                        $pdfComponentName = $pdfComponentBase . Utils::customFolderPath($pdfTemplate);
+
+                        $tpImports[] = 'import { ' . $pdfComponentName . ' } from "../../pdfs/buttons/' . $pdfComponentBase . '";';
+
+                        $tdTemplate = $openTagTd .
+                            $wrapStart .
+                            '<' . $pdfComponentName . ' id={' . $varName . '} />'
+                            .
+                            $wrapFinish .
+                            '</Td>';
+
+                    } else {
+
+                        $componentNameA = explode("/", $column['componentName']);
+                        $customComponentName = end($componentNameA);
+                        $componentNamePath = $tabCustomComponentsGeneratedPath . '/' . $column['componentName'] . '.tsx';
+                        if (!file_exists($componentNamePath)) {
+                            Utils::customFolderPath('tabs/components/' . implode("/", array_slice($componentNameA, 0, -1)));
+
+                            $generatedContent = $customColumnFunctionTemplate->render(['compName' => $customComponentName]);
+                            Utils::writeOnChanges($componentNamePath, $generatedContent);
+                        }
+
+                        $tpImports[] = 'import ' . $customComponentName . ' from "../../_custom/tabs/components/' . $column['componentName'] . '"';
+
+                        $tdTemplate = $openTagTd .
+                            $wrapStart .
+                            '<' . $customComponentName . ' item={item} value={' . $varName . '} />'
+                            .
+                            $wrapFinish .
+                            '</Td>';
                     }
-
-                    $tpImports[] = 'import ' . $customComponentName . ' from "../../_custom/tabs/components/' . $column['componentName'] . '"';
-
-                    $tdTemplate = $openTagTd .
-                        $wrapStart .
-                        '<' . $customComponentName . ' item={item} value={' . $varName . '} />'
-                        .
-                        $wrapFinish .
-                        '</Td>';
                 }
 
                 $tpBody[] = $tdTemplate;
