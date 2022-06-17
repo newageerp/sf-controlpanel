@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { PdfLinesContainer } from '@newageerp/ui.components.element.pdf-lines-container';
 import { PdfLine } from '@newageerp/ui.components.element.pdf-line';
 import axios from 'axios'
@@ -58,7 +58,7 @@ export const PdfCalculationItem = (props: {{ compName }}ItemProps) => {
 
 {% for pdf in pdfs %}
     export const {{  pdf.compName  }} = (props: PropsId) => {
-        return (<PdfCalculationItem title="{{ pdf.title }}" template="{{ pdf.template }}" />);
+        return (<PdfCalculationItem title="{{ pdf.title }}" template="{{ pdf.template }}" id={props.id} />);
     }
 {% endfor %}
 
