@@ -41,7 +41,7 @@ class InGeneratorPdfs extends Command
                 $pdfs[$data['slug']] = [];
             }
 
-            $compName = 'Pdf' . ucfirst($data['slug']) . ucfirst($data['template']);
+            $compName = 'Pdf' . Utils::fixComponentName($data['slug']) . Utils::fixComponentName($data['template']);
 
             $pdfs[$data['slug']][] = [
                 'sort' => (int)$data['sort'],
@@ -65,7 +65,7 @@ class InGeneratorPdfs extends Command
             });
 
 
-            $compName = 'Pdf'.ucfirst($slug);
+            $compName = 'Pdf'.Utils::fixComponentName($slug);
 
             $fileName = $generatedPath . '/' . $compName . '.tsx';
             $generatedContent = $pdfSchemaTemplate->render(
