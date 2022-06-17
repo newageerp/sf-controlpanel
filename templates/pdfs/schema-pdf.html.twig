@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, Fragment } from 'react'
 import { PdfLinesContainer } from '@newageerp/ui.components.element.pdf-lines-container';
 import { PdfLine } from '@newageerp/ui.components.element.pdf-line';
 import axios from 'axios'
@@ -68,7 +68,7 @@ export const {{ compName }}Item = (props: {{ compName }}ItemProps) => {
 
     return (
     <Fragment>
-        <PdfLine title={props.title} onDownload={onDownload} onPrint={onPrint} />
+        <PdfLine title={props.title} onDownload={onDownload} onPrint={onPrint} onClick={onClick} />
         {showPdf && !!pdfData &&
             <PopupPdf onClose={() => setShowPdf(false)}>
                 <PdfWindow
