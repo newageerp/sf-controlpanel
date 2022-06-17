@@ -93,7 +93,7 @@ export const {{ compName }}Item = (props: {{ compName }}ItemProps) => {
             </PopupPdf>
         }
         {showEmail && !!pdfData &&
-            <PopupMail onClose={() => setShowEmail(false)}>
+            <PopupMail>
                 <MailsForm
                     onBack={() => setShowEmail(false)}
                     extraData={
