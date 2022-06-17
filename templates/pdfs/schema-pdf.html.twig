@@ -1,0 +1,22 @@
+import React from 'react'
+import { PdfLinesContainer } from '@newageerp/ui.components.element.pdf-lines-container';
+import { PdfLine } from '@newageerp/ui.components.element.pdf-line';
+
+{% for pdf in pdfs %}
+    export const {{  pdf.compName  }} = () => {
+        return (<PdfLine title="{{ pdf.title }}" />);
+    }
+{% endfor %}
+
+export const {{ compName }} = () => {
+    return (
+    <PdfLinesContainer>
+        {% for pdf in pdfs %}
+            {% if pdf.skipList %}
+            {% else %}
+                <{{ pdf.compName }}
+            {% endif %}
+        {% endfor %}
+    </PdfLinesContainer>
+    )
+}
