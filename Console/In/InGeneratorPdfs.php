@@ -65,13 +65,14 @@ class InGeneratorPdfs extends Command
             });
 
 
-            $compName = 'Pdf'.Utils::fixComponentName($slug);
+            $compName = 'Pdf' . Utils::fixComponentName($slug);
 
             $fileName = $generatedPath . '/' . $compName . '.tsx';
             $generatedContent = $pdfSchemaTemplate->render(
                 [
                     'compName' => $compName,
                     'pdfs' => $list,
+                    'schema' => $slug
                 ]
             );
             Utils::writeOnChanges($fileName, $generatedContent);

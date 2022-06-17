@@ -1,20 +1,74 @@
 import React from 'react'
 import { PdfLinesContainer } from '@newageerp/ui.components.element.pdf-lines-container';
 import { PdfLine } from '@newageerp/ui.components.element.pdf-line';
+import axios from 'axios'
+import { PropsId } from '../../../UserComponents/ModelsCacheData/types';
+
+type PdfResponse = {
+    url: string,
+    viewUrl: string,
+    downloadUrl: string,
+    printUrl: string,
+}
+
+type {{ compName }}ItemProps = {
+    title: string,
+    template: string,
+} & PropsId
+
+const loadPdfData = async (id: number, template: string) => {
+    const url = `/app/nae-core/pdf/pdfInfo/{{ schema }}/${template}/${id}`;
+    const res = await axios.get(url);
+    return res.data;
+}
+
+export const PdfCalculationItem = (props: {{ compName }}ItemProps) => {
+    const [pdfData, setPdfData] = useState<PdfResponse>();
+
+    const onDownload = async () => {
+        let urlToOpen = "";
+        if (!pdfData) {
+            const _pdfData: PdfResponse = await loadPdfData(props.id, props.template);
+            setPdfData(_pdfData);
+            urlToOpen = _pdfData.downloadUrl;
+        } else {
+            urlToOpen = pdfData.downloadUrl;
+        }
+        if (urlToOpen) {
+            window.open(urlToOpen, '_blank');
+        }
+    }
+
+    const onPrint = async () => {
+        let urlToOpen = "";
+        if (!pdfData) {
+            const _pdfData: PdfResponse = await loadPdfData(props.id, props.template);
+            setPdfData(_pdfData);
+            urlToOpen = _pdfData.printUrl;
+        } else {
+            urlToOpen = pdfData.printUrl;
+        }
+        if (urlToOpen) {
+            window.open(urlToOpen, '_blank');
+        }
+    }
+
+    return (<PdfLine title={props.title} onDownload={onDownload} onPrint={onPrint} />);
+}
 
 {% for pdf in pdfs %}
-    export const {{  pdf.compName  }} = () => {
-        return (<PdfLine title="{{ pdf.title }}" />);
+    export const {{  pdf.compName  }} = (props: PropsId) => {
+        return (<PdfCalculationItem title="{{ pdf.title }}" template="{{ pdf.template }}" />);
     }
 {% endfor %}
 
-export const {{ compName }} = () => {
+export const {{ compName }} = (props: PropsId) => {
     return (
     <PdfLinesContainer>
         {% for pdf in pdfs %}
             {% if pdf.skipList %}
             {% else %}
-                <{{ pdf.compName }} />
+                <{{ pdf.compName }} id={props.id} />
             {% endif %}
         {% endfor %}
     </PdfLinesContainer>
