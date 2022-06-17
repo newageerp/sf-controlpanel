@@ -14,7 +14,7 @@ export const {{ compName }} = () => {
         {% for pdf in pdfs %}
             {% if pdf.skipList %}
             {% else %}
-                <{{ pdf.compName }}
+                <{{ pdf.compName }} />
             {% endif %}
         {% endfor %}
     </PdfLinesContainer>
