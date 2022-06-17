@@ -170,10 +170,10 @@ class InGeneratorTabs extends Command
                 if (isset($column['componentName']) && $column['componentName']) {
                     if (mb_strpos($column['componentName'], 'pdf:') === 0) {
                         $pdfTemplateA = explode(":", $column['componentName']);
-                        $pdfTemplate = end($pdfTemplateA);
+                        $pdfTemplateName = end($pdfTemplateA);
 
                         $pdfComponentBase = 'Pdf' . Utils::fixComponentName($tabItem['config']['schema']);
-                        $pdfComponentName = $pdfComponentBase . Utils::customFolderPath($pdfTemplate);
+                        $pdfComponentName = $pdfComponentBase . Utils::fixComponentName($pdfTemplateName);
 
                         $tpImports[] = 'import { ' . $pdfComponentName . ' } from "../../pdfs/buttons/' . $pdfComponentBase . '";';
 
