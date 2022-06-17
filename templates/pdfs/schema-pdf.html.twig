@@ -96,12 +96,14 @@ export const {{ compName }}Item = (props: {{ compName }}ItemProps) => {
             <PopupMail onClose={() => setShowEmail(false)}>
                 <MailsForm
                     onBack={() => setShowEmail(false)}
-                    extraData={{
-                        id: props.id,
-                        pdf: true,
-                        schema: '{{ schema }}',
-                        template: 'pdf',
-                    }}
+                    extraData={
+                        {
+                            id: props.id,
+                            pdf: true,
+                            schema: '{{ schema }}',
+                            template: 'pdf',
+                        }
+                    }
                     files={
                         [
                             {
