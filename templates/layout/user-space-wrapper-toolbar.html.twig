@@ -3,7 +3,7 @@ import { Toolbar } from "@newageerp/ui.layout.base.toolbar";
 import { ToolbarTitle } from '@newageerp/ui.texts.base.toolbar-title';
 import CustomToolbarBefore from "../../_custom/layout/CustomToolbarBefore";
 import CustomToolbarAfter from "../../_custom/layout/CustomToolbarAfter";
-import { atom, toolbarTitle } from "recoil";
+import { atom, useRecoilValue } from "recoil";
 
 interface Props {
         children?: any
@@ -19,7 +19,7 @@ function UserSpaceWrapperToolbar(props: Props) {
         return (
                 <Toolbar>
                         <CustomToolbarBefore/>
-                        <ToolbarTitle></ToolbarTitle>
+                        <ToolbarTitle>{toolbarTitle}</ToolbarTitle>
                         <CustomToolbarAfter/>
                 </Toolbar>
         );
