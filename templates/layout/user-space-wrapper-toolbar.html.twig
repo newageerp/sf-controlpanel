@@ -1,17 +1,25 @@
 import React from "react";
-import { LayoutLeftMenuToolbar } from "@newageerp/ui.layout.base.layout-left-menu-toolbar";
 import { Toolbar } from "@newageerp/ui.layout.base.toolbar";
+import { ToolbarTitle } from '@newageerp/ui.texts.base.toolbar-title';
 import CustomToolbarBefore from "../../_custom/layout/CustomToolbarBefore";
 import CustomToolbarAfter from "../../_custom/layout/CustomToolbarAfter";
+import { atom, toolbarTitle } from "recoil";
 
 interface Props {
         children?: any
 }
 
+export const UserSpaceWrapperToolbarState = atom({
+        key: "UserSpaceWrapperToolbarState",
+        default: "",
+});
+
 function UserSpaceWrapperToolbar(props: Props) {
+        const toolbarTitle = useRecoilValue(UserSpaceWrapperToolbarState)
         return (
                 <Toolbar>
                         <CustomToolbarBefore/>
+                        <ToolbarTitle></ToolbarTitle>
                         <CustomToolbarAfter/>
                 </Toolbar>
         );

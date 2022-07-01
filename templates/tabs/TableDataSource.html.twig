@@ -11,6 +11,8 @@ import {TypeItemFilters} from '@newageerp/ui.components.list.filter-container'
 import { LayoutToolbar } from "@newageerp/ui.layout.base.layout-toolbar";
 import { Toolbar } from "@newageerp/ui.layout.base.toolbar";
 import { ToolbarTitle } from "@newageerp/ui.texts.base.toolbar-title";
+import { useRecoilState } from "recoil";
+import { UserSpaceWrapperToolbarState } from "../../layout/toolbar/UserSpaceWrapperToolbar";
 
 {% if customToolbarStart %}
 import {{ tpCompName }}ToolbarStartContent from "../../_custom/tabs/tables-data-source/{{ tpCompName }}ToolbarStartContent";
@@ -28,6 +30,8 @@ interface Props {
 }
 
 export default function {{ tpCompName }}(props: Props) {
+    const [, setToolbarTitle] = useRecoilState(UserSpaceWrapperToolbarState)
+
     const history = useHistory()
 
     const onAddExtraFilter = (key: string, data: any) => {
@@ -199,6 +203,10 @@ export default function {{ tpCompName }}(props: Props) {
 
     const dataToRender = dataProcessing(dataResult.data.data);
 
+    useEffect(() => {
+        setToolbarTitle('{% if toolbarTitle != "" %}{{ toolbarTitle }}{% else %}{" "}{% endif %}');
+    }, []);
+
     return (
 <Fragment>
 {#    <LayoutToolbar#}
@@ -208,9 +216,9 @@ export default function {{ tpCompName }}(props: Props) {
 {#            </Toolbar>#}
 {#        }#}
 {#    >#}
-    <UI.Toolbar.Toolbar>
-        <UI.Typography.H3Toolbar>{% if toolbarTitle != "" %}{{ toolbarTitle }}{% else %}{" "}{% endif %}</UI.Typography.H3Toolbar>
-    </UI.Toolbar.Toolbar>
+{#    <UI.Toolbar.Toolbar>#}
+{#        <UI.Typography.H3Toolbar>{% if toolbarTitle != "" %}{{ toolbarTitle }}{% else %}{" "}{% endif %}</UI.Typography.H3Toolbar>#}
+{#    </UI.Toolbar.Toolbar>#}
         <div ref={headerRef}>
             <DefaultSearchToolbar
                     onCreate={isCreatable?onCreate:undefined}
