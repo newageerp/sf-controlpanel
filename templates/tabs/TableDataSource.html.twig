@@ -219,7 +219,7 @@ export default function {{ tpCompName }}(props: Props) {
 {#    <UI.Toolbar.Toolbar>#}
 {#        <UI.Typography.H3Toolbar>{% if toolbarTitle != "" %}{{ toolbarTitle }}{% else %}{" "}{% endif %}</UI.Typography.H3Toolbar>#}
 {#    </UI.Toolbar.Toolbar>#}
-        <div ref={headerRef}>
+        <div ref={headerRef} className="py-8">
             <DefaultSearchToolbar
                     onCreate={isCreatable?onCreate:undefined}
                     search={
