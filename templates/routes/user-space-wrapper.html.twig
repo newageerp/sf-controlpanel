@@ -1,6 +1,7 @@
 import React from "react";
-import { LayoutLeftMenu } from "@newageerp/ui.layout.base.layout-left-menu";
+import { LayoutLeftMenuToolbar } from "@newageerp/ui.layout.base.layout-left-menu-toolbar";
 import LeftMenu from "../../_custom/menu/LeftMenu";
+import UserSpaceWrapperToolbar from "../../layout/toolbar/UserSpaceWrapperToolbar";
 
 interface Props {
         children?: any
@@ -8,9 +9,9 @@ interface Props {
 
 function UserSpaceWrapper(props: Props) {
         return (
-        <LayoutLeftMenu leftSideContent={<LeftMenu />}>
+        <LayoutLeftMenuToolbar leftSideContent={<LeftMenu />} toolbar={<UserSpaceWrapperToolbar/>}>
                 {props.children}
-        </LayoutLeftMenu>
+        </LayoutLeftMenuToolbar>
         );
 }
 

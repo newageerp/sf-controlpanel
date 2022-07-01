@@ -36,6 +36,8 @@ class InGeneratorRoutes extends Command
         $userSpaceWrapperTemplate = $twig->load('routes/user-space-wrapper.html.twig');
         $customLeftMenuTemplate = $twig->load('routes/custom-left-menu.html.twig');
 
+        $customEmptyTemplate = $twig->load('common/empty.html.twig');
+
         $generatedRoutesWrappersPath = Utils::generatedPath('routes/wrappers');
         $generatedRoutesPath = Utils::generatedPath('routes');
 
@@ -129,6 +131,26 @@ class InGeneratorRoutes extends Command
         if (!file_exists($customMenuFileName)) {
             $generatedContent = $customLeftMenuTemplate->render();
             Utils::writeOnChanges($customMenuFileName, $generatedContent);
+        }
+
+        // UserSpaceWrapper TOOLBAR
+        $userSpaceWrapperToolbarTemplate = $twig->load('layout/user-space-wrapper-toolbar.html.twig');
+        $generatedContent = $userSpaceWrapperToolbarTemplate->render();
+        $fileName = Utils::generatedPath('layout/toolbar') . '/UserSpaceWrapperToolbar.tsx';
+        Utils::writeOnChanges($fileName, $generatedContent);
+
+        // Custom toolbar
+        $customLayoutPath = Utils::customFolderPath('layout');
+
+        $customFileName = $customLayoutPath.'/CustomToolbarBefore.tsx';
+        if (!file_exists($customFileName)) {
+            $generatedContent = $customEmptyTemplate->render(['compName' => 'CustomToolbarBefore']);
+            Utils::writeOnChanges($customFileName, $generatedContent);
+        }
+        $customFileName = $customLayoutPath.'/CustomToolbarAfter.tsx';
+        if (!file_exists($customFileName)) {
+            $generatedContent = $customEmptyTemplate->render(['compName' => 'CustomToolbarAfter']);
+            Utils::writeOnChanges($customFileName, $generatedContent);
         }
 
         return Command::SUCCESS;
