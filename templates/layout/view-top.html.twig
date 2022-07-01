@@ -1,0 +1,47 @@
+import classNames from 'classnames'
+import React from 'react'
+import { Back } from '@newageerp/ui.components.element.back';
+import { TwBorderColors, TwTextColors } from '@newageerp/ui.styles.tailwind'
+import { ElementTitle } from '@newageerp/ui.texts.base.element-title';
+import { Icon, IconType } from '@newageerp/ui.icons.base.icon'
+import { IconList } from '@newageerp/ui.icons.base.icon-list'
+
+interface Props {
+    extraOptions: any,
+    element: any
+}
+
+export default function ViewTop(props: Props) {
+    return (
+    <div>
+        {!!props.extraOptions.onBack && <div><Back onClick={props.extraOptions.onBack} /></div>}
+        <div
+            className={classNames(
+                    'tw3-flex tw3-items-center tw3-py-6',
+                    'tw3-gap-10',
+            )}
+        >
+            <ElementTitle>{props.element._viewTitle}</ElementTitle>
+            <span className="tw3-flex-grow"></span>
+            {!!props.extraOptions.onEdit &&
+                <button onClick={props.extraOptions.onEdit}>
+                    <Icon
+                            icon={IconList.edit}
+                            type={IconType.Solid}
+                            className={TwTextColors.slate400}
+                    />
+                </button>
+            }
+            {!!props.extraOptions.onRemove &&
+                <button onClick={props.extraOptions.onRemove}>
+                    <Icon
+                            icon={IconList.trash}
+                            type={IconType.Solid}
+                            className={TwTextColors.slate400}
+                    />
+                </button>
+            }
+        </div>
+    </div>
+    )
+}

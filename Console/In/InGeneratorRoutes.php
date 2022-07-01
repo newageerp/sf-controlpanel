@@ -134,6 +134,7 @@ class InGeneratorRoutes extends Command
         }
 
         // UserSpaceWrapper TOOLBAR
+
         $userSpaceWrapperToolbarTemplate = $twig->load('layout/user-space-wrapper-toolbar.html.twig');
         $generatedContent = $userSpaceWrapperToolbarTemplate->render();
         $fileName = Utils::generatedPath('layout/toolbar') . '/UserSpaceWrapperToolbar.tsx';
@@ -152,6 +153,12 @@ class InGeneratorRoutes extends Command
             $generatedContent = $customEmptyTemplate->render(['compName' => 'CustomToolbarAfter']);
             Utils::writeOnChanges($customFileName, $generatedContent);
         }
+
+        // view top
+        $viewTopTemplate = $twig->load('layout/view-top.html.twig');
+        $generatedContent = $viewTopTemplate->render();
+        $fileName = Utils::generatedPath('layout/view') . '/ViewTop.tsx';
+        Utils::writeOnChanges($fileName, $generatedContent);
 
         return Command::SUCCESS;
     }
