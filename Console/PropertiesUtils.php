@@ -25,6 +25,16 @@ class PropertiesUtils
         return $this->properties;
     }
 
+    public function getRelPropertiesForTarget(string $target)
+    {
+        return array_filter(
+            $this->properties,
+            function ($item) use ($target) {
+                return $item['type'] === 'rel' && $item['format'] === $target;
+            }
+        );
+    }
+
     public function getArraySchemasForTarget(string $target)
     {
         return array_filter(

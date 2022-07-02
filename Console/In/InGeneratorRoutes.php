@@ -154,12 +154,6 @@ class InGeneratorRoutes extends Command
             Utils::writeOnChanges($customFileName, $generatedContent);
         }
 
-        // view top
-        $viewTopTemplate = $twig->load('layout/view-top.html.twig');
-        $generatedContent = $viewTopTemplate->render();
-        $fileName = Utils::generatedPath('layout/view') . '/ViewTop.tsx';
-        Utils::writeOnChanges($fileName, $generatedContent);
-
         return Command::SUCCESS;
     }
 }
