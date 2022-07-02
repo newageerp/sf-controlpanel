@@ -41,7 +41,7 @@ class InGeneratorLayout extends Command
         // toolbar layout rels create
         $relsCreateFile = $_ENV['NAE_SFS_CP_STORAGE_PATH'] . '/rels-create.json';
         if (file_exists($relsCreateFile)) {
-            $relsList = json_decode(file_get_contents($relsCreateFile));
+            $relsList = json_decode(file_get_contents($relsCreateFile), true);
             $rels = [];
             foreach ($relsList as $relItem) {
                 if (!isset($rels[$relItem['source']])) {
