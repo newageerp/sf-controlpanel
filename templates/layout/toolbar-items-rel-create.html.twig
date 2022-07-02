@@ -34,7 +34,7 @@ export default function {{ compName }}(props: Props) {
         createOptions[{{ item.target }}] = {
             options: itemCreateOptions,
             type: "{{ item.type }}",
-            inPopup: {{ if item.forcePopup }}true{% else %}false{% endif %}
+            inPopup: {% if item.forcePopup %}true{% else %}false{% endif %}
         }
     {% endfor %}
 
