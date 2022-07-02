@@ -2,13 +2,13 @@ import { UI } from '@newageerp/nae-react-ui';
 import { INaeWidget } from '@newageerp/nae-react-ui/dist/interfaces';
 import { Fragment } from 'react';
 {% for comp in components %}
-import { {{ comp }} } from './view/toolbar-items/{{ comp }}';
+import {{ comp }} from './view/toolbar-items/{{ comp }}';
 {% endfor %}
 
 export const GeneratedLayoutWidgets: INaeWidget[] = [
 {% for key, comp in components %}
     {
-        schema: {{ key }},
+        schema: "{{ key }}",
         type: UI.Widget.WidgetType.viewMainTop2LineBefore,
         sort: 0,
         options: {
