@@ -21,18 +21,18 @@ export default function {{ compName }}(props: Props) {
     const createOptions: any = {};
 
     {% for item in items %}
-        let itemCreateOptions: any = {};
+        let itemCreateOptions{{ item.target }}: any = {};
 {#        {% if item.createOptions %}#}
 {#            itemCreateOptions = {{ item.createOptions|json_encode|raw|replace:"@context.id":"props.element.id"|replace:"@context.schema":schema }}#}
 {#        {% endif %}#}
 
-        itemCreateOptions.convert = {
+        itemCreateOptions{{ item.target }}.convert = {
             schema: "schema",
             element: { id: props.element.id },
         };
 
-        createOptions[{{ item.target }}] = {
-            options: itemCreateOptions,
+        createOptions["{{ item.target }}"] = {
+            options: itemCreateOptions{{ item.target }},
             type: "{{ item.type }}",
             inPopup: {% if item.forcePopup %}true{% else %}false{% endif %}
         }
@@ -72,7 +72,7 @@ export default function {{ compName }}(props: Props) {
             {!!isComponentVisible &&
                 <Menu>
                     {% for item in items %}
-                        <MenuItem onClick={() => openLink(item.target)}>{{  item.targetTitle }}</MenuItem>
+                        <MenuItem onClick={() => openLink("{{ item.target }}")}>{{  item.targetTitle }}</MenuItem>
                     {% endfor %}
                 </Menu>
             }
