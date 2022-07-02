@@ -39,13 +39,13 @@ export default function {{ compName }}(props: Props) {
         if (isPopup || targetOptions.inPopup) {
             showEditPopup({
                 id: "new",
-                schema: "{{ schema }}",
+                schema: target,
                 newStateOptions: { createOptions: targetOptions.options },
                 type: targetOptions.type,
             });
         } else {
             UIConfig.router({
-                path: "/u/{{ schema }}/" + targetOptions.type + "/edit/new",
+                path: "/u/"+ target +"/" + targetOptions.type + "/edit/new",
                 options: { createOptions: targetOptions.options }
             });
         }
