@@ -81,8 +81,8 @@ class InGeneratorPdfs extends Command
             Utils::writeOnChanges($fileName, $generatedContent);
         }
 
-        $fileName = $generatedPath . '/PdfWidgets.tsx';
-        $generatedContent = $pdfSchemaTemplate->render(
+        $fileName = Utils::generatedPath('pdfs') . '/GeneratedPdfWidgets.tsx';
+        $generatedContent = $widgetsTemplate->render(
             [
                 'components' => $components
             ]

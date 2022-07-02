@@ -2,13 +2,13 @@ import { UI } from '@newageerp/nae-react-ui';
 import { INaeWidget } from '@newageerp/nae-react-ui/dist/interfaces';
 import { Fragment } from 'react';
 {% for comp in components %}
-import { {{ comp }}Widget } from './{{ comp }}';
+import { {{ comp }}Widget } from './buttons/{{ comp }}';
 {% endfor %}
 
 export const GeneratedPdfWidgets: INaeWidget[] = [
-{% for comp in components %}
+{% for key, comp in components %}
     {
-        schema: "{{ loop.index }}",
+        schema: "{{ key }}",
         type: UI.Widget.WidgetType.viewAfterPdfButton,
         sort: 0,
         options: {},

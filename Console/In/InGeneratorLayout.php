@@ -74,7 +74,7 @@ class InGeneratorLayout extends Command
             }
         }
 
-        $fileName = Utils::generatedPath('layout') . '/PdfWidgets.tsx';
+        $fileName = Utils::generatedPath('layout') . '/GeneratedLayoutWidgets.tsx';
         $generatedContent = $widgetsTemplate->render(
             [
                 'components' => $widgetComponents

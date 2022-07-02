@@ -6,9 +6,9 @@ import { {{ comp }} } from './view/toolbar-items/{{ comp }}';
 {% endfor %}
 
 export const GeneratedLayoutWidgets: INaeWidget[] = [
-{% for comp in components %}
+{% for key, comp in components %}
     {
-        schema: {{ loop.index }},
+        schema: {{ key }},
         type: UI.Widget.WidgetType.viewMainTop2LineBefore,
         sort: 0,
         options: {
