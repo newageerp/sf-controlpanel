@@ -21,18 +21,13 @@ export default function {{ compName }}(props: Props) {
     const createOptions: any = {};
 
     {% for item in items %}
-        let itemCreateOptions{{ item.target }}: any = {};
-{#        {% if item.createOptions %}#}
-{#            itemCreateOptions = {{ item.createOptions|json_encode|raw|replace:"@context.id":"props.element.id"|replace:"@context.schema":schema }}#}
-{#        {% endif %}#}
-
-        itemCreateOptions{{ item.target }}.convert = {
-            schema: "schema",
-            element: { id: props.element.id },
-        };
-
         createOptions["{{ item.target }}"] = {
-            options: itemCreateOptions{{ item.target }},
+            options: {
+                convert: {
+                    schema: "schema",
+                    element: { id: props.element.id },
+                }
+            },
             type: "{{ item.type }}",
             inPopup: {% if item.forcePopup %}true{% else %}false{% endif %}
         }
