@@ -32,6 +32,9 @@ class InGeneratorLayout extends Command
             'cache' => '/tmp',
         ]);
 
+        $widgetsTemplate = $twig->load('layout/generated-widgets.html.twig');
+        $widgetComponents = [];
+        
         // view top
         $viewTopTemplate = $twig->load('layout/view-top.html.twig');
         $generatedContent = $viewTopTemplate->render();
@@ -64,10 +67,20 @@ class InGeneratorLayout extends Command
                 $compName = Utils::fixComponentName($source) . 'RelCreate';
                 $fileName = Utils::generatedPath('layout/view/toolbar-items') . '/' . $compName . '.tsx';
 
+                $widgetComponents[$source] = $compName;
+
                 $generatedContent = $toolbarItemTemplate->render(['compName' => $compName, 'items' => $items, 'schema' => $source]);
                 Utils::writeOnChanges($fileName, $generatedContent);
             }
         }
+
+        $fileName = Utils::generatedPath('layout') . '/PdfWidgets.tsx';
+        $generatedContent = $widgetsTemplate->render(
+            [
+                'components' => $widgetComponents
+            ]
+        );
+        Utils::writeOnChanges($fileName, $generatedContent);
 
         return Command::SUCCESS;
     }

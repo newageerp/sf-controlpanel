@@ -1,0 +1,19 @@
+import { UI } from '@newageerp/nae-react-ui';
+import { INaeWidget } from '@newageerp/nae-react-ui/dist/interfaces';
+import { Fragment } from 'react';
+{% for comp in components %}
+import { {{ comp }} } from './view/toolbar-items/{{ comp }}';
+{% endfor %}
+
+export const GeneratedLayoutWidgets: INaeWidget[] = [
+{% for comp in components %}
+    {
+        schema: {{ loop.index }},
+        type: UI.Widget.WidgetType.viewMainTop2LineBefore,
+        sort: 0,
+        options: {
+        },
+        comp: {{ comp }}
+    },
+{% endfor %}
+];

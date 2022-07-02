@@ -19,6 +19,7 @@ class InGeneratorPdfs extends Command
             'cache' => '/tmp/smarty',
         ]);
 
+        $widgetsTemplate = $twig->load('pdfs/generated-widgets.html.twig');
         $pdfSchemaTemplate = $twig->load('pdfs/schema-pdf.html.twig');
         $generatedPath = Utils::generatedPath('pdfs/buttons');
 
@@ -35,6 +36,7 @@ class InGeneratorPdfs extends Command
 
         $result = $db->query($sql);
 
+        $components = [];
         $pdfs = [];
         while ($data = $result->fetchArray(SQLITE3_ASSOC)) {
             if (!isset($pdfs[$data['slug']])) {
@@ -66,6 +68,7 @@ class InGeneratorPdfs extends Command
 
 
             $compName = 'Pdf' . Utils::fixComponentName($slug);
+            $components[$slug] = $compName;
 
             $fileName = $generatedPath . '/' . $compName . '.tsx';
             $generatedContent = $pdfSchemaTemplate->render(
@@ -77,6 +80,14 @@ class InGeneratorPdfs extends Command
             );
             Utils::writeOnChanges($fileName, $generatedContent);
         }
+
+        $fileName = $generatedPath . '/PdfWidgets.tsx';
+        $generatedContent = $pdfSchemaTemplate->render(
+            [
+                'components' => $components
+            ]
+        );
+        Utils::writeOnChanges($fileName, $generatedContent);
 
         return Command::SUCCESS;
     }

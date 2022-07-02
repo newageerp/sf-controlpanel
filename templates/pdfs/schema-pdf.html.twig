@@ -7,6 +7,7 @@ import { PopupPdf } from '@newageerp/ui.popups.base.popup-pdf';
 import { PdfWindow } from '@newageerp/ui.files.pdf.pdf-window';
 import { MailsForm } from '@newageerp/ui.mails.mails-form';
 import { PopupMail } from '@newageerp/ui.popups.base.popup-mail';
+import {WhiteCard} from '@newageerp/ui.cards.base.white-card'
 
 type PdfResponse = {
     url: string,
@@ -144,4 +145,8 @@ export const {{ compName }} = (props: PropsId) => {
         {% endfor %}
     </PdfLinesContainer>
     )
+}
+
+export const {{ compName }}Widget = (props: WidgetProps) => {
+    return ( <WhiteCard><{{ compName }} id={props.element.id} /></WhiteCard> )
 }
