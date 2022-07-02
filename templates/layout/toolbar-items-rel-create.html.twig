@@ -24,7 +24,7 @@ export default function {{ compName }}(props: Props) {
         createOptions["{{ item.target }}"] = {
             options: {
                 convert: {
-                    schema: "schema",
+                    schema: "{{ schema }}",
                     element: { id: props.element.id },
                 }
             },
