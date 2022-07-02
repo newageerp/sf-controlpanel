@@ -22,9 +22,9 @@ export default function {{ compName }}(props: Props) {
 
     {% for item in items %}
         let itemCreateOptions: any = {};
-        {% if item.createOptions %}
-            itemCreateOptions = {{ item.createOptions|json_encode|raw|replace:"@context.id":"props.element.id"|replace:"@context.schema":schema }}
-        {% endif %}
+{#        {% if item.createOptions %}#}
+{#            itemCreateOptions = {{ item.createOptions|json_encode|raw|replace:"@context.id":"props.element.id"|replace:"@context.schema":schema }}#}
+{#        {% endif %}#}
 
         itemCreateOptions.convert = {
             schema: "schema",
