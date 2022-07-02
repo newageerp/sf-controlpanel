@@ -53,6 +53,9 @@ class InGeneratorLayout extends Command
                 if (!isset($relItem['type'])) {
                     $relItem['type'] = 'main';
                 }
+                if (!isset($relItem['forcePopup'])) {
+                    $relItem['forcePopup'] = false;
+                }
                 $rels[$relItem['source']][] = $relItem;
             }
 
