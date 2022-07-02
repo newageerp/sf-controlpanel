@@ -35,7 +35,8 @@ class InRunAll extends Command
             'nae:localconfig:InFillModels',
             'nae:localconfig:InGeneratorRoutes',
             'nae:localconfig:InGeneratorFileWidgets',
-            'nae:localconfig:InGeneratorPdfs'
+            'nae:localconfig:InGeneratorPdfs',
+            'nae:localconfig:InGeneratorLayout'
         ];
 
         foreach ($commands as $commandName) {

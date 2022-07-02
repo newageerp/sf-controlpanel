@@ -90,6 +90,9 @@ services:
   Newageerp\SfControlpanel\Console\In\InGeneratorPdfs:
     tags:
       - { name: 'console.command' }
+  Newageerp\SfControlpanel\Console\In\InGeneratorLayout:
+    tags:
+      - { name: 'console.command' }
   Newageerp\SfControlpanel\Console\In\InRunAll:
     tags:
       - { name: 'console.command' }
