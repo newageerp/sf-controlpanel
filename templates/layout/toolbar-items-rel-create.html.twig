@@ -61,11 +61,13 @@ export default function {{ compName }}(props: Props) {
             <SquareButton
                     bgColor={TwBackgroundColors.slate50}
                     onClick={toggleComponentVisible}
-                    icon={{
-                        icon: IconList.plus,
-                        type: IconType.Solid,
-                        className: TwTextColors.slate400
-                    }}
+                    icon={
+                            {
+                                icon: IconList.plus,
+                                type: IconType.Solid,
+                                className: TwTextColors.slate400
+                            }
+                    }
             />
             {!!isComponentVisible &&
                 <Menu>
