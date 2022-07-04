@@ -9,7 +9,7 @@ import { SortingItem } from '@newageerp/ui.components.list.sort-controller';
 import { useHistory } from 'react-router-dom'
 import { v4 as uuidv4 } from 'uuid'
 import { ContentWidgetProps } from "@newageerp/nae-react-ui/dist/UI/Widget/NEWidgets";
-import { WhiteCard } from '@newageerp/ui.cards.base.white-card'
+import { WhiteCardWithTitle } from '@newageerp/ui.cards.base.white-card-with-title'
 
 interface Props {
     navigate?: (schema: string, id: number | string, el: any) => void,
@@ -21,7 +21,7 @@ interface Props {
 
 export function {{ tpCompName }}Widget(props: ContentWidgetProps) {
     return (
-        <WhiteCard>
+        <WhiteCardWithTitle title={"{{ schemaTitle }}"}>
             <{{ tpCompName }}
                 relId={props.element.id}
                 hideSearchBar={props.options.hideSearchBar}
@@ -29,7 +29,7 @@ export function {{ tpCompName }}Widget(props: ContentWidgetProps) {
                 dataProcessing={props.options.dataProcessing}
                 navigate={props.options.navigate}
             />
-        </WhiteCard>
+        </WhiteCardWithTitle>
     )
 }
 
