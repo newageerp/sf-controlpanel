@@ -74,6 +74,42 @@ class InGeneratorLayout extends Command
             }
         }
 
+        // toolbar layout rels copy
+        $relsCreateFile = $_ENV['NAE_SFS_CP_STORAGE_PATH'] . '/rels-copy.json';
+        if (file_exists($relsCreateFile)) {
+            $relsList = json_decode(file_get_contents($relsCreateFile), true);
+            $rels = [];
+            foreach ($relsList as $relItem) {
+                if (!isset($rels[$relItem['source']])) {
+                    $rels[$relItem['source']] = [];
+                }
+                if (!isset($relItem['targetTitle'])) {
+                    $relItem['targetTitle'] = $this->entitiesUtils->getTitleBySlug($relItem['target']);
+                }
+                if (!isset($relItem['type'])) {
+                    $relItem['type'] = 'main';
+                }
+                if (!isset($relItem['forcePopup'])) {
+                    $relItem['forcePopup'] = false;
+                }
+                $rels[$relItem['source']][] = $relItem;
+            }
+
+            $toolbarItemTemplate = $twig->load('layout/toolbar-items-rel-copy.html.twig');
+            foreach ($rels as $source => $items) {
+                $compName = Utils::fixComponentName($source) . 'RelCopy';
+                $fileName = Utils::generatedPath('layout/view/toolbar-items') . '/' . $compName . '.tsx';
+
+                $widgetComponents[$source] = $compName;
+
+                $generatedContent = $toolbarItemTemplate->render(['compName' => $compName, 'items' => $items, 'schema' => $source]);
+                Utils::writeOnChanges($fileName, $generatedContent);
+            }
+        }
+
+
+        // WIDGETS
+
         $fileName = Utils::generatedPath('layout') . '/GeneratedLayoutWidgets.tsx';
         $generatedContent = $widgetsTemplate->render(
             [
