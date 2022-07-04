@@ -1,6 +1,8 @@
 import React from 'react'
 import { ElementToolbar } from '@newageerp/ui.components.element.element-toolbar';
 import { UI, UIConfig } from '@newageerp/nae-react-ui';
+import { OpenApi } from '@newageerp/nae-react-auth-wrapper';
+import { useRecoilValue } from 'recoil';
 
 interface Props {
     extraOptions: any,
@@ -9,6 +11,8 @@ interface Props {
 }
 
 export default function ViewTop(props: Props) {
+    const userState = useRecoilValue(OpenApi.naeUserState);
+
     return (
         <ElementToolbar
             parentId={props.element.id}
@@ -18,8 +22,15 @@ export default function ViewTop(props: Props) {
             element={props.element}
             onEdit={props.extraOptions.onEdit}
             onRemove={props.extraOptions.onRemove}
-            onRemind={() => { }}
-            onTasks={() => { }}
+
+            tasksContent={
+                <UI.Tasks.Widget
+                    element={props.element}
+                    options={{}}
+                    schema={props.schema}
+                    userState={userState}
+                />
+            }
 
             contentBefore1Line={
                 <UI.Widget.Widget
