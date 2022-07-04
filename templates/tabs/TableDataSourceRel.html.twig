@@ -9,6 +9,7 @@ import { SortingItem } from '@newageerp/ui.components.list.sort-controller';
 import { useHistory } from 'react-router-dom'
 import { v4 as uuidv4 } from 'uuid'
 import { ContentWidgetProps } from "@newageerp/nae-react-ui/dist/UI/Widget/NEWidgets";
+import { WhiteCard } from '@newageerp/ui.cards.base.white-card'
 
 interface Props {
     navigate?: (schema: string, id: number | string, el: any) => void,
@@ -20,13 +21,15 @@ interface Props {
 
 export function {{ tpCompName }}Widget(props: ContentWidgetProps) {
     return (
-        <{{ tpCompName }}
-            relId={props.element.id}
-            hideSearchBar={props.options.hideSearchBar}
-            hidePaging={props.options.hidePaging}
-            dataProcessing={props.options.dataProcessing}
-            navigate={props.options.navigate}
-        />
+        <WhiteCard>
+            <{{ tpCompName }}
+                relId={props.element.id}
+                hideSearchBar={props.options.hideSearchBar}
+                hidePaging={props.options.hidePaging}
+                dataProcessing={props.options.dataProcessing}
+                navigate={props.options.navigate}
+            />
+        </WhiteCard>
     )
 }
 
@@ -227,7 +230,13 @@ export default function {{ tpCompName }}(props: Props) {
                 />
             </div>
             {!props.hidePaging &&
-                <PageContainer pages={pages} activePage={dataState.page} setActivePage={setActivePage} marginTop={PageContainerMarginTop['42px']} />
+                <PageContainer
+                            pages={pages}
+                            activePage={dataState.page}
+                            setActivePage={setActivePage}
+                            marginTop={PageContainerMarginTop['20px']}
+                            hidePageSelectionSelect={true}
+                />
             }
         </div>
     )
