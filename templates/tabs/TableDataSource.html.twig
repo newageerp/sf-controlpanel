@@ -259,13 +259,13 @@ export default function {{ tpCompName }}(props: Props) {
                         undefined
                     }
                     {% if customToolbarStart %}
-                    toolbarStartContent={<{{ tpCompName }}ToolbarStartContent onAddExtraFilter={onAddExtraFilter} />}
+                    toolbarStartContent={<{{ tpCompName }}ToolbarStartContent onAddExtraFilter={onAddExtraFilter} loadData={loadData} />}
                     {% endif %}
                     {% if customToolbarEnd %}
-                    toolbarEndContent={<{{ tpCompName }}ToolbarEndContent onAddExtraFilter={onAddExtraFilter} />}
+                    toolbarEndContent={<{{ tpCompName }}ToolbarEndContent onAddExtraFilter={onAddExtraFilter} loadData={loadData} />}
                     {% endif %}
                     {% if customToolbarMiddle %}
-                    toolbarMiddleContent={<{{ tpCompName }}ToolbarMiddleContent onAddExtraFilter={onAddExtraFilter} />}
+                    toolbarMiddleContent={<{{ tpCompName }}ToolbarMiddleContent onAddExtraFilter={onAddExtraFilter} loadData={loadData} />}
                     {% endif %}
                 />
             <{{ tpTableCompName }}
