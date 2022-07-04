@@ -8,6 +8,7 @@ import { SearchToolbar, SearchToolbarMarginBottom } from '@newageerp/ui.componen
 import { SortingItem } from '@newageerp/ui.components.list.sort-controller';
 import { useHistory } from 'react-router-dom'
 import { v4 as uuidv4 } from 'uuid'
+import { WidgetProps } from "@newageerp/nae-react-ui/dist/UI/Widget/NEWidgets";
 
 interface Props {
     navigate?: (schema: string, id: number | string, el: any) => void,
@@ -15,6 +16,18 @@ interface Props {
     relId?: number,
     hideSearchBar?: boolean,
     hidePaging?: boolean,
+}
+
+export function {{ tpCompName }}Widget(props: WidgetProps) {
+    return (
+        <{{ tpCompName }}
+            relId={props.element.id}
+            hideSearchBar={props.options.hideSearchBar}
+            hidePaging={props.options.hidePaging}
+            dataProcessing={props.options.dataProcessing}
+            navigate={props.options.navigate}
+        />
+    )
 }
 
 export default function {{ tpCompName }}(props: Props) {
