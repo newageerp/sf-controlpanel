@@ -137,7 +137,7 @@ export const {{ compName }}Item = (props: {{ compName }}ItemProps) => {
 
 export const {{ compName }} = (props: PropsId) => {
     return (
-    <PdfLinesContainer>
+    <PdfLinesContainer title="PDF dokumentai">
         {% for pdf in pdfs %}
             {% if pdf.skipList %}
             {% else %}
