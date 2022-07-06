@@ -27,6 +27,7 @@ import {{ tpCompName }}ToolbarEndContent from "../../_custom/tabs/tables-data-so
 interface Props {
     navigate?: (schema: string, id: number | string, el: any) => void,
     dataProcessing?: (data: any[]) => any[],
+    reloadState?: any,
 }
 
 export default function {{ tpCompName }}(props: Props) {

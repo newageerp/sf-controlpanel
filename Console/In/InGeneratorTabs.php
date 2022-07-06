@@ -332,7 +332,7 @@ class InGeneratorTabs extends Command
                             'tpCompName' => $dataSourceRelCompName,
                             'tpTableCompName' => $compName,
                             'schema' => $tabItem['config']['schema'],
-                            'schemaTitle' => $this->entitiesUtils->getTitleBySlug($tabItem['config']['schema']),
+                            'schemaTitle' => $this->entitiesUtils->getTitlePluralBySlug($tabItem['config']['schema']),
                             'type' => $tabItem['config']['type'],
                             'pageSize' => $pageSize,
                             'sort' => json_encode($sort),

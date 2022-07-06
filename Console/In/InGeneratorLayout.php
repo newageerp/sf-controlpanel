@@ -29,7 +29,7 @@ class InGeneratorLayout extends Command
     {
         $loader = new \Twig\Loader\FilesystemLoader(dirname(__DIR__, 2) . '/templates');
         $twig = new \Twig\Environment($loader, [
-            'cache' => '/tmp',
+            'cache' => '/tmp/smarty',
         ]);
 
         $widgetsTemplate = $twig->load('layout/generated-widgets.html.twig');
