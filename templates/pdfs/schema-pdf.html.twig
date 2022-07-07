@@ -26,7 +26,7 @@ type {{ compName }}ItemProps = {
     skipSign?: boolean,
 } & PropsId
 
-const loadPdfData = async (id: number, template: string, skipStamp: boolean, skipSign: boolean) => {
+const loadPdfData = async (id: number, template: string, skipStamp?: boolean, skipSign?: boolean) => {
     let url = `/app/nae-core/pdf/pdfInfo/{{ schema }}/${template}/${id}?pdf=1`;
     if (skipStamp) {
         url += '&skipStamp=true'
