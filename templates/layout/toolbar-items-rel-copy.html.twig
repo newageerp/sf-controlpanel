@@ -73,7 +73,7 @@ export default function {{ compName }}(props: Props) {
                     {% for item in items %}
                         <MenuItem
                                     onClick={() => openLink("{{ item.target }}")}
-                                    disabled={createOptions["{{ item.target }}"]}
+                                    disabled={createOptions["{{ item.target }}"].disabled()}
                         >
                             {{  item.targetTitle }}
                         </MenuItem>
