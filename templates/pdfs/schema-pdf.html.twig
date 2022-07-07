@@ -22,8 +22,8 @@ type PdfResponse = {
 type {{ compName }}ItemProps = {
     title: string,
     template: string,
-    skipStamp: boolean,
-    skipSign: boolean,
+    skipStamp?: boolean,
+    skipSign?: boolean,
 } & PropsId
 
 const loadPdfData = async (id: number, template: string, skipStamp: boolean, skipSign: boolean) => {
@@ -139,8 +139,8 @@ export const {{ compName }}Item = (props: {{ compName }}ItemProps) => {
 }
 
 interface ItemProps extends PropsId {
-    skipStamp: boolean,
-    skipSign: boolean,
+    skipStamp?: boolean,
+    skipSign?: boolean,
 }
 
 {% for pdf in pdfs %}
