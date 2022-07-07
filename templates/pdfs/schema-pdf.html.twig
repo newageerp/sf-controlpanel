@@ -9,6 +9,7 @@ import { MailsForm } from '@newageerp/ui.mails.mails-form';
 import { PopupMail } from '@newageerp/ui.popups.base.popup-mail';
 import {WhiteCard} from '@newageerp/ui.cards.base.white-card'
 import { WidgetProps } from '@newageerp/nae-react-ui/dist/UI/Widget/NEWidgets';
+import { useTranslation } from 'react-i18next';
 
 type PdfResponse = {
     url: string,
@@ -21,10 +22,18 @@ type PdfResponse = {
 type {{ compName }}ItemProps = {
     title: string,
     template: string,
+    skipStamp: boolean,
+    skipSign: boolean,
 } & PropsId
 
-const loadPdfData = async (id: number, template: string) => {
-    const url = `/app/nae-core/pdf/pdfInfo/{{ schema }}/${template}/${id}`;
+const loadPdfData = async (id: number, template: string, skipStamp: boolean, skipSign: boolean) => {
+    let url = `/app/nae-core/pdf/pdfInfo/{{ schema }}/${template}/${id}?pdf=1`;
+    if (skipStamp) {
+        url += '&skipStamp=true'
+    }
+    if (skipSign) {
+        url += '&skipSign=true'
+    }
     const res = await axios.get(url);
     return res.data;
 }
@@ -39,7 +48,7 @@ export const {{ compName }}Item = (props: {{ compName }}ItemProps) => {
         let urlToOpen = "";
         if (!pdfData) {
             setLoading(true);
-            const _pdfData: PdfResponse = await loadPdfData(props.id, props.template);
+            const _pdfData: PdfResponse = await loadPdfData(props.id, props.template, props.skipStamp, props.skipSign);
             setPdfData(_pdfData);
             setLoading(false);
             urlToOpen = _pdfData.downloadUrl;
@@ -55,7 +64,7 @@ export const {{ compName }}Item = (props: {{ compName }}ItemProps) => {
         let urlToOpen = "";
         if (!pdfData) {
             setLoading(true);
-            const _pdfData: PdfResponse = await loadPdfData(props.id, props.template);
+            const _pdfData: PdfResponse = await loadPdfData(props.id, props.template, props.skipStamp, props.skipSign);
             setLoading(false);
             setPdfData(_pdfData);
             urlToOpen = _pdfData.printUrl;
@@ -70,7 +79,7 @@ export const {{ compName }}Item = (props: {{ compName }}ItemProps) => {
     const onClick = async () => {
         if (!pdfData) {
             setLoading(true);
-            const _pdfData: PdfResponse = await loadPdfData(props.id, props.template);
+            const _pdfData: PdfResponse = await loadPdfData(props.id, props.template, props.skipStamp, props.skipSign);
             setLoading(false);
             setPdfData(_pdfData);
             setShowPdf(true);
@@ -82,7 +91,7 @@ export const {{ compName }}Item = (props: {{ compName }}ItemProps) => {
     const onSend = async () => {
         if (!pdfData) {
             setLoading(true);
-            const _pdfData: PdfResponse = await loadPdfData(props.id, props.template);
+            const _pdfData: PdfResponse = await loadPdfData(props.id, props.template, props.skipStamp, props.skipSign);
             setLoading(false);
             setPdfData(_pdfData);
             setShowEmail(true);
@@ -129,19 +138,36 @@ export const {{ compName }}Item = (props: {{ compName }}ItemProps) => {
     </Fragment>);
 }
 
+interface ItemProps extends PropsId {
+    skipStamp: boolean,
+    skipSign: boolean,
+}
+
 {% for pdf in pdfs %}
-    export const {{  pdf.compName  }} = (props: PropsId) => {
-        return (<{{ compName }}Item title="{{ pdf.title }}" template="{{ pdf.template }}" id={props.id} />);
+    export const {{  pdf.compName  }} = (props: ItemProps) => {
+        return (<{{ compName }}Item title="{{ pdf.title }}" template="{{ pdf.template }}" id={props.id} skipStamp={props.skipStamp} skipSign={props.skipSign} />);
     }
 {% endfor %}
 
 export const {{ compName }} = (props: PropsId) => {
+    const {t} = useTranslation();
+
+    const [sign, setSign] = useState(true);
+    const toggleSign = () => setSign(!sign);
+
     return (
-    <PdfLinesContainer title="PDF dokumentai">
+    <PdfLinesContainer
+        key={`pdf-container-${sign ? 'sign' : 'no-sign'}`}
+        title={t("PDF dokumentai")}
+        signature={{
+            state: sign,
+            toggleState: toggleSign
+        }}
+    >
         {% for pdf in pdfs %}
             {% if pdf.skipList %}
             {% else %}
-                <{{ pdf.compName }} id={props.id} />
+                <{{ pdf.compName }} id={props.id} skipStamp={!sign} skipSign={!sign} />
             {% endif %}
         {% endfor %}
     </PdfLinesContainer>
