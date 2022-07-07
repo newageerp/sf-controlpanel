@@ -257,8 +257,8 @@ class PropertiesUtils
                 break;
             case 'string_array':
                 return [
-                    "import" => '',
-                    "template" => '<Fragment/>'
+                    "import" => 'import { String } from "@newageerp/data.table.string";',
+                    "template" => '<String value={TP_VALUE.join(", ")}/>'
                 ];
                 break;
             case 'float':
