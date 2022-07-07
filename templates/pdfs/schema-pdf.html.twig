@@ -155,9 +155,14 @@ export const {{ compName }} = (props: PropsId) => {
     const [sign, setSign] = useState(true);
     const toggleSign = () => setSign(!sign);
 
+    let key = "pdf-container-sign";
+    if (!sign) {
+        key = "pdf-container-no-sign";
+    }
+
     return (
     <PdfLinesContainer
-        key={`pdf-container-${sign ? 'sign' : 'no-sign'}`}
+        key={key}
         title={t("PDF dokumentai")}
         signature={{
             state: sign,
