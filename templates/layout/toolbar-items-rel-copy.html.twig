@@ -6,12 +6,15 @@ import { IconList } from '@newageerp/ui.icons.base.icon-list'
 import { useComponentVisible } from '@newageerp/hooks.use-component-visible'
 import { Menu, MenuItem } from '@newageerp/sfs.modal.menu'
 import { UI, UIConfig } from '@newageerp/nae-react-ui'
+import { useTranslation } from 'react-i18next';
 
 interface Props {
     element: any,
 }
 
 export default function {{ compName }}(props: Props) {
+    const {t} = useTranslation();
+
     const { ref, isComponentVisible, setIsComponentVisible } = useComponentVisible(false);
     const toggleComponentVisible = () => setIsComponentVisible(!isComponentVisible);
 
@@ -29,7 +32,8 @@ export default function {{ compName }}(props: Props) {
                 }
             },
             type: "{{ item.type }}",
-            inPopup: {% if item.forcePopup %}true{% else %}false{% endif %}
+            inPopup: {% if item.forcePopup %}true{% else %}false{% endif %},
+            disabled: () => props.element.scopes && props.element.scopes.indexOf(`disable-copy-{{ schema }}-{{ item.target }}`) >= 0,
         }
     {% endfor %}
 
@@ -67,7 +71,12 @@ export default function {{ compName }}(props: Props) {
             {!!isComponentVisible &&
                 <Menu>
                     {% for item in items %}
-                        <MenuItem onClick={() => openLink("{{ item.target }}")}>{{  item.targetTitle }}</MenuItem>
+                        <MenuItem
+                                    onClick={() => openLink("{{ item.target }}")}
+                                    disabled={createOptions["{{ item.target }}"]}
+                        >
+                            {{  item.targetTitle }}
+                        </MenuItem>
                     {% endfor %}
                 </Menu>
             }
