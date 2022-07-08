@@ -112,7 +112,7 @@ class InGeneratorRoutes extends Command
             ];
         }
         if (class_exists('App\Entity\Note')) {
-            $imports[] = 'import NotesPage from "../apps/tasks/NotesPage";';
+            $imports[] = 'import NotesPage from "../apps/notes/NotesPage";';
             $appsComponents[] = [
                 'name' => 'notes',
                 'compName' => 'NotesPage'
