@@ -1,7 +1,7 @@
 import React from 'react'
 {% for component in components %}
 import {{ component.compName }} from './tables-data-source/{{ component.compName }}';
-{% enfor %}
+{% endfor %}
 
 export const TablesDataSource = [
     {% for component in components %}
@@ -10,7 +10,7 @@ export const TablesDataSource = [
         type: '{{ component.type }}',
         comp: {{ component.compName }}
     },
-    {% enfor %}
+    {% endfor %}
 ];
 
 export const tablesDataSourceBySchemaAndType = (schema: string, type: string) => {
