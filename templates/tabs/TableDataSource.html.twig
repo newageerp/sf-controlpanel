@@ -71,7 +71,7 @@ export default function {{ tpCompName }}(props: Props) {
         extraFilter: {},
     }
 
-    const isCreatable = {{ creatable }};
+    const isCreatable = {{ creatable }} && !props.disableCreate;
 
     const quickSearchFields : any = {{ quickSearch|raw }};
     const predefinedFilter : any = {{ filter|raw }};
