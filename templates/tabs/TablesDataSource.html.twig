@@ -1,0 +1,22 @@
+import React from 'react'
+{% for component in components %}
+import {{ component.compName }} from './tables-data-source/{{ component.compName }}';
+{% enfor %}
+
+export const TablesDataSource = [
+    {% for component in components %}
+    {
+        schema: '{{ component.schema }}',
+        type: '{{ component.type }}',
+        comp: {{ component.compName }}
+    },
+    {% enfor %}
+];
+
+export const tablesDataSourceBySchemaAndType = (schema: string, type: string) => {
+    const f = TablesDataSource.filter(i => i.schema === schema && i.type === type);
+    if (f.length > 0) {
+        return f[0].comp;
+    }
+    return undefined;
+}

@@ -39,6 +39,9 @@ class InGeneratorTabs extends Command
         $tableDataSourceRelTemplate = $twig->load('tabs/TableDataSourceRel.html.twig');
         $customColumnFunctionTemplate = $twig->load('tabs/CustomColumnFunction.html.twig');
 
+        $tablesDataSourceTemplate = $twig->load('tabs/TablesDataSource.html.twig');
+        $tablesDataSourceComponents = [];
+
         $tabTableTemplate = file_get_contents(
             __DIR__ . '/templates/tabs/TabTable.txt'
         );
@@ -381,6 +384,12 @@ class InGeneratorTabs extends Command
                     ]
                 );
                 Utils::writeOnChanges($dataSourceFileName, $generatedContent);
+
+                $tablesDataSourceComponents[] = [
+                    'compName' => $dataSourceCompName,
+                    'type' => $tabItem['config']['type'],
+                    'schema' => $tabItem['config']['schema'],
+                ];
             }
         }
 
@@ -388,6 +397,12 @@ class InGeneratorTabs extends Command
         $generatedPath = Utils::generatedPath('tabs');
         $defaultSearchToolbarFile = $generatedPath . '/DefaultSearchToolbar.tsx';
         $contents = $defaultSearchToolbarTemplate->render([]);
+        Utils::writeOnChanges($defaultSearchToolbarFile, $contents);
+
+        // TABLES DATA SOURCE
+        $generatedPath = Utils::generatedPath('tabs');
+        $defaultSearchToolbarFile = $generatedPath . '/TablesDataSource.tsx';
+        $contents = $tablesDataSourceTemplate->render(['components' => $tablesDataSourceComponents]);
         Utils::writeOnChanges($defaultSearchToolbarFile, $contents);
 
         return Command::SUCCESS;
