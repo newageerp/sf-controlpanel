@@ -122,11 +122,13 @@ export default function TasksWidget(props: ContentWidgetProps) {
   return (
     <Fragment>
       <TaskContainer
-        toolbar={{
-          completed: completed,
-          toggleCompleted: toggleCompleted,
-          onNew: createNew
-        }}
+        toolbar={
+          {
+            completed: completed,
+            toggleCompleted: toggleCompleted,
+            onNew: createNew
+          }
+        }
         items={
           data.map((task: IData) => {
             return {
