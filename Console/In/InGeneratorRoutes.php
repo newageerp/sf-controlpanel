@@ -111,6 +111,13 @@ class InGeneratorRoutes extends Command
                 'compName' => 'TasksPage'
             ];
         }
+        if (class_exists('App\Entity\Note')) {
+            $imports[] = 'import NotesPage from "../apps/tasks/NotesPage";';
+            $appsComponents[] = [
+                'name' => 'notes',
+                'compName' => 'NotesPage'
+            ];
+        }
 
         $generatedContent = $editRoutesTemplate->render(
             [
