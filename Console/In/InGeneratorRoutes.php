@@ -104,6 +104,13 @@ class InGeneratorRoutes extends Command
                 'compName' => 'BookmarksPage'
             ];
         }
+        if (class_exists('App\Entity\Task')) {
+            $imports[] = 'import TasksPage from "../apps/tasks/TasksPage";';
+            $appsComponents[] = [
+                'name' => 'tasks',
+                'compName' => 'TasksPage'
+            ];
+        }
 
         $generatedContent = $editRoutesTemplate->render(
             [
