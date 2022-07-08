@@ -29,6 +29,7 @@ interface Props {
     dataProcessing?: (data: any[]) => any[],
     reloadState?: any,
     extraFilter?: any,
+    disableScrollToHeader?: boolean,
 }
 
 export default function {{ tpCompName }}(props: Props) {
@@ -52,7 +53,7 @@ export default function {{ tpCompName }}(props: Props) {
 
     const headerRef = useRef(null)
     const scrollToHeader = () => {
-        if (headerRef && headerRef.current) {
+        if (headerRef && headerRef.current && !props.disableScrollToHeader) {
             // @ts-ignore
             headerRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
         }
