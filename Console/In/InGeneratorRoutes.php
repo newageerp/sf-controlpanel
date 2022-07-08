@@ -118,6 +118,13 @@ class InGeneratorRoutes extends Command
                 'compName' => 'NotesPage'
             ];
         }
+         if (class_exists('App\Entity\FollowUp')) {
+            $imports[] = 'import FollowUpPage from "../apps/follow-up/FollowUpPage";';
+            $appsComponents[] = [
+                'name' => 'follow-up',
+                'compName' => 'FollowUpPage'
+            ];
+        }
 
         $generatedContent = $editRoutesTemplate->render(
             [
