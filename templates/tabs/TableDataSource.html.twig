@@ -31,6 +31,7 @@ interface Props {
     extraFilter?: any,
     disableScrollToHeader?: boolean,
     disableCreate?: boolean,
+    disableSetTitle?: boolean,
 }
 
 export default function {{ tpCompName }}(props: Props) {
@@ -212,7 +213,9 @@ export default function {{ tpCompName }}(props: Props) {
     const dataToRender = dataProcessing(dataResult.data.data);
 
     useEffect(() => {
-        setToolbarTitle('{% if toolbarTitle != "" %}{{ toolbarTitle }}{% else %}{" "}{% endif %}');
+        if (!props.disableSetTitle) {
+            setToolbarTitle('{% if toolbarTitle != "" %}{{ toolbarTitle }}{% else %}{" "}{% endif %}');
+        }
     }, []);
 
     return (
