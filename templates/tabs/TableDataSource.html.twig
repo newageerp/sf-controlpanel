@@ -28,6 +28,7 @@ interface Props {
     navigate?: (schema: string, id: number | string, el: any) => void,
     dataProcessing?: (data: any[]) => any[],
     reloadState?: any,
+    extraFilter?: any,
 }
 
 export default function {{ tpCompName }}(props: Props) {
@@ -181,6 +182,10 @@ export default function {{ tpCompName }}(props: Props) {
             })
         }
 
+        if (!!props.extraFilter) {
+            filter.push(props.extraFilter);
+        }
+
         getData(
             filter,
             dataState.page,
@@ -188,7 +193,7 @@ export default function {{ tpCompName }}(props: Props) {
             dataState.sort.filter((s: SortingItem) => s.key !== ''),
         );
     }
-    useEffect(loadData, [dataState]);
+    useEffect(loadData, [dataState, props.extraFilter]);
 
     useEffect(scrollToHeader, [dataResult.data.data]);
 
