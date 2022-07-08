@@ -118,6 +118,11 @@ class InGeneratorLayout extends Command
         );
         Utils::writeOnChanges($fileName, $generatedContent);
 
+        // Task widget
+        $fileName = Utils::generatedPath('apps/tasks') . '/TasksWidget.tsx';
+        $generatedContent = $twig->load('layout/tasks-widget.html.twig')->render();
+        Utils::writeOnChanges($fileName, $generatedContent);
+
         return Command::SUCCESS;
     }
 }

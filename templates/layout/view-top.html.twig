@@ -1,8 +1,9 @@
 import React from 'react'
 import { ElementToolbar } from '@newageerp/ui.components.element.element-toolbar';
-import { UI, UIConfig } from '@newageerp/nae-react-ui';
+import { UI } from '@newageerp/nae-react-ui';
 import { OpenApi } from '@newageerp/nae-react-auth-wrapper';
 import { useRecoilValue } from 'recoil';
+import TasksWidget from '../../apps/tasks/TasksWidget';
 
 interface Props {
     extraOptions: any,
@@ -24,7 +25,7 @@ export default function ViewTop(props: Props) {
             onRemove={props.extraOptions.onRemove}
 
             tasksContent={
-                <UI.Tasks.Widget
+                <TasksWidget
                     element={props.element}
                     options={
                         {

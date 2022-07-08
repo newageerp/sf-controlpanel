@@ -1,0 +1,153 @@
+import React, { Fragment, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { TaskContainer } from '@newageerp/sfs.apps.tasks.task-container'
+import { TwBackgroundColors } from '@newageerp/ui.styles.tailwind'
+import { ContentWidgetProps } from '@newageerp/nae-react-ui/dist/UI/Widget/NEWidgets'
+import { UI, functions } from '@newageerp/nae-react-ui'
+import { OpenApi } from '@newageerp/nae-react-auth-wrapper'
+
+interface IData {
+  id: number
+  completed: boolean
+  doer: {
+    id: number
+    fullName: string
+  }
+  creator: {
+    id: number
+  }
+  description: string
+  dueDate: string
+  taskCategory: {
+    color: string
+    name: string
+  }
+  repeatPeriod: number
+  files: any
+}
+
+const defObject: IData = {
+  id: 0,
+  completed: false,
+  doer: {
+    id: 0,
+    fullName: ''
+  },
+  creator: {
+    id: 0
+  },
+  description: '',
+  dueDate: '',
+  taskCategory: {
+    color: '',
+    name: ''
+  },
+  repeatPeriod: 0,
+  files: '',
+}
+
+const moduleName = 'task'
+
+export default function TasksWidget(props: ContentWidgetProps) {
+  const { t } = useTranslation()
+  const userState = props.userState
+
+  const { showViewPopup, showEditPopup, closeEditPopup } = UI.Window.useNaeWindow()
+
+  const [getData, getDataParams] = OpenApi.useUList<IData>(
+    moduleName,
+    functions.properties.getKeysFromObject(defObject)
+  )
+  const [saveData, saveDataParams] = OpenApi.useUSave(moduleName)
+  const [completed, setCompleted] = useState(false)
+  const toggleCompleted = () => setCompleted(!completed)
+
+  const onChange = (id: number, completed: boolean) => {
+    if (saveDataParams.loading) {
+      return
+    }
+    saveData({ completed }, id).then(() => {
+      loadData()
+      OpenApi.toast.success(t('Išsaugota'))
+    })
+  }
+
+  const loadData = () => {
+    getData(
+      [
+        {
+          and: [
+            ['i.parentId', '=', props.element.id, true],
+            ['i.parentSchema', 'eq', props.schema, true],
+            ['i.completed', '=', completed, true]
+          ]
+        }
+      ],
+      1,
+      100,
+      [
+        {
+          key: 'i.dueDate',
+          value: completed ? 'DESC' : 'ASC'
+        }
+      ]
+    )
+  }
+
+  useEffect(loadData, [props.element, props.schema, completed])
+
+  const isData = !!getDataParams.data && !!getDataParams.data.data
+
+  const data: IData[] = isData ? getDataParams.data.data : []
+
+  const createNew = () => {
+    showEditPopup({
+      id: 'new',
+      schema: moduleName,
+      onSaveCallback: () => {
+        loadData()
+        closeEditPopup()
+      },
+      newStateOptions: {
+        createOptions: {
+          convert: {
+            parentId: props.element.id,
+            parentSchema: props.schema
+          }
+        }
+      }
+    })
+  }
+
+  return (
+    <Fragment>
+      <TaskContainer
+        toolbar={{
+          completed: completed,
+          toggleCompleted: toggleCompleted,
+          onNew: createNew
+        }}
+        items={
+          data.map((task: IData) => {
+            return {
+              id: task.id,
+              completed: {
+                value: task.completed,
+                onChange: (v) => onChange(task.id, v)
+              },
+              dueTo: task.dueDate,
+              responsible: task.doer.fullName,
+              status: task.taskCategory ? {
+                color: task.taskCategory.color,
+                text: task.taskCategory.name
+              } : undefined,
+              title: task.description,
+              onClick: () => showViewPopup({ id: task.id, schema: moduleName })
+            }
+          })
+        }
+      />
+
+    </Fragment>
+  )
+}

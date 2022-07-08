@@ -5,6 +5,19 @@ import DefaultEditRouteWrapper from "./wrappers/DefaultEditRouteWrapper";
     {{ import|raw }}
 {% endfor %}
 
+
+export function AppsRoutes() {
+    return (
+        <Fragment>
+            {% for component in appsComponents %}
+                <Route path={"/c/apps/{{ component.name}}"}>
+                    <{{ component.compName }} />
+                </Route>
+            {% endfor %}
+        </Fragment>
+    )
+}
+
 export function ListRoutes() {
     return (
         <Fragment>

@@ -96,11 +96,21 @@ class InGeneratorRoutes extends Command
             ];
         }
 
+        $appsComponents = [];
+        if (class_exists('App\Entity\Bookmark')) {
+            $imports[] = 'import BookmarksPage from "../apps/bookmarks/BookmarksPage";';
+            $appsComponents[] = [
+                'name' => 'bookmarks',
+                'compName' => 'BookmarksPage'
+            ];
+        }
+
         $generatedContent = $editRoutesTemplate->render(
             [
                 'imports' => $imports,
                 'listComponents' => $listComponents,
                 'editComponents' => $editComponents,
+                'appsComponents' => $appsComponents,
             ]
         );
         $fileName = $generatedRoutesPath . '/AppRoutes.tsx';
@@ -127,7 +137,7 @@ class InGeneratorRoutes extends Command
         Utils::writeOnChanges($fileName, $generatedContent);
 
         // Custom left menu
-        $customMenuFileName = $customMenuPath.'/LeftMenu.tsx';
+        $customMenuFileName = $customMenuPath . '/LeftMenu.tsx';
         if (!file_exists($customMenuFileName)) {
             $generatedContent = $customLeftMenuTemplate->render();
             Utils::writeOnChanges($customMenuFileName, $generatedContent);
@@ -143,12 +153,12 @@ class InGeneratorRoutes extends Command
         // Custom toolbar
         $customLayoutPath = Utils::customFolderPath('layout');
 
-        $customFileName = $customLayoutPath.'/CustomToolbarBefore.tsx';
+        $customFileName = $customLayoutPath . '/CustomToolbarBefore.tsx';
         if (!file_exists($customFileName)) {
             $generatedContent = $customEmptyTemplate->render(['compName' => 'CustomToolbarBefore']);
             Utils::writeOnChanges($customFileName, $generatedContent);
         }
-        $customFileName = $customLayoutPath.'/CustomToolbarAfter.tsx';
+        $customFileName = $customLayoutPath . '/CustomToolbarAfter.tsx';
         if (!file_exists($customFileName)) {
             $generatedContent = $customEmptyTemplate->render(['compName' => 'CustomToolbarAfter']);
             Utils::writeOnChanges($customFileName, $generatedContent);
