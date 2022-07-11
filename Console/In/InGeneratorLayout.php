@@ -154,7 +154,7 @@ class InGeneratorLayout extends Command
 
             'config/tabs/index.html.twig' => ['tabs', 'index.tsx'],
 
-            'config/widgets/widgets/base-entity.widgets.html.twig' => ['widgets/widgets', 'base-entity.widgets.tsx',
+            'config/widgets/widgets/base-entity.widgets.html.twig' => ['widgets/widgets', 'base-entity.widgets.tsx'],
             'config/widgets/index.html.twig' => ['widgets', 'index.tsx'],
         ];
 
