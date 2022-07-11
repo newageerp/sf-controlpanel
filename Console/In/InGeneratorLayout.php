@@ -148,14 +148,14 @@ class InGeneratorLayout extends Command
         }
 
         $templates = [
-            'config/fields/edit.html.twig' => ['fields', 'edit.tsx'],
-            'config/fields/fieldDependencies.html.twig' => ['fields', 'fieldDependencies.tsx'],
-            'config/fields/view.html.twig' => ['fields', 'view.tsx'],
+            'config/fields/edit.html.twig' => ['fields', 'edit'],
+            'config/fields/fieldDependencies.html.twig' => ['fields', 'fieldDependencies'],
+            'config/fields/view.html.twig' => ['fields', 'view'],
 
-            'config/tabs/index.html.twig' => ['tabs', 'index.tsx'],
+            'config/tabs/index.html.twig' => ['tabs', 'index'],
 
-            'config/widgets/widgets/base-entity.widgets.html.twig' => ['widgets/widgets', 'base-entity.widgets.tsx'],
-            'config/widgets/index.html.twig' => ['widgets', 'index.tsx'],
+            'config/widgets/widgets/base-entity.widgets.html.twig' => ['widgets/widgets', 'base-entity.widgets'],
+            'config/widgets/index.html.twig' => ['widgets', 'index'],
         ];
 
         foreach ($templates as $target) {
