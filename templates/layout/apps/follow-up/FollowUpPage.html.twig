@@ -115,10 +115,12 @@ export default function FollowUpPage() {
     return (
         <Fragment>
             <FollowupPageToolbar
-                period={{
+                period={
+                {
                     value: period.toString(),
                     onChange: (v) => setPeriod(parseInt(v, 10))
-                }}
+                }
+                }
             />
 
             {schemaComponents.map((comp: any, idX: number) => {
