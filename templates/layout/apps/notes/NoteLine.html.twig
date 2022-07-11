@@ -1,0 +1,251 @@
+import React, { Fragment, useState } from "react";
+import { useTranslation } from "react-i18next";
+import NoteContentForm from "./NoteContentForm";
+import parse from "html-react-parser";
+import { useSelector } from "react-redux";
+import { getSelectorForSchema } from "../../../UserComponents/ModelsCacheData/ModelFields";
+import { UI } from "@newageerp/nae-react-ui";
+import { useRecoilValue } from "recoil";
+import { OpenApi } from "@newageerp/nae-react-auth-wrapper";
+import NoteEditForm from "./NoteEditForm";
+import { SquareButton } from "@newageerp/ui.buttons.base.square-button";
+import { BaseButtonSize } from "@newageerp/ui.buttons.base.button";
+import { useComponentVisible } from "@newageerp/hooks.use-component-visible";
+import {
+  TwBackgroundColors,
+  TwBorderColors,
+  TwTextColors,
+} from "@newageerp/ui.styles.tailwind";
+import { IconList } from "@newageerp/ui.icons.base.icon-list";
+import { IconType } from "@newageerp/ui.icons.base.icon";
+import { Menu, MenuItem } from "@newageerp/sfs.modal.menu";
+
+interface IData {
+  id: number;
+  notifyAccept: any;
+  notify: any;
+  creator: {
+    id: number;
+    fullName: string;
+  };
+  createdAt: string;
+  content: string;
+  parentId: number;
+  parentSchema: string;
+}
+
+interface Props {
+  doReload: () => void;
+  showParentLink?: boolean;
+  note: IData; // NOTE
+  parentElementCallack?: (parentId: number, parentSchema: string) => any;
+}
+
+const moduleName = "note";
+
+export default function NoteLine(props: Props) {
+  const { ref, isComponentVisible, setIsComponentVisible } =
+    useComponentVisible(false);
+  const toggleComponentVisible = () =>
+    setIsComponentVisible(!isComponentVisible);
+
+  const { showViewPopup } = UI.Window.useNaeWindow();
+
+  const usersSelector = getSelectorForSchema("user");
+  const users = useSelector((state) => usersSelector(state));
+
+  const { note, doReload } = props;
+  const userState: any = useRecoilValue(OpenApi.naeUserState);
+  const { t } = useTranslation();
+  const [showAnswerForm, setShowAnswerForm] = useState(false);
+  const [showEditForm, setShowEditForm] = useState(false);
+
+  const toggleShowPopup = () =>
+    showViewPopup({
+      id: note.parentId,
+      schema: note.parentSchema,
+    });
+
+  const [saveData, saveDataParams] = OpenApi.useUSave(moduleName);
+  const hideNote = () => {
+    if (saveDataParams.loading) return;
+
+    saveData(
+      {
+        notifyAccept: [...note.notifyAccept, userState.id],
+      },
+      note.id
+    ).then(() => {
+      doReload();
+    });
+  };
+
+  const showParentLink =
+    props.showParentLink && note.parentId > 0 && !!note.parentSchema;
+
+  const extraClassName = [];
+
+  const isCreator = note.creator && note.creator.id === userState.id;
+
+  // if (isCreator) {
+  //   extraClassName.push("float-right");
+  // }
+
+  const forMe =
+    note.notify.indexOf(userState.id) >= 0 ||
+    note.notify.indexOf(userState.permissionGroup) >= 0;
+  const unread = forMe && note.notifyAccept.indexOf(userState.id) === -1;
+
+  if (unread) {
+    extraClassName.push(`${TwBackgroundColors.sky50} "border border-sky"`);
+  } else if (forMe) {
+    extraClassName.push("border " + TwBorderColors.sky);
+  } else {
+    extraClassName.push("border " + TwBorderColors.slate200);
+  }
+
+  const parentElementName = t("Atidaryti elementą");
+  // if (!!note.salesOrder) {
+  //   parentElementName =
+  //     note.salesOrder.serialNumber + " (" + note.salesOrder.soClientName + ")";
+  // }
+  // if (!!note.cargo) {
+  //   parentElementName = note.cargo.serialNumber + " (" + note.cargo.soClientJson.clientFilialName + ")";
+  // }
+  // if (!!note.calculation) {
+  //   parentElementName = note.calculation.serialNumber;
+  // }
+
+  const isCanAnswer = !isCreator && !!note.creator;
+  const isCanEdit = isCreator && (!note.notify || note.notify.length === 0);
+
+  return (
+    <div key={"note-" + note.id} className={"flex w-full"}>
+      {isCreator && <span style={{ width: "10%" }}></span>}
+      <div
+        style={{ width: "90%" }}
+        className={"px-1 py-1  rounded-sm " + extraClassName.join(" ")}
+      >
+        <div className={"flex w-full items-center gap-1"}>
+          <i className={"fad fa-comments-alt text-nsecondary"} />
+          <div className={"text-gray-400 text-xs"}>{note.createdAt}</div>
+          <div className={"text-gray-600 text-xs flex-grow"}>
+            {note.creator ? note.creator.fullName : "Sistema"}
+            {note.notify.length > 0 && (
+              <Fragment>
+                {" -> "}
+                {note.notify.map((userId: number, index: number) => {
+                  const userData = users.filter(
+                    (user: any) => user.id === userId
+                  );
+                  if (userData.length > 0) {
+                    return (
+                      <Fragment key={"note-" + note.id + "-" + index}>
+                        {index > 0 ? ", " : ""}
+                        {userData[0].fullName}
+                      </Fragment>
+                    );
+                  }
+                  return (
+                    <Fragment key={"note-" + note.id + "-" + index}>
+                      {index > 0 ? ", " : ""}
+                      {t("Nežinomas")}
+                    </Fragment>
+                  );
+                })}
+              </Fragment>
+            )}
+          </div>
+          {showParentLink && (
+            <SquareButton
+              size={BaseButtonSize.xs}
+              onClick={toggleShowPopup}
+              bgColor={"transparent"}
+              textColor={TwTextColors.sky}
+              className={"underline hover:no-underline"}
+            >
+              {props.parentElementCallack
+                ? props.parentElementCallack(note.parentId, note.parentSchema)
+                : parentElementName}
+            </SquareButton>
+          )}
+
+          {unread && (
+            <SquareButton
+              size={BaseButtonSize.xs}
+              bgColor={TwBackgroundColors.sky}
+              onClick={hideNote}
+            >
+              {saveDataParams.loading ? t("Siunčiama") : t("Perskaityta")}
+            </SquareButton>
+          )}
+
+          {(isCanEdit || isCanAnswer) && (
+            <span className="relative" ref={ref}>
+              <SquareButton
+                bgColor={TwBackgroundColors.slate50}
+                onClick={toggleComponentVisible}
+                icon={{
+                  icon: "circle-ellipsis-vertical",
+                  type: IconType.Solid,
+                  className: TwTextColors.slate400,
+                }}
+              />
+              {!!isComponentVisible && (
+                <Menu>
+                  {isCanEdit && (
+                    <MenuItem onClick={() => setShowEditForm(true)}>
+                      {t("Redaguoti")}
+                    </MenuItem>
+                  )}
+                  {isCanAnswer && (
+                    <MenuItem onClick={() => setShowAnswerForm(true)}>
+                      {t("Atsakyti")}
+                    </MenuItem>
+                  )}
+                </Menu>
+              )}
+            </span>
+          )}
+        </div>
+        <div className={"w-full text-sm"}>{parse(note.content)}</div>
+        {showAnswerForm && (
+          <div className={"w-full"}>
+            <NoteContentForm
+              options={{}}
+              parentElementId={note.parentId}
+              parentSchema={note.parentSchema}
+              reloadData={() => {
+                if (unread) {
+                  hideNote();
+                } else {
+                  props.doReload();
+                }
+                setShowAnswerForm(false);
+              }}
+              defaultSelected={[
+                { value: note.creator.id, label: note.creator.fullName },
+              ]}
+              defaultContent={`<blockquote>${note.content}</blockquote><br/>`}
+            />
+          </div>
+        )}
+        {showEditForm && (
+          <div className={"w-full"}>
+            <NoteEditForm
+              options={{}}
+              noteId={note.id}
+              reloadData={() => {
+                props.doReload();
+                setShowEditForm(false);
+              }}
+              defaultSelected={note.notify}
+              defaultContent={note.content}
+            />
+          </div>
+        )}
+      </div>
+      {!isCreator && <span style={{ width: "10%" }}></span>}
+    </div>
+  );
+}

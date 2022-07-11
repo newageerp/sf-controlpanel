@@ -1,0 +1,80 @@
+import React, { useState, Fragment } from "react";
+import { useTranslation } from "react-i18next";
+import { RichEditor } from "@newageerp/ui.form.base.rich-editor";
+import { OpenApi } from "@newageerp/nae-react-auth-wrapper";
+import NotesContentMembers from "./NotesContentMembers";
+import { SquareButton } from "@newageerp/ui.buttons.base.square-button";
+import { TwBackgroundColors } from "@newageerp/ui.styles.tailwind";
+
+interface Props {
+  parentElementId: number;
+  parentSchema: string;
+  reloadData: () => void;
+  options: any;
+  defaultSelected?: any[];
+  defaultContent?: string;
+}
+
+const moduleName = "note";
+
+export default function NoteContentForm(props: Props) {
+  const [selected, setSelected] = useState<any>(
+    props.defaultSelected ? props.defaultSelected : []
+  );
+
+  const [content, setContent] = useState(
+    props.defaultContent ? props.defaultContent : ""
+  );
+
+  const [saveData, saveDataParams] = OpenApi.useUSave(moduleName);
+
+  const { t } = useTranslation();
+
+  const doSend = () => {
+    if (saveDataParams.loading) {
+      return;
+    }
+    saveData(
+      {
+        parentId: props.parentElementId,
+        parentSchema: props.parentSchema,
+        content,
+        notify: selected.map((opt: any) => opt.value),
+      },
+      "new"
+    ).then(() => {
+      setContent("");
+      setSelected([]);
+      props.reloadData();
+    });
+  };
+  return (
+    <div className="px-2">
+      <RichEditor
+      className="mb-2"
+        setValue={setContent}
+        value={content}
+        extraContent={
+          !!content && (
+            <div className={"p-2 flex items-center"}>
+              <span className={"w-72"}>
+                <NotesContentMembers
+                  selected={selected}
+                  setSelected={setSelected}
+                />
+              </span>
+              <span className="flex-grow"></span>
+              <SquareButton
+                bgColor={TwBackgroundColors.sky}
+                onClick={doSend}
+                className={"w-32"}
+              >
+                {t("Siųsti")}
+              </SquareButton>
+            </div>
+          )
+        }
+      />
+    </div>
+  );
+}

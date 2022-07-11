@@ -1,0 +1,145 @@
+import React, { useState, useEffect, Fragment } from 'react'
+import { FollowupPageToolbar } from '@newageerp/sfs.apps.followup.followup-page-toolbar'
+import { useTranslation } from 'react-i18next';
+import { OpenApi } from '@newageerp/nae-react-auth-wrapper';
+import { functions, UI } from '@newageerp/nae-react-ui';
+import moment from 'moment';
+import { tablesDataSourceBySchemaAndType } from '../../tabs/TablesDataSource';
+import { useRecoilState } from 'recoil';
+import { UserSpaceWrapperToolbarState } from '../../layout/toolbar/UserSpaceWrapperToolbar';
+import { TitleOverTable } from '@newageerp/ui.texts.base.title-over-table'
+
+export default function FollowUpPage() {
+    const { t } = useTranslation();
+    const [period, setPeriod] = useState(0);
+    const [, setToolbarTitle] = useRecoilState(UserSpaceWrapperToolbarState)
+
+    const [getFollowUps, getFollowUpsData] = OpenApi.useUList("follow-up", ['parentId', 'onDate', 'parentSchema']);
+    const [listSchema, setListSchema] = useState<any>()
+
+    const { showViewPopup } = UI.Window.useNaeWindow()
+
+    const loadFollowUps = () => {
+        let datesFilter = {};
+        if (period === 0) {
+            datesFilter = {
+                "or": [
+                    ['i.onDate', 'IS_NULL', '', true],
+                    ['i.onDate', 'lte', moment().format("YYYY-MM-DD 23:59:59"), true],
+                ]
+            };
+        } else if (period === 1) {
+            datesFilter = {
+                "and": [
+                    ['i.onDate', 'gte', moment().add(1, 'days').format("YYYY-MM-DD 00:00:00"), true],
+                    ['i.onDate', 'lte', moment().add(1, 'days').format("YYYY-MM-DD 23:59:59"), true],
+                ]
+            };
+        } else if (period === 2) {
+            datesFilter = {
+                "and": [
+                    ['i.onDate', 'lte', moment().add(7, 'days').format("YYYY-MM-DD 23:59:59"), true],
+                ]
+            };
+        } else if (period === 3) {
+            datesFilter = {
+                "and": [
+                    ['i.onDate', 'lte', moment().add(30, 'days').format("YYYY-MM-DD 23:59:59"), true],
+                ]
+            };
+        } else if (period === 4) {
+            datesFilter = {
+                "and": [
+                    ['i.onDate', 'lte', moment().format("YYYY-MM-DD 00:00:0"), true],
+                ]
+            };
+        }
+
+        getFollowUps(
+            [
+                {
+                    "and": [
+                        ['i.creator', '=', 'CURRENT_USER', true],
+                    ]
+                },
+                datesFilter
+            ],
+            1,
+            10000
+        )
+    }
+
+    useEffect(loadFollowUps, [period]);
+
+    useEffect(() => {
+        let _listSchema: any = {}
+
+        getFollowUpsData.data.data.forEach((follow: any) => {
+            if (!(follow.parentSchema in _listSchema)) {
+                _listSchema[follow.parentSchema] = []
+            }
+            _listSchema[follow.parentSchema].push(follow.parentId)
+        })
+
+        setListSchema(_listSchema)
+    }, [getFollowUpsData.data])
+
+    const schemas = listSchema ? Object.keys(listSchema) : []
+
+    const schemaComponents = schemas.map(s => {
+        let bookmarksComp = tablesDataSourceBySchemaAndType(s, 'follow-up');
+        if (!bookmarksComp) {
+            bookmarksComp = tablesDataSourceBySchemaAndType(s, 'main');
+        }
+
+        const els: any = listSchema[s]
+        const idsMap = els.filter((f: number) => f > 0)
+        const extraFilter = {
+            and: [['i.id', 'in', idsMap, true]]
+        }
+
+        return (
+            {
+                comp: bookmarksComp,
+                schema: s,
+                extraFilter: extraFilter,
+                title: functions.schemas.getSchemaTitle(s, true)
+            }
+        )
+    })
+
+    useEffect(() => {
+        setToolbarTitle(t('Sekami'));
+    }, []);
+
+    return (
+        <Fragment>
+            <FollowupPageToolbar
+                period={{
+                    value: period.toString(),
+                    onChange: (v) => setPeriod(parseInt(v, 10))
+                }}
+            />
+
+            {schemaComponents.map((comp: any, idX: number) => {
+                const Comp = comp.comp;
+                return (
+                    <Fragment key={`follow-up-${idX}-${comp.schema}`}>
+                        <TitleOverTable>{comp.title}</TitleOverTable>
+
+                        <Comp
+                            extraFilter={comp.extraFilter}
+                            navigate={(schema: string, id: number | string) => {
+                                showViewPopup({ schema, id })
+                            }}
+                            disableScrollToHeader={true}
+                            disableCreate={true}
+                            disableSetTitle={true}
+                        />
+
+                    </Fragment>
+                )
+            })}
+        </Fragment>
+    )
+}

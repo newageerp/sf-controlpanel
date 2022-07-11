@@ -1,0 +1,176 @@
+import React, { useState, useEffect, Fragment } from "react";
+import { useTranslation } from "react-i18next";
+import parse from "html-react-parser";
+import { ContentWidgetProps } from "@newageerp/nae-react-ui/dist/UI/Widget/NEWidgets";
+import { OpenApi } from "@newageerp/nae-react-auth-wrapper";
+import { functions } from "@newageerp/nae-react-ui";
+import { LogoLoader } from "@newageerp/ui.loaders.logo-loader";
+import { Table, Td, Th } from "@newageerp/ui.table.base.table";
+import { Popup } from "@newageerp/ui.popups.base.popup";
+import { TwoLinesDatetime } from "@newageerp/data.view.date.base.two-lines-datetime";
+
+interface Props extends ContentWidgetProps {
+  toolbar?: any;
+}
+
+interface IData {
+  id: number;
+  createdAt: string;
+  subject: string;
+  creator: {
+    fullName: string;
+  };
+  recipient: string;
+  parentId: number;
+  parentSchema: string;
+  html: string;
+  lastStatus: string;
+}
+
+const defObject: IData = {
+  id: 0,
+  createdAt: "",
+  subject: "",
+  creator: {
+    fullName: "",
+  },
+  recipient: "",
+  parentId: 0,
+  parentSchema: "",
+  html: "",
+  lastStatus: "",
+};
+
+const moduleName = "mail";
+
+export default function MailsContent(props: Props) {
+  const { t } = useTranslation();
+
+  const [getData, getDataParams] = OpenApi.useUList<IData>(
+    moduleName,
+    functions.properties.getKeysFromObject(defObject)
+  );
+  const [getFiles, getFilesParams] = OpenApi.useURequest("NAEfilesList");
+
+  const [files, setFiles] = useState<any>([]);
+  const getFileName = (id: number) => {
+    const _filesF = files.filter((f: any) => f.id === id);
+    if (_filesF.length > 0) {
+      return _filesF[0].filename;
+    }
+    return "";
+  };
+
+  const folder = props.schema + "/" + props.element.id + "/%";
+
+  const [popupMail, setPopupMail] = useState<IData | null>(null);
+
+  const loadData = () => {
+    getFiles({ folder }).then((f: any) => {
+      const sFiles = !!f && !!f.data && !!f.data.data ? f.data.data : [];
+      setFiles(sFiles);
+      const fileIds = [-1, ...sFiles.map((_f: any) => _f.id)];
+
+      getData(
+        [
+          {
+            or: [
+              {
+                and: [
+                  ["i.parentId", "=", props.element.id, true],
+                  ["i.parentSchema", "equal", props.schema, true],
+                ],
+              },
+              {
+                and: [
+                  ["i.parentId", "in", fileIds, true],
+                  ["i.parentSchema", "equal", "file", true],
+                ],
+              },
+            ],
+          },
+        ],
+        1,
+        99999,
+        [{ key: "i.id", value: "DESC" }]
+      );
+    });
+  };
+  useEffect(loadData, []);
+
+  const data =
+    !!getDataParams && !!getDataParams.data && !!getDataParams.data.data
+      ? getDataParams.data.data
+      : [];
+  const isLoading =
+    (!!getDataParams && getDataParams.loading) ||
+    (!!getFilesParams && getFilesParams.loading);
+
+  return (
+    <Fragment>
+      {!!props.toolbar && props.toolbar}
+
+      {isLoading ? (
+        <LogoLoader />
+      ) : (
+        <div className={"px-4 bg-white py-2 rounded-sm"}>
+          <Table
+            thead={
+              <thead>
+                <tr>
+                  <Th>{t("Laikas")}</Th>
+                  <Th>{t("Failas")}</Th>
+                  <Th>{t("Tema")}</Th>
+                  <Th>{t("Siuntėjas")}</Th>
+                  <Th>{t("Gavėjas")}</Th>
+                  <Th>{t("Paskutinis statusas")}</Th>
+                </tr>
+              </thead>
+            }
+            tbody={
+              <tbody>
+                {data.map((mail: IData) => {
+                  return (
+                    <tr id={`mail-${mail.id}`}>
+                      <Td className="whitespace-nowrap">
+                        <button onClick={() => setPopupMail(mail)}>
+                          <TwoLinesDatetime value={mail.createdAt} />
+                        </button>
+                      </Td>
+                      <Td>
+                        {mail.parentSchema === "file"
+                          ? getFileName(mail.parentId)
+                          : ""}
+                      </Td>
+                      <Td>{mail.subject}</Td>
+                      <Td>{mail.creator ? mail.creator.fullName : ""}</Td>
+                      <Td>{mail.recipient}</Td>
+                      <Td>
+                        {mail.lastStatus in possibleTranslates
+                          ? possibleTranslates[mail.lastStatus]
+                          : mail.lastStatus}
+                      </Td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            }
+          />
+        </div>
+      )}
+      {!!popupMail && (
+        <Popup onClose={() => setPopupMail(null)} header={popupMail.subject}>
+          <div>{parse(popupMail.html)}</div>
+        </Popup>
+      )}
+    </Fragment>
+  );
+}
+
+const possibleTranslates: any = {
+  sent: "Išsiųstas",
+  open: "Atidarė",
+  bounce: "Grąžintas",
+  spam: "SPAM",
+  blocked: "Blokuotas",
+};

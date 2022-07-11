@@ -1,0 +1,124 @@
+import { OpenApi } from "@newageerp/nae-react-auth-wrapper";
+import React, { useEffect, Fragment } from "react";
+import { UI, functions } from "@newageerp/nae-react-ui";
+import { ContentWidgetProps } from "@newageerp/nae-react-ui/dist/UI/Widget/NEWidgets";
+import { useRecoilValue } from "recoil";
+import NoteContentForm from "./NoteContentForm";
+import NoteLine from "./NoteLine";
+
+const moduleName = "note";
+
+interface Props extends ContentWidgetProps {
+  toolbar?: any;
+  showOnlyMy?: boolean;
+}
+
+interface INote {
+  id: number;
+  notifyAccept: any;
+  notify: any;
+  creator: {
+    id: number;
+    fullName: string;
+  };
+  createdAt: string;
+  content: string;
+  parentId: number;
+  parentSchema: string;
+}
+const defObject: INote = {
+  id: 0,
+  notifyAccept: 0,
+  notify: 0,
+  creator: {
+    id: 0,
+    fullName: "",
+  },
+  createdAt: "",
+  content: "",
+  parentId: 0,
+  parentSchema: "",
+};
+
+export default function NotesContent(props: Props) {
+  const userState: any = useRecoilValue(OpenApi.naeUserState);
+
+  const [getData, getDataParams] = OpenApi.useUList<INote>(
+    moduleName,
+    functions.properties.getKeysFromObject(defObject)
+  );
+
+  const loadData = () => {
+    getData(
+      [
+        {
+          and: [
+            ["i.parentId", "=", props.element.id, true],
+            ["i.parentSchema", "eq", props.schema, true],
+          ],
+        },
+      ],
+      1,
+      1000,
+      [{ key: "i.id", value: "desc" }]
+    );
+  };
+  useEffect(loadData, []);
+
+  useEffect(() => {
+    const action = "note-" + props.element.id + "-" + props.schema;
+    UI.Socket.Service.addCallback(action, action + "-el", loadData);
+    return () => {
+        UI.Socket.Service.removeCallback(action, action + "-el");
+    };
+  }, [props.element.id, props.schema]);
+
+  const data: INote[] = getDataParams.data.data;
+
+  const dataForRender = !props.showOnlyMy
+    ? data
+    : data.filter(
+        (el) =>
+          el.notify.indexOf(userState.id) >= 0 ||
+          el.notify.indexOf(userState.permissionGroup) >= 0 ||
+          (!!el.creator &&
+            el.creator.id === userState.id &&
+            el.notify.length === 0)
+      );
+
+  return (
+    <Fragment>
+      {!!props.toolbar && props.toolbar}
+      <NoteContentForm
+        parentElementId={props.element.id}
+        reloadData={loadData}
+        parentSchema={props.schema}
+        options={props.options}
+        defaultSelected={
+          props.options.defaultSelected
+            ? props.options.defaultSelected
+            : undefined
+        }
+      />
+
+      <div className={""}>
+        {data.length > 0 && (
+          <Fragment>
+            <div className={"w-full px-4 space-y-2"}>
+              {dataForRender.map((note: INote) => {
+                return (
+                  <NoteLine
+                    note={note}
+                    doReload={loadData}
+                    key={"note-line-" + note.id}
+                  />
+                );
+              })}
+              <div className={"clear-both"}></div>
+            </div>
+          </Fragment>
+        )}
+      </div>
+    </Fragment>
+  );
+}

@@ -1,0 +1,41 @@
+import React, { useState } from 'react'
+import { Route } from 'react-router-dom';
+import { LoginV2 } from "@newageerp/ui.components.auth.login.login-v2";
+
+export default function AuthLogin() {
+    const [wrongLogin, setWrongLogin] = useState(false);
+
+    const onSubmit = (email: string, password: string) => {
+        setWrongLogin(false);
+
+        var requestOptions = {
+            body: JSON.stringify({
+                email: email,
+                password: password,
+            }),
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        };
+
+        fetch("/app/auth/login", requestOptions)
+            .then(function (res) {
+                return res.json();
+            })
+            .then((res) => {
+                if (res.token) {
+                    window.localStorage.setItem("token", res.token);
+                    window.location.href = '/';
+                } else {
+                    setWrongLogin(true);
+                }
+            });
+    };
+
+    return (
+        <Route path={"/login"}>
+            <LoginV2 onSubmit={onSubmit} clientLogo={"/logo.png"} wrongCredentials={wrongLogin} />
+        </Route>
+    )
+}

@@ -1,0 +1,145 @@
+import { UIConfig, functions, UI } from "@newageerp/nae-react-ui";
+import React, { Fragment, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { NotesPageToolbar } from '@newageerp/sfs.apps.notes.notes-page-toolbar'
+import { useRecoilState, useRecoilValue } from "recoil";
+import { OpenApi } from "@newageerp/nae-react-auth-wrapper";
+import { UserSpaceWrapperToolbarState } from "../../layout/toolbar/UserSpaceWrapperToolbar";
+import { LogoLoader } from "@newageerp/ui.loaders.logo-loader";
+import NotesNameResolver from "../../../UserComponents/Notes/NotesNameResolver";
+import { PageContainer } from '@newageerp/ui.paging.base.page-container'
+import NoteLine from "./NoteLine";
+
+const pageSize = 20;
+
+interface IData {
+    id: number;
+    notifyAccept: any;
+    notify: any;
+    creator: {
+        id: number;
+        fullName: string;
+    };
+    createdAt: string;
+    content: string;
+    parentId: number;
+    parentSchema: string;
+}
+
+const defObject: IData = {
+    id: 0,
+    notifyAccept: "",
+    notify: "",
+    creator: {
+        id: 0,
+        fullName: "",
+    },
+    createdAt: "",
+    content: "",
+    parentId: 0,
+    parentSchema: "",
+};
+
+
+export default function NotesPageContent() {
+    const [, setToolbarTitle] = useRecoilState(UserSpaceWrapperToolbarState)
+    const userState: any = useRecoilValue(OpenApi.naeUserState);
+
+    const [readAllR] = UIConfig.useURequest('NAENotesReadAll');
+
+    const [getData, getDataParams] = UIConfig.useUList('note', functions.properties.getKeysFromObject(defObject));
+    const [pages, setPages] = useState(1);
+    const [activePage, setActivePage] = useState(1);
+
+    const [activeState, setActiveState] = useState(0);
+
+    const { t } = useTranslation();
+
+    const readAll = () => {
+        readAllR({});
+        UIConfig.toast.success(UIConfig.texts.taskSentMessage)
+    }
+
+    const loadData = () => {
+        const filters: any = [
+            {
+                "and": [
+                    {
+                        "or": [
+                            ['i.notify', 'JSON_CONTAINS', userState.id.toString(), true],
+                            ['i.notify', 'JSON_CONTAINS', `"${userState.permissionGroup}"`, true],
+                        ]
+                    }
+
+                ]
+            }
+        ];
+        if (activeState === 0) {
+            filters[0].and.push(['i.notifyAccept', 'JSON_NOT_CONTAINS', userState.id.toString(), true]);
+        }
+        getData(filters, activePage, 20, [{ key: 'i.id', value: 'DESC' }])
+    };
+    useEffect(loadData, [activeState, activePage]);
+
+    const data: IData[] =
+        getDataParams && getDataParams.data && getDataParams.data.data
+            ? getDataParams.data.data
+            : [];
+
+    useEffect(() => {
+        if (getDataParams.data) {
+            setPages(Math.ceil(getDataParams.data.records / pageSize));
+        }
+    }, [getDataParams.data]);
+
+    useEffect(() => {
+        setToolbarTitle(t('Komentarai'));
+    }, []);
+
+    const parentElementCallack = (parentId: number, parentSchema: string) => {
+        return (<NotesNameResolver parentId={parentId} parentSchema={parentSchema} />)
+    }
+
+    return (
+        <Fragment>
+            <NotesPageToolbar
+                onReadAll={readAll}
+                onReload={loadData}
+                read={{
+                    value: activeState.toString(),
+                    onChange: (v) => setActiveState(parseInt(v, 10))
+                }}
+            />
+            {getDataParams.loading ? (
+                <LogoLoader />
+            ) : (
+                <Fragment>
+                    {!!data && (
+                        <Fragment>
+                            <div className={"w-full space-y-2"}>
+                                {data.map((note: IData) => {
+                                    return (
+                                        <NoteLine
+                                            key={"note-l-" + note.id}
+                                            note={note}
+                                            showParentLink={true}
+                                            doReload={loadData}
+                                            parentElementCallack={parentElementCallack}
+                                        />
+                                    );
+                                })}
+                                <div className={"clear-both"}></div>
+                            </div>
+                        </Fragment>
+                    )}
+                </Fragment>
+            )}
+            <PageContainer
+                activePage={activePage}
+                pages={pages}
+                setActivePage={setActivePage}
+            />
+
+        </Fragment>
+    );
+}

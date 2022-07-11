@@ -34,7 +34,7 @@ class InGeneratorLayout extends Command
 
         $widgetsTemplate = $twig->load('layout/generated-widgets.html.twig');
         $widgetComponents = [];
-        
+
         // view top
         $viewTopTemplate = $twig->load('layout/view-top.html.twig');
         $generatedContent = $viewTopTemplate->render();
@@ -118,10 +118,30 @@ class InGeneratorLayout extends Command
         );
         Utils::writeOnChanges($fileName, $generatedContent);
 
-        // Task widget
-        $fileName = Utils::generatedPath('apps/tasks') . '/TasksWidget.tsx';
-        $generatedContent = $twig->load('layout/tasks-widget.html.twig')->render();
-        Utils::writeOnChanges($fileName, $generatedContent);
+        $templates = [
+            'layout/apps/bookmarks/BookmarksPage.html.twig' => ['apps/bookmarks', 'BookmarksPage'],
+            'layout/apps/eventshistory/EventsHistoryWidget.html.twig' => ['apps/eventshistory', 'EventsHistoryWidget'],
+            'layout/apps/follow-up/FollowUpPage.html.twig' => ['apps/follow-up', 'FollowUpPage'],
+            'layout/apps/mails/MailsContent.html.twig' => ['apps/mails', 'MailsContent'],
+
+            'layout/apps/notes/NoteContentForm.html.twig' => ['apps/notes', 'NoteContentForm'],
+            'layout/apps/notes/NoteEditForm.html.twig' => ['apps/notes', 'NoteEditForm'],
+            'layout/apps/notes/NoteLine.html.twig' => ['apps/notes', 'NoteLine'],
+            'layout/apps/notes/NotesContent.html.twig' => ['apps/notes', 'NotesContent'],
+            'layout/apps/notes/NotesContentMembers.html.twig' => ['apps/notes', 'NotesContentMembers'],
+            'layout/apps/notes/NotesPage.html.twig' => ['apps/notes', 'NotesPage'],
+
+            'layout/apps/tasks/TasksPage.html.twig' => ['apps/tasks', 'TasksPage'],
+            'layout/apps/tasks/TasksWidget.html.twig' => ['apps/tasks', 'TasksWidget'],
+
+            'layout/auth/AuthLogin.html.twig' => ['auth', 'AuthLogin'],
+        ];
+
+        foreach ($templates as $template => $target) {
+            $fileName = Utils::generatedPath($target[0]) . '/'.$target[1].'.tsx';
+            $generatedContent = $twig->load($template)->render();
+            Utils::writeOnChanges($fileName, $generatedContent);
+        }
 
         return Command::SUCCESS;
     }

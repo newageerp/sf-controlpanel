@@ -1,0 +1,90 @@
+import React, { useState } from "react";
+
+import NotesContentMembers from "./NotesContentMembers";
+
+import { useTranslation } from "react-i18next";
+import { OpenApi } from "@newageerp/nae-react-auth-wrapper";
+import { UI } from "@newageerp/nae-react-ui";
+import { RichEditor } from "@newageerp/ui.form.base.form-pack";
+import { TwBackgroundColors } from "@newageerp/ui.styles.tailwind";
+import { SquareButton } from '@newageerp/ui.buttons.base.square-button';
+
+interface Props {
+  noteId: number;
+  reloadData: () => void;
+  options: any;
+  defaultSelected?: any[];
+  defaultContent?: string;
+}
+
+const moduleName = "note";
+
+export default function NoteEditForm(props: Props) {
+  const [selected, setSelected] = useState<any>(
+    props.defaultSelected ? props.defaultSelected : []
+  );
+
+  const [content, setContent] = useState(
+    props.defaultContent ? props.defaultContent : ""
+  );
+
+  const [saveData, saveDataParams] = OpenApi.useUSave(moduleName);
+
+  const { t } = useTranslation();
+
+  const doSend = () => {
+    if (saveDataParams.loading) {
+      return;
+    }
+    saveData(
+      {
+        content,
+        notify: selected.map((opt: any) => opt.value),
+      },
+      props.noteId
+    ).then(doCancel);
+  };
+
+  const doCancel = () => {
+    setContent("");
+    setSelected([]);
+    props.reloadData();
+  };
+
+  return (
+    <div className={"space-y-2"}>
+      {!!saveDataParams.error && (
+        <div>
+          <UI.Form.ErrorAlert error={saveDataParams.error} />
+        </div>
+      )}
+      <RichEditor
+        className="mb-2"
+        setValue={setContent}
+        value={content}
+        extraContent={
+          !!content && (
+            <div className={"p-2 flex items-center"}>
+              <span className={"w-72"}>
+                <NotesContentMembers
+                  selected={selected}
+                  setSelected={setSelected}
+                />
+              </span>
+              <span className="flex-grow"></span>
+              <SquareButton
+                bgColor={TwBackgroundColors.sky}
+                onClick={doSend}
+                className={"w-32"}
+              >
+                {t("Siųsti")}
+              </SquareButton>
+            </div>
+          )
+        }
+      />
+
+
+    </div>
+  );
+}

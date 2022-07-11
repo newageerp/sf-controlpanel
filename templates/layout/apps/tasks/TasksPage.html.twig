@@ -1,0 +1,287 @@
+import React, { useState, Fragment, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import { TasksPageToolbar } from '@newageerp/sfs.apps.tasks.tasks-page-toolbar'
+import { UI, functions, UIConfig } from '@newageerp/nae-react-ui';
+import { useRecoilState } from 'recoil';
+import { UserSpaceWrapperToolbarState } from '../../layout/toolbar/UserSpaceWrapperToolbar';
+import moment from 'moment';
+import { OpenApi } from '@newageerp/nae-react-auth-wrapper';
+import { Table, Th, Td } from '@newageerp/ui.table.base.table';
+import { Checkbox } from '@newageerp/ui.form.base.form-pack';
+import classNames from 'classnames';
+import { Badge } from '@newageerp/ui.badges.base.badge'
+import { getTaskEnums, getTaskEnumsColors } from '../../enums/view/TaskEnums';
+import { IconType, Icon } from '@newageerp/ui.icons.base.icon';
+
+const moduleSchema = 'task'
+
+// @ts-ignore
+const _a = Array.apply(null, { length: 100 }).map(Number.call, Number)
+
+export const getTaskPeriodDates = (period: number) => {
+    let dateTo = null
+    let dateFrom = null
+    if (period === 0) {
+        dateTo = moment().add(1, 'days').format('YYYY-MM-DD')
+    } else if (period === 1) {
+        dateFrom = moment().add(1, 'days').format('YYYY-MM-DD')
+        dateTo = moment().add(2, 'days').format('YYYY-MM-DD')
+    } else if (period === 2) {
+        dateFrom = moment().format('YYYY-MM-DD')
+        dateTo = moment().add(8, 'days').format('YYYY-MM-DD')
+    } else if (period === 3) {
+        dateFrom = moment().format('YYYY-MM-DD')
+        dateTo = moment().add(30, 'days').format('YYYY-MM-DD')
+    } else if (period === 4) {
+        dateTo = moment().format('YYYY-MM-DD')
+    }
+    return [dateFrom, dateTo]
+}
+
+interface IData {
+    id: number
+    completed: boolean
+    doer: {
+        id: number
+        fullName: string
+    }
+    creator: {
+        id: number
+        fullName: string
+    }
+    description: string
+    dueDate: string
+    taskCategory: {
+        color: string
+        name: string
+    }
+    parentId: number
+    parentSchema: string
+    repeatPeriod: number
+    files: any
+    longTerm: number
+}
+
+const defObject: IData = {
+    id: 0,
+    completed: false,
+    doer: {
+        id: 0,
+        fullName: ''
+    },
+    creator: {
+        id: 0,
+        fullName: ''
+    },
+    description: '',
+    dueDate: '',
+    taskCategory: {
+        color: '',
+        name: ''
+    },
+    parentId: 0,
+    parentSchema: '',
+    repeatPeriod: 0,
+    files: '',
+    longTerm: 0,
+}
+
+export default function TaskContent() {
+    const { t } = useTranslation()
+    const [, setToolbarTitle] = useRecoilState(UserSpaceWrapperToolbarState)
+
+    const [activeState, setActiveState] = useState(0)
+    const [delegated, setDelegated] = useState(false);
+    const [completed, setCompleted] = useState(0);
+
+    const { showEditPopup, closeEditPopup, showViewPopup } = UI.Window.useNaeWindow()
+
+    useEffect(() => {
+        setToolbarTitle(t('Užduotys'));
+    }, []);
+
+    const [saveData, saveDataParams] = OpenApi.useUSave(moduleSchema)
+    const onChange = (id: number, completed: boolean) => {
+        if (saveDataParams.loading) {
+            return
+        }
+        saveData(
+            {
+                completed
+            },
+            id
+        ).then(() => {
+            loadData()
+            UIConfig.toast.success(t('Išsaugota'))
+        })
+    }
+
+    const [getData, getDataParams] = OpenApi.useUList<IData>(
+        moduleSchema,
+        functions.properties.getKeysFromObject(defObject)
+    )
+    const loadData = () => {
+        const filters: any[] = [{ and: [['i.completed', '=', completed, true]] }]
+
+        const [dateFrom, dateTo] = getTaskPeriodDates(activeState)
+        const datePeriod: any = { and: [] }
+        if (dateFrom) {
+            datePeriod.and.push(['i.dueDate', 'dgte', dateFrom, true])
+        }
+        if (dateTo) {
+            datePeriod.and.push(['i.dueDate', 'dlt', dateTo, true])
+        }
+
+        if (datePeriod.and.length > 0) {
+            if (activeState === 0) {
+                filters.push({
+                    or: [
+                        datePeriod,
+                        ['i.longTerm', '=', 10, true]
+                    ]
+                })
+            } else {
+                filters.push(datePeriod)
+            }
+
+        }
+
+        const ownersFilter: any = { or: [] }
+        if (delegated) {
+            ownersFilter.or.push({
+                and: [
+                    ['i.creator', '=', 'CURRENT_USER', true],
+                    ['i.doer', '!=', 'CURRENT_USER', true]
+                ]
+            })
+        }
+        if (!delegated) {
+            ownersFilter.or.push(['i.doer', '=', 'CURRENT_USER', true])
+        }
+        if (ownersFilter.or.length > 0) {
+            filters.push(ownersFilter)
+        }
+
+        getData(filters, 1, 1000, [
+            {
+                key: 'i.dueDate',
+                value: completed ? 'DESC' : 'ASC'
+            }
+        ])
+    }
+    useEffect(loadData, [activeState, completed, delegated]);
+
+    const createNewTask = () => {
+        showEditPopup({
+            id: 'new',
+            schema: moduleSchema,
+            onSaveCallback: () => {
+                loadData()
+                closeEditPopup()
+            }
+        })
+    }
+
+    return (
+        <Fragment>
+            <TasksPageToolbar
+                onCreate={createNewTask}
+                delegated={{
+                    value: delegated,
+                    onChange: (v) => setDelegated(v)
+                }}
+                completed={{
+                    value: completed.toString(),
+                    onChange: (v) => setCompleted(parseInt(v, 10))
+                }}
+                period={{
+                    value: activeState.toString(),
+                    onChange: (v) => setActiveState(parseInt(v, 10))
+                }}
+            />
+            <Table
+                className='mt-4'
+                thead={
+                    <thead>
+                        <tr>
+                            <Th></Th>
+                            <Th>{t('Užduotis')}</Th>
+                            <Th>{t('Terminas')}</Th>
+                            <Th>{t('Tipas')}</Th>
+                            <Th>{t('Kategorija')}</Th>
+                            <Th>{t('Sukurė')}</Th>
+                            <Th>{t('Atsakingas')}</Th>
+                            <Th></Th>
+                        </tr>
+                    </thead>
+                }
+                tbody={
+                    <tbody>
+                        {getDataParams.data.data.map((task: IData) => {
+                            const [bgColor, brightness] = (
+                                task.taskCategory ? task.taskCategory.color : 'blue-500'
+                            ).split('-')
+
+                            return (
+                                <tr key={`task-${task.id}`}>
+                                    <Td>
+                                        <Checkbox
+                                            value={task.completed}
+                                            onChange={v => onChange(task.id, v)}
+                                        />
+                                    </Td>
+                                    <Td title={task.description}>
+                                        <div onClick={() => showViewPopup({
+                                            id: task.id,
+                                            schema: moduleSchema
+                                        })}
+                                            className={"truncate cursor-pointer"} style={{ maxWidth: 400 }}
+                                        >{task.description}</div>
+                                    </Td>
+                                    <Td className={classNames(
+                                        'whitespace-nowrap tw3-text-xs tw3-text-slate-400',
+                                        {
+                                            'tw3-text-red-600': moment().format("YYYYMMDD") >= moment(task.dueDate).format("YYYYMMDD"),
+                                        }
+                                    )
+                                    }>{moment(task.dueDate).format("YYYY-MM-DD")}</Td>
+                                    <Td>
+                                        <Badge size='sm' variant={getTaskEnumsColors('longTerm', task.longTerm)}>{getTaskEnums('longTerm', task.longTerm)}</Badge>
+                                    </Td>
+                                    <Td>{task.taskCategory ? <UI.Badges.Badge className='inline-block' bgColor={bgColor} brightness={parseInt(brightness, 10)} size={'sm'}>
+                                        {task.taskCategory.name}
+                                    </UI.Badges.Badge> : ''}</Td>
+                                    <Td className='whitespace-nowrap'>{task.creator ? task.creator.fullName : ''}</Td>
+                                    <Td className='whitespace-nowrap'>{task.doer ? task.doer.fullName : ''}</Td>
+                                    <Td className='flex gap-2 items-center' style={{width: 80}}>
+                                        {!!task.files && task.files.length > 0 && (
+                                            <Icon type={IconType.Solid} icon={"link"} title={t('Yra failas')} />
+                                        )}
+                                        {task.repeatPeriod > 0 && (
+                                            <i className='fad fa-repeat' title={t('Kartojama')} />
+                                        )}
+                                        {task.parentId > 0 && !!task.parentSchema && (
+                                            <a
+                                                href={'#'}
+                                                onClick={(e) => {
+                                                    e.preventDefault()
+                                                    UIConfig.router({
+                                                        path: `/u/${task.parentSchema}/main/view/${task.parentId}`
+                                                    })
+                                                }}
+                                            >
+                                                <i className='fad fa-external-link-alt' />
+                                            </a>
+                                        )}
+                                    </Td>
+                                </tr>
+                            )
+                        })}
+                    </tbody>
+                }
+
+            />
+
+        </Fragment>
+    )
+}

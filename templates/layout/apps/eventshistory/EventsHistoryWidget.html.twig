@@ -1,0 +1,35 @@
+import { TabContainer } from "@newageerp/ui.tabs.tab-container";
+import React, {Fragment} from "react";
+import { useTranslation } from "react-i18next";
+import { ContentWidgetProps } from '@newageerp/nae-react-ui/dist/UI/Widget/NEWidgets';
+import { UI } from "@newageerp/nae-react-ui";
+import { WhiteCard } from "@newageerp/ui.cards.base.white-card";
+import MailsContent from "../mails/MailsContent";
+import NotesContent from "../notes/NotesContent";
+
+export default function EventsHistoryWidget(props: ContentWidgetProps) {
+  const { t } = useTranslation();
+
+  const items = [
+    {
+      content: <NotesContent  {...props} toolbar={<Fragment/>} showOnlyMy={true} />,
+      tab: {
+        children: t("Komentarai man"),
+      },
+    },
+    {
+      content: <NotesContent  {...props} toolbar={<Fragment/>} showOnlyMy={false} />,
+      tab: {
+        children: t("Visi komentarai"),
+      },
+    },
+    {
+      content: <MailsContent {...props} toolbar={<Fragment/>} />,
+      tab: {
+        children: t("Laiškai"),
+      },
+    },
+  ];
+
+  return <WhiteCard compact={true}><TabContainer items={items} /></WhiteCard>;
+}
