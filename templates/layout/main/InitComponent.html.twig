@@ -1,0 +1,119 @@
+import { functions, UI, UIConfig } from "@newageerp/nae-react-ui";
+import React from "react";
+import { NaeSSchema, NaeSSchemaMap } from '../../config/NaeSSchema';
+import { useHistory } from "react-router";
+import { OpenApi } from '@newageerp/nae-react-auth-wrapper';
+import { getDepenciesForField } from "../../config/fields/fieldDependencies";
+import { NaeTabs } from "../../config/tabs";
+import { INaeEditSettings, INaePdf, INaeProperty, INaeSchema, INaeStatus, INaeTab, INaeViewSettings, INaeWidget } from '@newageerp/nae-react-ui/dist/interfaces';
+import { NaeSProperties } from '../../config/NaeSProperties';
+import { NaeSStatuses } from "../../config/NaeSStatuses";
+import { NaeViewFields } from "../../config/fields/view";
+import { NaeEditFields } from "../../config/fields/edit";
+import { NaeSPdfs } from '../../config/NaeSPdfs';
+import { useRecoilValue } from "recoil";
+import { NaeWidgets } from '../../config/widgets/index';
+import { NaeSPropertiesKeys } from "../../config/NaeSPropertiesKeys";
+import { getHookForSchema, getSelectorForSchema } from "../../UserComponents/ModelsCacheData/ModelFields";
+import { IUIBuilderTabItem } from "@newageerp/nae-react-ui/dist/UIBuilderPages/UIBuilderTabsPage";
+// import {
+//     NaeSSchemaFilterKeys,
+//     NaeSSchemaGroupKeys,
+//   } from "../../config/NaeGroupFields";
+
+interface Props {
+    children: any;
+}
+
+export default function InitComponent(props: Props) {
+    const userState: any = useRecoilValue(OpenApi.naeUserState);
+    const defaults = UI.UIBuilder.useUIBuilder();
+
+    const history = useHistory();
+
+
+    const onEditElementUpdate = (schema: string, key: string, val: any, element: any) => {
+
+        if (schema === NaeSSchemaMap.InvoiceService.schema) {
+            if (key === NaeSPropertiesKeys["invoice-service"].service) {
+                if (!!element['service']) {
+                    element[NaeSPropertiesKeys["invoice-service"].price] = element['service'][NaeSPropertiesKeys.service.defaultPrice];
+                }
+            }
+        }
+        return element;
+    }
+
+    return (
+        <UI.Config.UIInitConfig
+            getHookForSchema={getHookForSchema}
+            getSelectorForSchema={getSelectorForSchema}
+            userState={userState}
+            fieldVisibility={() => ({})}
+            router={(props) => {
+                history.push(props.path, props.options);
+            }}
+            useURequest={OpenApi.useURequest}
+            useUList={OpenApi.useUList}
+            useURemove={OpenApi.useURemove}
+            useUSave={OpenApi.useUSave}
+
+            onEditElementUpdate={onEditElementUpdate}
+            getDepenciesForField={getDepenciesForField}
+
+            tabs={(): INaeTab[] => {
+                return NaeTabs.concat(
+                    defaults.tabs.map((t: IUIBuilderTabItem) =>
+
+                        functions.config.configTabToInaeTab(t, defaults.defaults)
+
+                    )
+                );
+            }}
+            properties={(): INaeProperty[] => {
+                return NaeSProperties;
+            }}
+            schemas={(): INaeSchema[] => {
+                return NaeSSchema;
+            }}
+            statuses={(): INaeStatus[] => {
+                return NaeSStatuses;
+            }}
+            editFields={(): INaeEditSettings[] => {
+                const f = NaeEditFields.concat(
+                    defaults.edit.map((e) => functions.config.configEditToINaeEditSettings(e))
+                );
+                console.log('ff', f);
+                return f;
+            }}
+            viewFields={(): INaeViewSettings[] => {
+                return NaeViewFields.concat(
+                    defaults.view.map((e) => functions.config.configViewToINaeViewSettings(e))
+                );
+            }}
+            pdfs={(): INaePdf[] => {
+                return NaeSPdfs;
+            }}
+            widgets={(): INaeWidget[] => {
+                return NaeWidgets;
+            }}
+            toast={OpenApi.toast}
+            getFilterKeysForSchema={(schema: string) => {
+                return [];
+            }}
+            getGroupKeysForSchema={(schema: string) => {
+                return [];
+            }}
+            resetFieldsToDefValues={(
+                schema: string,
+                element: any,
+                hiddenFields: string[],
+                updateElementBatch: (updates: any) => void
+            ) => {
+
+            }}
+        >
+            {props.children}
+        </UI.Config.UIInitConfig>
+    )
+}
