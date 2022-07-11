@@ -2,16 +2,22 @@ import React from "react";
 import { Components, NaeAuthWrapper, OpenApi } from '@newageerp/nae-react-auth-wrapper';
 import { NaeApiFunctions } from "../../config/NaePaths";
 import AppRouting from "./AppRouting";
+import AppRouter from "../routes/wrappers/AppRouter";
+import { Provider } from 'react-redux';
+import { store } from '../../Components/Models/ormstore';
+import '@newageerp/ui.styles.tailwind/dist/all.css'
 
 function App() {
     OpenApi.naePaths = NaeApiFunctions;
 
     return (
-        <NaeAuthWrapper>
-            <Components.AppRoutes>
-                <AppRouting />
-            </Components.AppRoutes>
-        </NaeAuthWrapper>
+        <Provider store={store}>
+            <NaeAuthWrapper>
+                <AppRouter>
+                    <AppRouting />
+                </AppRouter>
+            </NaeAuthWrapper>
+        </Provider>
     );
 }
 

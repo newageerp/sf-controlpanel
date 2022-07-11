@@ -89,6 +89,7 @@ class InFillModels extends Command
             true
         );
 
+
         // CREATE MODELS
         $finder = new Finder();
         $files = $finder->files()->in($modelsDir)->name('*Model.js');
@@ -115,6 +116,12 @@ class InFillModels extends Command
             $queueModelContent = $queueModelTemplate->render([]);
             Utils::writeOnChanges($queueModelFile, $queueModelContent);
         }
+
+
+        // ormstore
+        $ormPath = $modelsDir . '/ormstore.ts';
+        $ormContents = $twig->load('front-models/ormstore.html.twig')->render();
+        Utils::writeOnChanges($ormPath, $ormContents);
 
         // FILL ORM.js
         $finder = new Finder();

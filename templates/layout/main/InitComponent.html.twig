@@ -34,13 +34,6 @@ export default function InitComponent(props: Props) {
 
     const onEditElementUpdate = (schema: string, key: string, val: any, element: any) => {
 
-        if (schema === NaeSSchemaMap.InvoiceService.schema) {
-            if (key === NaeSPropertiesKeys["invoice-service"].service) {
-                if (!!element['service']) {
-                    element[NaeSPropertiesKeys["invoice-service"].price] = element['service'][NaeSPropertiesKeys.service.defaultPrice];
-                }
-            }
-        }
         return element;
     }
 

@@ -1,0 +1,19 @@
+import { combineReducers, createStore, applyMiddleware } from "redux";
+import { createReducer } from "redux-orm";
+
+
+import { orm } from "./orm";
+
+let reducer = combineReducers({
+  orm: createReducer(orm),
+});
+
+const store = createStore(
+    reducer,
+  // applyMiddleware(thunk, sagaMiddleware, logger)
+//   applyMiddleware(thunk, sagaMiddleware),
+);
+
+export { store, reducer };
+
+export type RootState = ReturnType<typeof reducer>;
