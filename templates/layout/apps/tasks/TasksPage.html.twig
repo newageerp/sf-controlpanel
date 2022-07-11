@@ -186,18 +186,24 @@ export default function TaskContent() {
         <Fragment>
             <TasksPageToolbar
                 onCreate={createNewTask}
-                delegated={{
+                delegated={
+                {
                     value: delegated,
                     onChange: (v) => setDelegated(v)
-                }}
-                completed={{
+                }
+                }
+                completed={
+                {
                     value: completed.toString(),
                     onChange: (v) => setCompleted(parseInt(v, 10))
-                }}
-                period={{
+                }
+                }
+                period={
+                {
                     value: activeState.toString(),
                     onChange: (v) => setActiveState(parseInt(v, 10))
-                }}
+                }
+                }
             />
             <Table
                 className='mt-4'
@@ -235,7 +241,7 @@ export default function TaskContent() {
                                             id: task.id,
                                             schema: moduleSchema
                                         })}
-                                            className={"truncate cursor-pointer"} style={{ maxWidth: 400 }}
+                                            className={"truncate cursor-pointer"} style={ { maxWidth: 400 } }
                                         >{task.description}</div>
                                     </Td>
                                     <Td className={classNames(
@@ -253,7 +259,7 @@ export default function TaskContent() {
                                     </UI.Badges.Badge> : ''}</Td>
                                     <Td className='whitespace-nowrap'>{task.creator ? task.creator.fullName : ''}</Td>
                                     <Td className='whitespace-nowrap'>{task.doer ? task.doer.fullName : ''}</Td>
-                                    <Td className='flex gap-2 items-center' style={{width: 80}}>
+                                    <Td className='flex gap-2 items-center' style={ {width: 80} }>
                                         {!!task.files && task.files.length > 0 && (
                                             <Icon type={IconType.Solid} icon={"link"} title={t('Yra failas')} />
                                         )}

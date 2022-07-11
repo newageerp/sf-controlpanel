@@ -123,7 +123,7 @@ export default function NoteLine(props: Props) {
     <div key={"note-" + note.id} className={"flex w-full"}>
       {isCreator && <span style={ { width: "10%" } }></span>}
       <div
-        style={{ width: "90%" }}
+        style={ { width: "90%" } }
         className={"px-1 py-1  rounded-sm " + extraClassName.join(" ")}
       >
         <div className={"flex w-full items-center gap-1"}>
@@ -185,11 +185,13 @@ export default function NoteLine(props: Props) {
               <SquareButton
                 bgColor={TwBackgroundColors.slate50}
                 onClick={toggleComponentVisible}
-                icon={{
+                icon={
+                {
                   icon: "circle-ellipsis-vertical",
                   type: IconType.Solid,
                   className: TwTextColors.slate400,
-                }}
+                }
+              }
               />
               {!!isComponentVisible && (
                 <Menu>
@@ -212,7 +214,7 @@ export default function NoteLine(props: Props) {
         {showAnswerForm && (
           <div className={"w-full"}>
             <NoteContentForm
-              options={{}}
+              options={ {} }
               parentElementId={note.parentId}
               parentSchema={note.parentSchema}
               reloadData={() => {
@@ -233,7 +235,7 @@ export default function NoteLine(props: Props) {
         {showEditForm && (
           <div className={"w-full"}>
             <NoteEditForm
-              options={{}}
+              options={ {} }
               noteId={note.id}
               reloadData={() => {
                 props.doReload();
@@ -245,7 +247,7 @@ export default function NoteLine(props: Props) {
           </div>
         )}
       </div>
-      {!isCreator && <span style={{ width: "10%" }}></span>}
+      {!isCreator && <span style={ { width: "10%" } }></span>}
     </div>
   );
 }
