@@ -135,6 +135,9 @@ class InGeneratorLayout extends Command
             'layout/apps/tasks/TasksWidget.html.twig' => ['apps/tasks', 'TasksWidget'],
 
             'layout/auth/AuthLogin.html.twig' => ['auth', 'AuthLogin'],
+
+            'layout/main/App.html.twig' => ['main', 'App'],
+            'layout/main/AppRouting.html.twig' => ['main', 'AppRouting'],
         ];
 
         foreach ($templates as $template => $target) {

@@ -1,0 +1,58 @@
+import React, { Fragment, useEffect } from "react";
+import { Components, Hooks } from "@newageerp/nae-react-auth-wrapper";
+import { UI, Hooks as UIHooks, UIConfig } from "@newageerp/nae-react-ui";
+import InitComponent from "../../Components/Init/InitComponent";
+import { DataCacheProvider } from "../../Components/Hooks/DataCacheProvider";
+import UserSpaceWrapper from "../routes/wrappers/UserSpaceWrapper";
+import AppRoutes from "../routes/AppRoutes";
+
+
+export default function AppRouting() {
+  const [, , doLogin] = Hooks.useULogin();
+  const isMount = UIHooks.useDidMount();
+
+  useEffect(() => {
+    if (isMount) {
+      UI.Socket.Service.connect();
+    }
+  }, []);
+
+  return (
+    <UI.UIBuilder.UIBuilderProvider>
+      <InitComponent>
+        <DataCacheProvider>
+          <UI.Window.NaeWindowProvider>
+            <Fragment>
+              <Components.AppLoginRoutes
+                LoginPageComponent={<UI.Pages.LoginPage onSubmit={doLogin} />}
+              />
+              <Components.AppUserRoutes
+                Routes={[...UIConfig.getDefaultBuilderRoutes()]}
+                UserSpaceWrapper={<UserSpaceWrapper/>}
+                CustomUserSpaceRoutes={
+                  <Fragment>
+                    <AppRoutes />
+                  </Fragment>
+                }
+                UserSpaceRoutes={[
+                  {
+                    path: "/u/:schema/:type/view/:id",
+                    exact: true,
+                    comp: <UI.RoutePoints.View />,
+                  },
+                  {
+                    path: "/u/:schema/:type/edit/:id",
+                    exact: true,
+                    comp: <UI.RoutePoints.Edit />,
+                  },
+                ]}
+              >
+
+              </Components.AppUserRoutes>
+            </Fragment>
+          </UI.Window.NaeWindowProvider>
+        </DataCacheProvider>
+      </InitComponent>
+    </UI.UIBuilder.UIBuilderProvider>
+  );
+}
