@@ -121,7 +121,7 @@ export default function NoteLine(props: Props) {
 
   return (
     <div key={"note-" + note.id} className={"flex w-full"}>
-      {isCreator && <span style={{ width: "10%" }}></span>}
+      {isCreator && <span style={ { width: "10%" } }></span>}
       <div
         style={{ width: "90%" }}
         className={"px-1 py-1  rounded-sm " + extraClassName.join(" ")}
