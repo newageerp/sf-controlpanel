@@ -14,6 +14,7 @@ export interface AppRouterRoute {
 export interface AppRouterProps {
     noAuthRoutes?: any,
     authRoutes?: any,
+    children?: any
 }
 
 export default function AppRouter(props: AppRouterProps) {
@@ -48,6 +49,7 @@ export default function AppRouter(props: AppRouterProps) {
             <Switch>
                 {props.noAuthRoutes}
                 {isLoggedIn && props.authRoutes}
+                {props.children}
             </Switch>
         </Router>
     )
