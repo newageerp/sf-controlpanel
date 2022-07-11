@@ -1,0 +1,8 @@
+export const fieldDependencies: any = {}
+
+export const getDepenciesForField = (schema: string, key: string) => {
+  if (!!fieldDependencies[schema] && !!fieldDependencies[schema][key]) {
+    return fieldDependencies[schema][key];
+  }
+  return [];
+};

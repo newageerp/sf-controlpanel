@@ -147,6 +147,25 @@ class InGeneratorLayout extends Command
             Utils::writeOnChanges($fileName, $generatedContent);
         }
 
+        $templates = [
+            'config/fields/edit.html.twig' => ['fields', 'edit.tsx'],
+            'config/fields/fieldDependencies.html.twig' => ['fields', 'fieldDependencies.tsx'],
+            'config/fields/view.html.twig' => ['fields', 'view.tsx'],
+
+            'config/tabs/index.html.twig' => ['tabs', 'index.tsx'],
+
+            'config/widgets/widgets/base-entity.widgets.html.twig' => ['widgets/widgets', 'base-entity.widgets.tsx',
+            'config/widgets/index.html.twig' => ['widgets', 'index.tsx'],
+        ];
+
+        foreach ($templates as $target) {
+            $fileName = Utils::generatedConfigPath($target[0]) . '/'.$target[1].'.tsx';
+            if (!file_exists($fileName)) {
+                $generatedContent = $twig->load($template)->render();
+                Utils::writeOnChanges($fileName, $generatedContent);
+            }
+        }
+
         return Command::SUCCESS;
     }
 }

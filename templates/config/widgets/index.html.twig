@@ -1,0 +1,10 @@
+import React, { Fragment } from "react";
+import { INaeWidget } from "@newageerp/nae-react-ui/dist/interfaces";
+import { BaseEntityWidgets } from "./widgets/base-entity.widgets";
+import { GeneratedLayoutWidgets } from "../../_generated/layout/GeneratedLayoutWidgets";
+import { GeneratedPdfWidgets } from "../../_generated/pdfs/GeneratedPdfWidgets";
+
+export const NaeWidgets: INaeWidget[] = [
+  ...GeneratedLayoutWidgets,
+  ...GeneratedPdfWidgets,
+];

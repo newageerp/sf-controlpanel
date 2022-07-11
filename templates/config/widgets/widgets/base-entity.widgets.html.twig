@@ -1,0 +1,20 @@
+import { UI } from '@newageerp/nae-react-ui';
+import { INaeWidget } from '@newageerp/nae-react-ui/dist/interfaces';
+import EventsHistoryWidget from '../../../_generated/apps/eventshistory/EventsHistoryWidget';
+import ViewTop from '../../../_generated/layout/view/ViewTop';
+export const BaseEntityWidgets: INaeWidget[] = [
+    {
+        schema: 'all',
+        type: UI.Widget.WidgetType.viewBottom,
+        sort: 0,
+        options: {},
+        comp: EventsHistoryWidget
+    },
+    {
+        schema: 'all',
+        type: UI.Widget.WidgetType.viewMainTop,
+        sort: 0,
+        options: {},
+        comp: ViewTop
+    }
+];

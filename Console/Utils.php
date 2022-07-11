@@ -22,6 +22,15 @@ class Utils
         return $generatedPath;
     }
 
+    public static function generatedConfigPath(string $folder) {
+        $fs = new Filesystem();
+        $generatedPath = LocalConfigUtils::getFrontendConfigPath() . '/'.$folder;
+        if (!$fs->exists($generatedPath)) {
+            $fs->mkdir($generatedPath);
+        }
+        return $generatedPath;
+    }
+
     public static function writeOnChanges(string $fileName, string $content) {
         $fs = new Filesystem();
 
