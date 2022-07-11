@@ -26,6 +26,8 @@ export default function AppRouter(props: AppRouterProps) {
                 setUserState(res.data)
             }
             setIsUserDataLoading(false);
+        }).catch(e => {
+            setIsUserDataLoading(false);
         });
     }
 
