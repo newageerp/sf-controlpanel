@@ -31,7 +31,9 @@ export default function AppRouter(props: AppRouterProps) {
     const [userState, setUserState] = useRecoilState(OpenApi.naeUserState)
 
     const [loadData, loadDataParams] = OpenApi.useURequest('NAEPing');
-    useEffect(loadData, []);
+    useEffect(() => {
+        loadData();
+    }, []);
 
     useEffect(getUserData, [])
 
