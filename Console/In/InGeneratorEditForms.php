@@ -73,7 +73,9 @@ class InGeneratorEditForms extends Command
 
             foreach ($editItem['config']['fields'] as $fieldIndex => $field) {
                 if (isset($field['type']) && $field['type'] === 'separator') {
-
+                    $content = '<div className="h-6"></div>';
+                    $tpWideRows[] = $content;
+                    $tpCompactRows[] = $content;
                 } else if (isset($field['path']) && $field['path']) {
                     $pathA = explode(".", $field['path']);
                     $path = $pathA[0] . '.' . $pathA[1];

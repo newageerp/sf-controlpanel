@@ -362,19 +362,19 @@ class PropertiesUtils
             case 'float':
                 return [
                     "import" => 'import { InputFloat } from "@newageerp/ui.form.base.form-pack";',
-                    "template" => '<InputFloat onChangeFloat={TP_ON_CHANGE} value={TP_VALUE}/>'
+                    "template" => '<InputFloat onChangeFloat={TP_ON_CHANGE} value={TP_VALUE} className={"field-float"}/>'
                 ];
                 break;
             case 'number':
                 return [
                     "import" => 'import { InputInt } from "@newageerp/ui.form.base.form-pack";',
-                    "template" => '<InputInt onChangeInt={TP_ON_CHANGE} value={TP_VALUE}/>'
+                    "template" => '<InputInt onChangeInt={TP_ON_CHANGE} value={TP_VALUE} className={"field-number"}/>'
                 ];
                 break;
             case 'date':
                 return [
                     "import" => 'import { Datepicker } from "@newageerp/ui.form.base.form-pack";',
-                    "template" => '<Datepicker value={TP_VALUE} onChange={TP_ON_CHANGE}/>'
+                    "template" => '<Datepicker value={TP_VALUE} onChange={TP_ON_CHANGE}  className={"field-date"}/>'
                 ];
                 break;
             case 'enum_text':
