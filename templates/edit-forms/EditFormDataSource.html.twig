@@ -1,0 +1,129 @@
+import React, {Fragment, useState, useEffect} from 'react';
+import { useTranslation } from 'react-i18next'
+import { OpenApi } from '@newageerp/nae-react-auth-wrapper';
+import { UIConfig } from '@newageerp/nae-react-ui';
+import { SquareButton } from '@newageerp/ui.buttons.base.square-button';
+import { TwBackgroundColors } from '@newageerp/ui.styles.tailwind';
+
+import {{ TP_COMP_NAME }} from '../forms/{{ TP_COMP_NAME }}';
+
+import { useRecoilState } from "recoil";
+import { UserSpaceWrapperToolbarState } from "../../layout/toolbar/UserSpaceWrapperToolbar";
+
+interface Props {
+    id: number | string,
+    compact?: boolean,
+
+    onSave: (element: any, isNew: boolean, schema: string) => void,
+    onCancel: () => void,
+
+    fieldsToReturnOnSave?: string[],
+
+    disableSetTitle?: boolean,
+}
+
+export default function {{ TP_COMP_NAME_DATA_SOURCE }}(props: Props) {
+    const { t } = useTranslation();
+
+    const [hasChanges, setHasChanges] = useState(false)
+    const [element, setElement] = useState<any>(null)
+
+    const [saveData, saveDataParams] = OpenApi.useUSave(
+        '{{ TP_SCHEMA }}',
+        props.fieldsToReturnOnSave ? props.fieldsToReturnOnSave : ['id']
+    );
+    const doSave = () => {
+        if (saveDataParams.loading) {
+            return
+        }
+        const isNew = props.id === 'new'
+        setHasChanges(false)
+        saveData(element, props.id).then((res: any) => {
+            if (res) {
+                if (res.error) {
+                } else {
+                    props.onSave(res.data.element, isNew, '{{ TP_SCHEMA }}');
+                }
+            }
+        })
+    }
+
+    let fieldsToReturn: string[] = {{ TP_FIELDS_TO_RETURN|raw }};
+    const [schemaGetData, schemaGetDataParams] = OpenApi.useUList(
+        '{{ TP_SCHEMA }}',
+        fieldsToReturn
+    );
+    const getData = () => {
+        if (props.id === 'new') {
+            schemaGetData(
+                { empty: true },
+                1,
+                1,
+                undefined,
+                undefined,
+                {} // TODO
+            )
+        } else {
+            schemaGetData([{ and: [['i.id', 'eq', props.id, true]] }], 1, 1)
+        }
+    }
+    useEffect(getData, [])
+
+    useEffect(() => {
+        if (schemaGetDataParams.data.records === 1) {
+            setElement(schemaGetDataParams.data.data[0])
+        }
+    }, [schemaGetDataParams.data.data])
+
+    const updateElement = (key: string, val: any) => {
+        let _el = JSON.parse(JSON.stringify(element))
+        if (val !== _el[key]) {
+            setHasChanges(true)
+            _el[key] = val
+
+            _el = UIConfig.onEditElementUpdate('{{ TP_SCHEMA }}', key, val, _el)
+
+            setElement(_el)
+        }
+    }
+
+    const updateElementBatch = (updates: any) => {
+        let _el = JSON.parse(JSON.stringify(element))
+        let _hasChanges = false
+        Object.keys(updates).forEach((k: string) => {
+            if (updates[k] !== _el[k]) {
+                _hasChanges = true
+                _el[k] = updates[k]
+
+                _el = UIConfig.onEditElementUpdate('{{ TP_SCHEMA }}', k, updates[k], _el)
+            }
+        })
+
+        if (_hasChanges) {
+            setHasChanges(true)
+            setElement(_el)
+        }
+    }
+
+    useEffect(() => {
+        if (!props.disableSetTitle) {
+            setToolbarTitle('{% if toolbarTitle != "" %}{{ toolbarTitle }}{% else %}{" "}{% endif %}');
+        }
+    }, []);
+
+    if (!element) {
+        return <Fragment/>
+    }
+
+    return (
+        <Fragment>
+            <{{ TP_COMP_NAME }}
+                element={element}
+                onChange={updateElement}
+                compact={props.compact}
+                onSave={doSave}
+                onCancel={props.onCancel}
+            />
+        </Fragment>
+    )
+}

@@ -32,12 +32,16 @@ class InGeneratorEditForms extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $loader = new \Twig\Loader\FilesystemLoader(dirname(__DIR__, 2) . '/templates');
+        $twig = new \Twig\Environment($loader, [
+            'cache' => '/tmp/smarty',
+        ]);
+
         $editFormTemplate = file_get_contents(
             __DIR__ . '/templates/edit-forms/EditForm.txt'
         );
-        $editFormDataSourceTemplate = file_get_contents(
-            __DIR__ . '/templates/edit-forms/EditFormDataSource.txt'
-        );
+        $editFormDataSourceTemplate = $twig->load('edit-forms/EditFormDataSource.html.twig');
+
 
         $editsFile = $_ENV['NAE_SFS_CP_STORAGE_PATH'] . '/edit.json';
         $editItems = [];
@@ -172,21 +176,15 @@ class InGeneratorEditForms extends Command
 
             // DATA SOURCE
             $fileName = $generatedPathDataSource . '/' . $compNameDataSource . '.tsx';
-            $generatedContent = str_replace(
-                [
-                    'TP_COMP_NAME_DATA_SOURCE',
-                    'TP_COMP_NAME',
-                    'TP_SCHEMA',
-                    'TP_FIELDS_TO_RETURN'
-                ],
-                [
-                    $compNameDataSource,
-                    $compName,
-                    $editItem['config']['schema'],
-                    json_encode($fieldsToReturn, JSON_PRETTY_PRINT),
-                ],
-                $editFormDataSourceTemplate
-            );
+
+            $generatedContent = $editFormDataSourceTemplate->render([
+                'TP_COMP_NAME_DATA_SOURCE' => $compNameDataSource,
+                'TP_COMP_NAME' => $compName,
+                'TP_SCHEMA' => $editItem['config']['schema'],
+                'TP_FIELDS_TO_RETURN' => json_encode($fieldsToReturn, JSON_PRETTY_PRINT),
+                'toolbarTitle' => $this->entitiesUtils->getTitleBySlug($editItem['config']['schema'])
+            ]);
+
             Utils::writeOnChanges($fileName, $generatedContent);
         }
 
