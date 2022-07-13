@@ -212,12 +212,18 @@ class PropertiesUtils
                     "template" => '<SecondsToTime seconds={TP_VALUE}/>'
                 ];
                 break;
-
             case 'status-short':
                 $compName = Utils::fixComponentName(ucfirst($property['schema']) . 'Statuses');
                 return [
                     "import" => 'import { ' . $compName . ' } from "../../statuses/badges/' . $compName . '";',
                     "template" => '{' . $compName . '(TP_VALUE, "TP_KEY", true)}'
+                ];
+                break;
+            case 'status':
+                $compName = Utils::fixComponentName(ucfirst($property['schema']) . 'Statuses');
+                return [
+                    "import" => 'import { ' . $compName . ' } from "../../statuses/badges/' . $compName . '";',
+                    "template" => '{' . $compName . '(TP_VALUE, "TP_KEY")}'
                 ];
                 break;
             case 'file':
