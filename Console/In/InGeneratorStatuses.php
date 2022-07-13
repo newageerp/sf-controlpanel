@@ -24,9 +24,13 @@ class InGeneratorStatuses extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $statusItemsTemplate = file_get_contents(
-            __DIR__ . '/templates/statuses/StatusItems.txt'
-        );
+        $loader = new \Twig\Loader\FilesystemLoader(dirname(__DIR__, 2) . '/templates');
+        $twig = new \Twig\Environment($loader, [
+            'cache' => '/tmp',
+        ]);
+
+        $statusItemsTemplate = $twig->load('statuses/StatusItems.html.twig');
+
 
         $generatedPath = Utils::generatedPath('statuses/badges');
 
@@ -50,10 +54,13 @@ class InGeneratorStatuses extends Command
             $statuses[$data['entity_slug']][] = $data;
         }
 
+
+
         foreach ($statuses as $slug => $entityStatuses) {
+            $statusData = [];
+
             $compName = Utils::fixComponentName(ucfirst($slug) . 'Statuses');
-            $badges = [];
-            $badgeVarNames = [];
+
             foreach ($entityStatuses as $entityStatus) {
                 $statusName = Utils::fixComponentName(
                     ucfirst($slug) .
@@ -61,43 +68,24 @@ class InGeneratorStatuses extends Command
                     'Badge' .
                     $entityStatus['status']
                 );
-                $badgeVarNames[] = 'if (status === ' . $entityStatus['status'] . ' && type === "' . $entityStatus['type'] . '") {
-                    return <' . $statusName . ' />;
-                }
-';
-                $badges[] = "
-    export const " . $statusName . " = () => {
-        const { t } = useTranslation();
-        
-        return (
-            <UI.Badges.Badge
-              bgColor={'" . $entityStatus['color'] . "'}
-              brightness={" . mb_substr($entityStatus['brightness'], 1) . "}
-              size={'sm'}
-              className={'w-56 float-right'}
-            >
-              {t('" . $entityStatus['text'] . "')}
-            </UI.Badges.Badge>
-        )
-    };";
+                $statusData[] = [
+                    'statusName' => $statusName,
+                    'color' => $entityStatus['color'],
+                    'brightness' => mb_substr($entityStatus['brightness'], 1),
+                    'text' => $entityStatus['text'],
+                    'status' => $entityStatus['status'],
+                    'type' => $entityStatus['type'],
+                ];
+
             }
 
-            $tpBadgesStr = implode("\n", $badges);
-            $tpBadgesExportStr = implode("\n", $badgeVarNames);
-
             $fileName = $generatedPath . '/' . $compName . '.tsx';
-            $generatedContent = str_replace(
+
+            $generatedContent = $statusItemsTemplate->render(
                 [
-                    'TP_BADGES_EXPORT',
-                    'TP_BADGES',
-                    'TP_COMP_NAME',
-                ],
-                [
-                    $tpBadgesExportStr,
-                    $tpBadgesStr,
-                    $compName,
-                ],
-                $statusItemsTemplate
+                    'TP_COMP_NAME' => $compName,
+                    'statusData' => $statusData
+                ]
             );
             Utils::writeOnChanges($fileName, $generatedContent);
         }

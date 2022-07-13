@@ -1,0 +1,33 @@
+import React from "react";
+import { UI } from '@newageerp/nae-react-ui';
+import { useTranslation } from "react-i18next";
+
+interface StatusProps {
+    short?: boolean,
+}
+
+{% for status in statusData %}
+    export const {{ status.statusName }} = (props: StatusProps) => {
+        const { t } = useTranslation();
+
+        return (
+            <UI.Badges.Badge
+              bgColor={'{{ status.color }}'}
+              brightness={ {{status.brightness}} }
+              size={'sm'}
+              className={props.short?'w-8':'w-56 float-right'}
+              title={t('{{ status.text }}')}
+            >
+              {props.short?t('{{ status.text }}').substr(0, 1):t('{{ status.text }}')}
+            </UI.Badges.Badge>
+        )
+    };
+{% endfor %}
+
+export const {{ TP_COMP_NAME }} = (status: number, type: string, short?: boolean) => {
+{% for status in statusData %}
+    if (status === {{ status.status }} && type === "{{ status.type }}") {
+        return <{{ status.statusName }} short={short} />;
+    }
+{% endfor %}
+}
