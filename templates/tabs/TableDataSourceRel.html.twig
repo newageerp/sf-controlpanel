@@ -21,7 +21,7 @@ interface Props {
 
 export function {{ tpCompName }}Widget(props: ContentWidgetProps) {
     return (
-        <WhiteCardWithTitle title={"{{ schemaTitle }}"}>
+        <WhiteCardWithTitle title={"{{ schemaTitle }}"} compact={true}>
             <{{ tpCompName }}
                 relId={props.element.id}
                 hideSearchBar={props.options.hideSearchBar}
