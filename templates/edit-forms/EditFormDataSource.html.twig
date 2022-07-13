@@ -23,6 +23,8 @@ interface Props {
 }
 
 export default function {{ TP_COMP_NAME_DATA_SOURCE }}(props: Props) {
+    const [, setToolbarTitle] = useRecoilState(UserSpaceWrapperToolbarState)
+
     const { t } = useTranslation();
 
     const [hasChanges, setHasChanges] = useState(false)
