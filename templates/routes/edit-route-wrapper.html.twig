@@ -1,12 +1,15 @@
-import React, { ReactNode, Fragment } from 'react'
+import React, { ReactNode, Fragment, useEffect } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
+import { useRecoilState } from 'recoil'
+import { UserSpaceWrapperToolbarState } from '../../layout/toolbar/UserSpaceWrapperToolbar'
 
 interface Props {
     render: (
         id: string,
         onSave: (element: any, isNew: boolean, schema: string) => void,
         onCancel: () => void,
-    ) => ReactNode
+    ) => ReactNode,
+    disableSetTitle?: boolean,
 }
 
 interface ParamTypes {
@@ -14,6 +17,7 @@ interface ParamTypes {
 }
 
 export default function DefaultEditRouteWrapper(props: Props) {
+    const [, setToolbarTitle] = useRecoilState(UserSpaceWrapperToolbarState)
     const history = useHistory()
     const routeParams = useParams<ParamTypes>()
 
@@ -28,7 +32,13 @@ export default function DefaultEditRouteWrapper(props: Props) {
         history.goBack();
     }
 
+    useEffect(() => {
+        if (!props.disableSetTitle) {
+            setToolbarTitle('{% if toolbarTitle != "" %}{{ toolbarTitle }}{% else %}{" "}{% endif %}');
+        }
+    }, []);
+
     return (
-        <Fragment>{props.render(routeParams.id, onSave, onCancel)}</Fragment>
+        <div className="mx-auto" style={ { maxWidth: 800 } }>{props.render(routeParams.id, onSave, onCancel)}</div>
     )
 }
