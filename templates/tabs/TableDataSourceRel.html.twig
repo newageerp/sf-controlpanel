@@ -229,7 +229,7 @@ export default function {{ tpCompName }}(props: Props) {
                         navigate={navigate}
                 />
             </div>
-            {!props.hidePaging &&
+            {!props.hidePaging && pages > 1 &&
                 <PageContainer
                             pages={pages}
                             activePage={dataState.page}
