@@ -10,7 +10,9 @@ import { Table, Th, Td } from '@newageerp/ui.table.base.table';
 import { Checkbox } from '@newageerp/ui.form.base.form-pack';
 import classNames from 'classnames';
 import { Badge } from '@newageerp/ui.badges.base.badge'
+{% if hasTasksApp %}
 import { getTaskEnums, getTaskEnumsColors } from '../../enums/view/TaskEnums';
+{% endif %}
 import { IconType, Icon } from '@newageerp/ui.icons.base.icon';
 
 const moduleSchema = 'task'
@@ -184,6 +186,7 @@ export default function TaskContent() {
 
     return (
         <Fragment>
+            {% if hasTasksApp %}
             <TasksPageToolbar
                 onCreate={createNewTask}
                 delegated={
@@ -287,7 +290,7 @@ export default function TaskContent() {
                 }
 
             />
-
+            {% endif %}
         </Fragment>
     )
 }

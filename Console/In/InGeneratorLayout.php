@@ -141,9 +141,11 @@ class InGeneratorLayout extends Command
             'layout/main/InitComponent.html.twig' => ['main', 'InitComponent'],
         ];
 
+        $hasTasksApp = class_exists('App\Entity\Task');
+
         foreach ($templates as $template => $target) {
             $fileName = Utils::generatedPath($target[0]) . '/'.$target[1].'.tsx';
-            $generatedContent = $twig->load($template)->render();
+            $generatedContent = $twig->load($template)->render(['hasTasksApp' => $hasTasksApp]);
             Utils::writeOnChanges($fileName, $generatedContent);
         }
 
