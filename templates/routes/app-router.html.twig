@@ -1,9 +1,9 @@
-import { OpenApi } from '@newageerp/nae-react-auth-wrapper';
+import { OpenApi, Hooks } from '@newageerp/nae-react-auth-wrapper';
 import React, { useEffect, useState } from 'react'
 import { BrowserRouter as Router, Switch } from 'react-router-dom';
 import { Redirect, useLocation } from 'react-router-dom'
 import axios from 'axios'
-import { useRecoilState } from 'recoil';
+import { atom, useRecoilState } from 'recoil';
 
 export interface AppRouterRoute {
     path: string
@@ -19,30 +19,21 @@ export interface AppRouterProps {
 
 export default function AppRouter(props: AppRouterProps) {
     const [isUserDataLoading, setIsUserDataLoading] = useState(true);
-
-    const getUserData = () => {
-        axios.post('/app/nae-core/auth/get').then(res => {
-            if (res.status === 200) {
-                setUserState(res.data)
-            }
-            setIsUserDataLoading(false);
-        }).catch(e => {
-            setIsUserDataLoading(false);
-        });
-    }
-
     const [userState, setUserState] = useRecoilState(OpenApi.naeUserState)
 
-    const [loadData, loadDataParams] = OpenApi.useURequest('NAEPing');
-    useEffect(() => {
-        loadData();
-    }, []);
+    const [getUserData, getUserDataParams] = OpenApi.useURequest('NAEauthGetProfile')
 
-    useEffect(getUserData, [])
+    useEffect(() => {
+        getUserData();
+    }, [])
+    useEffect(() => {
+        setUserState(getUserDataParams.data)
+    }, [getUserDataParams.data])
 
     const isLoggedIn = !!userState && ('id' in userState);
+    const _isUserDataLoading = isUserDataLoading && !userState;
 
-    if (loadDataParams.loading || loadDataParams.data.data.length === 0 || isUserDataLoading) {
+    if ( _isUserDataLoading) {
         return <div>Loading...</div>
     }
 
@@ -50,9 +41,9 @@ export default function AppRouter(props: AppRouterProps) {
         <Router>
             <Switch>
                 {props.noAuthRoutes}
-                {isLoggedIn && props.authRoutes}
-                {props.children}
             </Switch>
+            {isLoggedIn && props.authRoutes}
+            {props.children}
         </Router>
     )
 }

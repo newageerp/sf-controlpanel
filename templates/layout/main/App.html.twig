@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment, useEffect } from "react";
 import { Components, NaeAuthWrapper, OpenApi } from '@newageerp/nae-react-auth-wrapper';
 import { NaeApiFunctions } from "../../config/NaePaths";
 import AppRouting from "./AppRouting";
@@ -6,17 +6,54 @@ import AppRouter from "../routes/wrappers/AppRouter";
 import { Provider } from 'react-redux';
 import { store } from '../../Components/Models/ormstore';
 import '@newageerp/ui.styles.tailwind/dist/all.css'
+import { RoutesWrapper } from "../routes/wrappers/RoutesWrapper";
+import AuthLogin from "../auth/AuthLogin";
+import UserSpaceWrapper from "../routes/wrappers/UserSpaceWrapper";
+import AppRoutes from "../routes/AppRoutes";
+import { UI, Hooks as UIHooks, UIConfig } from "@newageerp/nae-react-ui";
+import InitComponent from "./InitComponent";
+import { DataCacheProvider } from "../../Components/Hooks/DataCacheProvider";
+import { Switch } from "react-router-dom";
 
 function App() {
     OpenApi.naePaths = NaeApiFunctions;
+    const isMount = UIHooks.useDidMount();
+
+    useEffect(() => {
+        if (isMount) {
+            UI.Socket.Service.connect();
+        }
+    }, []);
+
 
     return (
         <Provider store={store}>
-            <NaeAuthWrapper>
-                <AppRouter>
-                    <AppRouting />
-                </AppRouter>
-            </NaeAuthWrapper>
+            <RoutesWrapper>
+                <AppRouter
+                    authRoutes={
+                        <Fragment>
+                            <UI.UIBuilder.UIBuilderProvider>
+                                <InitComponent>
+                                    <DataCacheProvider>
+                                        <UI.Window.NaeWindowProvider>
+                                            <UserSpaceWrapper>
+                                                <Switch>
+                                                    <AppRoutes />
+                                                </Switch>
+                                            </UserSpaceWrapper>
+                                        </UI.Window.NaeWindowProvider>
+                                    </DataCacheProvider>
+                                </InitComponent>
+                            </UI.UIBuilder.UIBuilderProvider>
+                        </Fragment>
+                    }
+                    noAuthRoutes={
+                        <Fragment>
+                            <AuthLogin />
+                        </Fragment>
+                    }
+                />
+            </RoutesWrapper>
         </Provider>
     );
 }
