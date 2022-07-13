@@ -4,6 +4,15 @@ import { ToolbarTitle } from '@newageerp/ui.texts.base.toolbar-title';
 import CustomToolbarBefore from "../../_custom/layout/CustomToolbarBefore";
 import CustomToolbarAfter from "../../_custom/layout/CustomToolbarAfter";
 import { atom, useRecoilValue } from "recoil";
+import { ActionsBar } from '@newageerp/sfs.toolbar.actions-bar'
+import { IconList } from "@newageerp/ui.icons.base.icon-list";
+import { OpenApi } from "@newageerp/nae-react-auth-wrapper";
+import { useTranslation } from 'react-i18next'
+import { useComponentVisible } from '@newageerp/hooks.use-component-visible'
+import { Menu, MenuItem } from '@newageerp/sfs.modal.menu'
+import { Icon, IconType } from "@newageerp/ui.icons.base.icon";
+import { TwBackgroundColors, TwTextSizes } from "@newageerp/ui.styles.tailwind";
+import classNames from "classnames";
 
 interface Props {
         children?: any
@@ -15,13 +24,46 @@ export const UserSpaceWrapperToolbarState = atom({
 });
 
 function UserSpaceWrapperToolbar(props: Props) {
+        const settingsVisibleData = useComponentVisible(false);
+
+        const userState: any = useRecoilValue(OpenApi.naeUserState);
+
+        const { t } = useTranslation();
+
+        const doLogout = () => {
+                window.localStorage.setItem("token", "");
+                window.location.href = "/";
+        };
+
         const toolbarTitle = useRecoilValue(UserSpaceWrapperToolbarState)
         return (
                 <Toolbar>
-                        <CustomToolbarBefore/>
+                        <CustomToolbarBefore />
                         <ToolbarTitle>{toolbarTitle}</ToolbarTitle>
-                        <CustomToolbarAfter/>
-                </Toolbar>ser-
+                        <span className="flex-grow"></span>
+                        <ActionsBar
+                                items={
+
+                                }
+                        />
+                        <span className="relative ml-20 mr-20" ref={settingsVisibleData.ref} style={{ width: 150 }}>
+                                <div className="flex gap-2 items-center text-white cursor-pointer" onClick={() => settingsVisibleData.setIsComponentVisible(!settingsVisibleData.isComponentVisible)}>
+                                        <span className={classNames('flex items-center justify-center', TwBackgroundColors.orange, TwTextSizes.px12, 'rounded-full')} style={{width: 24, height: 24,}}>
+                                        <Icon type={IconType.Regular} icon={IconList.user}/>
+                                        </span>
+                                        <p className="flex-grow">
+                                                {userState.fullName}
+                                        </p>
+                                        <Icon type={IconType.Regular} icon={IconList.angleDown} />
+                                </div>
+                                {!!settingsVisibleData.isComponentVisible && <Menu>
+                                        <MenuItem onClick={doLogout}>{t('Atsijungti')}</MenuItem>
+                                </Menu>}
+
+                        </span>
+                        <CustomToolbarAfter />
+                </Toolbar>
         );
+}
 
 export default UserSpaceWrapperToolbar;
