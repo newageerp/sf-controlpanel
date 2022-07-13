@@ -68,7 +68,11 @@ export const CheckUserPermissionComponent = (props: ICheckUserPermissionComponen
 
         $result = $db->query($sql);
 
-        $permissions = [];
+        $permissions = [
+            'key' => 'default',
+            'slug' => 'default',
+            'title' => 'default',
+        ];
         while ($data = $result->fetchArray(SQLITE3_ASSOC)) {
             $permissions[] = [
                 'key' => LocalConfigUtils::transformKeyToCamelCase($data['slug']),
