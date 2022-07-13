@@ -46,9 +46,9 @@ function UserSpaceWrapperToolbar(props: Props) {
                                 []
                                 }
                         />
-                        <span className="relative ml-20 mr-20" ref={settingsVisibleData.ref} style={ { width: 150 } }>
+                        <span className="relative ml-20 mr-20" ref={settingsVisibleData.ref} style={ { width: 200 } }>
                                 <div className="flex gap-2 items-center text-white cursor-pointer" onClick={() => settingsVisibleData.setIsComponentVisible(!settingsVisibleData.isComponentVisible)}>
-                                        <span className={classNames('flex items-center justify-center', TwBackgroundColors.orange, TwTextSizes.px12, 'rounded-full')} style={ {width: 24, height: 24,} }>
+                                        <span className={classNames('flex items-center justify-center', TwBackgroundColors.orange, TwTextSizes.px12, 'rounded-full')} style={ {width: 24, height: 24, minWidth: 24,} }>
                                         <Icon type={IconType.Regular} icon={IconList.user}/>
                                         </span>
                                         <p className="flex-grow">
