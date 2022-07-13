@@ -68,7 +68,7 @@ export const CheckUserPermissionComponent = (props: ICheckUserPermissionComponen
 
         $result = $db->query($sql);
 
-        $permissions = [
+        $permissions[] = [
             'key' => 'default',
             'slug' => 'default',
             'title' => 'default',
