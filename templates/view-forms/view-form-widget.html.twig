@@ -32,11 +32,13 @@ export default function {{ compName }}Widget(props: Props) {
                     {!!props.onEdit &&
                         <SquareButton
                             bgColor={"transparent"}
-                            icon={{
+                            icon={
+                            {
                                 type: IconType.SolidButton,
                                 icon: IconList.edit,
                                 className: TwTextColors.slate400,
-                            }}
+                            }
+                            }
 
                         />
                     }
