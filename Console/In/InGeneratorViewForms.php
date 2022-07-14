@@ -76,7 +76,7 @@ class InGeneratorViewForms extends Command
 
             foreach ($viewItem['config']['fields'] as $fieldIndex => $field) {
                 if (isset($field['type']) && $field['type'] === 'separator') {
-                    $content = '<div className="h-6"></div>';
+                    $content = '<div className="h-4"></div>';
                     $tpCompactRows[] = $content;
                 } else if (isset($field['type']) && $field['type'] === 'label') {
                     $labelInner = ' label={<Label>{t(\'' . $field['text'] . '\')}</Label>}';
