@@ -26,7 +26,7 @@ export default function {{ compName }}Widget(props: Props) {
 
     return (
         <WhiteCard>
-            {(!!props.title || props.onEdit) &&
+            {(!!title || props.onEdit) &&
                 <div className='flex gap-2 items-center'>
                     {!!title &&
                         <CardWidgetTitle className='flex-grow'>{title}</CardWidgetTitle>
