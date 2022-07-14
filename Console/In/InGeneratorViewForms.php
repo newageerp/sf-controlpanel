@@ -155,7 +155,8 @@ class InGeneratorViewForms extends Command
                 [
                     'compName' => $compName,
                     'imports' => array_unique($tpImports),
-                    'compactRows' => $tpCompactRows
+                    'compactRows' => $tpCompactRows,
+                    'compactPrefix' => $compactPrefix,
                 ]
             );
             Utils::writeOnChanges($fileName, $generatedContent);
