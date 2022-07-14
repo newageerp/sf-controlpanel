@@ -53,6 +53,9 @@ class InGeneratorViewForms extends Command
         $generatedPathWidget = Utils::generatedPath('viewforms/widgets');
 
         foreach ($viewItems as $viewItem) {
+            $compact = isset($viewItem['config']['compact']) && $viewItem['config']['compact'];
+            $compactPrefix = $compact ? 'Compact' : 'Wide';
+
             $generateForWidget = isset($viewItem['config']['generateForWidget']) && $viewItem['config']['generateForWidget'];
             if (!$generateForWidget) {
                 continue;
@@ -78,7 +81,7 @@ class InGeneratorViewForms extends Command
                 } else if (isset($field['type']) && $field['type'] === 'label') {
                     $labelInner = ' label={<Label>{t(\'' . $field['text'] . '\')}</Label>}';
 
-                    $content = '<CompactRow' . $labelInner . ' control={<Fragment/>}/>';
+                    $content = '<' . $compactPrefix . 'Row' . $labelInner . ' control={<Fragment/>}/>';
                     $tpCompactRows[] = $content;
                 } else if (isset($field['path']) && $field['path']) {
                     $pathA = explode(".", $field['path']);
@@ -142,7 +145,7 @@ class InGeneratorViewForms extends Command
                         $labelInner = ' label={<Label>{t(\'' . $fieldProperty['title'] . '\')}</Label>}';
                     }
 
-                    $content = '<CompactRow' . $labelInner . ' control={' . $fieldTemplate . '}/>';
+                    $content = '<' . $compactPrefix . 'Row' . $labelInner . ' control={' . $fieldTemplate . '}/>';
                     $tpCompactRows[] = $content;
                 }
             }
@@ -152,7 +155,7 @@ class InGeneratorViewForms extends Command
                 [
                     'compName' => $compName,
                     'imports' => array_unique($tpImports),
-                    'compactRows' => $tpCompactRows,
+                    'compactRows' => $tpCompactRows
                 ]
             );
             Utils::writeOnChanges($fileName, $generatedContent);
@@ -162,6 +165,8 @@ class InGeneratorViewForms extends Command
                 [
                     'compName' => $compName,
                     'hookSchemaName' => Utils::fixComponentName($viewItem['config']['schema']),
+                    'title' => $viewItem['config']['title'] ?? '',
+                    'editForm' => $viewItem['config']['editForm'] ?? '',
                 ]
             );
             Utils::writeOnChanges($fileName, $generatedContent);

@@ -22,12 +22,14 @@ export default function {{ compName }}Widget(props: Props) {
         return <Fragment />
     }
 
+    const title = props.title?props.title:"{{ title }}";
+
     return (
         <WhiteCard>
             {(!!props.title || props.onEdit) &&
                 <div className='flex gap-2 items-center'>
-                    {!!props.title &&
-                        <CardWidgetTitle className='flex-grow'>{props.title}</CardWidgetTitle>
+                    {!!title &&
+                        <CardWidgetTitle className='flex-grow'>{title}</CardWidgetTitle>
                     }
                     {!!props.onEdit &&
                         <SquareButton
