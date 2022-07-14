@@ -60,6 +60,15 @@ class InGeneratorRoutes extends Command
             );
         }
 
+        $viewsFile = $_ENV['NAE_SFS_CP_STORAGE_PATH'] . '/view.json';
+        $viewItems = [];
+        if (file_exists($viewsFile)) {
+            $viewItems = json_decode(
+                file_get_contents($viewsFile),
+                true
+            );
+        }
+
         $listComponents = [];
 
         $imports = [];
@@ -93,6 +102,21 @@ class InGeneratorRoutes extends Command
                 'schema' => $editItem['config']['schema'],
                 'type' => $editItem['config']['type'],
                 'compName' => $compNameDataSource
+            ];
+        }
+
+        $viewComponents = [];
+        foreach ($viewItems as $viewItem) {
+//            $compNameDataSource = Utils::fixComponentName(
+//                ucfirst($editItem['config']['schema']) .
+//                ucfirst($editItem['config']['type']) . 'FormDataSource'
+//            );
+//            $imports[] = 'import ' . $compNameDataSource . ' from "../editforms/forms-data-source/' . $compNameDataSource . '"';
+
+            $viewComponents[] = [
+                'schema' => $viewItem['config']['schema'],
+                'type' => $viewItem['config']['type'],
+//                'compName' => $compNameDataSource
             ];
         }
 
@@ -131,6 +155,7 @@ class InGeneratorRoutes extends Command
                 'imports' => $imports,
                 'listComponents' => $listComponents,
                 'editComponents' => $editComponents,
+                'viewComponents' => $viewComponents,
                 'appsComponents' => $appsComponents,
             ]
         );

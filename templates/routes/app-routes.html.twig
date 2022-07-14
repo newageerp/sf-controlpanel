@@ -50,11 +50,24 @@ export function EditRoutes() {
     )
 }
 
+export function ViewRoutes() {
+    return (
+        <Fragment>
+            {% for component in viewComponents %}
+                <Route path={"/u/{{ component.schema }}/{{ component.type }}/view/:id"}>
+                    <UI.RoutePoints.List key={"{{ component.schema }}-{{ component.type }}"} schema="{{ component.schema }}" type="{{ component.type }}"/>
+                </Route>
+            {% endfor %}
+        </Fragment>
+    )
+}
+
 export default function AppRoutes() {
     return (
         <Fragment>
             <ListRoutes/>
             <EditRoutes/>
+            <ViewRoutes/>
             <AppsRoutes/>
         </Fragment>
     )
