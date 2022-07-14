@@ -23,7 +23,7 @@ export default function {{ compName }}Widget(props: Props) {
     const openEditWindow = {% if editForm != "" %}() => showEditPopup({
         schema: '{{ schema }}',
         type: '{{ editForm }}',
-        id: props.element.id,
+        id: props.id,
     });{% else %}undefined;{% endif %}
 
     const onEdit = props.onEdit ? props.onEdit : openEditWindow;
