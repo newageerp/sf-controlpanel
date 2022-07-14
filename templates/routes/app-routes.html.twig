@@ -56,7 +56,7 @@ export function ViewRoutes() {
         <Fragment>
             {% for component in viewComponents %}
                 <Route path={"/u/{{ component.schema }}/{{ component.type }}/view/:id"}>
-                    <UI.RoutePoints.View key={"{{ component.schema }}-{{ component.type }}"}/>
+                    <UI.RoutePoints.ViewEntry key={"{{ component.schema }}-{{ component.type }}"} schema="{{ component.schema }}" type="{{ component.type }}"/>
                 </Route>
             {% endfor %}
         </Fragment>
