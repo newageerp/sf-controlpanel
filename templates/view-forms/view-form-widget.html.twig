@@ -1,0 +1,48 @@
+import { WhiteCard } from '@newageerp/ui.cards.base.white-card';
+import { CardWidgetTitle } from '@newageerp/ui.cards.base.card-widget-title'
+import React, { Fragment } from 'react'
+import { useTripHookNae } from '../../../Components/Hooks/useTripHookNae'
+import { PropsId } from '../../../UserComponents/ModelsCacheData/types'
+import { SquareButton } from '@newageerp/ui.buttons.base.square-button'
+import { IconType } from '@newageerp/ui.icons.base.icon';
+import { IconList } from '@newageerp/ui.icons.base.icon-list';
+import { TwTextColors } from '@newageerp/ui.styles.tailwind';
+import {{ compName }} from '../forms/{{ compName }}';
+
+interface Props extends PropsId {
+    title?: string,
+    onEdit?: () => void,
+
+}
+
+export default function {{ compName }}Widget(props: Props) {
+    const element = use{{ hookSchemaName }}HookNae(props.id);
+
+    if (!element) {
+        return <Fragment />
+    }
+
+    return (
+        <WhiteCard>
+            {(!!props.title || props.onEdit) &&
+                <div className='flex gap-2 items-center'>
+                    {!!props.title &&
+                        <CardWidgetTitle className='flex-grow'>{props.title}</CardWidgetTitle>
+                    }
+                    {!!props.onEdit &&
+                        <SquareButton
+                            bgColor={"transparent"}
+                            icon={{
+                                type: IconType.SolidButton,
+                                icon: IconList.edit,
+                                className: TwTextColors.slate400,
+                            }}
+
+                        />
+                    }
+                </div>
+            }
+            <{{ compName }} element={element} />
+        </WhiteCard>
+    )
+}

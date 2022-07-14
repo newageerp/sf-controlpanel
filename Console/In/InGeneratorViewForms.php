@@ -38,6 +38,7 @@ class InGeneratorViewForms extends Command
         ]);
 
         $viewFormTemplate = $twig->load('view-forms/view-form.html.twig');
+        $viewFormWidgetTemplate = $twig->load('view-forms/view-form-widget.html.twig');
 
         $viewsFile = $_ENV['NAE_SFS_CP_STORAGE_PATH'] . '/view.json';
         $viewItems = [];
@@ -49,7 +50,7 @@ class InGeneratorViewForms extends Command
         }
 
         $generatedPath = Utils::generatedPath('viewforms/forms');
-//        $generatedPathDataSource = Utils::generatedPath('editforms/forms-data-source');
+        $generatedPathWidget = Utils::generatedPath('viewforms/widgets');
 
         foreach ($viewItems as $viewItem) {
             $generateForWidget = isset($viewItem['config']['generateForWidget']) && $viewItem['config']['generateForWidget'];
@@ -147,21 +148,6 @@ class InGeneratorViewForms extends Command
             }
 
             $fileName = $generatedPath . '/' . $compName . '.tsx';
-//            $generatedContent = str_replace(
-//                [
-//                    'TP_COMP_NAME',
-//                    'TP_COMPACT_ROWS',
-//                    'TP_WIDE_ROWS',
-//                    'TP_IMPORT'
-//                ],
-//                [
-//                    $compName,
-//                    $tpCompactRowsStr,
-//                    $tpWideRowsStr,
-//                    $tpImportsStr,
-//                ],
-//                $editFormTemplate
-//            );
             $generatedContent = $viewFormTemplate->render(
                 [
                     'compName' => $compName,
@@ -171,18 +157,15 @@ class InGeneratorViewForms extends Command
             );
             Utils::writeOnChanges($fileName, $generatedContent);
 
-            // DATA SOURCE
-//            $fileName = $generatedPathDataSource . '/' . $compNameDataSource . '.tsx';
-//
-//            $generatedContent = $editFormDataSourceTemplate->render([
-//                'TP_COMP_NAME_DATA_SOURCE' => $compNameDataSource,
-//                'TP_COMP_NAME' => $compName,
-//                'TP_SCHEMA' => $editItem['config']['schema'],
-//                'TP_FIELDS_TO_RETURN' => json_encode($fieldsToReturn, JSON_PRETTY_PRINT),
-//                'toolbarTitle' => $this->entitiesUtils->getTitleBySlug($editItem['config']['schema'])
-//            ]);
-//
-//            Utils::writeOnChanges($fileName, $generatedContent);
+            $fileName = $generatedPathWidget . '/' . $compName . 'Widget.tsx';
+            $generatedContent = $viewFormWidgetTemplate->render(
+                [
+                    'compName' => $compName,
+                    'hookSchemaName' => Utils::fixComponentName($viewItem['config']['schema']),
+                ]
+            );
+            Utils::writeOnChanges($fileName, $generatedContent);
+
         }
 
         return Command::SUCCESS;
