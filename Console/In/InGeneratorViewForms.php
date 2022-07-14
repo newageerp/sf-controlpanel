@@ -161,7 +161,7 @@ class InGeneratorViewForms extends Command
             $generatedContent = $viewFormTemplate->render(
                 [
                     'compName' => $compName,
-                    'imports' => $tpImports,
+                    'imports' => array_unique($tpImports),
                     'compactRows' => $tpCompactRows,
                 ]
             );
