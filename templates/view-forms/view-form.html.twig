@@ -1,0 +1,23 @@
+import { Compact, CompactRow, Label } from '@newageerp/ui.form.base.form-pack'
+import { useTranslation } from 'react-i18next'
+import React from 'react'
+{% for import in imports %}
+    {{ import|raw }}
+{% endfor %}
+
+interface Props {
+    element: any
+}
+
+export default function {{ compName }}(props: Props) {
+    const { t } = useTranslation();
+    const { element } = props;
+
+    return (
+        <Compact>
+            {% for compactRow in compactRows %}
+                {{ compactRow|raw }}
+            {% endfor %}
+        </Compact>
+    )
+}

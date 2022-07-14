@@ -107,17 +107,20 @@ class InGeneratorRoutes extends Command
 
         $viewComponents = [];
         foreach ($viewItems as $viewItem) {
+            $generateForWidget = isset($viewItem['config']['generateForWidget']) && $viewItem['config']['generateForWidget'];
+            if (!$generateForWidget) {
 //            $compNameDataSource = Utils::fixComponentName(
 //                ucfirst($editItem['config']['schema']) .
 //                ucfirst($editItem['config']['type']) . 'FormDataSource'
 //            );
 //            $imports[] = 'import ' . $compNameDataSource . ' from "../editforms/forms-data-source/' . $compNameDataSource . '"';
 
-            $viewComponents[] = [
-                'schema' => $viewItem['config']['schema'],
-                'type' => $viewItem['config']['type'],
+                $viewComponents[] = [
+                    'schema' => $viewItem['config']['schema'],
+                    'type' => $viewItem['config']['type'],
 //                'compName' => $compNameDataSource
-            ];
+                ];
+            }
         }
 
         $appsComponents = [];
@@ -142,7 +145,7 @@ class InGeneratorRoutes extends Command
                 'compName' => 'NotesPage'
             ];
         }
-         if (class_exists('App\Entity\FollowUp')) {
+        if (class_exists('App\Entity\FollowUp')) {
             $imports[] = 'import FollowUpPage from "../apps/follow-up/FollowUpPage";';
             $appsComponents[] = [
                 'name' => 'follow-up',

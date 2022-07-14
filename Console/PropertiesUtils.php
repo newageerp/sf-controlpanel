@@ -347,6 +347,163 @@ class PropertiesUtils
         }
     }
 
+    public function getDefaultPropertyViewValueTemplate(?array $property, ?array $column)
+    {
+        if (!$column) {
+            $column = [];
+        }
+
+        if (!$property || !$column) {
+            return [
+                "import" => '',
+                "template" => '<Fragment/>'
+            ];
+        }
+
+        $naeType = $this->getPropertyNaeType($property, $column);
+
+        switch ($naeType) {
+            case 'seconds-to-time':
+                return [
+                    "import" => 'import { SecondsToTime } from "@newageerp/data.table.seconds-to-time";',
+                    "template" => '<SecondsToTime seconds={TP_VALUE}/>'
+                ];
+                break;
+            case 'status-short':
+                $compName = Utils::fixComponentName(ucfirst($property['schema']) . 'Statuses');
+                return [
+                    "import" => 'import { ' . $compName . ' } from "../../statuses/badges/' . $compName . '";',
+                    "template" => '{' . $compName . '(TP_VALUE, "TP_KEY", true)}'
+                ];
+                break;
+            case 'status':
+                $compName = Utils::fixComponentName(ucfirst($property['schema']) . 'Statuses');
+                return [
+                    "import" => 'import { ' . $compName . ' } from "../../statuses/badges/' . $compName . '";',
+                    "template" => '{' . $compName . '(TP_VALUE, "TP_KEY")}'
+                ];
+                break;
+            case 'file':
+                return [
+                    "import" => '',
+                    "template" => '<Fragment/>'
+                ];
+                break;
+            case 'fileMultiple':
+                return [
+                    "import" => '',
+                    "template" => '<Fragment/>'
+                ];
+                break;
+            case 'image':
+                return [
+                    "import" => 'import { Image } from "@newageerp/data.table.image";',
+                    "template" => '<Image value={TP_VALUE}/>'
+                ];
+                break;
+            case 'audio':
+                return [
+                    "import" => 'import { Audio } from "@newageerp/data.table.audio";',
+                    "template" => '<Audio value={TP_VALUE}/>'
+                ];
+                break;
+            case 'color':
+                return [
+                    "import" => '',
+                    "template" => '<Fragment/>'
+                ];
+                break;
+            case 'object':
+                return [
+                    "import" => '',
+                    "template" => '<Fragment/>'
+                ];
+                break;
+            case 'string_array':
+                return [
+                    "import" => 'import { String } from "@newageerp/data.table.string";',
+                    "template" => '<String value={TP_VALUE.join(", ")}/>'
+                ];
+                break;
+            case 'float':
+                return [
+                    "import" => 'import { Float } from "@newageerp/data.table.float";',
+                    "template" => '<Float value={TP_VALUE}/>'
+                ];
+                break;
+            case 'number':
+                return [
+                    "import" => 'import { Int } from "@newageerp/data.table.int";',
+                    "template" => '<Int value={TP_VALUE}/>'
+                ];
+                break;
+            case 'date':
+                return [
+                    "import" => 'import { Date } from "@newageerp/data.table.date";',
+                    "template" => '<Date value={TP_VALUE}/>'
+                ];
+                break;
+            case 'datetime':
+                return [
+                    "import" => 'import { Datetime } from "@newageerp/data.table.datetime";',
+                    "template" => '<Datetime value={TP_VALUE}/>'
+                ];
+                break;
+            case 'bool':
+                return [
+                    "import" => 'import { Bool } from "@newageerp/data.table.bool";',
+                    "template" => '<Bool value={TP_VALUE}/>'
+                ];
+                break;
+            case 'text':
+                return [
+                    "import" => 'import { Text } from "@newageerp/data.table.text";',
+                    "template" => '<Text value={TP_VALUE}/>'
+                ];
+                break;
+            case 'enum_multi_number':
+                return [
+                    "import" => '',
+                    "template" => '<Fragment/>'
+                ];
+                break;
+            case 'enum_multi_text':
+                return [
+                    "import" => '',
+                    "template" => '<Fragment/>'
+                ];
+                break;
+            case 'enum_text':
+                $compName = 'get' . Utils::fixComponentName(ucfirst($property['schema']) . 'Enums');
+                $compFileName = Utils::fixComponentName(ucfirst($property['schema']) . 'Enums');
+                return [
+                    "import" => 'import { ' . $compName . ' } from "../../enums/view/' . $compFileName . '";',
+                    "template" => '{' . $compName . '("TP_KEY", TP_VALUE)}'
+                ];
+                break;
+            case 'enum_number':
+                $compName = 'get' . Utils::fixComponentName(ucfirst($property['schema']) . 'Enums');
+                $compFileName = Utils::fixComponentName(ucfirst($property['schema']) . 'Enums');
+                return [
+                    "import" => 'import { ' . $compName . ' } from "../../enums/view/' . $compFileName . '";',
+                    "template" => '{' . $compName . '("TP_KEY", TP_VALUE.toString())}'
+                ];
+                break;
+            case 'array':
+                return [
+                    "import" => '',
+                    "template" => '<Fragment/>'
+                ];
+                break;
+            case 'string':
+                return [
+                    "import" => 'import { String } from "@newageerp/data.table.string";',
+                    "template" => '<String value={TP_VALUE}/>'
+                ];
+                break;
+        }
+    }
+
 
     public function getDefaultPropertyEditValueTemplate(?array $property, ?array $column)
     {

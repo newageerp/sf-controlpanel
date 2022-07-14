@@ -81,6 +81,9 @@ services:
   Newageerp\SfControlpanel\Console\In\InGeneratorEditForms:
     tags:
       - { name: 'console.command' }
+  Newageerp\SfControlpanel\Console\In\InGeneratorViewForms:
+    tags:
+      - { name: 'console.command' }
   Newageerp\SfControlpanel\Console\In\InGeneratorRoutes:
     tags:
       - { name: 'console.command' }
