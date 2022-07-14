@@ -168,6 +168,7 @@ class InGeneratorViewForms extends Command
                     'hookSchemaName' => Utils::fixComponentName($viewItem['config']['schema']),
                     'title' => $viewItem['config']['title'] ?? '',
                     'editForm' => $viewItem['config']['editForm'] ?? '',
+                    'schema' => $viewItem['config']['schema'],
                 ]
             );
             Utils::writeOnChanges($fileName, $generatedContent);

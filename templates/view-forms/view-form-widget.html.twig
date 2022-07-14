@@ -8,6 +8,7 @@ import { IconType } from '@newageerp/ui.icons.base.icon';
 import { IconList } from '@newageerp/ui.icons.base.icon-list';
 import { TwTextColors } from '@newageerp/ui.styles.tailwind';
 import {{ compName }} from '../forms/{{ compName }}';
+import { UI } from '@newageerp/nae-react-ui';
 
 interface Props extends PropsId {
     title?: string,
@@ -18,6 +19,15 @@ interface Props extends PropsId {
 export default function {{ compName }}Widget(props: Props) {
     const element = use{{ hookSchemaName }}HookNae(props.id);
 
+    const { showEditPopup } = UI.Window.useNaeWindow();
+    const openEditWindow = {% if editForm != "" %}() => showEditPopup({
+        schema: '{{ schema }}',
+        type: '{{ editForm }}',
+        id: props.element.id,
+    });{% else %}undefined;{% endif %}
+
+    const onEdit = props.onEdit ? props.onEdit : openEditWindow;
+
     if (!element) {
         return <Fragment />
     }
@@ -26,14 +36,15 @@ export default function {{ compName }}Widget(props: Props) {
 
     return (
         <WhiteCard>
-            {(!!title || props.onEdit) &&
+            {(!!title || onEdit) &&
                 <div className='flex gap-2 items-center'>
                     {!!title &&
                         <CardWidgetTitle className='flex-grow'>{title}</CardWidgetTitle>
                     }
-                    {!!props.onEdit &&
+                    {!!onEdit &&
                         <SquareButton
                             bgColor={"transparent"}
+                            onClick={onEdit}
                             icon={
                             {
                                 type: IconType.SolidButton,
