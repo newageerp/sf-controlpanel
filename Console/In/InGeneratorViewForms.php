@@ -52,6 +52,10 @@ class InGeneratorViewForms extends Command
 //        $generatedPathDataSource = Utils::generatedPath('editforms/forms-data-source');
 
         foreach ($viewItems as $viewItem) {
+            $generateForWidget = isset($viewItem['config']['generateForWidget']) && $viewItem['config']['generateForWidget'];
+            if (!$generateForWidget) {
+                continue;
+            }
             $tpCompactRows = [];
             $tpImports = [];
 
