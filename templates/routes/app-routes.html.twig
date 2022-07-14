@@ -4,6 +4,7 @@ import DefaultEditRouteWrapper from "./wrappers/DefaultEditRouteWrapper";
 {% for import in imports %}
     {{ import|raw }}
 {% endfor %}
+import { UI } from "@newageerp/nae-react-ui";
 
 
 export function AppsRoutes() {
@@ -55,7 +56,7 @@ export function ViewRoutes() {
         <Fragment>
             {% for component in viewComponents %}
                 <Route path={"/u/{{ component.schema }}/{{ component.type }}/view/:id"}>
-                    <UI.RoutePoints.List key={"{{ component.schema }}-{{ component.type }}"} schema="{{ component.schema }}" type="{{ component.type }}"/>
+                    <UI.RoutePoints.ListEntry key={"{{ component.schema }}-{{ component.type }}"} schema="{{ component.schema }}" type="{{ component.type }}"/>
                 </Route>
             {% endfor %}
         </Fragment>
