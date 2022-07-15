@@ -75,7 +75,7 @@ class InGeneratorViewForms extends Command
             $fieldsToReturn = [];
 
             foreach ($viewItem['config']['fields'] as $fieldIndex => $field) {
-                if (isset($field['type']) && $field['type'] === 'separator') {
+                if (isset($field['type']) && ($field['type'] === 'separator' || $field['type'] === 'horizontal-separator')) {
                     $content = '<div className="h-4"></div>';
                     $tpCompactRows[] = $content;
                 } else if (isset($field['type']) && $field['type'] === 'label') {

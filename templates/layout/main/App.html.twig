@@ -1,7 +1,6 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Components, NaeAuthWrapper, OpenApi } from '@newageerp/nae-react-auth-wrapper';
 import { NaeApiFunctions } from "../../config/NaePaths";
-import AppRouting from "./AppRouting";
 import AppRouter from "../routes/wrappers/AppRouter";
 import { Provider } from 'react-redux';
 import { store } from '../../Components/Models/ormstore';
@@ -16,15 +15,22 @@ import { DataCacheProvider } from "../../Components/Hooks/DataCacheProvider";
 import { Switch } from "react-router-dom";
 
 function App() {
+    const [isLoaded, setIsLoaded] = useState(false);
+
     OpenApi.naePaths = NaeApiFunctions;
     const isMount = UIHooks.useDidMount();
 
     useEffect(() => {
         if (isMount) {
-            UI.Socket.Service.connect();
+            setIsLoaded(true);
         }
     }, []);
 
+    useEffect(() => {
+        if (isLoaded) {
+            UI.Socket.Service.connect();
+        }
+    }, [isLoaded]);
 
     return (
         <Provider store={store}>

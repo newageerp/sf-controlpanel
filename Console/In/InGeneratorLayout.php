@@ -137,7 +137,7 @@ class InGeneratorLayout extends Command
             'layout/auth/AuthLogin.html.twig' => ['auth', 'AuthLogin'],
 
             'layout/main/App.html.twig' => ['main', 'App'],
-            'layout/main/AppRouting.html.twig' => ['main', 'AppRouting'],
+//            'layout/main/AppRouting.html.twig' => ['main', 'AppRouting'],
             'layout/main/InitComponent.html.twig' => ['main', 'InitComponent'],
         ];
 

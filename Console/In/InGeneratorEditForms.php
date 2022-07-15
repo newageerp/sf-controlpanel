@@ -72,7 +72,7 @@ class InGeneratorEditForms extends Command
             $fieldsToReturn = [];
 
             foreach ($editItem['config']['fields'] as $fieldIndex => $field) {
-                if (isset($field['type']) && ($field['type'] === 'separator' || $field['type'] === 'horizontal-separator')) {
+                if (isset($field['type']) && ($field['type'] === 'separator' || $field['type'] === 'horizontal-separator' || $field['type'] === 'tagCloud')) {
                     $content = '<div className="h-6"></div>';
                     $tpWideRows[] = $content;
                     $tpCompactRows[] = $content;

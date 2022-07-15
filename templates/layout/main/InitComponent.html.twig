@@ -76,7 +76,6 @@ export default function InitComponent(props: Props) {
                 const f = NaeEditFields.concat(
                     defaults.edit.map((e) => functions.config.configEditToINaeEditSettings(e))
                 );
-                console.log('ff', f);
                 return f;
             }}
             viewFields={(): INaeViewSettings[] => {
