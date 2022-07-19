@@ -52,8 +52,8 @@ class MenuService
                     explode(
                         "/",
                         str_replace(
-                            '-',
-                            '/',
+                            ['-', '?', '=', '_'],
+                            ['/', '', '', ''],
                             $menuItem['config']['customLink']
                         )
                     )
