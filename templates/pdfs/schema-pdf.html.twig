@@ -115,6 +115,7 @@ export const {{ compName }}Item = (props: {{ compName }}ItemProps) => {
         {showEmail && !!pdfData &&
             <PopupMail>
                 <MailsForm
+                    onSend={() => setShowEmail(false)}
                     onBack={() => setShowEmail(false)}
                     extraData={
                         {
