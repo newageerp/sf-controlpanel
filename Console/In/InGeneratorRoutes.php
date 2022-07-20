@@ -42,6 +42,7 @@ class InGeneratorRoutes extends Command
         $generatedRoutesPath = Utils::generatedPath('routes');
 
         $customMenuPath = Utils::customFolderPath('menu');
+        $customRoutesPath = Utils::customFolderPath('routes');
 
         $tabsFile = $_ENV['NAE_SFS_CP_STORAGE_PATH'] . '/tabs.json';
         $tabItems = [];
@@ -213,6 +214,12 @@ class InGeneratorRoutes extends Command
             Utils::writeOnChanges($customFileName, $generatedContent);
         }
 
+        // CustomUserWrapperRoutes
+        $fileName = $customRoutesPath . '/CustomUserWrapperRoutes.tsx';
+        if (!file_exists($fileName)) {
+            $generatedContent = $twig->load('routes/CustomUserWrapperRoutes.html.twig')->render();
+            Utils::writeOnChanges($fileName, $generatedContent);
+        }
         return Command::SUCCESS;
     }
 }
