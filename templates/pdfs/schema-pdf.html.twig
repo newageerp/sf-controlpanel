@@ -108,7 +108,7 @@ export const {{ compName }}Item = (props: {{ compName }}ItemProps) => {
                 <PdfWindow
                     pdf={pdfData}
                     onBack={() => setShowPdf(false)}
-                    onEmail={() => {}}
+                    onEmail={onSend}
                 />
             </PopupPdf>
         }
