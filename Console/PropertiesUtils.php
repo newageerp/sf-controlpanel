@@ -10,10 +10,14 @@ class PropertiesUtils
 
     public function __construct(EntitiesUtils $entitiesUtils)
     {
-        $this->properties = json_decode(
-            file_get_contents(LocalConfigUtils::getPhpCachePath() . '/properties.json'),
-            true
-        );
+        $propertiesFile = LocalConfigUtils::getPhpCachePath() . '/properties.json';
+        $this->properties = [];
+        if (file_exists($propertiesFile)) {
+            $this->properties = json_decode(
+                file_get_contents($propertiesFile),
+                true
+            );
+        }
         $this->entitiesUtils = $entitiesUtils;
     }
 
