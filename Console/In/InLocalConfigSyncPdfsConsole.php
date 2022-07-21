@@ -27,7 +27,7 @@ class InLocalConfigSyncPdfsConsole extends Command
     {
         // TMP OLD SYNC
         $db = LocalConfigUtils::getSqliteDb();
-        $sql = 'select pdfs.template, pdfs.title, pdfs.skipList, pdfs.sort, pdfs.skipWithoutSign, entities.slug from pdfs left join entities on entities.id = pdfs.entity';
+        $sql = 'select pdfs.id, pdfs.template, pdfs.title, pdfs.skipList, pdfs.sort, pdfs.skipWithoutSign, entities.slug from pdfs left join entities on entities.id = pdfs.entity';
         $result = $db->query($sql);
 
         $variables = LocalConfigUtils::getCpConfigFileData('pdfs');
