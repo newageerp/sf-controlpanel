@@ -30,42 +30,28 @@ class InGeneratorEnums extends Command
 
         $generatedPath = Utils::generatedPath('enums/view');
 
-        $db = new \SQLite3($_ENV['NAE_SFS_CP_DB_PATH']);
-
-        $sql = "SELECT 
-                    enums.id, enums.title, enums.value, enums.entity, enums.property, enums.sort,
-       enums.badge_variant as badgeVariant,
-       entities.slug as entity_slug,
-                    entities.slug || ' (' || entities.titleSingle || ')' as entity_title,
-       properties.key as property_key,
-       
-                    properties.key || ' (' || properties.title || ')' as property_title
-                FROM enums 
-                left join entities on enums.entity = entities.id
-                left join properties on enums.property = properties.id
-                WHERE 1 = 1 ";
-        $result = $db->query($sql);
+        $enumsList = LocalConfigUtils::getCpConfigFileData('enums');
 
         $enums = [];
         $enumsColors = [];
         $enumsOptions = [];
-        while ($data = $result->fetchArray(SQLITE3_ASSOC)) {
-            if (!isset($enums[$data['entity_slug']])) {
-                $enums[$data['entity_slug']] = [];
-                $enumsColors[$data['entity_slug']] = [];
-                $enumsOptions[$data['entity_slug']] = [];
+        foreach ($enumsList as $enum) {
+            if (!isset($enums[$enum['config']['entity']])) {
+                $enums[$enum['config']['entity']] = [];
+                $enumsColors[$enum['config']['entity']] = [];
+                $enumsOptions[$enum['config']['entity']] = [];
             }
-            if (!isset($enums[$data['entity_slug']][$data['property_key']])) {
-                $enums[$data['entity_slug']][$data['property_key']] = [];
-                $enumsColors[$data['entity_slug']][$data['property_key']] = [];
-                $enumsOptions[$data['entity_slug']][$data['property_key']] = [];
+            if (!isset($enums[$enum['config']['entity']][$enum['config']['key']])) {
+                $enums[$enum['config']['entity']][$enum['config']['key']] = [];
+                $enumsColors[$enum['config']['entity']][$enum['config']['key']] = [];
+                $enumsOptions[$enum['config']['entity']][$enum['config']['key']] = [];
             }
-            $enumsOptions[$data['entity_slug']][$data['property_key']][] = [
-                'value' => $data['value'],
-                'label' => $data['title'],
+            $enumsOptions[$enum['config']['entity']][$enum['config']['key']][] = [
+                'value' => $enum['config']['value'],
+                'label' => $enum['config']['title'],
             ];
-            $enums[$data['entity_slug']][$data['property_key']][$data['value']] = $data['title'];
-            $enumsColors[$data['entity_slug']][$data['property_key']][$data['value']] = $data['badgeVariant'];
+            $enums[$enum['config']['entity']][$enum['config']['key']][$enum['config']['value']] = $enum['config']['title'];
+            $enumsColors[$enum['config']['entity']][$enum['config']['key']][$enum['config']['value']] = $enum['config']['badgeVariant'];
         }
 
         foreach ($enums as $slug => $propertyKeys) {

@@ -30,7 +30,50 @@ class InLocalConfigSyncFieldsConsole extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        // TMP OLD SYNC
         $db = LocalConfigUtils::getSqliteDb();
+        $sql = "SELECT 
+                    enums.id, enums.title, enums.value, enums.entity, enums.property, enums.sort,
+       enums.badge_variant as badgeVariant,
+       entities.slug as entity_slug,
+                    entities.slug || ' (' || entities.titleSingle || ')' as entity_title,
+       properties.key as property_key,
+       
+                    properties.key || ' (' || properties.title || ')' as property_title
+                FROM enums 
+                left join entities on enums.entity = entities.id
+                left join properties on enums.property = properties.id
+                WHERE 1 = 1";
+        $result = $db->query($sql);
+
+        $variables = LocalConfigUtils::getCpConfigFileData('enums');
+        while ($data = $result->fetchArray(SQLITE3_ASSOC)) {
+            $newId = 'synced-' . $data['id'];
+
+            $isExist = false;
+            foreach ($variables as $var) {
+                if ($var['id'] === $newId) {
+                    $isExist = true;
+                }
+            }
+            if (!$isExist) {
+                $variables[] = [
+                    'id' => $newId,
+                    'tag' => '',
+                    'title' => '',
+                    'config' => [
+                        'entity' => $data['entity_slug'],
+                        'property' => $data['property_key'],
+                        'value' => $data['value'],
+                        'sort' => (int)$data['sort'],
+                        'title' => $data['title'],
+                        'badgeVariant' => $data['badgeVariant'],
+                    ]
+                ];
+            }
+        }
+        file_put_contents(LocalConfigUtils::getCpConfigFile('enums'), json_encode($variables));
+        // TMP OLD SYNC OFF
 
         $configJsonPath = LocalConfigUtils::getStrapiCachePath() . '/NaeSProperties.json';
         $configJsonPathDbKeys = LocalConfigUtils::getStrapiCachePath() . '/NaeSDbKeys.json';
@@ -133,23 +176,20 @@ class InLocalConfigSyncFieldsConsole extends Command
                 $prop['as'] = $data['as'];
             }
 
-            $sql = 'select 
-        enums.sort,
-        enums.title,
-        enums.value
-        
-        from enums
-        where enums.entity = ' . $data['entity'] . ' 
-        and enums.property = ' . $data['id'] . '
-         ';
-            $resultEnums = $db->query($sql);
-
             $enumsData = [];
-            while ($enum = $resultEnums->fetchArray(SQLITE3_ASSOC)) {
-                $enumsData[] = [
-                    'sort' => $enum['sort'],
-                    'title' => $enum['title'],
-                    'value' => $enum['value'],
+
+            $enumsList = LocalConfigUtils::getCpConfigFileData('enums');
+            $enumsList = array_filter(
+                $enumsList,
+                function ($item) use ($data) {
+                    return $item['config']['entity'] === $data['entity_slug'] && $item['config']['key'] === $data['key'];
+                }
+            );
+            foreach ($enumsList as $enum) {
+                 $enumsData[] = [
+                    'sort' => $enum['config']['sort'],
+                    'title' => $enum['config']['title'],
+                    'value' => $enum['config']['value'],
                 ];
             }
 
