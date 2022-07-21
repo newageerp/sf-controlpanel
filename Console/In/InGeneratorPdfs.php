@@ -32,7 +32,7 @@ class InGeneratorPdfs extends Command
                 $pdfs[$pdf['config']['entity']] = [];
             }
 
-            $compName = 'Pdf' . Utils::fixComponentName($pdf['config']['slug']) . Utils::fixComponentName($pdf['config']['template']);
+            $compName = 'Pdf' . Utils::fixComponentName($pdf['config']['entity']) . Utils::fixComponentName($pdf['config']['template']);
 
             $pdfs[$pdf['config']['entity']][] = [
                 'sort' => (int)$pdf['config']['sort'],
