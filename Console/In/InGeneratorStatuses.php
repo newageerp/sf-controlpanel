@@ -34,24 +34,14 @@ class InGeneratorStatuses extends Command
 
         $generatedPath = Utils::generatedPath('statuses/badges');
 
-        $db = new \SQLite3($_ENV['NAE_SFS_CP_DB_PATH']);
-
-        $sql = "SELECT 
-                    statuses.id, statuses.text, statuses.entity, statuses.status, statuses.type, statuses.color, statuses.brightness,
-                    entities.slug as entity_slug,
-                    entities.slug || ' (' || entities.titleSingle || ')' as entity_title
-                FROM statuses 
-                left join entities on statuses.entity = entities.id
-                WHERE 1 = 1 
-                ";
-        $result = $db->query($sql);
+        $statusData = LocalConfigUtils::getCpConfigFileData('statuses');
 
         $statuses = [];
-        while ($data = $result->fetchArray(SQLITE3_ASSOC)) {
-            if (!isset($statuses[$data['entity_slug']])) {
-                $statuses[$data['entity_slug']] = [];
+        foreach ($statusData as $status) {
+            if (!isset($statuses[$status['config']['entity']])) {
+                $statuses[$status['config']['entity']] = [];
             }
-            $statuses[$data['entity_slug']][] = $data;
+            $statuses[$status['config']['entity']][] = $status;
         }
 
 
@@ -61,20 +51,20 @@ class InGeneratorStatuses extends Command
 
             $compName = Utils::fixComponentName(ucfirst($slug) . 'Statuses');
 
-            foreach ($entityStatuses as $entityStatus) {
+            foreach ($entityStatuses as $status) {
                 $statusName = Utils::fixComponentName(
                     ucfirst($slug) .
-                    ucfirst($entityStatus['type']) .
+                    ucfirst($status['config']['type']) .
                     'Badge' .
-                    $entityStatus['status']
+                    $status['config']['status']
                 );
                 $statusData[] = [
                     'statusName' => $statusName,
-                    'color' => $entityStatus['color'],
-                    'brightness' => mb_substr($entityStatus['brightness'], 1),
-                    'text' => $entityStatus['text'],
-                    'status' => $entityStatus['status'],
-                    'type' => $entityStatus['type'],
+                    'color' => $status['config']['color'],
+                    'brightness' => mb_substr($status['config']['brightness'], 1),
+                    'text' => $status['config']['text'],
+                    'status' => $status['config']['status'],
+                    'type' => $status['config']['type'],
                 ];
 
             }
