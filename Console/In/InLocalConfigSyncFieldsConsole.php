@@ -73,7 +73,71 @@ class InLocalConfigSyncFieldsConsole extends Command
             }
         }
         file_put_contents(LocalConfigUtils::getCpConfigFile('enums'), json_encode($variables));
+
+
+        $sql = "select 
+        properties.id,
+        properties.key, 
+        properties.description, 
+        properties.type, 
+        properties.typeFormat, 
+        properties.title, 
+        properties.additionalProperties,  
+        properties.`as`,
+        properties.isDb,
+        properties.dbType,
+        entities.slug as entity_slug, 
+        entities.className as entity_className,
+        properties.entity,
+       properties.available_sort,
+       properties.available_filter,
+       properties.available_group,
+       properties.available_total
+        
+        from properties
+        left join entities on entities.id = properties.entity";
+        $result = $db->query($sql);
+
+        $variables = LocalConfigUtils::getCpConfigFileData('properties');
+        while ($data = $result->fetchArray(SQLITE3_ASSOC)) {
+            $newId = 'synced-' . $data['id'];
+
+            $isExist = false;
+            foreach ($variables as $var) {
+                if ($var['id'] === $newId) {
+                    $isExist = true;
+                }
+            }
+            if (!$isExist) {
+                $variables[] = [
+                    'id' => $newId,
+                    'tag' => '',
+                    'title' => '',
+                    'config' => [
+                        'additionalProperties' => $data['additionalProperties'],
+                        'as' => $data['as'],
+                        'dbType' => $data['dbType'],
+                        'description' => $data['description'],
+                        'entity' => $data['entity_slug'],
+
+                        'isDb' => $data['isDb'],
+                        'key' => $data['key'],
+                        'title' => $data['title'],
+                        'type' => $data['type'],
+                        'typeFormat' => $data['typeFormat'],
+
+                        'available_sort' => $data['available_sort'],
+                        'available_filter' => $data['available_filter'],
+                        'available_group' => $data['available_group'],
+                        'available_total' => $data['available_total'],
+                    ]
+                ];
+            }
+        }
+        file_put_contents(LocalConfigUtils::getCpConfigFile('properties'), json_encode($variables));
+        unset($data);
         // TMP OLD SYNC OFF
+
 
         $configJsonPath = LocalConfigUtils::getStrapiCachePath() . '/NaeSProperties.json';
         $configJsonPathDbKeys = LocalConfigUtils::getStrapiCachePath() . '/NaeSDbKeys.json';
@@ -106,74 +170,52 @@ class InLocalConfigSyncFieldsConsole extends Command
         }
 
 
-        $sql = 'select 
-        properties.id,
-        properties.key, 
-        properties.description, 
-        properties.type, 
-        properties.typeFormat, 
-        properties.title, 
-        properties.additionalProperties,  
-        properties.`as`,
-        properties.isDb,
-        properties.dbType,
-        entities.slug as entity_slug, 
-        entities.className as entity_className,
-        properties.entity,
-       properties.available_sort,
-       properties.available_filter,
-       properties.available_group,
-       properties.available_total
-        
-        from properties
-        left join entities on entities.id = properties.entity ';
-
-        $result = $db->query($sql);
+        $propsData = LocalConfigUtils::getCpConfigFileData('properties');
 
         $properties = [];
         $propertiesKeys = [];
         $dbDataKeys = [];
         $phpProperties = [];
 
-        while ($data = $result->fetchArray(SQLITE3_ASSOC)) {
-            if (!isset($dbDataKeys[$data['entity_slug']])) {
-                $dbDataKeys[$data['entity_slug']] = [];
+        foreach ($propsData as $prop) {
+            if (!isset($dbDataKeys[$prop['config']['entity']])) {
+                $dbDataKeys[$prop['config']['entity']] = [];
             }
-            $dbDataKeys[$data['entity_slug']][$data['key']] = $data['key'];
+            $dbDataKeys[$prop['config']['entity_slug']][$prop['config']['key']] = $prop['config']['key'];
 
             $description = str_replace(
                 ['|||', '<b>', '</b>', '<hr/>'],
                 ["\n\n", '**', '**', '___'],
-                $data['description']
+                $prop['config']['description']
             );
 
-            if (!isset($propertiesKeys[$data['entity_slug']])) {
-                $propertiesKeys[$data['entity_slug']] = [];
+            if (!isset($propertiesKeys[$prop['config']['entity']])) {
+                $propertiesKeys[$prop['config']['entity']] = [];
             }
 
-            $propertiesKeys[$data['entity_slug']][$data['key']] = $data['key'];
+            $propertiesKeys[$prop['config']['entity']][$prop['config']['key']] = $prop['config']['key'];
 
             $available = [
-                'sort' => $data['available_sort'],
-                'filter' => $data['available_filter'],
-                'group' => $data['available_group'],
-                'total' => $data['available_total'],
+                'sort' => $prop['config']['available_sort'],
+                'filter' => $prop['config']['available_filter'],
+                'group' => $prop['config']['available_group'],
+                'total' => $prop['config']['available_total'],
             ];
 
-            $prop = [
-                'schema' => $data['entity_slug'],
-                'key' => $data['key'],
-                'type' => $data['type'],
-                'format' => $data['typeFormat'],
-                'title' => $data['title'],
-                'additionalProperties' => json_decode($data['additionalProperties'], true),
+            $propSet = [
+                'schema' => $prop['config']['entity'],
+                'key' => $prop['config']['key'],
+                'type' => $prop['config']['type'],
+                'format' => $prop['config']['typeFormat'],
+                'title' => $prop['config']['title'],
+                'additionalProperties' => json_decode($prop['config']['additionalProperties'], true),
                 'description' => $description,
-                'className' => $data['entity_className'],
-                'isDb' => $data['isDb'] === 1,
-                'dbType' => $data['dbType']
+                'className' => $prop['config']['entity_className'],
+                'isDb' => $prop['config']['isDb'] === 1,
+                'dbType' => $prop['config']['dbType']
             ];
-            if ($data['as']) {
-                $prop['as'] = $data['as'];
+            if ($prop['config']['as']) {
+                $propSet['as'] = $prop['config']['as'];
             }
 
             $enumsData = [];
@@ -181,8 +223,8 @@ class InLocalConfigSyncFieldsConsole extends Command
             $enumsList = LocalConfigUtils::getCpConfigFileData('enums');
             $enumsList = array_filter(
                 $enumsList,
-                function ($item) use ($data) {
-                    return $item['config']['entity'] === $data['entity_slug'] && $item['config']['property'] === $data['key'];
+                function ($item) use ($prop) {
+                    return $item['config']['entity'] === $prop['config']['entity'] && $item['config']['property'] === $prop['config']['key'];
                 }
             );
             foreach ($enumsList as $enum) {
@@ -212,8 +254,8 @@ class InLocalConfigSyncFieldsConsole extends Command
                 });
 
                 $prop['enum'] = array_map(
-                    function ($en) use ($data) {
-                        $isInt = $data['type'] === 'integer' || $data['type'] === 'int' || $data['type'] === 'number';
+                    function ($en) use ($prop) {
+                        $isInt = $prop['config']['type'] === 'integer' || $prop['config']['type'] === 'int' || $prop['config']['type'] === 'number';
                         return [
                             'label' => $en['title'],
                             'value' => $isInt ? ((int)$en['value']) : $en['value']
@@ -223,21 +265,21 @@ class InLocalConfigSyncFieldsConsole extends Command
                 );
             }
 
-            $properties[] = $prop;
+            $properties[] = $propSet;
 
 
             $propPhp = [
-                'key' => $prop['key'],
-                'title' => $prop['title'],
-                'type' => $prop['type'],
-                'format' => $prop['format'],
-                'description' => $prop['description'],
-                'schema' => $prop['schema'],
-                'isDb' => $prop['isDb'],
-                'dbType' => $prop['dbType'],
-                'as' => $prop['as'] ?? '',
-                'additionalProperties' => $prop['additionalProperties'] ?? [],
-                'enum' => $prop['enum'] ?? [],
+                'key' => $propSet['key'],
+                'title' => $propSet['title'],
+                'type' => $propSet['type'],
+                'format' => $propSet['format'],
+                'description' => $propSet['description'],
+                'schema' => $propSet['schema'],
+                'isDb' => $propSet['isDb'],
+                'dbType' => $propSet['dbType'],
+                'as' => $propSet['as'] ?? '',
+                'additionalProperties' => $propSet['additionalProperties'] ?? [],
+                'enum' => $propSet['enum'] ?? [],
                 'available' => $available,
             ];
             $propPhp['naeType'] = $this->propertiesUtils->getPropertyNaeType($propPhp, []);

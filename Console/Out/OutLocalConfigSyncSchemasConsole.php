@@ -3,6 +3,7 @@
 namespace Newageerp\SfControlpanel\Console\Out;
 
 use Newageerp\SfControlpanel\Console\LocalConfigUtils;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -18,17 +19,11 @@ class OutLocalConfigSyncSchemasConsole extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $db = LocalConfigUtils::getSqliteDb();
-
-        $sql = "SELECT 
-                    entities.id,
-                    entities.slug
-                FROM entities ";
-        $result = $db->query($sql);
+        $entityData = LocalConfigUtils::getCpConfigFileData('entities');
 
         $schemasDb = [];
-        while ($data = $result->fetchArray(SQLITE3_ASSOC)) {
-            $schemasDb[] = $data['slug'];
+        foreach ($entityData as $entity) {
+            $schemasDb[] = $entity['config']['slug'];
         }
 
         $docJsonFile = LocalConfigUtils::getDocJsonPath();
@@ -51,20 +46,25 @@ class OutLocalConfigSyncSchemasConsole extends Command
                     $titlePlural = $titleA[1];
                 }
 
-                $sql = "INSERT INTO entities 
-                (slug, className, titleSingle, titlePlural) 
-                VALUES (:slug, :className, :titleSingle, :titlePlural)";
-                $stmt = $db->prepare($sql);
-
-                $stmt->bindValue(':slug', $normalizeSchemaClass);
-                $stmt->bindValue(':className', $schemasClass);
-                $stmt->bindValue(':titleSingle', $titleSingle);
-                $stmt->bindValue(':titlePlural', $titlePlural);
-                $stmt->execute();
+                $entityData[] = [
+                    'id' => Uuid::uuid4()->toString(),
+                    'tag' => '',
+                    'title' => '',
+                    'config' => [
+                        'className' => $schemasClass,
+                        'slug' => $normalizeSchemaClass,
+                        'titleSingle' => $titleSingle,
+                        'titlePlural' => $titlePlural,
+                        'required' => '[]',
+                        'scopes' => '[]',
+                    ]
+                ];
 
                 $output->writeln("SCHEMA ADDED ". $schemasClass . ' - ' . $normalizeSchemaClass);
             }
         }
+
+        file_put_contents(LocalConfigUtils::getCpConfigFile('entities'), json_encode($entityData));
 
         return Command::SUCCESS;
     }
