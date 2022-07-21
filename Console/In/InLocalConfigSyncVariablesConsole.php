@@ -27,7 +27,7 @@ class InLocalConfigSyncVariablesConsole extends Command
     {
         // TMP OLD SYNC
         $db = LocalConfigUtils::getSqliteDb();
-        $sql = 'select variables.slug, variables.text from variables';
+        $sql = 'select variables.id, variables.slug, variables.text from variables';
         $result = $db->query($sql);
 
         $variables = LocalConfigUtils::getCpConfigFileData('variables');
