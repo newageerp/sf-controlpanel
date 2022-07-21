@@ -52,6 +52,7 @@ class InLocalConfigSyncVariablesConsole extends Command
                 ];
             }
         }
+        file_put_contents(LocalConfigUtils::getCpConfigFile('variables'), json_encode($variables));
         // TMP OLD SYNC OFF
 
         $configPhpPath = LocalConfigUtils::getPhpVariablesPath() . '/NaeSVariables.php';
