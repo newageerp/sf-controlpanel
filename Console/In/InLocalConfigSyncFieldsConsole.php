@@ -181,7 +181,7 @@ class InLocalConfigSyncFieldsConsole extends Command
             if (!isset($dbDataKeys[$prop['config']['entity']])) {
                 $dbDataKeys[$prop['config']['entity']] = [];
             }
-            $dbDataKeys[$prop['config']['entity_slug']][$prop['config']['key']] = $prop['config']['key'];
+            $dbDataKeys[$prop['config']['entity']][$prop['config']['key']] = $prop['config']['key'];
 
             $description = str_replace(
                 ['|||', '<b>', '</b>', '<hr/>'],
