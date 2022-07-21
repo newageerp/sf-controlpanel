@@ -182,7 +182,7 @@ class InLocalConfigSyncFieldsConsole extends Command
             $enumsList = array_filter(
                 $enumsList,
                 function ($item) use ($data) {
-                    return $item['config']['entity'] === $data['entity_slug'] && $item['config']['key'] === $data['key'];
+                    return $item['config']['entity'] === $data['entity_slug'] && $item['config']['property'] === $data['key'];
                 }
             );
             foreach ($enumsList as $enum) {

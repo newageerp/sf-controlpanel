@@ -41,17 +41,17 @@ class InGeneratorEnums extends Command
                 $enumsColors[$enum['config']['entity']] = [];
                 $enumsOptions[$enum['config']['entity']] = [];
             }
-            if (!isset($enums[$enum['config']['entity']][$enum['config']['key']])) {
-                $enums[$enum['config']['entity']][$enum['config']['key']] = [];
-                $enumsColors[$enum['config']['entity']][$enum['config']['key']] = [];
-                $enumsOptions[$enum['config']['entity']][$enum['config']['key']] = [];
+            if (!isset($enums[$enum['config']['entity']][$enum['config']['property']])) {
+                $enums[$enum['config']['entity']][$enum['config']['property']] = [];
+                $enumsColors[$enum['config']['entity']][$enum['config']['property']] = [];
+                $enumsOptions[$enum['config']['entity']][$enum['config']['property']] = [];
             }
-            $enumsOptions[$enum['config']['entity']][$enum['config']['key']][] = [
+            $enumsOptions[$enum['config']['entity']][$enum['config']['property']][] = [
                 'value' => $enum['config']['value'],
                 'label' => $enum['config']['title'],
             ];
-            $enums[$enum['config']['entity']][$enum['config']['key']][$enum['config']['value']] = $enum['config']['title'];
-            $enumsColors[$enum['config']['entity']][$enum['config']['key']][$enum['config']['value']] = $enum['config']['badgeVariant'];
+            $enums[$enum['config']['entity']][$enum['config']['property']][$enum['config']['value']] = $enum['config']['title'];
+            $enumsColors[$enum['config']['entity']][$enum['config']['property']][$enum['config']['value']] = $enum['config']['badgeVariant'];
         }
 
         foreach ($enums as $slug => $propertyKeys) {
