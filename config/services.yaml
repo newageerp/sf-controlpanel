@@ -32,6 +32,18 @@ services:
     arguments: [ ]
   Newageerp\SfControlpanel\Controller\ConfigPropertiesController:
     arguments: [ ]
+  Newageerp\SfControlpanel\Controller\ConfigVariablesController:
+    arguments: [ ]
+  Newageerp\SfControlpanel\Controller\ConfigUserPermissionsController:
+    arguments: [ ]
+  Newageerp\SfControlpanel\Controller\ConfigEntitiesController:
+    arguments: [ ]
+  Newageerp\SfControlpanel\Controller\ConfigEnumsController:
+    arguments: [ ]
+  Newageerp\SfControlpanel\Controller\ConfigPdfsController:
+    arguments: [ ]
+  Newageerp\SfControlpanel\Controller\ConfigStatusesController:
+    arguments: [ ]
   Newageerp\SfControlpanel\Service\MenuService:
     arguments: [ ]
   Newageerp\SfControlpanel\Console\PropertiesUtils:
