@@ -63,7 +63,7 @@ class InGeneratorStatuses extends Command
                     'color' => $status['config']['color'],
                     'brightness' => mb_substr($status['config']['brightness'], 1),
                     'text' => $status['config']['text'],
-                    'status' => $status['config']['status'],
+                    'status' => (int)$status['config']['status'],
                     'type' => $status['config']['type'],
                 ];
 

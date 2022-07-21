@@ -72,7 +72,7 @@ class InLocalConfigSyncStatusesConsole extends Command
         foreach ($statusData as $status) {
             $statuses[] = [
                 'type' => $status['config']['type'],
-                'status' => $status['config']['status'],
+                'status' => (int)$status['config']['status'],
                 'text' => $status['config']['text'],
                 'bgColor' => $status['config']['color'],
                 'brightness' => (int)str_replace('b', '', $status['config']['brightness']),
