@@ -47,7 +47,7 @@ class InLocalConfigSyncVariablesConsole extends Command
                     'title' => '',
                     'config' => [
                         'slug' => $data['slug'],
-                        'title' => $data['title']
+                        'text' => $data['text']
                     ]
                 ];
             }
