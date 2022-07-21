@@ -28,13 +28,13 @@ class InGeneratorPdfs extends Command
         $components = [];
         $pdfs = [];
         foreach ($pdfsData as $pdf) {
-            if (!isset($pdfs[$pdf['config']['slug']])) {
-                $pdfs[$pdf['config']['slug']] = [];
+            if (!isset($pdfs[$pdf['config']['entity']])) {
+                $pdfs[$pdf['config']['entity']] = [];
             }
 
             $compName = 'Pdf' . Utils::fixComponentName($pdf['config']['slug']) . Utils::fixComponentName($pdf['config']['template']);
 
-            $pdfs[$pdf['config']['slug']][] = [
+            $pdfs[$pdf['config']['entity']][] = [
                 'sort' => (int)$pdf['config']['sort'],
                 'template' => $pdf['config']['template'],
                 'title' => $pdf['config']['title'],
