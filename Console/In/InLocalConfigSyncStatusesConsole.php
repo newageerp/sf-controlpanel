@@ -62,7 +62,7 @@ class InLocalConfigSyncStatusesConsole extends Command
         }
         // TMP OLD SYNC OFF
 
-        $configJsonPath = LocalConfigUtils::getStrapiCachePath() . '/NaeSStatuses.json';
+//        $configJsonPath = LocalConfigUtils::getStrapiCachePath() . '/NaeSStatuses.json';
         $configPath = LocalConfigUtils::getFrontendConfigPath() . '/NaeSStatuses.tsx';
 
         $fileContent = 'import { INaeStatus } from "@newageerp/nae-react-ui/dist/interfaces";
@@ -104,10 +104,10 @@ class InLocalConfigSyncStatusesConsole extends Command
             $configPath,
             $fileContent
         );
-        file_put_contents(
-            $configJsonPath,
-            json_encode($statuses, JSON_PRETTY_PRINT)
-        );
+//        file_put_contents(
+//            $configJsonPath,
+//            json_encode($statuses, JSON_PRETTY_PRINT)
+//        );
 
         return Command::SUCCESS;
     }
