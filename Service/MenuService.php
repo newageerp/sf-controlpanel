@@ -10,7 +10,16 @@ class MenuService
 
     public function __construct()
     {
-        $this->entities = json_decode(file_get_contents(LocalConfigUtils::getPhpCachePath() . '/NaeSSchema.json'), true);
+        $schemaFile = LocalConfigUtils::getPhpCachePath() . '/NaeSSchema.json';
+        $this->entities = [];
+        if (file_exists($schemaFile)) {
+            $this->entities = json_decode(
+                file_get_contents(
+                    $schemaFile
+                ),
+                true
+            );
+        }
     }
 
     public function menuTitleForMenu(array $menuItem): string
@@ -121,7 +130,7 @@ class MenuService
                         FILTER_SANITIZE_STRING,
                         FILTER_FLAG_STRIP_HIGH
                     )
-                ). substr(
+                ) . substr(
                     $menuFolder['id'],
                     0,
                     3
