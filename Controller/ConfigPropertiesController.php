@@ -15,7 +15,7 @@ class ConfigPropertiesController extends ConfigBaseController
 {
     protected function getLocalStorageFile()
     {
-        $file = $this->getLocalStorage() . '/propeties.json';
+        $file = $this->getLocalStorage() . '/properties.json';
         if (!file_exists($file)) {
             file_put_contents($file, json_encode([]));
         }
@@ -144,7 +144,7 @@ class ConfigPropertiesController extends ConfigBaseController
 
         $output = [];
 
-        $mainProperties = $this->schemaPropetiesForFilter($schema, $propertiesUtils);
+        $mainProperties = $this->schemaPropertiesForFilter($schema, $propertiesUtils);
         $output[] = [
             'id' => 'main',
             'title' => $title,
@@ -155,7 +155,7 @@ class ConfigPropertiesController extends ConfigBaseController
 
         $rels = $this->relPropertiesForFilter($schema, $propertiesUtils);
         foreach ($rels as $relProperty) {
-            $relSchemaProperties = $this->schemaPropetiesForSort($relProperty['format'], $propertiesUtils);
+            $relSchemaProperties = $this->schemaPropertiesForSort($relProperty['format'], $propertiesUtils);
 
             $relProperties = [];
             foreach ($relSchemaProperties as $relSchemaProperty) {
@@ -188,11 +188,11 @@ class ConfigPropertiesController extends ConfigBaseController
 
         $schema = $request->get('schema');
 
-        $schemaProperties = $this->schemaPropetiesForSort($schema, $propertiesUtils);
+        $schemaProperties = $this->schemaPropertiesForSort($schema, $propertiesUtils);
 
         $rels = $this->relPropertiesForSort($schema, $propertiesUtils);
         foreach ($rels as $relProperty) {
-            $relSchemaProperties = $this->schemaPropetiesForSort($relProperty['format'], $propertiesUtils);
+            $relSchemaProperties = $this->schemaPropertiesForSort($relProperty['format'], $propertiesUtils);
             foreach ($relSchemaProperties as $relSchemaProperty) {
                 $key = explode(".", $relSchemaProperty['value']);
                 $title = $relProperty['title'] . ' -> ' . $relSchemaProperty['label'];
@@ -207,7 +207,7 @@ class ConfigPropertiesController extends ConfigBaseController
         return $this->json(['data' => array_values($schemaProperties)]);
     }
 
-    protected function schemaPropetiesForSort(string $schema, PropertiesUtils $propertiesUtils)
+    protected function schemaPropertiesForSort(string $schema, PropertiesUtils $propertiesUtils)
     {
         $schemaProperties = array_filter(
             $propertiesUtils->getProperties(),
@@ -250,7 +250,7 @@ class ConfigPropertiesController extends ConfigBaseController
         return $schemaProperties;
     }
 
-    protected function schemaPropetiesForFilter(string $schema, PropertiesUtils $propertiesUtils)
+    protected function schemaPropertiesForFilter(string $schema, PropertiesUtils $propertiesUtils)
     {
         $schemaProperties = array_filter(
             $propertiesUtils->getProperties(),
