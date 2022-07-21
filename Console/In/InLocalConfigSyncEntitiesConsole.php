@@ -25,7 +25,47 @@ class InLocalConfigSyncEntitiesConsole extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        // TMP OLD SYNC
         $db = LocalConfigUtils::getSqliteDb();
+        $sql = "select
+            entities.id,
+            entities.className, 
+            entities.slug, 
+            entities.titleSingle, 
+            entities.titlePlural, 
+            entities.required, 
+            entities.scopes 
+            from entities ";
+        $result = $db->query($sql);
+
+        $variables = LocalConfigUtils::getCpConfigFileData('entities');
+        while ($data = $result->fetchArray(SQLITE3_ASSOC)) {
+            $newId = 'synced-' . $data['id'];
+
+            $isExist = false;
+            foreach ($variables as $var) {
+                if ($var['id'] === $newId) {
+                    $isExist = true;
+                }
+            }
+            if (!$isExist) {
+                $variables[] = [
+                    'id' => $newId,
+                    'tag' => '',
+                    'title' => '',
+                    'config' => [
+                        'className' => $data['className'],
+                        'slug' => $data['slug'],
+                        'titleSingle' => $data['titleSingle'],
+                        'titlePlural' => $data['titlePlural'],
+                        'required' => $data['required'],
+                        'scopes' => $data['scopes'],
+                    ]
+                ];
+            }
+        }
+        file_put_contents(LocalConfigUtils::getCpConfigFile('entities'), json_encode($variables));
+        // TMP OLD SYNC OFF
 
         $configJsonPath = LocalConfigUtils::getStrapiCachePath() . '/NaeSSchema.json';
         $phpPropertiesFile = LocalConfigUtils::getPhpCachePath() . '/NaeSSchema.json';
@@ -34,45 +74,36 @@ class InLocalConfigSyncEntitiesConsole extends Command
         $fileContent = 'import { INaeSchema } from "@newageerp/nae-react-ui/dist/interfaces";
 ';
 
-        $sql = 'select 
-            entities.className, 
-            entities.slug, 
-            entities.titleSingle, 
-            entities.titlePlural, 
-            entities.required, 
-            entities.scopes 
-            from entities ';
-
-        $result = $db->query($sql);
+        $entityData = LocalConfigUtils::getCpConfigFileData('entities');
 
         $entities = [];
         $entitiesMap = [];
-        while ($data = $result->fetchArray(SQLITE3_ASSOC)) {
+        foreach ($entityData as $entity) {
             $status = [
-                'className' => $data['className'],
-                'schema' => $data['slug'],
-                'title' => $data['titleSingle'],
-                'titlePlural' => $data['titlePlural'],
+                'className' => $entity['config']['className'],
+                'schema' => $entity['config']['slug'],
+                'title' => $entity['config']['titleSingle'],
+                'titlePlural' => $entity['config']['titlePlural'],
             ];
 
-            if ($data['required']) {
+            if ($entity['config']['required']) {
                 $status['required'] = json_decode(
-                    $data['required'],
+                    $entity['config']['required'],
                     true
                 );
             }
-            if ($data['scopes']) {
+            if ($entity['config']['scopes']) {
                 $status['scopes'] = json_decode(
-                    $data['scopes'],
+                    $entity['config']['scopes'],
                     true
                 );
             }
 
             $entities[] = $status;
 
-            $entitiesMap[$data['className']] = [
-                'className' => $data['className'],
-                'schema' => $data['slug']
+            $entitiesMap[$entity['config']['className']] = [
+                'className' => $entity['config']['className'],
+                'schema' => $entity['config']['slug']
             ];
         }
 
