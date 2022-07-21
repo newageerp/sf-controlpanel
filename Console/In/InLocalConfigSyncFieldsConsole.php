@@ -293,6 +293,8 @@ class InLocalConfigSyncFieldsConsole extends Command
             $phpProperties[] = $propPhp;
         }
 
+
+
         usort($properties, function ($pdfA, $pdfB) {
             if ($pdfA['schema'] < $pdfB['schema']) {
                 return -1;

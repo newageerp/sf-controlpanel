@@ -159,6 +159,7 @@ class OutLocalConfigSyncPropertiesConsole extends Command
             }
         }
 
+        file_put_contents(LocalConfigUtils::getCpConfigFile('properties'), json_encode($propertiesData));
 
         return Command::SUCCESS;
     }
