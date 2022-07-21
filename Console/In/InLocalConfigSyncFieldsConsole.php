@@ -24,7 +24,7 @@ class InLocalConfigSyncFieldsConsole extends Command
     public function __construct(
         EntityManagerInterface $em,
         PropertiesUtils        $propertiesUtils,
-        EntitiesUtils $entitiesUtils,
+        EntitiesUtils          $entitiesUtils,
     )
     {
         parent::__construct();
@@ -37,7 +37,8 @@ class InLocalConfigSyncFieldsConsole extends Command
     {
         // TMP OLD SYNC
         $db = LocalConfigUtils::getSqliteDb();
-        $sql = "SELECT 
+        if ($db) {
+            $sql = "SELECT 
                     enums.id, enums.title, enums.value, enums.entity, enums.property, enums.sort,
        enums.badge_variant as badgeVariant,
        entities.slug as entity_slug,
@@ -49,38 +50,38 @@ class InLocalConfigSyncFieldsConsole extends Command
                 left join entities on enums.entity = entities.id
                 left join properties on enums.property = properties.id
                 WHERE 1 = 1";
-        $result = $db->query($sql);
+            $result = $db->query($sql);
 
-        $variables = LocalConfigUtils::getCpConfigFileData('enums');
-        while ($data = $result->fetchArray(SQLITE3_ASSOC)) {
-            $newId = 'synced-' . $data['id'];
+            $variables = LocalConfigUtils::getCpConfigFileData('enums');
+            while ($data = $result->fetchArray(SQLITE3_ASSOC)) {
+                $newId = 'synced-' . $data['id'];
 
-            $isExist = false;
-            foreach ($variables as $var) {
-                if ($var['id'] === $newId) {
-                    $isExist = true;
+                $isExist = false;
+                foreach ($variables as $var) {
+                    if ($var['id'] === $newId) {
+                        $isExist = true;
+                    }
+                }
+                if (!$isExist) {
+                    $variables[] = [
+                        'id' => $newId,
+                        'tag' => '',
+                        'title' => '',
+                        'config' => [
+                            'entity' => $data['entity_slug'],
+                            'property' => $data['property_key'],
+                            'value' => $data['value'],
+                            'sort' => (int)$data['sort'],
+                            'title' => $data['title'],
+                            'badgeVariant' => $data['badgeVariant'],
+                        ]
+                    ];
                 }
             }
-            if (!$isExist) {
-                $variables[] = [
-                    'id' => $newId,
-                    'tag' => '',
-                    'title' => '',
-                    'config' => [
-                        'entity' => $data['entity_slug'],
-                        'property' => $data['property_key'],
-                        'value' => $data['value'],
-                        'sort' => (int)$data['sort'],
-                        'title' => $data['title'],
-                        'badgeVariant' => $data['badgeVariant'],
-                    ]
-                ];
-            }
-        }
-        file_put_contents(LocalConfigUtils::getCpConfigFile('enums'), json_encode($variables));
+            file_put_contents(LocalConfigUtils::getCpConfigFile('enums'), json_encode($variables));
 
 
-        $sql = "select 
+            $sql = "select 
         properties.id,
         properties.key, 
         properties.description, 
@@ -101,46 +102,47 @@ class InLocalConfigSyncFieldsConsole extends Command
         
         from properties
         left join entities on entities.id = properties.entity";
-        $result = $db->query($sql);
+            $result = $db->query($sql);
 
-        $variables = LocalConfigUtils::getCpConfigFileData('properties');
-        while ($data = $result->fetchArray(SQLITE3_ASSOC)) {
-            $newId = 'synced-' . $data['id'];
+            $variables = LocalConfigUtils::getCpConfigFileData('properties');
+            while ($data = $result->fetchArray(SQLITE3_ASSOC)) {
+                $newId = 'synced-' . $data['id'];
 
-            $isExist = false;
-            foreach ($variables as $var) {
-                if ($var['id'] === $newId) {
-                    $isExist = true;
+                $isExist = false;
+                foreach ($variables as $var) {
+                    if ($var['id'] === $newId) {
+                        $isExist = true;
+                    }
+                }
+                if (!$isExist) {
+                    $variables[] = [
+                        'id' => $newId,
+                        'tag' => '',
+                        'title' => '',
+                        'config' => [
+                            'additionalProperties' => $data['additionalProperties'],
+                            'as' => $data['as'],
+                            'dbType' => $data['dbType'],
+                            'description' => $data['description'],
+                            'entity' => $data['entity_slug'],
+
+                            'isDb' => $data['isDb'],
+                            'key' => $data['key'],
+                            'title' => $data['title'],
+                            'type' => $data['type'],
+                            'typeFormat' => $data['typeFormat'],
+
+                            'available_sort' => $data['available_sort'],
+                            'available_filter' => $data['available_filter'],
+                            'available_group' => $data['available_group'],
+                            'available_total' => $data['available_total'],
+                        ]
+                    ];
                 }
             }
-            if (!$isExist) {
-                $variables[] = [
-                    'id' => $newId,
-                    'tag' => '',
-                    'title' => '',
-                    'config' => [
-                        'additionalProperties' => $data['additionalProperties'],
-                        'as' => $data['as'],
-                        'dbType' => $data['dbType'],
-                        'description' => $data['description'],
-                        'entity' => $data['entity_slug'],
-
-                        'isDb' => $data['isDb'],
-                        'key' => $data['key'],
-                        'title' => $data['title'],
-                        'type' => $data['type'],
-                        'typeFormat' => $data['typeFormat'],
-
-                        'available_sort' => $data['available_sort'],
-                        'available_filter' => $data['available_filter'],
-                        'available_group' => $data['available_group'],
-                        'available_total' => $data['available_total'],
-                    ]
-                ];
-            }
+            file_put_contents(LocalConfigUtils::getCpConfigFile('properties'), json_encode($variables));
+            unset($data);
         }
-        file_put_contents(LocalConfigUtils::getCpConfigFile('properties'), json_encode($variables));
-        unset($data);
         // TMP OLD SYNC OFF
 
 
@@ -233,7 +235,7 @@ class InLocalConfigSyncFieldsConsole extends Command
                 }
             );
             foreach ($enumsList as $enum) {
-                 $enumsData[] = [
+                $enumsData[] = [
                     'sort' => $enum['config']['sort'],
                     'title' => $enum['config']['title'],
                     'value' => $enum['config']['value'],

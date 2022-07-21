@@ -4,6 +4,7 @@ namespace Newageerp\SfControlpanel\Console\Out;
 
 use Newageerp\SfControlpanel\Console\LocalConfigUtils;
 use Doctrine\ORM\EntityManagerInterface;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -16,7 +17,8 @@ class OutLocalConfigSyncPropertiesConsole extends Command
 
     public function __construct(
         EntityManagerInterface $em
-    ) {
+    )
+    {
         parent::__construct();
         $this->em = $em;
     }
@@ -35,34 +37,12 @@ class OutLocalConfigSyncPropertiesConsole extends Command
             $dbFieldsByTableColumn[$dbField['TABLE_NAME'] . "-" . $dbField['COLUMN_NAME']] = $dbField;
         }
 
-        
-
-        $db = LocalConfigUtils::getSqliteDb();
-
-        $sql = "SELECT 
-                entities.id,
-                entities.slug
-            FROM entities ";
-        $result = $db->query($sql);
-
-        $dbSchemasSlug = [];
-        $dbSchemas = [];
-        while ($data = $result->fetchArray(SQLITE3_ASSOC)) {
-            $dbSchemas[] = $data;
-            $dbSchemasSlug[$data['slug']] = $data['id'];
-        }
+        $propertiesData = LocalConfigUtils::getCpConfigFileData('properties');
 
         $dbPropertiesSlug = [];
 
-        $sql = "SELECT 
-                properties.id,
-                properties.key,
-                properties.entity
-            FROM properties ";
-        $result = $db->query($sql);
-
-        while ($data = $result->fetchArray(SQLITE3_ASSOC)) {
-            $dbPropertiesSlug[$data['key'] . "-" . $data['entity']] = $data['id'];
+        foreach ($propertiesData as $property) {
+            $dbPropertiesSlug[$property['config']['key'] . "-" . $property['config']['entity']] = $property['id'];
         }
 
 
@@ -80,7 +60,7 @@ class OutLocalConfigSyncPropertiesConsole extends Command
                     $normalizePropKey = LocalConfigUtils::transformCamelCaseToKey($propKey);
                     $dbPropKey = str_replace('-', '_', $normalizePropKey);
 
-                    $_schemaId = isset($dbSchemasSlug[$normalizeSchemaClass]) ? $dbSchemasSlug[$normalizeSchemaClass] : 0;
+                    $_schemaId = $normalizeSchemaClass;
 
                     $type = isset($prop['type']) ? $prop['type'] : '';
                     if (isset($prop['allOf'])) {
@@ -138,49 +118,40 @@ class OutLocalConfigSyncPropertiesConsole extends Command
 
 
                     if (isset($dbPropertiesSlug[$propKey . '-' . $_schemaId])) {
-
-                        $sql = "UPDATE properties 
-                                    set 
-                                    type = :type,
-                                    typeFormat = :typeFormat,
-                                    isDb = :isDb,
-                                    dbType = :dbType,
-                                    `as` = :as,
-                                    additionalProperties = :additionalProperties
-                                    where id = :id";
-
-                        $stmt = $db->prepare($sql);
-
-                        $stmt->bindValue(':id', $dbPropertiesSlug[$propKey . '-' . $_schemaId]);
-
-                        $stmt->bindValue(':type', $type);
-                        $stmt->bindValue(':typeFormat', $format);
-                        $stmt->bindValue(':isDb', $isDb);
-                        $stmt->bindValue(':dbType', $dbType);
-                        $stmt->bindValue(':as', $as);
-                        $stmt->bindValue(':additionalProperties', json_encode($propAdditionalProperties));
-
-                        $stmt->execute();
+                        foreach ($propertiesData as &$propToChange) {
+                            if ($propToChange['id'] === $dbPropertiesSlug[$propKey . '-' . $_schemaId]) {
+                                $propToChange['config']['type'] = $type;
+                                $propToChange['config']['typeFormat'] = $format;
+                                $propToChange['config']['isDb'] = $isDb;
+                                $propToChange['config']['dbType'] = $dbType;
+                                $propToChange['config']['as'] = $as;
+                                $propToChange['config']['additionalProperties'] = json_encode($propAdditionalProperties);
+                            }
+                        }
                     } else {
+                        $propertiesData[] = [
+                            'id' => Uuid::uuid4()->toString(),
+                            'tag' => '',
+                            'title' => '',
+                            'config' => [
+                                'additionalProperties' => json_encode($propAdditionalProperties),
+                                'as' => $as,
+                                'dbType' => $dbType,
+                                'description' => $propDescription,
+                                'entity' => $_schemaId,
 
-                        $sql = "INSERT INTO properties 
-                        (`key`, title, `type`, typeFormat, `description`, entity, isDb, dbType, `as`, additionalProperties) 
-                        VALUES (:key, :title, :type, :typeFormat, :description, :entity, :isDb, :dbType, :as, :additionalProperties)";
+                                'isDb' => $isDb,
+                                'key' => $propKey,
+                                'title' => $propTitle,
+                                'type' => $type,
+                                'typeFormat' => $format,
 
-                        $stmt = $db->prepare($sql);
-
-                        $stmt->bindValue(':key', $propKey);
-                        $stmt->bindValue(':title', $propTitle);
-                        $stmt->bindValue(':type', $type);
-                        $stmt->bindValue(':typeFormat', $format);
-                        $stmt->bindValue(':description', $propDescription);
-                        $stmt->bindValue(':entity', $_schemaId);
-                        $stmt->bindValue(':isDb', $isDb);
-                        $stmt->bindValue(':dbType', $dbType);
-                        $stmt->bindValue(':as', $as);
-                        $stmt->bindValue(':additionalProperties', json_encode($propAdditionalProperties));
-
-                        $stmt->execute();
+                                'available_sort' => 0,
+                                'available_filter' => 0,
+                                'available_group' => 0,
+                                'available_total' => 0,
+                            ]
+                        ];
 
                         $output->writeln("PROPERTY ADDED " . $schemasClass . ' - ' . $propKey);
                     }
@@ -188,7 +159,6 @@ class OutLocalConfigSyncPropertiesConsole extends Command
             }
         }
 
-        
 
         return Command::SUCCESS;
     }

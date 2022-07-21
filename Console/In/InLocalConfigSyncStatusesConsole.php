@@ -27,37 +27,39 @@ class InLocalConfigSyncStatusesConsole extends Command
     {
         // TMP OLD SYNC
         $db = LocalConfigUtils::getSqliteDb();
-        $sql = "select statuses.id, statuses.type, statuses.status, statuses.text, statuses.color, statuses.brightness, entities.slug from statuses
+        if ($db) {
+            $sql = "select statuses.id, statuses.type, statuses.status, statuses.text, statuses.color, statuses.brightness, entities.slug from statuses
         left join entities on entities.id = statuses.entity";
-        $result = $db->query($sql);
+            $result = $db->query($sql);
 
-        $variables = LocalConfigUtils::getCpConfigFileData('statuses');
-        while ($data = $result->fetchArray(SQLITE3_ASSOC)) {
-            $newId = 'synced-' . $data['id'];
+            $variables = LocalConfigUtils::getCpConfigFileData('statuses');
+            while ($data = $result->fetchArray(SQLITE3_ASSOC)) {
+                $newId = 'synced-' . $data['id'];
 
-            $isExist = false;
-            foreach ($variables as $var) {
-                if ($var['id'] === $newId) {
-                    $isExist = true;
+                $isExist = false;
+                foreach ($variables as $var) {
+                    if ($var['id'] === $newId) {
+                        $isExist = true;
+                    }
+                }
+                if (!$isExist) {
+                    $variables[] = [
+                        'id' => $newId,
+                        'tag' => '',
+                        'title' => '',
+                        'config' => [
+                            'entity' => $data['slug'],
+                            'text' => $data['text'],
+                            'status' => $data['status'],
+                            'type' => $data['type'],
+                            'color' => $data['color'],
+                            'brightness' => $data['brightness'],
+                        ]
+                    ];
                 }
             }
-            if (!$isExist) {
-                $variables[] = [
-                    'id' => $newId,
-                    'tag' => '',
-                    'title' => '',
-                    'config' => [
-                        'entity' => $data['slug'],
-                        'text' => $data['text'],
-                        'status' => $data['status'],
-                        'type' => $data['type'],
-                        'color' => $data['color'],
-                        'brightness' => $data['brightness'],
-                    ]
-                ];
-            }
+            file_put_contents(LocalConfigUtils::getCpConfigFile('statuses'), json_encode($variables));
         }
-        file_put_contents(LocalConfigUtils::getCpConfigFile('statuses'), json_encode($variables));
         // TMP OLD SYNC OFF
 
         $configJsonPath = LocalConfigUtils::getStrapiCachePath() . '/NaeSStatuses.json';

@@ -27,36 +27,38 @@ class InLocalConfigSyncPdfsConsole extends Command
     {
         // TMP OLD SYNC
         $db = LocalConfigUtils::getSqliteDb();
-        $sql = 'select pdfs.id, pdfs.template, pdfs.title, pdfs.skipList, pdfs.sort, pdfs.skipWithoutSign, entities.slug from pdfs left join entities on entities.id = pdfs.entity';
-        $result = $db->query($sql);
+        if ($db) {
+            $sql = 'select pdfs.id, pdfs.template, pdfs.title, pdfs.skipList, pdfs.sort, pdfs.skipWithoutSign, entities.slug from pdfs left join entities on entities.id = pdfs.entity';
+            $result = $db->query($sql);
 
-        $variables = LocalConfigUtils::getCpConfigFileData('pdfs');
-        while ($data = $result->fetchArray(SQLITE3_ASSOC)) {
-            $newId = 'synced-' . $data['id'];
+            $variables = LocalConfigUtils::getCpConfigFileData('pdfs');
+            while ($data = $result->fetchArray(SQLITE3_ASSOC)) {
+                $newId = 'synced-' . $data['id'];
 
-            $isExist = false;
-            foreach ($variables as $var) {
-                if ($var['id'] === $newId) {
-                    $isExist = true;
+                $isExist = false;
+                foreach ($variables as $var) {
+                    if ($var['id'] === $newId) {
+                        $isExist = true;
+                    }
+                }
+                if (!$isExist) {
+                    $variables[] = [
+                        'id' => $newId,
+                        'tag' => '',
+                        'title' => '',
+                        'config' => [
+                            'entity' => $data['slug'],
+                            'skipList' => isset($data['skipList']) ? (int)$data['skipList'] : 0,
+                            'skipWithoutSign' => isset($data['skipWithoutSign']) ? (int)$data['skipWithoutSign'] : 0,
+                            'sort' => (int)$data['sort'],
+                            'template' => $data['template'],
+                            'title' => $data['title'],
+                        ]
+                    ];
                 }
             }
-            if (!$isExist) {
-                $variables[] = [
-                    'id' => $newId,
-                    'tag' => '',
-                    'title' => '',
-                    'config' => [
-                        'entity' => $data['slug'],
-                        'skipList' => isset($data['skipList'])?(int)$data['skipList']:0,
-                        'skipWithoutSign' => isset($data['skipWithoutSign'])?(int)$data['skipWithoutSign']:0,
-                        'sort' => (int)$data['sort'],
-                        'template' => $data['template'],
-                        'title' => $data['title'],
-                    ]
-                ];
-            }
+            file_put_contents(LocalConfigUtils::getCpConfigFile('pdfs'), json_encode($variables));
         }
-        file_put_contents(LocalConfigUtils::getCpConfigFile('pdfs'), json_encode($variables));
         // TMP OLD SYNC OFF
 
         $configPath = LocalConfigUtils::getFrontendConfigPath() . '/NaeSPdfs.tsx';

@@ -27,7 +27,8 @@ class InLocalConfigSyncEntitiesConsole extends Command
     {
         // TMP OLD SYNC
         $db = LocalConfigUtils::getSqliteDb();
-        $sql = "select
+        if ($db) {
+            $sql = "select
             entities.id,
             entities.className, 
             entities.slug, 
@@ -36,35 +37,36 @@ class InLocalConfigSyncEntitiesConsole extends Command
             entities.required, 
             entities.scopes 
             from entities ";
-        $result = $db->query($sql);
+            $result = $db->query($sql);
 
-        $variables = LocalConfigUtils::getCpConfigFileData('entities');
-        while ($data = $result->fetchArray(SQLITE3_ASSOC)) {
-            $newId = 'synced-' . $data['id'];
+            $variables = LocalConfigUtils::getCpConfigFileData('entities');
+            while ($data = $result->fetchArray(SQLITE3_ASSOC)) {
+                $newId = 'synced-' . $data['id'];
 
-            $isExist = false;
-            foreach ($variables as $var) {
-                if ($var['id'] === $newId) {
-                    $isExist = true;
+                $isExist = false;
+                foreach ($variables as $var) {
+                    if ($var['id'] === $newId) {
+                        $isExist = true;
+                    }
+                }
+                if (!$isExist) {
+                    $variables[] = [
+                        'id' => $newId,
+                        'tag' => '',
+                        'title' => '',
+                        'config' => [
+                            'className' => $data['className'],
+                            'slug' => $data['slug'],
+                            'titleSingle' => $data['titleSingle'],
+                            'titlePlural' => $data['titlePlural'],
+                            'required' => $data['required'],
+                            'scopes' => $data['scopes'],
+                        ]
+                    ];
                 }
             }
-            if (!$isExist) {
-                $variables[] = [
-                    'id' => $newId,
-                    'tag' => '',
-                    'title' => '',
-                    'config' => [
-                        'className' => $data['className'],
-                        'slug' => $data['slug'],
-                        'titleSingle' => $data['titleSingle'],
-                        'titlePlural' => $data['titlePlural'],
-                        'required' => $data['required'],
-                        'scopes' => $data['scopes'],
-                    ]
-                ];
-            }
+            file_put_contents(LocalConfigUtils::getCpConfigFile('entities'), json_encode($variables));
         }
-        file_put_contents(LocalConfigUtils::getCpConfigFile('entities'), json_encode($variables));
         // TMP OLD SYNC OFF
 
         $configJsonPath = LocalConfigUtils::getStrapiCachePath() . '/NaeSSchema.json';

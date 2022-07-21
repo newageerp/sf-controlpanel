@@ -27,32 +27,34 @@ class InLocalConfigSyncVariablesConsole extends Command
     {
         // TMP OLD SYNC
         $db = LocalConfigUtils::getSqliteDb();
-        $sql = 'select variables.id, variables.slug, variables.text from variables';
-        $result = $db->query($sql);
+        if ($db) {
+            $sql = 'select variables.id, variables.slug, variables.text from variables';
+            $result = $db->query($sql);
 
-        $variables = LocalConfigUtils::getCpConfigFileData('variables');
-        while ($data = $result->fetchArray(SQLITE3_ASSOC)) {
-            $newId = 'synced-' . $data['id'];
+            $variables = LocalConfigUtils::getCpConfigFileData('variables');
+            while ($data = $result->fetchArray(SQLITE3_ASSOC)) {
+                $newId = 'synced-' . $data['id'];
 
-            $isExist = false;
-            foreach ($variables as $var) {
-                if ($var['id'] === $newId) {
-                    $isExist = true;
+                $isExist = false;
+                foreach ($variables as $var) {
+                    if ($var['id'] === $newId) {
+                        $isExist = true;
+                    }
+                }
+                if (!$isExist) {
+                    $variables[] = [
+                        'id' => $newId,
+                        'tag' => '',
+                        'title' => '',
+                        'config' => [
+                            'slug' => $data['slug'],
+                            'text' => $data['text']
+                        ]
+                    ];
                 }
             }
-            if (!$isExist) {
-                $variables[] = [
-                    'id' => $newId,
-                    'tag' => '',
-                    'title' => '',
-                    'config' => [
-                        'slug' => $data['slug'],
-                        'text' => $data['text']
-                    ]
-                ];
-            }
+            file_put_contents(LocalConfigUtils::getCpConfigFile('variables'), json_encode($variables));
         }
-        file_put_contents(LocalConfigUtils::getCpConfigFile('variables'), json_encode($variables));
         // TMP OLD SYNC OFF
 
         $configPhpPath = LocalConfigUtils::getPhpVariablesPath() . '/NaeSVariables.php';

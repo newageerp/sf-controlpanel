@@ -25,7 +25,37 @@ class InLocalConfigSyncUsersPermissionsConsole extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        // TMP OLD SYNC
         $db = LocalConfigUtils::getSqliteDb();
+        if ($db) {
+            $sql = 'select user_permissions.id, user_permissions.slug as slug, user_permissions.title as title from user_permissions ';
+            $result = $db->query($sql);
+
+            $variables = LocalConfigUtils::getCpConfigFileData('user-permissions');
+            while ($data = $result->fetchArray(SQLITE3_ASSOC)) {
+                $newId = 'synced-' . $data['id'];
+
+                $isExist = false;
+                foreach ($variables as $var) {
+                    if ($var['id'] === $newId) {
+                        $isExist = true;
+                    }
+                }
+                if (!$isExist) {
+                    $variables[] = [
+                        'id' => $newId,
+                        'tag' => '',
+                        'title' => '',
+                        'config' => [
+                            'slug' => $data['slug'],
+                            'title' => $data['title'],
+                        ]
+                    ];
+                }
+            }
+            file_put_contents(LocalConfigUtils::getCpConfigFile('user-permissions'), json_encode($variables));
+        }
+        // TMP OLD SYNC OFF
 
         $configPath = LocalConfigUtils::getFrontendConfigPath() . '/NaeSPermissions.tsx';
 
@@ -64,20 +94,18 @@ export const CheckUserPermissionComponent = (props: ICheckUserPermissionComponen
 }
 ";
 
-        $sql = 'select user_permissions.slug as slug, user_permissions.title as title from user_permissions ';
-
-        $result = $db->query($sql);
+        $permissionsData = LocalConfigUtils::getCpConfigFileData('user-permissions');
 
         $permissions[] = [
             'key' => 'default',
             'slug' => 'default',
             'title' => 'default',
         ];
-        while ($data = $result->fetchArray(SQLITE3_ASSOC)) {
+        foreach ($permissionsData as $permission) {
             $permissions[] = [
-                'key' => LocalConfigUtils::transformKeyToCamelCase($data['slug']),
-                'slug' => $data['slug'],
-                'title' => $data['title'],
+                'key' => LocalConfigUtils::transformKeyToCamelCase($permission['config']['slug']),
+                'slug' => $permission['config']['slug'],
+                'title' => $permission['config']['title'],
             ];
         }
 

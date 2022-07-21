@@ -6,6 +6,9 @@ class LocalConfigUtils
 {
     public static function getSqliteDb()
     {
+        if (!file_exists($_ENV['NAE_SFS_CP_DB_PATH'])) {
+            return false;
+        }
         $configDbFile = $_ENV['NAE_SFS_CP_DB_PATH'];
         return new \SQLite3($configDbFile);
     }
