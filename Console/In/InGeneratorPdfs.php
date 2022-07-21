@@ -23,34 +23,23 @@ class InGeneratorPdfs extends Command
         $pdfSchemaTemplate = $twig->load('pdfs/schema-pdf.html.twig');
         $generatedPath = Utils::generatedPath('pdfs/buttons');
 
-        $db = LocalConfigUtils::getSqliteDb();
-
-        $sql = 'select 
-            pdfs.template, 
-            pdfs.title, 
-            pdfs.skipList, 
-            pdfs.sort, 
-            pdfs.skipWithoutSign, 
-            entities.slug from pdfs
-        left join entities on entities.id = pdfs.entity ';
-
-        $result = $db->query($sql);
+        $pdfsData = LocalConfigUtils::getCpConfigFileData('pdfs');
 
         $components = [];
         $pdfs = [];
-        while ($data = $result->fetchArray(SQLITE3_ASSOC)) {
-            if (!isset($pdfs[$data['slug']])) {
-                $pdfs[$data['slug']] = [];
+        foreach ($pdfsData as $pdf) {
+            if (!isset($pdfs[$pdf['config']['slug']])) {
+                $pdfs[$pdf['config']['slug']] = [];
             }
 
-            $compName = 'Pdf' . Utils::fixComponentName($data['slug']) . Utils::fixComponentName($data['template']);
+            $compName = 'Pdf' . Utils::fixComponentName($pdf['config']['slug']) . Utils::fixComponentName($pdf['config']['template']);
 
-            $pdfs[$data['slug']][] = [
-                'sort' => (int)$data['sort'],
-                'template' => $data['template'],
-                'title' => $data['title'],
-                'skipList' => $data['skipList'] === 1,
-                'skipWithoutSign' => isset($data['skipWithoutSign']) && $data['skipWithoutSign'] === 1,
+            $pdfs[$pdf['config']['slug']][] = [
+                'sort' => (int)$pdf['config']['sort'],
+                'template' => $pdf['config']['template'],
+                'title' => $pdf['config']['title'],
+                'skipList' => $pdf['config']['skipList'] === 1,
+                'skipWithoutSign' => isset($pdf['config']['skipWithoutSign']) && $pdf['config']['skipWithoutSign'] === 1,
                 'compName' => $compName
             ];
         }

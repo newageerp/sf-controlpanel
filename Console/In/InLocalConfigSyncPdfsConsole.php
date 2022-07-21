@@ -25,27 +25,71 @@ class InLocalConfigSyncPdfsConsole extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        // TMP OLD SYNC
         $db = LocalConfigUtils::getSqliteDb();
+        $sql = 'select pdfs.template, pdfs.title, pdfs.skipList, pdfs.sort, pdfs.skipWithoutSign, entities.slug from pdfs left join entities on entities.id = pdfs.entity';
+        $result = $db->query($sql);
+
+        $variables = LocalConfigUtils::getCpConfigFileData('pdfs');
+        while ($data = $result->fetchArray(SQLITE3_ASSOC)) {
+            $newId = 'synced-' . $data['id'];
+
+            $isExist = false;
+            foreach ($variables as $var) {
+                if ($var['id'] === $newId) {
+                    $isExist = true;
+                }
+            }
+            if (!$isExist) {
+                $variables[] = [
+                    'id' => $newId,
+                    'tag' => '',
+                    'title' => '',
+                    'config' => [
+                        'entity' => $data['slug'],
+                        'skipList' => isset($data['skipList'])?(int)$data['skipList']:0,
+                        'skipWithoutSign' => isset($data['skipWithoutSign'])?(int)$data['skipWithoutSign']:0,
+                        'sort' => (int)$data['sort'],
+                        'template' => $data['template'],
+                        'title' => $data['title'],
+                    ]
+                ];
+            }
+        }
+        file_put_contents(LocalConfigUtils::getCpConfigFile('pdfs'), json_encode($variables));
+        // TMP OLD SYNC OFF
 
         $configPath = LocalConfigUtils::getFrontendConfigPath() . '/NaeSPdfs.tsx';
 
         $fileContent = 'import { INaePdf } from "@newageerp/nae-react-ui/dist/interfaces";
 ';
 
-        $sql = 'select pdfs.template, pdfs.title, pdfs.skipList, pdfs.sort, pdfs.skipWithoutSign, entities.slug from pdfs
-        left join entities on entities.id = pdfs.entity ';
-
-        $result = $db->query($sql);
-
+//        $sql = 'select pdfs.template, pdfs.title, pdfs.skipList, pdfs.sort, pdfs.skipWithoutSign, entities.slug from pdfs
+//        left join entities on entities.id = pdfs.entity ';
+//
+//        $result = $db->query($sql);
+//
+//        $pdfs = [];
+//        while ($data = $result->fetchArray(SQLITE3_ASSOC)) {
+//            $pdfs[] = [
+//                'sort' => (int)$data['sort'],
+//                'schema' => $data['slug'],
+//                'template' => $data['template'],
+//                'title' => $data['title'],
+//                'skipList' => $data['skipList'] === 1,
+//                'skipWithoutSign' => isset($data['skipWithoutSign']) && $data['skipWithoutSign'] === 1,
+//            ];
+//        }
         $pdfs = [];
-        while ($data = $result->fetchArray(SQLITE3_ASSOC)) {
+        $pdfsData = LocalConfigUtils::getCpConfigFileData('pdfs');
+        foreach ($pdfsData as $pdf) {
             $pdfs[] = [
-                'sort' => (int)$data['sort'],
-                'schema' => $data['slug'],
-                'template' => $data['template'],
-                'title' => $data['title'],
-                'skipList' => $data['skipList'] === 1,
-                'skipWithoutSign' => isset($data['skipWithoutSign']) && $data['skipWithoutSign'] === 1,
+                'sort' => (int)$pdf['config']['sort'],
+                'schema' => $pdf['config']['entity'],
+                'template' => $pdf['config']['template'],
+                'title' => $pdf['config']['title'],
+                'skipList' => $pdf['config']['skipList'] === 1,
+                'skipWithoutSign' => isset($pdf['config']['skipWithoutSign']) && $pdf['config']['skipWithoutSign'] === 1,
             ];
         }
 
