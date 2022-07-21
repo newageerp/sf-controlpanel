@@ -10,6 +10,19 @@ class LocalConfigUtils
         return new \SQLite3($configDbFile);
     }
 
+    public static function getCpConfigFile(string $file)
+    {
+        return $_ENV['NAE_SFS_CP_STORAGE_PATH'] . '/' . $file . '.json';
+    }
+    public static function getCpConfigFileData(string $file)
+    {
+        $file = $_ENV['NAE_SFS_CP_STORAGE_PATH'] . '/' . $file . '.json';
+        if (!file_exists($file)) {
+            file_put_contents($file, json_encode([]));
+        }
+        return json_decode(file_get_contents($file), true);
+    }
+
     public static function getDocJsonPath()
     {
         return $_ENV['NAE_SFS_FRONT_URL'] . '/app/doc.json';
@@ -19,10 +32,12 @@ class LocalConfigUtils
     {
         return $_ENV['NAE_SFS_ROOT_PATH'] . '/front-hooks';
     }
+
     public static function getFrontendModelsPath()
     {
         return $_ENV['NAE_SFS_ROOT_PATH'] . '/front-models';
     }
+
     public static function getFrontendModelsCachePath()
     {
         return $_ENV['NAE_SFS_ROOT_PATH'] . '/front-models-cache';

@@ -2,6 +2,7 @@
 
 namespace Newageerp\SfControlpanel\Controller;
 
+use Newageerp\SfControlpanel\Console\LocalConfigUtils;
 use Symfony\Component\Routing\Annotation\Route;
 use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,14 +16,15 @@ class ConfigVariablesController extends ConfigBaseController
 {
     protected function getLocalStorageFile()
     {
-        $file = $this->getLocalStorage() . '/variables.json';
+        $file = LocalConfigUtils::getCpConfigFile('variables');
         if (!file_exists($file)) {
             file_put_contents($file, json_encode([]));
         }
         return $file;
     }
 
-    protected function saveBuilder($data) {
+    protected function saveBuilder($data)
+    {
         file_put_contents(
             $this->getLocalStorageFile(),
             json_encode($data)

@@ -25,16 +25,40 @@ class InLocalConfigSyncVariablesConsole extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        // TMP OLD SYNC
         $db = LocalConfigUtils::getSqliteDb();
+        $sql = 'select variables.slug, variables.text from variables';
+        $result = $db->query($sql);
+
+        $variables = LocalConfigUtils::getCpConfigFileData('variables');
+        while ($data = $result->fetchArray(SQLITE3_ASSOC)) {
+            $newId = 'synced-' . $data['id'];
+
+            $isExist = false;
+            foreach ($variables as $var) {
+                if ($var['id'] === $newId) {
+                    $isExist = true;
+                }
+            }
+            if (!$isExist) {
+                $variables[] = [
+                    'id' => $newId,
+                    'tag' => '',
+                    'title' => '',
+                    'config' => [
+                        'slug' => $data['slug'],
+                        'title' => $data['title']
+                    ]
+                ];
+            }
+        }
+        // TMP OLD SYNC OFF
 
         $configPhpPath = LocalConfigUtils::getPhpVariablesPath() . '/NaeSVariables.php';
-
         $configPath = LocalConfigUtils::getFrontendConfigPath() . '/NaeSVariables.tsx';
         $fileContent = '';
 
-        $sql = 'select variables.slug, variables.text from variables';
-
-        $result = $db->query($sql);
+        $variables = LocalConfigUtils::getCpConfigFileData('variables');
 
         $phpFileContent = '<?php
 namespace App\\Config;
@@ -43,12 +67,12 @@ class NaeSVariables {
 ';
 
         $dbData = [];
-        while ($data = $result->fetchArray(SQLITE3_ASSOC)) {
-            $dbData[$data['slug']] = $data['text'];
+        foreach ($variables as $variable) {
+            $dbData[$variable['config']['slug']] = $variable['config']['text'];
 
             $phpFileContent .= '
-    public static function get' . ucfirst($data['slug']) . '(): string {
-        return "' . $data['text'] . '";
+    public static function get' . ucfirst($variable['config']['slug']) . '(): string {
+        return "' . $variable['config']['text'] . '";
     }
 ';
         }
