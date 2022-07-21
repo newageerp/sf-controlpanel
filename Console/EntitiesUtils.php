@@ -10,14 +10,23 @@ class EntitiesUtils
 
     public function __construct()
     {
-        $this->entities = json_decode(
-            file_get_contents(LocalConfigUtils::getPhpCachePath() . '/NaeSSchema.json'),
-            true
-        );
-        $this->defaultItems = json_decode(
-            file_get_contents($_ENV['NAE_SFS_CP_STORAGE_PATH'] . '/defaults.json'),
-            true
-        );
+        $entitiesFile = LocalConfigUtils::getPhpCachePath() . '/NaeSSchema.json';
+        $this->entities = [];
+        if (file_exists($entitiesFile)) {
+            $this->entities = json_decode(
+                file_get_contents($entitiesFile),
+                true
+            );
+        }
+
+        $defaultsFile = $_ENV['NAE_SFS_CP_STORAGE_PATH'] . '/defaults.json';
+        $this->defaultItems = [];
+        if (file_exists($defaultsFile)) {
+            $this->defaultItems = json_decode(
+                file_get_contents($_ENV['NAE_SFS_CP_STORAGE_PATH'] . '/defaults.json'),
+                true
+            );
+        }
     }
 
     public function getTitleBySlug(string $slug)
