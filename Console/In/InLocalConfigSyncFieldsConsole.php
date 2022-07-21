@@ -2,6 +2,7 @@
 
 namespace Newageerp\SfControlpanel\Console\In;
 
+use Newageerp\SfControlpanel\Console\EntitiesUtils;
 use Newageerp\SfControlpanel\Console\LocalConfigUtils;
 use Doctrine\ORM\EntityManagerInterface;
 use Newageerp\SfControlpanel\Console\PropertiesUtils;
@@ -18,14 +19,18 @@ class InLocalConfigSyncFieldsConsole extends Command
 
     protected PropertiesUtils $propertiesUtils;
 
+    protected EntitiesUtils $entitiesUtils;
+
     public function __construct(
         EntityManagerInterface $em,
-        PropertiesUtils        $propertiesUtils
+        PropertiesUtils        $propertiesUtils,
+        EntitiesUtils $entitiesUtils,
     )
     {
         parent::__construct();
         $this->em = $em;
         $this->propertiesUtils = $propertiesUtils;
+        $this->entitiesUtils = $entitiesUtils;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -210,7 +215,7 @@ class InLocalConfigSyncFieldsConsole extends Command
                 'title' => $prop['config']['title'],
                 'additionalProperties' => json_decode($prop['config']['additionalProperties'], true),
                 'description' => $description,
-                'className' => $prop['config']['entity_className'],
+                'className' => $this->entitiesUtils->getClassNameBySlug($prop['config']['entity']),
                 'isDb' => $prop['config']['isDb'] === 1,
                 'dbType' => $prop['config']['dbType']
             ];
