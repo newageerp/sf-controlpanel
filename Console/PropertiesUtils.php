@@ -527,6 +527,12 @@ class PropertiesUtils
                     "template" => '<Input onChange={TP_ON_CHANGE_STRING} value={TP_VALUE}/>'
                 ];
                 break;
+            case 'text':
+                return [
+                    "import" => 'import { Textarea } from "@newageerp/ui.form.base.form-pack";',
+                    "template" => '<Textarea onChange={TP_ON_CHANGE_STRING} value={TP_VALUE}/>'
+                ];
+                break;
             case 'float':
                 return [
                     "import" => 'import { InputFloat } from "@newageerp/ui.form.base.form-pack";',
