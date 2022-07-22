@@ -172,7 +172,13 @@ class InGeneratorLayout extends Command
         // getFrontendModelsCachePath
         $fileName = LocalConfigUtils::getFrontendModelsCachePath().'/NotesNameResolver.tsx';
         if (!file_exists($fileName)) {
-            $generatedContent = $twig->load('notes/NotesNameResolver.html.twig')->render();
+            $generatedContent = $twig->load('user-components/notes/NotesNameResolver.html.twig')->render();
+            Utils::writeOnChanges($fileName, $generatedContent);
+        }
+
+        $fileName = LocalConfigUtils::getFrontendModelsCachePath().'/types.ts';
+        if (!file_exists($fileName)) {
+            $generatedContent = $twig->load('user-components/types.html.twig')->render();
             Utils::writeOnChanges($fileName, $generatedContent);
         }
 

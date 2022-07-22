@@ -1,0 +1,12 @@
+export interface PropsId {
+    id: number,
+}
+
+export interface PropsMapId {
+    id: number[],
+}
+
+export interface PropsLink extends PropsId {
+    link?: boolean,
+    linkInline?: boolean,
+}
