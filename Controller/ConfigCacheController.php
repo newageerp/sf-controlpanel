@@ -15,7 +15,8 @@ class ConfigCacheController extends ConfigBaseController
      * @Route(path="/getLocalConfig", methods={"GET"})
      * @OA\Post (operationId="NaeConfigLocalConfigList")
      */
-    public function getLocalConfig(Request $request) {
+    public function getLocalConfig(Request $request)
+    {
         $request = $this->transformJsonBody($request);
 
         $config = [
@@ -31,10 +32,13 @@ class ConfigCacheController extends ConfigBaseController
 
         try {
             foreach ($config as $key => $file) {
-                $data = json_decode(
-                    file_get_contents($this->getLocalStorage().'/'.$file),
-                    true
-                );
+                $data = [];
+                if (file_exists($this->getLocalStorage() . '/' . $file)) {
+                    $data = json_decode(
+                        file_get_contents($this->getLocalStorage() . '/' . $file),
+                        true
+                    );
+                }
                 $output['data'][$key] = $data;
             }
 
