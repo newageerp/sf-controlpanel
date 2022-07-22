@@ -1,0 +1,17 @@
+import React, { Fragment } from 'react'
+import { useTranslation } from 'react-i18next';
+
+interface Props {
+    parentId: number,
+    parentSchema: string,
+}
+
+export default function NotesNameResolver(props: Props) {
+    const { t } = useTranslation();
+
+    return (
+        <Fragment>
+            {t("Atidaryti elementą")}
+        </Fragment>
+    )
+}

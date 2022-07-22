@@ -3,6 +3,7 @@
 namespace Newageerp\SfControlpanel\Console\In;
 
 use Newageerp\SfControlpanel\Console\EntitiesUtils;
+use Newageerp\SfControlpanel\Console\LocalConfigUtils;
 use Newageerp\SfControlpanel\Console\PropertiesUtils;
 use Newageerp\SfControlpanel\Console\Utils;
 use Newageerp\SfControlpanel\Service\MenuService;
@@ -166,6 +167,13 @@ class InGeneratorLayout extends Command
                 $generatedContent = $twig->load($template)->render();
                 Utils::writeOnChanges($fileName, $generatedContent);
             }
+        }
+
+        // getFrontendModelsCachePath
+        $fileName = LocalConfigUtils::getFrontendModelsCachePath().'/NotesNameResolver.tsx';
+        if (!file_exists($fileName)) {
+            $generatedContent = $twig->load('notes/NotesNameResolver.html.twig')->render();
+            Utils::writeOnChanges($fileName, $generatedContent);
         }
 
         return Command::SUCCESS;
