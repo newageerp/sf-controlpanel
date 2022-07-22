@@ -570,8 +570,8 @@ class PropertiesUtils
                         withIcon={true}
                         schema="TP_OBJECT_SCHEMA"
                         field="TP_OBJECT_KEY"
-                        selectedId={TP_VALUE}
-                        onSelectId={TP_ON_CHANGE}
+                        selectedId={TP_VALUE_OBJ}
+                        onSelectId={TP_ON_CHANGE_OBJ}
                         parentElement={element}
                         parentSchema={"TP_SCHEMA"}
                         sort={TP_OBJECT_SORT}

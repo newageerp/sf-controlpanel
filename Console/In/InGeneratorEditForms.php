@@ -99,12 +99,19 @@ class InGeneratorEditForms extends Command
                         $objectPath = implode(".", $pathArray);
                         $fieldsToReturn[] = $objectPath;
                         if (count($pathArray) >= 2) {
-                            $fieldsToReturn[] = $path . '.id';
-                        }
+                            $fieldsToReturn[] = $pathA[1] . '.id';
 
-                        $fieldObjectProperty = $this->propertiesUtils->getPropertyForPath($objectPath);
-                        if ($fieldObjectProperty) {
-                            $objectSort = $this->entitiesUtils->getDefaultSortForSchema($fieldObjectProperty['schema']);
+
+                            $relPathArray = explode(".", $field['path']);
+                            array_shift($relPathArray);
+                            array_shift($relPathArray);
+                            array_unshift($relPathArray, $fieldProperty['format']);
+                            $objectRelPath = implode(".", $relPathArray);
+
+                            $fieldObjectProperty = $this->propertiesUtils->getPropertyForPath($objectRelPath);
+                            if ($fieldObjectProperty) {
+                                $objectSort = $this->entitiesUtils->getDefaultSortForSchema($fieldObjectProperty['schema']);
+                            }
                         }
                     }
 
@@ -121,11 +128,16 @@ class InGeneratorEditForms extends Command
                     $tpOnChange = '(e: any) => onChange(\'' . $fieldProperty['key'] . '\', e)';
                     $tpOnChangeString = '(e: any) => onChange(\'' . $fieldProperty['key'] . '\', e.target.value)';
 
+                    $tpValueObj = 'element.' . $fieldProperty['key'].'?.id';
+                    $tpOnChangeObj = '(e: any) => onChange(\'' . $fieldProperty['key'] . '\', {id: e})';
+
                     $tpObjectSortStr = json_encode($objectSort, JSON_PRETTY_PRINT);
 
                     $fieldTemplate = str_replace(
                         [
+                            'TP_VALUE_OBJ',
                             'TP_VALUE',
+                            'TP_ON_CHANGE_OBJ',
                             'TP_ON_CHANGE_STRING',
                             'TP_ON_CHANGE',
                             'TP_SCHEMA',
@@ -135,7 +147,9 @@ class InGeneratorEditForms extends Command
                             'TP_OBJECT_SORT'
                         ],
                         [
+                            $tpValueObj,
                             $tpValue,
+                            $tpOnChangeObj,
                             $tpOnChangeString,
                             $tpOnChange,
                             $fieldProperty['schema'],
