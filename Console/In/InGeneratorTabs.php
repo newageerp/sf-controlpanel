@@ -46,20 +46,10 @@ class InGeneratorTabs extends Command
             __DIR__ . '/templates/tabs/TabTable.txt'
         );
 
-        $defaultsFile = $_ENV['NAE_SFS_CP_STORAGE_PATH'] . '/defaults.json';
-        $defaultItems = json_decode(
-            file_get_contents($defaultsFile),
-            true
-        );
+        $defaultItems = LocalConfigUtils::getCpConfigFileData('defaults');
 
         $tabsFile = $_ENV['NAE_SFS_CP_STORAGE_PATH'] . '/tabs.json';
-        $tabItems = [];
-        if (file_exists($tabsFile)) {
-            $tabItems = json_decode(
-                file_get_contents($tabsFile),
-                true
-            );
-        }
+        $tabItems = LocalConfigUtils::getCpConfigFileData('tabs');
 
         $generatedPath = Utils::generatedPath('tabs/tables');
         $dataSourceGeneratedPath = Utils::generatedPath('tabs/tables-data-source');
