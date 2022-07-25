@@ -260,7 +260,7 @@ class InLocalConfigSyncFieldsConsole extends Command
                     return 0;
                 });
 
-                $prop['enum'] = array_map(
+                $propSet['enum'] = array_map(
                     function ($en) use ($prop) {
                         $isInt = $prop['config']['type'] === 'integer' || $prop['config']['type'] === 'int' || $prop['config']['type'] === 'number';
                         return [
