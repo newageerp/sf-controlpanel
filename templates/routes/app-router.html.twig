@@ -37,7 +37,7 @@ export default function AppRouter(props: AppRouterProps) {
 
     const isLoggedIn = isRequestFinished && userState.id > 0;
 
-    if (isRequestFinished) {
+    if (!isRequestFinished) {
         return <div>Loading...</div>
     }
 
