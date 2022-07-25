@@ -12,7 +12,7 @@ import AppRoutes from "../routes/AppRoutes";
 import { UI, Hooks as UIHooks, UIConfig } from "@newageerp/nae-react-ui";
 import InitComponent from "./InitComponent";
 import { DataCacheProvider } from "../../Components/Hooks/DataCacheProvider";
-import { Switch } from "react-router-dom";
+import { Redirect, Switch } from "react-router-dom";
 import CustomUserWrapperRoutes from "../_custom/routes/CustomUserWrapperRoutes";
 
 function App() {
@@ -60,6 +60,7 @@ function App() {
                     noAuthRoutes={
                         <Fragment>
                             <AuthLogin />
+                            <Redirect to='/login' />
                         </Fragment>
                     }
                 />
