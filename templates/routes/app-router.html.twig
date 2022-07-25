@@ -1,4 +1,5 @@
-import { OpenApi, Hooks } from '@newageerp/nae-react-auth-wrapper';
+import { OpenApi } from '@newageerp/nae-react-auth-wrapper';
+import { Hooks } from '@newageerp/nae-react-ui';
 import React, { useEffect, useState } from 'react'
 import { BrowserRouter as Router, Switch } from 'react-router-dom';
 import { Redirect, useLocation } from 'react-router-dom'
@@ -12,14 +13,14 @@ export interface AppRouterRoute {
 }
 
 export interface AppRouterProps {
-    noAuthRoutes?: any,
+    noAuthRoutes?: (isLoggedIn: boolean) => any,
     authRoutes?: any,
     children?: any
 }
 
 export default function AppRouter(props: AppRouterProps) {
-    const [isUserDataLoading, setIsUserDataLoading] = useState(true);
-    const [userState, setUserState] = useRecoilState(OpenApi.naeUserState)
+    const isMount = Hooks.useDidMount();
+    const [userState, setUserState] = useRecoilState<any>(OpenApi.naeUserState)
 
     const [getUserData, getUserDataParams] = OpenApi.useURequest('NAEauthGetProfile')
 
@@ -27,20 +28,23 @@ export default function AppRouter(props: AppRouterProps) {
         getUserData();
     }, [])
     useEffect(() => {
-        setUserState(getUserDataParams.data)
+        if (!isMount) {
+            setUserState(getUserDataParams.data)
+        }
     }, [getUserDataParams.data])
 
-    const isLoggedIn = !!userState && ('id' in userState);
-    const _isUserDataLoading = isUserDataLoading && !userState;
+    const isRequestFinished = !!userState && ('id' in userState);
 
-    if ( _isUserDataLoading) {
+    const isLoggedIn = isRequestFinished && userState.id > 0;
+
+    if (isRequestFinished) {
         return <div>Loading...</div>
     }
 
     return (
         <Router>
             <Switch>
-                {props.noAuthRoutes}
+                {!!props.noAuthRoutes && props.noAuthRoutes(isLoggedIn)}
             </Switch>
             {isLoggedIn && props.authRoutes}
             {props.children}

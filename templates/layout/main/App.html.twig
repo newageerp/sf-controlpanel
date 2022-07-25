@@ -57,11 +57,15 @@ function App() {
                             </UI.UIBuilder.UIBuilderProvider>
                         </Fragment>
                     }
-                    noAuthRoutes={
-                        <Fragment>
-                            <AuthLogin />
-                            <Redirect to='/login' />
-                        </Fragment>
+                    noAuthRoutes={(isLoggedIn) => {
+                        return (
+                            <Fragment>
+                                <AuthLogin />
+                                {!isLoggedIn && <Redirect to='/login' />}
+                            </Fragment>
+                        )
+                    }
+
                     }
                 />
             </RoutesWrapper>

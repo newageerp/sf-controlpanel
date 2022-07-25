@@ -5,10 +5,13 @@ TP_IMPORTS
 export default function TP_COMP_NAME() {
     return (
         <Fragment>
-            <MenuFolder item={{
-                children: 'TP_TITLE',
-                icon: 'TP_ICON'
-            }}>
+            <MenuFolder
+                item={{
+                    children: 'TP_TITLE',
+                    icon: 'TP_ICON'
+                }}
+                menuFolderId='TP_COMP_NAME'
+            >
 TP_CHILDS
             </MenuFolder>
         </Fragment>
