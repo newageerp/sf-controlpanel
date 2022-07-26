@@ -13,7 +13,8 @@ import { UI } from '@newageerp/nae-react-ui';
 interface Props extends PropsId {
     title?: string,
     onEdit?: () => void,
-
+    contentBeforeForm?: any,
+    contentAfterForm?: any,
 }
 
 export default function {{ compName }}Widget(props: Props) {
@@ -57,7 +58,12 @@ export default function {{ compName }}Widget(props: Props) {
                     }
                 </div>
             }
+
+            {props.contentBeforeForm}
+
             <{{ compName }} element={element} />
+
+            {props.contentAfterForm}
         </WhiteCard>
     )
 }
