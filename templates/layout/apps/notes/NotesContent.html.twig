@@ -25,6 +25,7 @@ interface INote {
   content: string;
   parentId: number;
   parentSchema: string;
+  replyTo: number;
 }
 const defObject: INote = {
   id: 0,
@@ -38,6 +39,7 @@ const defObject: INote = {
   content: "",
   parentId: 0,
   parentSchema: "",
+  replyTo: 0,
 };
 
 export default function NotesContent(props: Props) {

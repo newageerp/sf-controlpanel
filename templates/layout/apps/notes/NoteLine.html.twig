@@ -19,6 +19,10 @@ import {
 import { IconList } from "@newageerp/ui.icons.base.icon-list";
 import { IconType } from "@newageerp/ui.icons.base.icon";
 import { Menu, MenuItem } from "@newageerp/sfs.modal.menu";
+import { NotesEditForm } from '@newageerp/sfs.notes.notes-edit-form';
+import { NotesAnswerForm } from '@newageerp/sfs.notes.notes-answer-form'
+import { NotesQuoteTextSelector } from '@newageerp/sfs.notes.notes-quote-text-selector'
+import { useNoteHookNae } from '../../../Components/Hooks/useNoteHookNae';
 
 interface IData {
   id: number;
@@ -32,6 +36,7 @@ interface IData {
   content: string;
   parentId: number;
   parentSchema: string;
+  replyTo: number;
 }
 
 interface Props {
@@ -210,11 +215,11 @@ export default function NoteLine(props: Props) {
             </span>
           )}
         </div>
+        {!!note.replyTo && <NotesQuoteTextSelector id={note.replyTo} selector={useNoteHookNae} />}
         <div className={"w-full text-sm"}>{parse(note.content)}</div>
         {showAnswerForm && (
-          <div className={"w-full"}>
-            <NoteContentForm
-              options={ {} }
+          <NotesAnswerForm
+              options={{}}
               parentElementId={note.parentId}
               parentSchema={note.parentSchema}
               reloadData={() => {
@@ -228,14 +233,17 @@ export default function NoteLine(props: Props) {
               defaultSelected={[
                 { value: note.creator.id, label: note.creator.fullName },
               ]}
-              defaultContent={`<blockquote>${note.content}</blockquote><br/>`}
-            />
-          </div>
+              quoteContent={note.content}
+              replyTo={note.id}
+
+              onClose={() => setShowEditForm(false)}
+              saveFunc={OpenApi.useUSave}
+              users={users}
+              />
         )}
         {showEditForm && (
-          <div className={"w-full"}>
-            <NoteEditForm
-              options={ {} }
+          <NotesEditForm
+              options={{}}
               noteId={note.id}
               reloadData={() => {
                 props.doReload();
@@ -243,8 +251,11 @@ export default function NoteLine(props: Props) {
               }}
               defaultSelected={note.notify}
               defaultContent={note.content}
+
+              onClose={() => setShowEditForm(false)}
+              saveFunc={OpenApi.useUSave}
+              users={users}
             />
-          </div>
         )}
       </div>
       {!isCreator && <span style={ { width: "10%" } }></span>}
