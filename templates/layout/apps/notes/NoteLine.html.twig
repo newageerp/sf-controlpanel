@@ -219,7 +219,9 @@ export default function NoteLine(props: Props) {
         <div className={"w-full text-sm"}>{parse(note.content)}</div>
         {showAnswerForm && (
           <NotesAnswerForm
-              options={ { } }
+              options={
+                {}
+              }
               parentElementId={note.parentId}
               parentSchema={note.parentSchema}
               reloadData={() => {
@@ -243,7 +245,9 @@ export default function NoteLine(props: Props) {
         )}
         {showEditForm && (
           <NotesEditForm
-              options={ { } }
+              options={
+                {}
+              }
               noteId={note.id}
               reloadData={() => {
                 props.doReload();
