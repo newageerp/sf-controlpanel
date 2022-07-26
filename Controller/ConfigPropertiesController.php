@@ -115,15 +115,13 @@ class ConfigPropertiesController extends ConfigBaseController
                 $item['id'] = Uuid::uuid4()->toString();
             }
 
-            $isFound = false;
             $data = json_decode(
                 file_get_contents($this->getLocalStorageFile()),
                 true
             );
             foreach ($data as &$el) {
                 if ($el['id'] === $item['id']) {
-                    $el[$item['key']] = $item['value'];
-                    $isFound = true;
+                    $el['config'][$item['key']] = $item['value'];
                 }
             }
             unset($el);
