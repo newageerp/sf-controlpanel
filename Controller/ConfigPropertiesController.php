@@ -101,6 +101,43 @@ class ConfigPropertiesController extends ConfigBaseController
     }
 
     /**
+     * @Route(path="/saveConfigKey", methods={"POST"})
+     */
+    public function saveConfigKey(Request $request)
+    {
+        $request = $this->transformJsonBody($request);
+
+        $output = [];
+
+        try {
+            $item = $request->get('item');
+            if (!isset($item['id']) || !$item['id']) {
+                $item['id'] = Uuid::uuid4()->toString();
+            }
+
+            $isFound = false;
+            $data = json_decode(
+                file_get_contents($this->getLocalStorageFile()),
+                true
+            );
+            foreach ($data as &$el) {
+                if ($el['id'] === $item['id']) {
+                    $el[$item['key']] = $item['value'];
+                    $isFound = true;
+                }
+            }
+            unset($el);
+
+            $this->saveBuilder($data);
+
+            $output['data'] = $item;
+        } catch (\Exception $e) {
+            $output['e'] = $e->getMessage();
+        }
+        return $this->json($output);
+    }
+
+    /**
      * @Route(path="/removeConfig", methods={"POST"})
      */
     public function removeConfig(Request $request)
