@@ -83,7 +83,7 @@ export default function {{ TP_COMP_NAME_DATA_SOURCE }}(props: Props) {
             setHasChanges(true)
             _el[key] = val
 
-            _el = UIConfig.onEditElementUpdate('{{ TP_SCHEMA }}', key, val, _el, updateElement)
+            _el = await UIConfig.onEditElementUpdate('{{ TP_SCHEMA }}', key, val, _el, updateElement)
 
             setElement(_el)
         }
@@ -97,7 +97,7 @@ export default function {{ TP_COMP_NAME_DATA_SOURCE }}(props: Props) {
                 _hasChanges = true
                 _el[k] = updates[k]
 
-                _el = UIConfig.onEditElementUpdate('{{ TP_SCHEMA }}', k, updates[k], _el, updateElement)
+                _el = await UIConfig.onEditElementUpdate('{{ TP_SCHEMA }}', k, updates[k], _el, updateElement)
             }
         })
 
