@@ -275,13 +275,13 @@ class PropertiesUtils
             case 'float':
                 return [
                     "import" => 'import { Float } from "@newageerp/data.table.float";',
-                    "template" => '<Float value={TP_VALUE}/>'
+                    "template" => '<Float value={TP_VALUE} className="field-float"/>'
                 ];
                 break;
             case 'number':
                 return [
                     "import" => 'import { Int } from "@newageerp/data.table.int";',
-                    "template" => '<Int value={TP_VALUE}/>'
+                    "template" => '<Int value={TP_VALUE} className="field-number"/>'
                 ];
                 break;
             case 'date':
@@ -577,8 +577,16 @@ class PropertiesUtils
                         sort={TP_OBJECT_SORT}
                         />'
                 ];
-                break;
-                break;
+            case 'file':
+                return [
+                    "import" => 'import { FilePicker } from "@newageerp/ui.form.base.form-pack";',
+                    "template" => '<FilePicker value={TP_VALUE} onChange={TP_ON_CHANGE}  folder={"TP_SCHEMA/TP_KEY"}/>'
+                ];
+            case 'fileMultiple':
+                return [
+                    "import" => 'import { FilePickerMultiple } from "@newageerp/ui.form.base.form-pack";',
+                    "template" => '<FilePickerMultiple value={TP_VALUE} onChange={TP_ON_CHANGE}  folder={"TP_SCHEMA/TP_KEY"}/>'
+                ];
             default :
                 return [
                     "import" => '',

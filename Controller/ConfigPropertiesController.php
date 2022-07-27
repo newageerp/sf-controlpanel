@@ -7,6 +7,7 @@ use Newageerp\SfControlpanel\Console\PropertiesUtils;
 use Symfony\Component\Routing\Annotation\Route;
 use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Request;
+use Ramsey\Uuid\Uuid;
 
 /**
  * @Route(path="/app/nae-core/config-properties")
