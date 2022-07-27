@@ -218,7 +218,7 @@ class InLocalConfigSyncFieldsConsole extends Command
                 'additionalProperties' => json_decode($prop['config']['additionalProperties'], true),
                 'description' => $description,
                 'className' => $this->entitiesUtils->getClassNameBySlug($prop['config']['entity']),
-                'isDb' => $prop['config']['isDb'] === 1,
+                'isDb' => $prop['config']['isDb'] === 1 || $prop['config']['isDb'] === true,
                 'dbType' => $prop['config']['dbType']
             ];
             if ($prop['config']['as']) {

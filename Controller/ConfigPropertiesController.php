@@ -112,9 +112,6 @@ class ConfigPropertiesController extends ConfigBaseController
 
         try {
             $item = $request->get('item');
-            if (!isset($item['id']) || !$item['id']) {
-                $item['id'] = Uuid::uuid4()->toString();
-            }
 
             $data = json_decode(
                 file_get_contents($this->getLocalStorageFile()),
