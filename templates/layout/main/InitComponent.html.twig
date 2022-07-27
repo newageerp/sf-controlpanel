@@ -16,6 +16,8 @@ import { NaeWidgets } from '../../config/widgets/index';
 import { NaeSPropertiesKeys } from "../../config/NaeSPropertiesKeys";
 import { getHookForSchema, getSelectorForSchema } from "../../UserComponents/ModelsCacheData/ModelFields";
 import { IUIBuilderTabItem } from "@newageerp/nae-react-ui/dist/UIBuilderPages/UIBuilderTabsPage";
+import { onEditElementUpdate } from "../../config/fields/onEditElementUpdate";
+
 // import {
 //     NaeSSchemaFilterKeys,
 //     NaeSSchemaGroupKeys,
@@ -30,12 +32,6 @@ export default function InitComponent(props: Props) {
     const defaults = UI.UIBuilder.useUIBuilder();
 
     const history = useHistory();
-
-
-    const onEditElementUpdate = (schema: string, key: string, val: any, element: any) => {
-
-        return element;
-    }
 
     return (
         <UI.Config.UIInitConfig
