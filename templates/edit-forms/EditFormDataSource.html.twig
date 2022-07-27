@@ -77,7 +77,7 @@ export default function {{ TP_COMP_NAME_DATA_SOURCE }}(props: Props) {
         }
     }, [schemaGetDataParams.data.data])
 
-    const updateElement = (key: string, val: any) => {
+    const updateElement = async (key: string, val: any) => {
         let _el = JSON.parse(JSON.stringify(element))
         if (val !== _el[key]) {
             setHasChanges(true)
