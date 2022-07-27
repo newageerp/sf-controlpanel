@@ -153,6 +153,8 @@ class InGeneratorLayout extends Command
         $templates = [
             'config/fields/edit.html.twig' => ['fields', 'edit'],
             'config/fields/fieldDependencies.html.twig' => ['fields', 'fieldDependencies'],
+            'config/fields/onEditElementUpdate.html.twig' => ['fields', 'onEditElementUpdate'],
+
             'config/fields/view.html.twig' => ['fields', 'view'],
 
             'config/tabs/index.html.twig' => ['tabs', 'index'],
@@ -181,6 +183,7 @@ class InGeneratorLayout extends Command
             $generatedContent = $twig->load('user-components/types.html.twig')->render();
             Utils::writeOnChanges($fileName, $generatedContent);
         }
+
 
         return Command::SUCCESS;
     }
