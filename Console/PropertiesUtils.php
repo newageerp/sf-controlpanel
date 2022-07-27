@@ -578,12 +578,12 @@ class PropertiesUtils
             case 'file':
                 return [
                     "import" => 'import { FilePicker } from "@newageerp/ui.form.base.form-pack";',
-                    "template" => '<FilePicker className="tw3-w-full" val={TP_VALUE} onChange={TP_ON_CHANGE}  folder={"TP_SCHEMA/TP_KEY"}/>'
+                    "template" => '<FilePicker width="tw3-w-full" val={TP_VALUE} onChange={TP_ON_CHANGE}  folder={"TP_SCHEMA/TP_KEY"}/>'
                 ];
             case 'fileMultiple':
                 return [
                     "import" => 'import { FilePickerMultiple } from "@newageerp/ui.form.base.form-pack";',
-                    "template" => '<FilePickerMultiple className="tw3-w-full" val={TP_VALUE} onChange={TP_ON_CHANGE}  folder={"TP_SCHEMA/TP_KEY"}/>'
+                    "template" => '<FilePickerMultiple width="tw3-w-full" val={TP_VALUE} onChange={TP_ON_CHANGE}  folder={"TP_SCHEMA/TP_KEY"}/>'
                 ];
             default :
                 return [
