@@ -275,13 +275,13 @@ class PropertiesUtils
             case 'float':
                 return [
                     "import" => 'import { Float } from "@newageerp/data.table.float";',
-                    "template" => '<Float value={TP_VALUE} className="field-float"/>'
+                    "template" => '<Float value={TP_VALUE}/>'
                 ];
                 break;
             case 'number':
                 return [
                     "import" => 'import { Int } from "@newageerp/data.table.int";',
-                    "template" => '<Int value={TP_VALUE} className="field-number"/>'
+                    "template" => '<Int value={TP_VALUE}/>'
                 ];
                 break;
             case 'date':
