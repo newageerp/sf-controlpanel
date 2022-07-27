@@ -89,7 +89,7 @@ export default function {{ TP_COMP_NAME_DATA_SOURCE }}(props: Props) {
         }
     }
 
-    const updateElementBatch = (updates: any) => {
+    const updateElementBatch = async (updates: any) => {
         let _el = JSON.parse(JSON.stringify(element))
         let _hasChanges = false
         Object.keys(updates).forEach((k: string) => {
