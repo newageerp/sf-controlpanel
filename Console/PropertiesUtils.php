@@ -389,16 +389,14 @@ class PropertiesUtils
                 break;
             case 'file':
                 return [
-                    "import" => '',
-                    "template" => '<Fragment/>'
+                    "import" => 'import { Image } from "@newageerp/data.table.file";',
+                    "template" => '<File val={TP_VALUE}/>'
                 ];
-                break;
             case 'fileMultiple':
                 return [
-                    "import" => '',
-                    "template" => '<Fragment/>'
+                    "import" => 'import { Image } from "@newageerp/data.table.file-multiple";',
+                    "template" => '<FileMultiple val={TP_VALUE}/>'
                 ];
-                break;
             case 'image':
                 return [
                     "import" => 'import { Image } from "@newageerp/data.table.image";',
