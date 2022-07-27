@@ -89,7 +89,7 @@ export default function {{ TP_COMP_NAME_DATA_SOURCE }}(props: Props) {
         }
     }
 
-    const updateElementBatch = async (updates: any) => {
+    const updateElementBatch =  (updates: any) => {
         let _el = JSON.parse(JSON.stringify(element))
         let _hasChanges = false
         Object.keys(updates).forEach((k: string) => {
@@ -97,7 +97,7 @@ export default function {{ TP_COMP_NAME_DATA_SOURCE }}(props: Props) {
                 _hasChanges = true
                 _el[k] = updates[k]
 
-                _el = await UIConfig.onEditElementUpdate('{{ TP_SCHEMA }}', k, updates[k], _el, updateElement)
+                _el =  UIConfig.onEditElementUpdate('{{ TP_SCHEMA }}', k, updates[k], _el, updateElement)
             }
         })
 
