@@ -166,7 +166,7 @@ class InGeneratorLayout extends Command
         ];
 
         foreach ($templates as $template => $target) {
-            $ext = $target[0] === 'tsx';
+            $ext = 'tsx';
             $fileName = Utils::generatedConfigPath($target[0]) . '/'.$target[1].'.'.$ext;
             if (!file_exists($fileName)) {
                 $generatedContent = $twig->load($template)->render();
