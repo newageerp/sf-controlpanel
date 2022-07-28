@@ -524,31 +524,31 @@ class PropertiesUtils
                     "import" => 'import { Input } from "@newageerp/ui.form.base.form-pack";',
                     "template" => '<Input onChange={TP_ON_CHANGE_STRING} value={TP_VALUE}/>'
                 ];
-                break;
             case 'text':
                 return [
                     "import" => 'import { Textarea } from "@newageerp/ui.form.base.form-pack";',
                     "template" => '<Textarea onChange={TP_ON_CHANGE_STRING} value={TP_VALUE}/>'
                 ];
-                break;
             case 'float':
                 return [
                     "import" => 'import { InputFloat } from "@newageerp/ui.form.base.form-pack";',
                     "template" => '<InputFloat onChangeFloat={TP_ON_CHANGE} value={TP_VALUE} className={"field-float"}/>'
                 ];
-                break;
             case 'number':
                 return [
                     "import" => 'import { InputInt } from "@newageerp/ui.form.base.form-pack";',
                     "template" => '<InputInt onChangeInt={TP_ON_CHANGE} value={TP_VALUE} className={"field-number"}/>'
                 ];
-                break;
+            case 'bool':
+                return [
+                    "import" => 'import { Checkbox } from "@newageerp/ui.form.base.form-pack";',
+                    "template" => '<Checkbox onChange={TP_ON_CHANGE} value={TP_VALUE}/>'
+                ];
             case 'date':
                 return [
                     "import" => 'import { Datepicker } from "@newageerp/ui.form.base.form-pack";',
                     "template" => '<Datepicker value={TP_VALUE} onChange={TP_ON_CHANGE}  className={"field-date"}/>'
                 ];
-                break;
             case 'enum_text':
             case 'enum_number':
                 $compName = Utils::fixComponentName(ucfirst($property['schema']) . 'EnumsOptions');
@@ -560,7 +560,6 @@ class PropertiesUtils
                     ],
                     "template" => '<SelectAdvId withIcon={true} options={' . $compName . '[\'TP_KEY\']} selectedId={TP_VALUE} onSelectId={TP_ON_CHANGE} />'
                 ];
-                break;
             case 'object':
                 return [
                     "import" => 'import { SelectAdvData } from "@newageerp/ui.form.base.form-pack";',
@@ -585,6 +584,7 @@ class PropertiesUtils
                     "import" => 'import { FilePickerMultiple } from "@newageerp/ui.form.base.form-pack";',
                     "template" => '<FilePickerMultiple width="tw3-w-full" val={TP_VALUE} onChange={TP_ON_CHANGE}  folder={"TP_SCHEMA/TP_KEY"}/>'
                 ];
+
             default :
                 return [
                     "import" => '',
