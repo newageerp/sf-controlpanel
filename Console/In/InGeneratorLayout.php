@@ -144,9 +144,11 @@ class InGeneratorLayout extends Command
 
         $hasTasksApp = class_exists('App\Entity\Task');
 
+        $settings = LocalConfigUtils::getCpConfigFileData('settings');
+
         foreach ($templates as $template => $target) {
             $fileName = Utils::generatedPath($target[0]) . '/'.$target[1].'.tsx';
-            $generatedContent = $twig->load($template)->render(['hasTasksApp' => $hasTasksApp]);
+            $generatedContent = $twig->load($template)->render(['hasTasksApp' => $hasTasksApp, 'settings' => $settings]);
             Utils::writeOnChanges($fileName, $generatedContent);
         }
 

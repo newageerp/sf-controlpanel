@@ -35,7 +35,7 @@ export default function AuthLogin() {
 
     return (
         <Route path={"/login"}>
-            <LoginV2 onSubmit={onSubmit} clientLogo={"/logo.png"} wrongCredentials={wrongLogin} />
+            <LoginV2 onSubmit={onSubmit} clientLogo={"/logo.png"} wrongCredentials={wrongLogin} type={"{{ settings.loginType }}"} />
         </Route>
     )
 }
