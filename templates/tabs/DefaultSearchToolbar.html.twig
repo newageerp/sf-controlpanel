@@ -1,5 +1,5 @@
 import React, {ReactNode} from 'react'
-import { SearchToolbar, SearchToolbarMarginBottom, SearchToolbarQuickSearchProps, SearchToolbarSortProps, SearchToolbarTabSwitchProps, SearchToolbarExtendedSearchProps } from '@newageerp/ui.components.list.search-toolbar'
+import { SearchToolbar, SearchToolbarExportProps, SearchToolbarMarginBottom, SearchToolbarQuickSearchProps, SearchToolbarSortProps, SearchToolbarTabSwitchProps, SearchToolbarExtendedSearchProps } from '@newageerp/ui.components.list.search-toolbar'
 
 interface Props {
     onCreate?: () => void,
@@ -10,6 +10,7 @@ interface Props {
     toolbarEndContent?: ReactNode,
     toolbarMiddleContent?: ReactNode,
     extendedSearch?: SearchToolbarExtendedSearchProps,
+    export?: SearchToolbarExportProps,
 }
 
 export default function DefaultSearchToolbar(props: Props) {
@@ -23,6 +24,7 @@ export default function DefaultSearchToolbar(props: Props) {
             toolbarStartContent={props.toolbarStartContent}
             toolbarEndContent={props.toolbarEndContent}
             extendedSearch={props.extendedSearch}
+            export={props.export}
         >
             {props.toolbarMiddleContent}
         </SearchToolbar>

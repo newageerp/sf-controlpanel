@@ -5,6 +5,7 @@ import { OpenApi } from '@newageerp/nae-react-auth-wrapper';
 import { functions, UI } from '@newageerp/nae-react-ui';
 import { PageContainer, PageContainerMarginTop } from '@newageerp/ui.paging.base.page-container'
 import { SortingItem } from '@newageerp/ui.components.list.sort-controller';
+import { ExportContainer } from '@newageerp/ui.components.list.export-controller';
 import { useHistory } from 'react-router-dom'
 import DefaultSearchToolbar from "../DefaultSearchToolbar";
 import {TypeItemFilters} from '@newageerp/ui.components.list.filter-container'
@@ -52,6 +53,8 @@ export default function {{ tpCompName }}(props: Props) {
     }
 
     const otherTabs = {{ otherTabs|raw }};
+
+    const exports = {{ exports|raw }};
 
     const headerRef = useRef(null)
     const scrollToHeader = () => {
@@ -233,6 +236,12 @@ export default function {{ tpCompName }}(props: Props) {
         <div ref={headerRef} className="py-8">
             <DefaultSearchToolbar
                     onCreate={isCreatable?onCreate:undefined}
+                    export={!!exports?{
+                        schema: '{{ schema }}',
+                        requestFunc: OpenApi.useURequest,
+                        exports: exports
+                        }: undefined
+                    }
                     search={
                         !!quickSearchFields?
                         {

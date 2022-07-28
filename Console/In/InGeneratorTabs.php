@@ -285,6 +285,7 @@ class InGeneratorTabs extends Command
                         )
                     );
             }
+            $exports = isset($tabItem['config']['exports'])?$tabItem['config']['exports']:[];
 
             $pageSize = isset($tabItem['config']['pageSize']) && $tabItem['config']['pageSize'] ? $tabItem['config']['pageSize'] : 20;
 
@@ -333,6 +334,7 @@ class InGeneratorTabs extends Command
                             'quickSearch' => json_encode($quickSearch),
                             'creatable' => isset($tabItem['config']['disableCreate']) && $tabItem['config']['disableCreate'] ? 'false' : 'true',
                             'otherTabs' => $otherTabs && count($otherTabs) > 0 ? json_encode($otherTabs, JSON_UNESCAPED_UNICODE) : 'null',
+                            'exports' => $exports && count($exports) > 0 ? json_encode($exports, JSON_UNESCAPED_UNICODE) : 'null',
                             'relFilter' => str_replace('"props.relId"', 'props.relId', json_encode($relFilter)),
                             'mappedField' => $mapped,
                             'relSchema' => $relProperty['schema']
@@ -371,6 +373,8 @@ class InGeneratorTabs extends Command
                         'customToolbarStart' => $customToolbarStart,
                         'customToolbarEnd' => $customToolbarEnd,
                         'customToolbarMiddle' => $customToolbarMiddle,
+
+                        'exports' => $exports && count($exports) > 0 ? json_encode($exports, JSON_UNESCAPED_UNICODE) : 'null',
                     ]
                 );
                 Utils::writeOnChanges($dataSourceFileName, $generatedContent);
