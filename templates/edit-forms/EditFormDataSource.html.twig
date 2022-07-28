@@ -9,6 +9,7 @@ import {{ TP_COMP_NAME }} from '../forms/{{ TP_COMP_NAME }}';
 
 import { useRecoilState } from "recoil";
 import { UserSpaceWrapperToolbarState } from "../../layout/toolbar/UserSpaceWrapperToolbar";
+import { useLocation } from 'react-router-dom';
 
 interface Props {
     id: number | string,
@@ -20,9 +21,14 @@ interface Props {
     fieldsToReturnOnSave?: string[],
 
     disableSetTitle?: boolean,
+
+    newStateOptions?: any,
 }
 
 export default function {{ TP_COMP_NAME_DATA_SOURCE }}(props: Props) {
+    const location = useLocation<any>()
+    const locationState = location.state
+
     const [, setToolbarTitle] = useRecoilState(UserSpaceWrapperToolbarState)
 
     const { t } = useTranslation();
@@ -63,7 +69,7 @@ export default function {{ TP_COMP_NAME_DATA_SOURCE }}(props: Props) {
                 1,
                 undefined,
                 undefined,
-                {} // TODO
+                props.newStateOptions ? props.newStateOptions : locationState
             )
         } else {
             schemaGetData([{ and: [['i.id', 'eq', props.id, true]] }], 1, 1)
