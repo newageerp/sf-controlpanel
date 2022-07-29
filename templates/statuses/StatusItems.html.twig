@@ -15,7 +15,7 @@ interface StatusProps {
               bgColor={'{{ status.color }}'}
               brightness={ {{status.brightness}} }
               size={'sm'}
-              className={props.short?'w-8 inline':'w-56 float-right inline'}
+              className={props.short?'w-8 inline-block':'w-56 float-right inline-block'}
               title={t('{{ status.text }}')}
             >
               {props.short?t('{{ status.text }}').substr(0, 1):t('{{ status.text }}')}
