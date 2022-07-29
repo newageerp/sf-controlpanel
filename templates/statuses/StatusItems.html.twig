@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 
 interface StatusProps {
     short?: boolean,
+    table?: boolean,
 }
 
 {% for status in statusData %}
@@ -15,7 +16,7 @@ interface StatusProps {
               bgColor={'{{ status.color }}'}
               brightness={ {{status.brightness}} }
               size={'sm'}
-              className={props.short?'w-8 inline-block':'w-56 float-right inline-block'}
+              className={props.short?'w-8':(props.table?'inline-block':'w-56 float-right')}
               title={t('{{ status.text }}')}
             >
               {props.short?t('{{ status.text }}').substr(0, 1):t('{{ status.text }}')}
