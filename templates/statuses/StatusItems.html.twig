@@ -25,10 +25,10 @@ interface StatusProps {
     };
 {% endfor %}
 
-export const {{ TP_COMP_NAME }} = (status: number, type: string, short?: boolean) => {
+export const {{ TP_COMP_NAME }} = (status: number, type: string, short?: boolean, table?: boolean) => {
 {% for status in statusData %}
     if (status === {{ status.status }} && type === "{{ status.type }}") {
-        return <{{ status.statusName }} short={short} />;
+        return <{{ status.statusName }} short={short} table={table} />;
     }
 {% endfor %}
 }

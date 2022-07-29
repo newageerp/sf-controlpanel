@@ -220,14 +220,14 @@ class PropertiesUtils
                 $compName = Utils::fixComponentName(ucfirst($property['schema']) . 'Statuses');
                 return [
                     "import" => 'import { ' . $compName . ' } from "../../statuses/badges/' . $compName . '";',
-                    "template" => '{' . $compName . '(TP_VALUE, "TP_KEY", true)}'
+                    "template" => '{' . $compName . '(TP_VALUE, "TP_KEY", true, true)}'
                 ];
                 break;
             case 'status':
                 $compName = Utils::fixComponentName(ucfirst($property['schema']) . 'Statuses');
                 return [
                     "import" => 'import { ' . $compName . ' } from "../../statuses/badges/' . $compName . '";',
-                    "template" => '{' . $compName . '(TP_VALUE, "TP_KEY")}'
+                    "template" => '{' . $compName . '(TP_VALUE, "TP_KEY", false, true)}'
                 ];
                 break;
             case 'file':
