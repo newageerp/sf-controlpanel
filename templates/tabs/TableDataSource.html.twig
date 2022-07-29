@@ -13,6 +13,8 @@ import { Toolbar } from "@newageerp/ui.layout.base.toolbar";
 import { ToolbarTitle } from "@newageerp/ui.texts.base.toolbar-title";
 import { useRecoilState } from "recoil";
 import { UserSpaceWrapperToolbarState } from "../../layout/toolbar/UserSpaceWrapperToolbar";
+import {FilterListData} from "@newageerp/sfs.list-toolbar.filter.filter-list-data"
+import {FilterDate} from "@newageerp/sfs.list-toolbar.filter.filter-date"
 
 {% if customToolbarStart %}
 import {{ tpCompName }}ToolbarStartContent from "../../_custom/tabs/tables-data-source/{{ tpCompName }}ToolbarStartContent";
@@ -220,6 +222,19 @@ export default function {{ tpCompName }}(props: Props) {
         }
     }, []);
 
+    const toolbarQuickFilterContent = {% if quickFilters %}<Fragment>
+    <div className="flex items-center gap-2">
+        {% for filter in quickFilters %}
+            {% if fiter.type === 'date'}
+                <FilterDate path={"{{ filter.path }}"} onAddExtraFilter={onAddExtraFilter} />
+            {% elseif filter.type === 'object'}
+                <FilterListData path={"{{ filter.path }}"} onAddExtraFilter={onAddExtraFilter} schema={"{{ filter.property.schema }}"} field={"_viewTitle"}  />
+            {% endif %}
+        {% endfor %}
+    </div>
+    </Fragment>
+    {% else %}undefined;{% endif %};
+
     return (
 <Fragment>
 {#    <LayoutToolbar#}
@@ -234,6 +249,7 @@ export default function {{ tpCompName }}(props: Props) {
 {#    </UI.Toolbar.Toolbar>#}
         <div ref={headerRef} className="py-8">
             <DefaultSearchToolbar
+                    toolbarQuickFilterContent={toolbarQuickFilterContent}
                     onCreate={isCreatable?onCreate:undefined}
                     export={!!exports?{
                         schema: '{{ schema }}',

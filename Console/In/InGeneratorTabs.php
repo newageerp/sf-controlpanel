@@ -289,6 +289,13 @@ class InGeneratorTabs extends Command
 
             $pageSize = isset($tabItem['config']['pageSize']) && $tabItem['config']['pageSize'] ? $tabItem['config']['pageSize'] : 20;
 
+            $quickFilters = isset($tabItem['config']['quickFilters'])?array_map(
+                function ($item) {
+                    return $item;
+                },
+                $tabItem['config']['quickFilters']
+            ): null;
+
             if (isset($tabItem['config']['generateForRel']) && $tabItem['config']['generateForRel']) {
                 $relProperties = $this->propertiesUtils->getArraySchemasForTarget(
                     $tabItem['config']['schema']
@@ -337,7 +344,9 @@ class InGeneratorTabs extends Command
                             'exports' => $exports && count($exports) > 0 ? json_encode($exports, JSON_UNESCAPED_UNICODE) : 'null',
                             'relFilter' => str_replace('"props.relId"', 'props.relId', json_encode($relFilter)),
                             'mappedField' => $mapped,
-                            'relSchema' => $relProperty['schema']
+                            'relSchema' => $relProperty['schema'],
+
+                            'quickFilters' => $quickFilters && count($quickFilters) > 0 ? json_encode($quickFilters, JSON_UNESCAPED_UNICODE) : 'null',
                         ]
                     );
 
@@ -375,6 +384,8 @@ class InGeneratorTabs extends Command
                         'customToolbarMiddle' => $customToolbarMiddle,
 
                         'exports' => $exports && count($exports) > 0 ? json_encode($exports, JSON_UNESCAPED_UNICODE) : 'null',
+
+                        'quickFilters' => $quickFilters && count($quickFilters) > 0 ? json_encode($quickFilters, JSON_UNESCAPED_UNICODE) : 'null',
                     ]
                 );
                 Utils::writeOnChanges($dataSourceFileName, $generatedContent);

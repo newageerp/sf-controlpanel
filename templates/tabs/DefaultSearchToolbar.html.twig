@@ -9,6 +9,7 @@ interface Props {
     toolbarStartContent?: ReactNode,
     toolbarEndContent?: ReactNode,
     toolbarMiddleContent?: ReactNode,
+    toolbarQuickFilterContent?: ReactNode,
     extendedSearch?: SearchToolbarExtendedSearchProps,
     export?: SearchToolbarExportProps,
 }
@@ -23,6 +24,7 @@ export default function DefaultSearchToolbar(props: Props) {
             tabSwitch={props.tabSwitch}
             toolbarStartContent={props.toolbarStartContent}
             toolbarEndContent={props.toolbarEndContent}
+            toolbarQuickFilterContent={props.toolbarQuickFilterContent}
             extendedSearch={props.extendedSearch}
             export={props.export}
         >
