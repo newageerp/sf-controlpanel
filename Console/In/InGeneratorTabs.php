@@ -291,6 +291,8 @@ class InGeneratorTabs extends Command
 
             $quickFilters = isset($tabItem['config']['quickFilters'])?array_map(
                 function ($item) {
+                    $item['property'] = $this->propertiesUtils->getPropertyForPath($item['path']);
+                    $item['type'] = $this->propertiesUtils->getPropertyNaeType($item['property'], []);
                     return $item;
                 },
                 $tabItem['config']['quickFilters']
