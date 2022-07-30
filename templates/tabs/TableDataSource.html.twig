@@ -224,11 +224,12 @@ export default function {{ tpCompName }}(props: Props) {
 
     const toolbarQuickFilterContent = {% if quickFilters %}<Fragment>
     <div className="flex items-center gap-2">
-        {% for filter in quickFilters %}
-            {% if fiter.type == 'date' %}
-                <FilterDate path={"{{ filter.path }}"} onAddExtraFilter={onAddExtraFilter} />
-            {% elseif filter.type == 'object' %}
-                <FilterListData path={"{{ filter.path }}"} onAddExtraFilter={onAddExtraFilter} schema={"{{ filter.property.schema }}"} field={"_viewTitle"}  />
+        {% for qfilter in quickFilters %}
+        
+            {% if qfilter.type == 'date' %}
+                <FilterDate path={"{{ qfilter.path }}"} onAddExtraFilter={onAddExtraFilter} />
+            {% elseif qfilter.type == 'object' %}
+                <FilterListData path={"{{ qfilter.path }}"} onAddExtraFilter={onAddExtraFilter} schema={"{{ qfilter.property.format }}"} field={"_viewTitle"} iconName={"{% if qfilter.iconName %}{{ qfilter.iconName }}{% endif %}"} />
             {% endif %}
         {% endfor %}
     </div>

@@ -66,11 +66,11 @@ class InGeneratorTabs extends Command
 
             $compName = Utils::fixComponentName(
                 ucfirst($tabItem['config']['schema']) .
-                ucfirst($tabItem['config']['type']) . 'Table'
+                    ucfirst($tabItem['config']['type']) . 'Table'
             );
             $dataSourceCompName = Utils::fixComponentName(
                 ucfirst($tabItem['config']['schema']) .
-                ucfirst($tabItem['config']['type']) . 'TableDataSource'
+                    ucfirst($tabItem['config']['type']) . 'TableDataSource'
             );
 
             if (isset($tabItem['config']['allowMultipleSelection']) && $tabItem['config']['allowMultipleSelection']) {
@@ -176,7 +176,6 @@ class InGeneratorTabs extends Command
                             .
                             $wrapFinish .
                             '</Td>';
-
                     } else {
 
                         $componentNameA = explode("/", $column['componentName']);
@@ -238,7 +237,8 @@ class InGeneratorTabs extends Command
                 $sort = json_decode($tabItem['config']['sort'], true);
             } else {
                 foreach ($defaultItems as $df) {
-                    if ($df['config']['schema'] === $tabItem['config']['schema'] &&
+                    if (
+                        $df['config']['schema'] === $tabItem['config']['schema'] &&
                         isset($df['config']['defaultSort']) &&
                         $df['config']['defaultSort']
                     ) {
@@ -252,7 +252,8 @@ class InGeneratorTabs extends Command
                 $quickSearch = json_decode($tabItem['config']['quickSearchFilterKeys'], true);
             } else {
                 foreach ($defaultItems as $df) {
-                    if ($df['config']['schema'] === $tabItem['config']['schema'] &&
+                    if (
+                        $df['config']['schema'] === $tabItem['config']['schema'] &&
                         isset($df['config']['defaultQuickSearch']) &&
                         $df['config']['defaultQuickSearch']
                     ) {
@@ -285,18 +286,24 @@ class InGeneratorTabs extends Command
                         )
                     );
             }
-            $exports = isset($tabItem['config']['exports'])?$tabItem['config']['exports']:[];
+            $exports = isset($tabItem['config']['exports']) ? $tabItem['config']['exports'] : [];
 
             $pageSize = isset($tabItem['config']['pageSize']) && $tabItem['config']['pageSize'] ? $tabItem['config']['pageSize'] : 20;
 
-            $quickFilters = isset($tabItem['config']['quickFilters'])?array_map(
+            $quickFilters = isset($tabItem['config']['quickFilters']) ? array_map(
                 function ($item) {
                     $item['property'] = $this->propertiesUtils->getPropertyForPath($item['path']);
                     $item['type'] = $this->propertiesUtils->getPropertyNaeType($item['property'], []);
+
+                    $pathA = explode(".", $item['path']);
+                    $pathA[0] = 'i';
+                    $item['path'] = implode(".", $pathA);
+
                     return $item;
                 },
                 $tabItem['config']['quickFilters']
-            ): null;
+            ) : null;
+
 
             if (isset($tabItem['config']['generateForRel']) && $tabItem['config']['generateForRel']) {
                 $relProperties = $this->propertiesUtils->getArraySchemasForTarget(
@@ -317,9 +324,9 @@ class InGeneratorTabs extends Command
 
                     $dataSourceRelCompName = Utils::fixComponentName(
                         ucfirst($tabItem['config']['schema']) .
-                        ucfirst($tabItem['config']['type']) .
-                        'TableDataSourceBy' .
-                        ucfirst($relProperty['schema'])
+                            ucfirst($tabItem['config']['type']) .
+                            'TableDataSourceBy' .
+                            ucfirst($relProperty['schema'])
                     );
 
                     $relFilter = [
@@ -348,7 +355,7 @@ class InGeneratorTabs extends Command
                             'mappedField' => $mapped,
                             'relSchema' => $relProperty['schema'],
 
-                            'quickFilters' => $quickFilters && count($quickFilters) > 0 ? json_encode($quickFilters, JSON_UNESCAPED_UNICODE) : 'null',
+                            'quickFilters' => $quickFilters && count($quickFilters) > 0 ? $quickFilters : 'null',
                         ]
                     );
 
@@ -387,7 +394,7 @@ class InGeneratorTabs extends Command
 
                         'exports' => $exports && count($exports) > 0 ? json_encode($exports, JSON_UNESCAPED_UNICODE) : 'null',
 
-                        'quickFilters' => $quickFilters && count($quickFilters) > 0 ? json_encode($quickFilters, JSON_UNESCAPED_UNICODE) : 'null',
+                        'quickFilters' => $quickFilters && count($quickFilters) > 0 ? $quickFilters : 'null',
                     ]
                 );
                 Utils::writeOnChanges($dataSourceFileName, $generatedContent);
