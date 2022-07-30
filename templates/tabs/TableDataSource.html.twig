@@ -140,7 +140,7 @@ export default function {{ tpCompName }}(props: Props) {
         history.push('/u/{{ schema }}/main/edit/new')
     }
 
-    const loadData = () => {
+    const prepareFilter = () => {
         let _filter: any = [{ and: [] }]
         if (!!predefinedFilter) {
             _filter[0]['and'].push(predefinedFilter);
@@ -192,6 +192,11 @@ export default function {{ tpCompName }}(props: Props) {
         if (!!props.extraFilter) {
             filter.push(props.extraFilter);
         }
+        return filter;
+    }
+
+    const loadData = () => {
+        const filter = prepareFilter();
 
         getData(
             filter,
@@ -295,13 +300,13 @@ export default function {{ tpCompName }}(props: Props) {
                         undefined
                     }
                     {% if customToolbarStart %}
-                    toolbarStartContent={<{{ tpCompName }}ToolbarStartContent onAddExtraFilter={onAddExtraFilter} loadData={loadData} />}
+                    toolbarStartContent={<{{ tpCompName }}ToolbarStartContent onAddExtraFilter={onAddExtraFilter} loadData={loadData}  prepareFilter={prepareFilter} />}
                     {% endif %}
                     {% if customToolbarEnd %}
-                    toolbarEndContent={<{{ tpCompName }}ToolbarEndContent onAddExtraFilter={onAddExtraFilter} loadData={loadData} />}
+                    toolbarEndContent={<{{ tpCompName }}ToolbarEndContent onAddExtraFilter={onAddExtraFilter} loadData={loadData}  prepareFilter={prepareFilter}/>}
                     {% endif %}
                     {% if customToolbarMiddle %}
-                    toolbarMiddleContent={<{{ tpCompName }}ToolbarMiddleContent onAddExtraFilter={onAddExtraFilter} loadData={loadData} />}
+                    toolbarMiddleContent={<{{ tpCompName }}ToolbarMiddleContent onAddExtraFilter={onAddExtraFilter} loadData={loadData} prepareFilter={prepareFilter} />}
                     {% endif %}
                 />
             <{{ tpTableCompName }}
