@@ -65,13 +65,15 @@ class InGeneratorMenu extends Command
                     'TP_COMP_NAME',
                     'TP_PATH',
                     'TP_ICON',
-                    'TP_TITLE'
+                    'TP_TITLE',
+                    'TP_BADGE_KEY'
                 ],
                 [
                     $compName,
                     $menuLink,
                     $menuItem['config']['icon'] ?? '',
-                    $menuTitle
+                    $menuTitle,
+                    $menuItem['config']['badgeKey'] ?? '',
                 ],
                 $menuTemplate
             );

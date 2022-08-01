@@ -11,13 +11,15 @@ export default function TP_COMP_NAME(props: Props) {
 
     const path = 'TP_PATH';
 
+    const badgeKey = 'TP_BADGE_KEY';
+
     const goTo = () => {
         history.push(path);
     }
 
     return (
         <Fragment>
-            <MenuItem onClick={goTo} icon={props.forceSkipIcon?'':'TP_ICON'}>{'TP_TITLE'}</MenuItem>
+            <MenuItem onClick={goTo} icon={props.forceSkipIcon?'':'TP_ICON'} badgeKey={badgeKey?badgeKey:undefined}>{'TP_TITLE'}</MenuItem>
         </Fragment>
     )
 }
