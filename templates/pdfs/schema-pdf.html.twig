@@ -44,6 +44,10 @@ export const {{ compName }}Item = (props: {{ compName }}ItemProps) => {
     const [showEmail, setShowEmail] = useState(false);
     const [isLoading, setLoading] = useState(false);
 
+    const onReset = () => {
+        setPdfData(undefined);
+    }
+
     const onDownload = async () => {
         let urlToOpen = "";
         if (!pdfData) {
@@ -102,7 +106,7 @@ export const {{ compName }}Item = (props: {{ compName }}ItemProps) => {
 
     return (
     <Fragment>
-        <PdfLine title={props.title} onDownload={onDownload} onPrint={onPrint} onClick={onClick} onSend={onSend} loading={isLoading} />
+        <PdfLine title={props.title} onReset={pdfData?onReset:undefined} onDownload={onDownload} onPrint={onPrint} onClick={onClick} onSend={onSend} loading={isLoading} />
         {showPdf && !!pdfData &&
             <PopupPdf onClose={() => setShowPdf(false)}>
                 <PdfWindow
