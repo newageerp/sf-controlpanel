@@ -20,7 +20,7 @@ interface StatusProps {
                 className={props.short?'w-8':(props.table?'':'w-56 float-right')}
             >
               {props.short?t('{{ status.text }}').substr(0, 1):t('{{ status.text }}')}
-            </UI.Badges.Badge>
+            </Badge>
         )
         {% else %}
         return (
