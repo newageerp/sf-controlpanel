@@ -92,7 +92,7 @@ class InGeneratorStatuses extends Command
                     'TP_COMP_NAME' => $compName,
                     'statusData' => $statusData,
                     'statusJson' => json_encode($statusJson[$slug], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE),
-                    'statusCompJson' => $statusCompJson
+                    'statusCompJson' => $statusCompJson[$slug]
                 ]
             );
             Utils::writeOnChanges($fileName, $generatedContent);
