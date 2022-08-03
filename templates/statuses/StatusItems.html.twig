@@ -11,6 +11,10 @@ interface StatusProps {
     size?: BadgeSize | string
 }
 
+interface StatusPropsWithStatus extends StatusProps {
+    status: number,
+}
+
 {% for status in statusData %}
     export const {{ status.statusName }} = (props: StatusProps) => {
         const { t } = useTranslation();
@@ -59,4 +63,12 @@ export const {{ TP_COMP_NAME }} = (status: number, type: string, short?: boolean
 
 export const {{ TP_COMP_NAME }}List = {{ statusJson|raw }};
 
-export const {{ TP_COMP_NAME }}Components = {{ statusCompJson|raw }};
+{% for c, k in statusCompJson %}
+export const {{ TP_COMP_NAME }}{{ k }}Component = (props: StatusPropsWithStatus) => {
+    {% for status in c %}
+        if (props.status === {{ status.status }} && type === "{{ status.type }}") {
+            return <{{ status.statusName }} {...props}}/>;
+        }
+    {% endfor %}
+};
+{% endfor %}

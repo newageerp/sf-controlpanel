@@ -61,11 +61,6 @@ class InGeneratorStatuses extends Command
                 'status' => $status['config']['status'],
                 'title' => $status['config']['text']
             ];
-
-            $statusName = Utils::fixComponentName(
-                ucfirst($entity) .ucfirst($type) . 'Badge' . $status['config']['status']
-            );
-            $statusCompJson[$entity][$type][$status['config']['status']] = $statusName;
         }
 
         foreach ($statuses as $slug => $entityStatuses) {
@@ -77,7 +72,7 @@ class InGeneratorStatuses extends Command
                 $statusName = Utils::fixComponentName(
                     ucfirst($slug) .ucfirst($status['config']['type']) . 'Badge' . $status['config']['status']
                 );
-                $statusData[] = [
+                $el = [
                     'statusName' => $statusName,
                     'color' => $status['config']['color'],
                     'brightness' => mb_substr($status['config']['brightness'], 1),
@@ -86,6 +81,8 @@ class InGeneratorStatuses extends Command
                     'type' => $status['config']['type'],
                     'bgColor' => isset($status['config']['badgeVariant']) ? $status['config']['badgeVariant'] : ''
                 ];
+                $statusData[] = $el;
+                $statusCompJson[$slug][$status['config']['type']][] = $el;
             }
 
             $fileName = $generatedPath . '/' . $compName . '.tsx';
@@ -95,7 +92,7 @@ class InGeneratorStatuses extends Command
                     'TP_COMP_NAME' => $compName,
                     'statusData' => $statusData,
                     'statusJson' => json_encode($statusJson[$slug], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE),
-                    'statusCompJson' => json_encode($statusCompJson[$slug], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)
+                    'statusCompJson' => $statusCompJson
                 ]
             );
             Utils::writeOnChanges($fileName, $generatedContent);
