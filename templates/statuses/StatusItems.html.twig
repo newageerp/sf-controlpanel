@@ -12,10 +12,10 @@ interface StatusProps {
     export const {{ status.statusName }} = (props: StatusProps) => {
         const { t } = useTranslation();
 
-        {% if $status.bgColor %}
+        {% if status.bgColor %}
         return (
             <Badge 
-                variant={"{{ $status.bgColor }}"} 
+                variant={"{{ status.bgColor }}"} 
                 size={BadgeSize.sm} 
                 className={props.short?'w-8':(props.table?'':'w-56 float-right')}
             >
