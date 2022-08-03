@@ -83,7 +83,9 @@ export default function InitComponent(props: Props) {
                 return NaeSPdfs;
             }}
             widgets={(): INaeWidget[] => {
-                return NaeWidgets;
+                return NaeWidgets.concat(
+                    defaults.widgets.map((e) => functions.config.configWidgetToINaeWidget(e))
+                );
             }}
             toast={OpenApi.toast}
             getFilterKeysForSchema={(schema: string) => {
