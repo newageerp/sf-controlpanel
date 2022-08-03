@@ -54,9 +54,9 @@ class InGeneratorStatuses extends Command
             foreach ($entityStatuses as $status) {
                 $statusName = Utils::fixComponentName(
                     ucfirst($slug) .
-                    ucfirst($status['config']['type']) .
-                    'Badge' .
-                    $status['config']['status']
+                        ucfirst($status['config']['type']) .
+                        'Badge' .
+                        $status['config']['status']
                 );
                 $statusData[] = [
                     'statusName' => $statusName,
@@ -65,8 +65,8 @@ class InGeneratorStatuses extends Command
                     'text' => $status['config']['text'],
                     'status' => (int)$status['config']['status'],
                     'type' => $status['config']['type'],
+                    'bgColor' => isset($status['config']['badgeVariant']) ? $status['config']['badgeVariant'] : ''
                 ];
-
             }
 
             $fileName = $generatedPath . '/' . $compName . '.tsx';
