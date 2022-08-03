@@ -54,7 +54,7 @@ class InGeneratorStatuses extends Command
             if (!isset($statusJson[$entity][$type])) {
                 $statusJson[$entity][$type] = [];
             }
-            $statusJson[$entity][$type] = [
+            $statusJson[$entity][$type][] = [
                 'status' => $status['config']['status'],
                 'title' => $status['config']['text']
             ];
