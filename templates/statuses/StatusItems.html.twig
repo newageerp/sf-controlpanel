@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { UI } from '@newageerp/nae-react-ui';
 import { useTranslation } from "react-i18next";
 import { Badge, BadgeSize } from '@newageerp/ui.badges.base.badge';
@@ -70,5 +70,6 @@ export const {{ TP_COMP_NAME }}{{ k }}Component = (props: StatusPropsWithStatus)
             return <{{ status.statusName }} {...props} />;
         }
     {% endfor %}
+    return <Fragment />
 };
 {% endfor %}
