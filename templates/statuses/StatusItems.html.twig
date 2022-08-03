@@ -28,6 +28,7 @@ interface StatusProps {
                         {'w-56 float-right': !props.short && !props.table},
                         props.className
                     )
+                }
             >
               {props.short?t('{{ status.text }}').substr(0, 1):t('{{ status.text }}')}
             </Badge>
