@@ -2,22 +2,32 @@ import React from "react";
 import { UI } from '@newageerp/nae-react-ui';
 import { useTranslation } from "react-i18next";
 import { Badge, BadgeSize } from '@newageerp/ui.badges.base.badge';
+import classNames from 'classnames'
 
 interface StatusProps {
     short?: boolean,
     table?: boolean,
+    className?: string,
+    size?: BadgeSize | string
 }
 
 {% for status in statusData %}
     export const {{ status.statusName }} = (props: StatusProps) => {
         const { t } = useTranslation();
 
+        const size = props.size?props.size:BadgeSize.sm;
+
         {% if status.bgColor %}
         return (
             <Badge 
                 variant={"{{ status.bgColor }}"} 
-                size={BadgeSize.sm} 
-                className={props.short?'w-8':(props.table?'':'w-56 float-right')}
+                size={size} 
+                className={
+                    classNames(
+                        {'w-8': props.short},
+                        {'w-56 float-right': !props.short && !props.table},
+                        props.className
+                    )
             >
               {props.short?t('{{ status.text }}').substr(0, 1):t('{{ status.text }}')}
             </Badge>
@@ -47,3 +57,5 @@ export const {{ TP_COMP_NAME }} = (status: number, type: string, short?: boolean
 }
 
 export const {{ TP_COMP_NAME }}List = {{ statusJson|raw }};
+
+export const {{ TP_COMP_NAME }}Components = {{ statusJson|raw }};
