@@ -63,7 +63,7 @@ export const {{ TP_COMP_NAME }} = (status: number, type: string, short?: boolean
 
 export const {{ TP_COMP_NAME }}List = {{ statusJson|raw }};
 
-{% for c, k in statusCompJson %}
+{% for k,c in statusCompJson %}
 export const {{ TP_COMP_NAME }}{{ k }}Component = (props: StatusPropsWithStatus) => {
     {% for status in c %}
         if (props.status === {{ status.status }} && type === "{{ status.type }}") {
