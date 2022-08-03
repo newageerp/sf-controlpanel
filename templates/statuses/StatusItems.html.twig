@@ -45,3 +45,5 @@ export const {{ TP_COMP_NAME }} = (status: number, type: string, short?: boolean
     }
 {% endfor %}
 }
+
+export const {{ TP_COMP_NAME }}List = {{ statusJson|raw }};

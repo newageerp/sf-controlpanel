@@ -37,14 +37,28 @@ class InGeneratorStatuses extends Command
         $statusData = LocalConfigUtils::getCpConfigFileData('statuses');
 
         $statuses = [];
+        $statusJson = [];
+
         foreach ($statusData as $status) {
-            if (!isset($statuses[$status['config']['entity']])) {
-                $statuses[$status['config']['entity']] = [];
+            $entity = $status['config']['entity'];
+            $type = $status['config']['type'];
+
+            if (!isset($statuses[$entity])) {
+                $statuses[$entity] = [];
             }
-            $statuses[$status['config']['entity']][] = $status;
+            $statuses[$entity][] = $status;
+
+            if (!isset($statusJson[$entity])) {
+                $statusJson[$entity] = [];
+            }
+            if (!isset($statusJson[$entity][$type])) {
+                $statusJson[$entity][$type] = [];
+            }
+            $statusJson[$entity][$type] = [
+                'status' => $status['config']['status'],
+                'title' => $status['config']['text']
+            ];
         }
-
-
 
         foreach ($statuses as $slug => $entityStatuses) {
             $statusData = [];
@@ -74,7 +88,8 @@ class InGeneratorStatuses extends Command
             $generatedContent = $statusItemsTemplate->render(
                 [
                     'TP_COMP_NAME' => $compName,
-                    'statusData' => $statusData
+                    'statusData' => $statusData,
+                    'statusJson' => json_encode($statusJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)
                 ]
             );
             Utils::writeOnChanges($fileName, $generatedContent);
