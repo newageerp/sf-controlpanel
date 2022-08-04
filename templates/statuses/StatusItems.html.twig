@@ -72,7 +72,7 @@ export const {{ TP_COMP_NAME }}List = {{ statusJson|raw }};
 export const {{ TP_COMP_NAME }}{{ k }}Widget = (props: PropsId) => {
     const element = use{{ schemaUc }}HookNae(props.id);
 
-    const [doSave] = OpenApi.useUSave('');
+    const [doSave] = OpenApi.useUSave('{{ schema }}');
     const changeStatus = (s: number) => {
         doSave({'{{ c.type }}': s}, props.id);
     }
