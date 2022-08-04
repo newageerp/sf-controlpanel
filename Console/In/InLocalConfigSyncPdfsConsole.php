@@ -57,7 +57,7 @@ class InLocalConfigSyncPdfsConsole extends Command
                     ];
                 }
             }
-            file_put_contents(LocalConfigUtils::getCpConfigFile('pdfs'), json_encode($variables));
+            file_put_contents(LocalConfigUtils::getCpConfigFile('pdfs'), json_encode($variables, JSON_UNESCAPED_UNICODE));
         }
         // TMP OLD SYNC OFF
 
@@ -111,7 +111,7 @@ class InLocalConfigSyncPdfsConsole extends Command
             return 0;
         });
 
-        $fileContent .= 'export const NaeSPdfs: INaePdf[] = ' . json_encode($pdfs, JSON_PRETTY_PRINT);
+        $fileContent .= 'export const NaeSPdfs: INaePdf[] = ' . json_encode($pdfs, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 
         file_put_contents(
             $configPath,

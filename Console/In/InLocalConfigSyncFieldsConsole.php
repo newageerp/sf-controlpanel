@@ -78,7 +78,7 @@ class InLocalConfigSyncFieldsConsole extends Command
                     ];
                 }
             }
-            file_put_contents(LocalConfigUtils::getCpConfigFile('enums'), json_encode($variables));
+            file_put_contents(LocalConfigUtils::getCpConfigFile('enums'), json_encode($variables, JSON_UNESCAPED_UNICODE));
 
 
             $sql = "select 
@@ -140,7 +140,7 @@ class InLocalConfigSyncFieldsConsole extends Command
                     ];
                 }
             }
-            file_put_contents(LocalConfigUtils::getCpConfigFile('properties'), json_encode($variables));
+            file_put_contents(LocalConfigUtils::getCpConfigFile('properties'), json_encode($variables, JSON_UNESCAPED_UNICODE));
             unset($data);
         }
         // TMP OLD SYNC OFF
@@ -317,12 +317,12 @@ class InLocalConfigSyncFieldsConsole extends Command
             return 0;
         });
 
-        $fileContent .= 'export const NaeSProperties: INaeProperty[] = ' . json_encode($properties, JSON_PRETTY_PRINT);
+        $fileContent .= 'export const NaeSProperties: INaeProperty[] = ' . json_encode($properties, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 
-        $fileKeysContent = 'export const NaeSPropertiesKeys = ' . json_encode($propertiesKeys, JSON_PRETTY_PRINT);
+        $fileKeysContent = 'export const NaeSPropertiesKeys = ' . json_encode($propertiesKeys, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 
         $fileDbKeysContent .= '
-export const NaeSDbKeys = ' . json_encode($dbFieldsAll, JSON_PRETTY_PRINT);
+export const NaeSDbKeys = ' . json_encode($dbFieldsAll, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 
         file_put_contents(
             $configPath,
@@ -347,7 +347,7 @@ export const NaeSDbKeys = ' . json_encode($dbFieldsAll, JSON_PRETTY_PRINT);
 
         file_put_contents(
             $phpPropertiesFile,
-            json_encode($phpProperties, JSON_UNESCAPED_UNICODE)
+            json_encode($phpProperties, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_UNICODE)
         );
 
         return Command::SUCCESS;

@@ -45,7 +45,7 @@ class InPathMapConsole extends Command
 import axios from "axios";';
 
         $fileContent .= '
-export const NaePaths = ' . json_encode($map, JSON_PRETTY_PRINT);
+export const NaePaths = ' . json_encode($map, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 
         $fileContent .= '
 

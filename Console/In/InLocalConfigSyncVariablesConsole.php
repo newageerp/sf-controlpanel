@@ -53,7 +53,7 @@ class InLocalConfigSyncVariablesConsole extends Command
                     ];
                 }
             }
-            file_put_contents(LocalConfigUtils::getCpConfigFile('variables'), json_encode($variables));
+            file_put_contents(LocalConfigUtils::getCpConfigFile('variables'), json_encode($variables, JSON_UNESCAPED_UNICODE));
         }
         // TMP OLD SYNC OFF
 
@@ -83,7 +83,7 @@ class NaeSVariables {
         $phpFileContent .= '}
 ';
 
-        $fileContent .= 'export const NaeSVariables = ' . json_encode($dbData, JSON_PRETTY_PRINT);
+        $fileContent .= 'export const NaeSVariables = ' . json_encode($dbData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 
         file_put_contents(
             $configPath,

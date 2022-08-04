@@ -131,7 +131,7 @@ class InGeneratorEditForms extends Command
                     $tpValueObj = 'element.' . $fieldProperty['key'].'?.id';
                     $tpOnChangeObj = '(e: any) => onChange(\'' . $fieldProperty['key'] . '\', {id: e})';
 
-                    $tpObjectSortStr = json_encode($objectSort, JSON_PRETTY_PRINT);
+                    $tpObjectSortStr = json_encode($objectSort, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 
                     $fieldTemplate = str_replace(
                         [
@@ -205,7 +205,7 @@ class InGeneratorEditForms extends Command
                 'TP_COMP_NAME_DATA_SOURCE' => $compNameDataSource,
                 'TP_COMP_NAME' => $compName,
                 'TP_SCHEMA' => $editItem['config']['schema'],
-                'TP_FIELDS_TO_RETURN' => json_encode($fieldsToReturn, JSON_PRETTY_PRINT),
+                'TP_FIELDS_TO_RETURN' => json_encode($fieldsToReturn, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE),
                 'toolbarTitle' => $this->entitiesUtils->getTitleBySlug($editItem['config']['schema'])
             ]);
 

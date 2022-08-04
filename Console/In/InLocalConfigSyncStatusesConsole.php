@@ -58,7 +58,7 @@ class InLocalConfigSyncStatusesConsole extends Command
                     ];
                 }
             }
-            file_put_contents(LocalConfigUtils::getCpConfigFile('statuses'), json_encode($variables));
+            file_put_contents(LocalConfigUtils::getCpConfigFile('statuses'), json_encode($variables, JSON_UNESCAPED_UNICODE));
         }
         // TMP OLD SYNC OFF
 
@@ -98,7 +98,7 @@ class InLocalConfigSyncStatusesConsole extends Command
             return 0;
         });
 
-        $fileContent .= 'export const NaeSStatuses: INaeStatus[] = ' . json_encode($statuses, JSON_PRETTY_PRINT);
+        $fileContent .= 'export const NaeSStatuses: INaeStatus[] = ' . json_encode($statuses, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 
         file_put_contents(
             $configPath,

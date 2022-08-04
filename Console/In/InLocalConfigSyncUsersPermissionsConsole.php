@@ -53,7 +53,7 @@ class InLocalConfigSyncUsersPermissionsConsole extends Command
                     ];
                 }
             }
-            file_put_contents(LocalConfigUtils::getCpConfigFile('user-permissions'), json_encode($variables));
+            file_put_contents(LocalConfigUtils::getCpConfigFile('user-permissions'), json_encode($variables, JSON_UNESCAPED_UNICODE));
         }
         // TMP OLD SYNC OFF
 
@@ -127,7 +127,7 @@ export const check' . ucfirst($el['key']) . ' = (userState: any) => {
         $fileContent .= $enumText;
 
         $fileContent .= '
-export const NaeSPermissions = ' . json_encode($permissions, JSON_PRETTY_PRINT);
+export const NaeSPermissions = ' . json_encode($permissions, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 
         file_put_contents(
             $configPath,

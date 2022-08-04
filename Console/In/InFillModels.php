@@ -354,7 +354,7 @@ class InFillModels extends Command
 
             $hooksContent = str_replace(
                 ['|MODELFIELDSSTRUCT|', '|MODELFIELDSARRAY|', '|MODELNAME|', '|ChildId|'],
-                [$struct, json_encode($oFields, JSON_PRETTY_PRINT), $m, 'ChildId[]'],
+                [$struct, json_encode($oFields, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE), $m, 'ChildId[]'],
                 $hookTemplate
             );
 

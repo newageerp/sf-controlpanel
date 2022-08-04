@@ -118,7 +118,7 @@ class InGeneratorViewForms extends Command
 
                     $tpValue = 'element.' . $fieldProperty['key'];
 
-                    $tpObjectSortStr = json_encode($objectSort, JSON_PRETTY_PRINT);
+                    $tpObjectSortStr = json_encode($objectSort, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 
                     $fieldTemplate = str_replace(
                         [

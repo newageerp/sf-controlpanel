@@ -64,7 +64,7 @@ class OutLocalConfigSyncSchemasConsole extends Command
             }
         }
 
-        file_put_contents(LocalConfigUtils::getCpConfigFile('entities'), json_encode($entityData));
+        file_put_contents(LocalConfigUtils::getCpConfigFile('entities'), json_encode($entityData, JSON_UNESCAPED_UNICODE));
 
         return Command::SUCCESS;
     }

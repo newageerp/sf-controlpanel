@@ -119,10 +119,10 @@ class InLocalConfigSyncEntitiesConsole extends Command
             return 0;
         });
 
-        $fileContent .= 'export const NaeSSchema: INaeSchema[] = ' . json_encode($entities, JSON_PRETTY_PRINT);
+        $fileContent .= 'export const NaeSSchema: INaeSchema[] = ' . json_encode($entities, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 
         $fileContent .= '
-        export const NaeSSchemaMap = ' . json_encode($entitiesMap, JSON_PRETTY_PRINT);
+        export const NaeSSchemaMap = ' . json_encode($entitiesMap, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 
         file_put_contents(
             $configPath,
@@ -130,11 +130,11 @@ class InLocalConfigSyncEntitiesConsole extends Command
         );
         file_put_contents(
             $configJsonPath,
-            json_encode($entities, JSON_PRETTY_PRINT)
+            json_encode($entities, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)
         );
         file_put_contents(
             $phpPropertiesFile,
-            json_encode($entities, JSON_PRETTY_PRINT)
+            json_encode($entities, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)
         );
 
         return Command::SUCCESS;
