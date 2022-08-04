@@ -7,6 +7,7 @@ import {StatusChangeButton} from '@newageerp/v2.element.status-change-button'
 import { use{{ schemaUc }}HookNae } from "../../../Components/Hooks/use{{ schemaUc }}HookNae";
 import { OpenApi } from "@newageerp/nae-react-auth-wrapper";
 import { PropsId } from "../../../UserComponents/ModelsCacheData/types";
+import { ContentWidgetProps } from "@newageerp/nae-react-ui/dist/UI/Widget/NEWidgets";
 
 interface StatusProps {
     short?: boolean,
@@ -69,12 +70,12 @@ export const {{ TP_COMP_NAME }}List = {{ statusJson|raw }};
 
 {% for k,c in statusCompJson %}
 
-export const {{ TP_COMP_NAME }}{{ k }}Widget = (props: PropsId) => {
-    const element = use{{ schemaUc }}HookNae(props.id);
+export const {{ TP_COMP_NAME }}{{ k }}Widget = (props: ContentWidgetProps) => {
+    const element = use{{ schemaUc }}HookNae(props.element.id);
 
     const [doSave] = OpenApi.useUSave('{{ schema }}');
     const changeStatus = (s: number) => {
-        doSave({'{{ c.type }}': s}, props.id);
+        doSave({'{{ c.type }}': s}, props.element.id);
     }
 
     if (!element) {
@@ -85,7 +86,7 @@ export const {{ TP_COMP_NAME }}{{ k }}Widget = (props: PropsId) => {
         <StatusChangeButton
             schema={"{{ schema }}"}
             type={"{{ c.type }}"}
-            id={props.id}
+            id={props.element.id}
 
             onStatusChange={changeStatus}
             reloadState={element.status}
