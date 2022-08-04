@@ -61,6 +61,8 @@ export default function {{ tpCompName }}(props: Props) {
 
     const exports = {{ exports|raw }};
 
+    const totals = {{ totals|raw }};
+
     const headerRef = useRef(null)
     const scrollToHeader = () => {
         if (headerRef && headerRef.current && !props.disableScrollToHeader) {
@@ -207,6 +209,8 @@ export default function {{ tpCompName }}(props: Props) {
             dataState.page,
             pageSize,
             dataState.sort.filter((s: SortingItem) => s.key !== ''),
+            undefined,
+            totals,
         );
     }
     useEffect(loadData, [dataState, props.extraFilter]);
@@ -215,6 +219,7 @@ export default function {{ tpCompName }}(props: Props) {
 
     const records = dataResult.data.records;
     const pages = Math.ceil(records / pageSize);
+    const dataTotals = dataResult.data.totals;
 
     const dataProcessing = (data: any[]) => {
         if (props.dataProcessing) {
@@ -318,6 +323,8 @@ export default function {{ tpCompName }}(props: Props) {
                     doReload={loadData}
                     className={`${dataResult.loading?'tw3-animate-pulse':''}`}
                     navigate={navigate}
+                    totals={totals}
+                    dataTotals={dataTotals}
             />
             <PageContainer pages={pages} activePage={dataState.page} setActivePage={setActivePage} marginTop={PageContainerMarginTop['42px']} />
         </div>

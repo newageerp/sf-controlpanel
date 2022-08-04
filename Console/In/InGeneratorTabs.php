@@ -288,6 +288,8 @@ class InGeneratorTabs extends Command
             }
             $exports = isset($tabItem['config']['exports']) ? $tabItem['config']['exports'] : [];
 
+            $totals = isset($tabItem['config']['totals']) ? $tabItem['config']['totals'] : [];
+
             $pageSize = isset($tabItem['config']['pageSize']) && $tabItem['config']['pageSize'] ? $tabItem['config']['pageSize'] : 20;
 
             $quickFilters = isset($tabItem['config']['quickFilters']) ? array_map(
@@ -356,6 +358,8 @@ class InGeneratorTabs extends Command
                             'relSchema' => $relProperty['schema'],
 
                             'quickFilters' => $quickFilters && count($quickFilters) > 0 ? $quickFilters : 'null',
+
+                            'totals' => $totals && count($totals) > 0 ? json_encode($totals, JSON_UNESCAPED_UNICODE) : 'null',
                         ]
                     );
 
@@ -393,6 +397,8 @@ class InGeneratorTabs extends Command
                         'customToolbarMiddle' => $customToolbarMiddle,
 
                         'exports' => $exports && count($exports) > 0 ? json_encode($exports, JSON_UNESCAPED_UNICODE) : 'null',
+
+                        'totals' => $totals && count($totals) > 0 ? json_encode($totals, JSON_UNESCAPED_UNICODE) : 'null',
 
                         'quickFilters' => $quickFilters && count($quickFilters) > 0 ? $quickFilters : 'null',
                     ]

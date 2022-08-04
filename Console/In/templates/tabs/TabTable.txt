@@ -22,7 +22,10 @@ interface Props {
 
     navigate?: (schema: string, id: number | string, el: any) => void,
 
-    selection?: TableSelectedProps
+    selection?: TableSelectedProps,
+
+    totals?: any,
+    dataTotals?: any
 }
 
 export default function TP_COMP_NAME(props: Props) {
@@ -105,6 +108,17 @@ export default function TP_COMP_NAME(props: Props) {
                 </tbody>
             }
         />
+
+        {!!props.totals && props.totals.map((total: any) => {
+            return (
+                <div className="flex items-center">
+                    <label>{total.title}</label>
+                    {!!props.dataTotals && 
+                    <span>{props.dataTotals[total.field]}</span>
+                    }
+                </div>
+            )
+        })}
     </Fragment>
     )
 }
