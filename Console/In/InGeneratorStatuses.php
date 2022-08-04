@@ -43,6 +43,7 @@ class InGeneratorStatuses extends Command
         foreach ($statusData as $status) {
             $entity = $status['config']['entity'];
             $type = $status['config']['type'];
+            $typeUc = Utils::fixComponentName($status['config']['type']);
 
             if (!isset($statuses[$entity])) {
                 $statuses[$entity] = [];
@@ -55,12 +56,12 @@ class InGeneratorStatuses extends Command
             }
             if (!isset($statusJson[$entity][$type])) {
                 $statusJson[$entity][$type] = [];
-                $statusCompJson[$entity][$type] = [];
             }
-            $statusJson[$entity][$type][] = [
-                'status' => $status['config']['status'],
-                'title' => $status['config']['text']
-            ];
+            if (!isset($statusJson[$entity][$typeUc])) {
+                $statusCompJson[$entity][$typeUc] = [
+                    'type' => $type,
+                ];
+            }
         }
 
         foreach ($statuses as $slug => $entityStatuses) {
@@ -69,6 +70,8 @@ class InGeneratorStatuses extends Command
             $compName = Utils::fixComponentName(ucfirst($slug) . 'Statuses');
 
             foreach ($entityStatuses as $status) {
+                $typeUc = Utils::fixComponentName($status['config']['type']);
+
                 $statusName = Utils::fixComponentName(
                     ucfirst($slug) .ucfirst($status['config']['type']) . 'Badge' . $status['config']['status']
                 );
@@ -82,7 +85,6 @@ class InGeneratorStatuses extends Command
                     'bgColor' => isset($status['config']['badgeVariant']) ? $status['config']['badgeVariant'] : ''
                 ];
                 $statusData[] = $el;
-                $statusCompJson[$slug][$status['config']['type']][] = $el;
             }
 
             $fileName = $generatedPath . '/' . $compName . '.tsx';
@@ -92,7 +94,9 @@ class InGeneratorStatuses extends Command
                     'TP_COMP_NAME' => $compName,
                     'statusData' => $statusData,
                     'statusJson' => json_encode($statusJson[$slug], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE),
-                    'statusCompJson' => $statusCompJson[$slug]
+                    'statusCompJson' => $statusCompJson[$slug],
+                    'schema' => $slug,
+                    'schemaUc' => Utils::fixComponentName($slug)
                 ]
             );
             Utils::writeOnChanges($fileName, $generatedContent);

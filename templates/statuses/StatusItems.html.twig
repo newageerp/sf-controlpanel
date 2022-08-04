@@ -3,6 +3,10 @@ import { UI } from '@newageerp/nae-react-ui';
 import { useTranslation } from "react-i18next";
 import { Badge, BadgeSize } from '@newageerp/ui.badges.base.badge';
 import classNames from 'classnames'
+import {StatusChangeButton} from '@newageerp/v2.element.status-change-button'
+import { use{{ schemaUc }}HookNae } from "../../../Components/Hooks/use{{ schemaUc }}HookNae";
+import { OpenApi } from "@newageerp/nae-react-auth-wrapper";
+import { PropsId } from "../../../UserComponents/ModelsCacheData/types";
 
 interface StatusProps {
     short?: boolean,
@@ -64,12 +68,29 @@ export const {{ TP_COMP_NAME }} = (status: number, type: string, short?: boolean
 export const {{ TP_COMP_NAME }}List = {{ statusJson|raw }};
 
 {% for k,c in statusCompJson %}
-export const {{ TP_COMP_NAME }}{{ k }}Component = (props: StatusPropsWithStatus) => {
-    {% for status in c %}
-        if (props.status === {{ status.status }}) {
-            return <{{ status.statusName }} {...props} />;
-        }
-    {% endfor %}
-    return <Fragment />
+
+export const {{ TP_COMP_NAME }}{{ k }}Widget = (props: PropsId) => {
+    const element = use{{ schemaUc }}HookNae(props.id);
+
+    const [doSave] = OpenApi.useUSave('');
+    const changeStatus = (s: number) => {
+        doSave({'{{ c.type }}': s}, props.id);
+    }
+
+    if (!element) {
+        return <Fragment/>
+    }
+
+    return (
+        <StatusChangeButton
+            schema={"{{ schema }}"}
+            type={"{{ c.type }}"}
+            id={props.id}
+
+            onStatusChange={changeStatus}
+            reloadState={element.status}
+        />
+    )
 };
+
 {% endfor %}
