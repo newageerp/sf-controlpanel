@@ -45,7 +45,11 @@ export default function {{ tpCompName }}(props: Props) {
         const _extraFilter = JSON.parse(JSON.stringify(dataState.extraFilter));
         _extraFilter[key] = data;
 
-        if (_extraFilter !== dataState.extraFilter) {
+        if (!data && key in _extraFilter) {
+            return;
+        }
+
+        if (JSON.stringify(_extraFilter) !== JSON.stringify(dataState.extraFilter)) {
             const _state = JSON.parse(JSON.stringify(dataState));
             _state.page = 1;
             _state.extraFilter = _extraFilter;
@@ -101,7 +105,7 @@ export default function {{ tpCompName }}(props: Props) {
     }
 
     const setSort = (sort: SortingItem[]) => {
-        if (sort !== dataState.sort) {
+        if (JSON.stringify(sort) !== JSON.stringify(dataState.sort)) {
             const _state = JSON.parse(JSON.stringify(dataState));
             _state.page = 1;
             _state.sort = sort;
@@ -110,7 +114,7 @@ export default function {{ tpCompName }}(props: Props) {
     }
 
     const setDetailedSearch = (detailedSearch: TypeItemFilters) => {
-        if (detailedSearch !== dataState.detailedSearch) {
+        if (JSON.stringify(detailedSearch) !== JSON.stringify(dataState.detailedSearch)) {
             const _state = JSON.parse(JSON.stringify(dataState));
             _state.page = 1;
             _state.detailedSearch = detailedSearch;
