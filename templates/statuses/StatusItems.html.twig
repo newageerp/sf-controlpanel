@@ -89,7 +89,7 @@ export const {{ TP_COMP_NAME }}{{ k }}Widget = (props: ContentWidgetProps) => {
             id={props.element.id}
 
             onStatusChange={changeStatus}
-            reloadState={element.status}
+            reloadState={element.{{ c.type }}}
         />
     )
 };
