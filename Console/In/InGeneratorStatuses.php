@@ -85,6 +85,7 @@ class InGeneratorStatuses extends Command
                     'bgColor' => isset($status['config']['badgeVariant']) ? $status['config']['badgeVariant'] : ''
                 ];
                 $statusData[] = $el;
+                $statusJson[$entity][$type][] = $el;
             }
 
             $fileName = $generatedPath . '/' . $compName . '.tsx';
