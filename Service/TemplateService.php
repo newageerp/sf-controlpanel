@@ -20,7 +20,7 @@ class TemplateService
     {
         $this->templateName = $templateName;
 
-        $loader = new \Twig\Loader\FilesystemLoader(dirname(__DIR__, 2) . '/templates');
+        $loader = new \Twig\Loader\FilesystemLoader(dirname(__DIR__) . '/templates');
         $this->twig = new \Twig\Environment($loader, [
             'cache' => '/tmp/smarty',
         ]);
