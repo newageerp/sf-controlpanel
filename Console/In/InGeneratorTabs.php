@@ -10,6 +10,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Newageerp\SfControlpanel\Console\LocalConfigUtils;
+use Newageerp\SfControlpanel\Service\TemplateService;
 use Symfony\Component\Filesystem\Filesystem;
 
 class InGeneratorTabs extends Command
@@ -42,9 +43,8 @@ class InGeneratorTabs extends Command
         $tablesDataSourceTemplate = $twig->load('tabs/TablesDataSource.html.twig');
         $tablesDataSourceComponents = [];
 
-        $tabTableTemplate = file_get_contents(
-            __DIR__ . '/templates/tabs/TabTable.txt'
-        );
+        $tabTableT = new TemplateService('tabs/TabTable.html.twig');
+
 
         $defaultItems = LocalConfigUtils::getCpConfigFileData('defaults');
 
@@ -206,27 +206,19 @@ class InGeneratorTabs extends Command
             $tpRowDataStr = implode("\n", $tpRowData);
             $tpImportsStr = implode("\n", array_unique($tpImports));
 
-            $fileName = $generatedPath . '/' . $compName . '.tsx';
-            $generatedContent = str_replace(
+
+            $tabTableT->writeToFileOnChanges(
+                $generatedPath . '/' . $compName . '.tsx',
                 [
-                    'TP_COMP_NAME',
-                    'TP_THEAD',
-                    'TP_TBODY',
-                    'TP_ROW_DATA',
-                    'TP_IMPORT',
-                    'TP_SCHEMA',
-                ],
-                [
-                    $compName,
-                    $tpHeadStr,
-                    $tpBodyStr,
-                    $tpRowDataStr,
-                    $tpImportsStr,
-                    $tabItem['config']['schema'],
-                ],
-                $tabTableTemplate
+                    'TP_COMP_NAME' => $compName,
+                    'TP_THEAD' => $tpHeadStr,
+                    'TP_TBODY' => $tpBodyStr,
+                    'TP_ROW_DATA' => $tpRowDataStr,
+                    'TP_IMPORT' => $tpImportsStr,
+                    'TP_SCHEMA' => $tabItem['config']['schema'],
+                ]
             );
-            Utils::writeOnChanges($fileName, $generatedContent);
+
 
             // data sort
             $sort = [

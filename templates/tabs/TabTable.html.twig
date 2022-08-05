@@ -1,0 +1,121 @@
+import React, { useState, Fragment } from "react";
+import { Table, Td, Th } from "@newageerp/ui.table.base.table";
+import { useTranslation } from "react-i18next";
+import { Icon, IconType } from '@newageerp/ui.icons.base.icon'
+import { IconList } from '@newageerp/ui.icons.base.icon-list'
+import { OpenApi } from "@newageerp/nae-react-auth-wrapper";
+import { TwTextColors, TwBackgroundColors } from "@newageerp/ui.styles.tailwind";
+import { Button } from "@newageerp/ui.buttons.base.button";
+import { UI } from "@newageerp/nae-react-ui";
+
+{{ TP_IMPORT }}
+
+export interface TableSelectedProps {
+    onSelect: (selectedIds: number[]) => void,
+    toolbarContent: any
+}
+
+interface Props {
+    data: any,
+    doReload: () => void,
+    className?: string,
+
+    navigate?: (schema: string, id: number | string, el: any) => void,
+
+    selection?: TableSelectedProps,
+
+    dataTotals?: any
+}
+
+export default function {{ TP_COMP_NAME }}(props: Props) {
+    const { data, navigate } = props;
+    const { t } = useTranslation();
+
+    const [doRemove, doRemoveData] = OpenApi.useURequest('NAEURemoveMultiple');
+
+    const [selectedIds, setSelectedIds] = useState<number[]>([]);
+
+    const dataIds = data.map((i: any) => i?.id);
+    const intersection = dataIds.filter((value: number) => selectedIds.includes(value));
+    const isCheckedAll = intersection.length === data.length;
+
+    const toggleSelectAll = () => {
+        let _selected: number[] = JSON.parse(JSON.stringify(selectedIds));
+        if (isCheckedAll) {
+            dataIds.forEach((id: number) => {
+                if (_selected.indexOf(id) >= 0) {
+                    _selected = _selected.filter(i => id !== i);
+                } else {
+
+                }
+            })
+        } else {
+            dataIds.forEach((id: number) => {
+                if (_selected.indexOf(id) >= 0) {
+                } else {
+                    _selected.push(id);
+                }
+            })
+        }
+        setSelectedIds(_selected);
+    }
+
+    const toggleSelect = (id: number) => {
+        const _selected: number[] = JSON.parse(JSON.stringify(selectedIds));
+        if (selectedIds.indexOf(id) >= 0) {
+            setSelectedIds(_selected.filter(i => id !== i));
+        } else {
+            setSelectedIds([..._selected, id]);
+        }
+    }
+
+    const doMultipleRemove = () => {
+        doRemove({
+            ids: selectedIds,
+            schema: '{{ TP_SCHEMA }}'
+        }).then(() => {
+            setSelectedIds([]);
+            props.doReload();
+        })
+    }
+
+    return (
+    <Fragment>
+        {selectedIds.length > 0 && <div className={`tw3-flex tw3-items-center tw3-gap-6 tw3-mb-2 ${TwTextColors.slate400}`}>
+            <p>{t('Pažymėta')}: {selectedIds.length}</p>
+            <Button confirmation={true} bgColor={TwBackgroundColors.white} onClick={doMultipleRemove}><Icon type={IconType.Solid} icon={IconList.trash} ping={doRemoveData.loading} /></Button>
+        </div>}
+        <Table
+            className={props.className}
+            thead={
+                <thead>
+                    <tr>
+                        {{ TP_THEAD }}
+                    </tr>
+                </thead>
+            }
+            tbody={
+                <tbody>
+                    {data.map((item: any) => {
+                        {{ TP_ROW_DATA }}
+                        return (
+                            <tr key={`row-${item?.id}`}>
+                                {{ TP_TBODY }}
+                            </tr>
+                        )
+                    })}
+                </tbody>
+            }
+        />
+
+        {% for total in totals %}
+            <div className="flex items-center">
+                <label>{{ total.title }}</label>
+                {!!props.dataTotals && 
+                <span>{props.dataTotals['{{ totalField }}']}</span>
+                }
+            </div>
+        {% endfor %}
+    </Fragment>
+    )
+}
