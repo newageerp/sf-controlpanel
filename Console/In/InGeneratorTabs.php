@@ -220,7 +220,7 @@ class InGeneratorTabs extends Command
                     'TP_ROW_DATA' => $tpRowDataStr,
                     'TP_IMPORT' => $tpImportsStr,
                     'TP_SCHEMA' => $tabItem['config']['schema'],
-                    'totals' => $tabItem['config']['totals'],
+                    'totals' => $totals,
                 ]
             );
 
