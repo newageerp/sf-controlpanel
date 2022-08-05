@@ -53,6 +53,14 @@ class ConfigPropertiesController extends ConfigBaseController
                     }
                 );
             }
+            if ($request->get('schema')) {
+                $data = array_filter(
+                    $data,
+                    function ($item) use ($request) {
+                        return $item['config']['entity'] === $request->get('schema');
+                    }
+                );
+            }
 
             $output['data'] = array_values($data);
         } catch (\Exception $e) {
