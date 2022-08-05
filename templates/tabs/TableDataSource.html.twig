@@ -34,6 +34,9 @@ interface Props {
     disableScrollToHeader?: boolean,
     disableCreate?: boolean,
     disableSetTitle?: boolean,
+
+    hideSearchBar?: boolean,
+    hidePaging?: boolean,
 }
 
 export default function {{ tpCompName }}(props: Props) {
@@ -263,6 +266,7 @@ export default function {{ tpCompName }}(props: Props) {
 {#        <UI.Typography.H3Toolbar>{% if toolbarTitle != "" %}{{ toolbarTitle }}{% else %}{" "}{% endif %}</UI.Typography.H3Toolbar>#}
 {#    </UI.Toolbar.Toolbar>#}
         <div ref={headerRef} className="py-8">
+        {!props.hideSearchBar &&
             <DefaultSearchToolbar
                     toolbarQuickFilterContent={toolbarQuickFilterContent}
                     onCreate={isCreatable?onCreate:undefined}
@@ -318,6 +322,7 @@ export default function {{ tpCompName }}(props: Props) {
                     toolbarMiddleContent={<{{ tpCompName }}ToolbarMiddleContent onAddExtraFilter={onAddExtraFilter} loadData={loadData} prepareFilter={prepareFilter} />}
                     {% endif %}
                 />
+        }
             <{{ tpTableCompName }}
                     data={dataToRender}
                     doReload={loadData}
@@ -325,7 +330,9 @@ export default function {{ tpCompName }}(props: Props) {
                     navigate={navigate}
                     dataTotals={dataTotals}
             />
+            {!props.hidePaging && pages > 1 &&
             <PageContainer pages={pages} activePage={dataState.page} setActivePage={setActivePage} marginTop={PageContainerMarginTop['42px']} />
+            }
         </div>
 {#    </LayoutToolbar>#}
 </Fragment>
