@@ -79,7 +79,11 @@ class InGeneratorTabs extends Command
                 $tpRowData[] = 'const isChecked = selectedIds.indexOf(item?.id) >= 0;';
             }
 
+            $totals = isset($tabItem['config']['totals']) ? $tabItem['config']['totals'] : [];
+
             foreach ($tabItem['config']['columns'] as $columnIndex => $column) {
+                
+
                 $tdClassName = [];
 
                 $colProperty = $this->propertiesUtils->getPropertyForPath($column['path']);
@@ -216,6 +220,7 @@ class InGeneratorTabs extends Command
                     'TP_ROW_DATA' => $tpRowDataStr,
                     'TP_IMPORT' => $tpImportsStr,
                     'TP_SCHEMA' => $tabItem['config']['schema'],
+                    'totals' => $tabItem['config']['totals'],
                 ]
             );
 
@@ -280,7 +285,7 @@ class InGeneratorTabs extends Command
             }
             $exports = isset($tabItem['config']['exports']) ? $tabItem['config']['exports'] : [];
 
-            $totals = isset($tabItem['config']['totals']) ? $tabItem['config']['totals'] : [];
+            
 
             $pageSize = isset($tabItem['config']['pageSize']) && $tabItem['config']['pageSize'] ? $tabItem['config']['pageSize'] : 20;
 

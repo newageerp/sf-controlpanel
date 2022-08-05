@@ -8,7 +8,7 @@ import { TwTextColors, TwBackgroundColors } from "@newageerp/ui.styles.tailwind"
 import { Button } from "@newageerp/ui.buttons.base.button";
 import { UI } from "@newageerp/nae-react-ui";
 
-{{ TP_IMPORT }}
+{{ TP_IMPORT|raw }}
 
 export interface TableSelectedProps {
     onSelect: (selectedIds: number[]) => void,
@@ -90,17 +90,17 @@ export default function {{ TP_COMP_NAME }}(props: Props) {
             thead={
                 <thead>
                     <tr>
-                        {{ TP_THEAD }}
+                        {{ TP_THEAD|raw }}
                     </tr>
                 </thead>
             }
             tbody={
                 <tbody>
                     {data.map((item: any) => {
-                        {{ TP_ROW_DATA }}
+                        {{ TP_ROW_DATA|raw }}
                         return (
                             <tr key={`row-${item?.id}`}>
-                                {{ TP_TBODY }}
+                                {{ TP_TBODY|raw }}
                             </tr>
                         )
                     })}
