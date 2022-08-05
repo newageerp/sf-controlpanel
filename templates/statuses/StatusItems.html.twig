@@ -1,13 +1,14 @@
 import React, { Fragment } from "react";
 import { UI } from '@newageerp/nae-react-ui';
 import { useTranslation } from "react-i18next";
-import { Badge, BadgeSize } from '@newageerp/ui.badges.base.badge';
 import classNames from 'classnames'
 import {StatusChangeButton} from '@newageerp/v2.element.status-change-button'
 import { use{{ schemaUc }}HookNae } from "../../../Components/Hooks/use{{ schemaUc }}HookNae";
 import { OpenApi } from "@newageerp/nae-react-auth-wrapper";
 import { PropsId } from "../../../UserComponents/ModelsCacheData/types";
 import { ContentWidgetProps } from "@newageerp/nae-react-ui/dist/UI/Widget/NEWidgets";
+import {Short} from '@newageerp/v2.element.status-badge.short';
+import {Base} from '@newageerp/v2.element.status-badge.base';
 
 interface StatusProps {
     short?: boolean,
@@ -24,23 +25,14 @@ interface StatusPropsWithStatus extends StatusProps {
     export const {{ status.statusName }} = (props: StatusProps) => {
         const { t } = useTranslation();
 
-        const size = props.size?props.size:BadgeSize.sm;
-
         {% if status.bgColor %}
+        const Comp = props.short?Short:Base;
         return (
-            <Badge 
+            <Comp 
                 variant={"{{ status.bgColor }}"} 
-                size={size} 
-                className={
-                    classNames(
-                        {'w-8': props.short},
-                        {'w-56 float-right': !props.short && !props.table},
-                        props.className
-                    )
-                }
             >
               {props.short?t('{{ status.text }}').substr(0, 1):t('{{ status.text }}')}
-            </Badge>
+            </Comp>
         )
         {% else %}
         return (
