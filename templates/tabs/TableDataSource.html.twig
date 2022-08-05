@@ -37,6 +37,8 @@ interface Props {
 
     hideSearchBar?: boolean,
     hidePaging?: boolean,
+
+    disableVerticalMargin?: boolean
 }
 
 export default function {{ tpCompName }}(props: Props) {
@@ -265,7 +267,7 @@ export default function {{ tpCompName }}(props: Props) {
 {#    <UI.Toolbar.Toolbar>#}
 {#        <UI.Typography.H3Toolbar>{% if toolbarTitle != "" %}{{ toolbarTitle }}{% else %}{" "}{% endif %}</UI.Typography.H3Toolbar>#}
 {#    </UI.Toolbar.Toolbar>#}
-        <div ref={headerRef} className="py-8">
+        <div ref={headerRef} className={props.disableVerticalMargin?"":"py-8"}>
         {!props.hideSearchBar &&
             <DefaultSearchToolbar
                     toolbarQuickFilterContent={toolbarQuickFilterContent}
