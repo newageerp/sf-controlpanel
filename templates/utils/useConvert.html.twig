@@ -1,0 +1,42 @@
+import { UI, UIConfig } from "@newageerp/nae-react-ui";
+import React from "react";
+
+interface Props {
+  from: string;
+  to: string;
+  id: number;
+}
+
+export default function useConvert(props: Props) {
+  const { isPopup } = UI.Popup.useNaePopup();
+  const { showEditPopup } = UI.Window.useNaeWindow();
+
+  const createOptions: any = {
+    options: {
+      convert: {
+        schema: props.from,
+        element: { id: props.id },
+      },
+    },
+    type: "main",
+    inPopup: true,
+  };
+
+  const openLink = () => {
+
+    if (isPopup || createOptions.inPopup) {
+      showEditPopup({
+        id: "new",
+        schema: props.to,
+        newStateOptions: { createOptions: createOptions.options },
+        type: createOptions.type,
+      });
+    } else {
+      UIConfig.router({
+        path: "/u/" + props.to + "/" + createOptions.type + "/edit/new",
+        options: { createOptions: createOptions.options },
+      });
+    }
+  };
+  return [openLink, createOptions, isPopup];
+}

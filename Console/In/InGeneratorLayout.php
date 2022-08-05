@@ -165,6 +165,8 @@ class InGeneratorLayout extends Command
             'config/widgets/index.html.twig' => ['widgets', 'index'],
 
             'config/lang/i18.html.twig' => ['lang', 'i18'],
+
+            'utils/useConvert.html.twig' => ['utils', 'useConvert'],
         ];
 
         foreach ($templates as $template => $target) {
