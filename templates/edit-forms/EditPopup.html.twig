@@ -1,9 +1,45 @@
-import React, {Fragment, useState, useEffect} from 'react';
+import { UI } from '@newageerp/nae-react-ui';
+import { MvcEditModalContentProps, MvcViewModalContentProps } from '@newageerp/nae-react-ui/dist/interfaces';
+import { EditHeaderType } from '@newageerp/nae-react-ui/dist/UI/Mvc/MvcEditPage';
+import React, { Fragment, useState, useEffect } from 'react';
 
 interface Props {
-
+    onClose: () => void,
+    editProps: MvcEditModalContentProps,
+    setViewProps: (v: MvcViewModalContentProps) => void,
 }
 
 export default function {{ compName }}(props: Props) {
-
+    const { editProps } = props;
+    return (
+        <UI.Popup.Popup visible={true} toggleVisible={props.onClose}>
+            <UI.Content.Edit
+                schema={editProps.schema}
+                type={editProps.type ? editProps.type : 'main'}
+                id={
+                    typeof editProps.id !== 'string'
+                        ? editProps.id.toString()
+                        : editProps.id
+                }
+                header={EditHeaderType.show}
+                onSave={editProps.onSaveCallback}
+                onSaveAndStay={(el: any, backFunc: any) => {
+                    if (editProps.onSaveCallback) {
+                        editProps.onSaveCallback(el, backFunc);
+                    } else {
+                        backFunc();
+                    }
+                    props.setViewProps({
+                        schema: editProps.schema,
+                        id: el.id,
+                        type: 'main'
+                    })
+                }}
+                onBack={props.onClose}
+                newStateOptions={editProps.newStateOptions}
+                skipHiddenCheck={editProps.skipHiddenCheck}
+                fieldsToReturnOnSave={editProps.fieldsToReturnOnSave}
+            />
+        </UI.Popup.Popup>
+    )
 }

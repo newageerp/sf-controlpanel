@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Fragment} from 'react'
 {% for component in components %}
 import {{ component.compName }} from './popups/{{ component.compName }}';
 {% endfor %}
@@ -13,10 +13,18 @@ export const EditPopupMap = [
     {% endfor %}
 ];
 
-export const editPopupBySchemaAndType = (schema: string, type: string) => {
+interface PopupProps {
+    onClose: () => void,
+    editProps: MvcEditModalContentProps,
+    setViewProps: (v: MvcViewModalContentProps) => void,
+}
+
+export const editPopupBySchemaAndType = (schema: string, type: string, props: PopupProps) => {
     const f = EditPopupMap.filter(i => i.schema === schema && i.type === type);
     if (f.length > 0) {
-        return f[0].comp;
+        const Comp = f[0].comp;
+        // @ts-ignore
+        return <Comp {...props} />
     }
-    return undefined;
+    return <Fragment />;
 }
