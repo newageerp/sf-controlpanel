@@ -2,6 +2,7 @@ import React, {Fragment} from 'react'
 {% for component in components %}
 import {{ component.compName }} from './popups/{{ component.compName }}';
 {% endfor %}
+import { MvcEditModalContentProps, MvcViewModalContentProps } from '@newageerp/nae-react-ui/dist/interfaces';
 
 export const EditPopupMap = [
     {% for component in components %}
