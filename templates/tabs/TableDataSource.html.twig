@@ -218,7 +218,7 @@ export default function {{ tpCompName }}(props: Props) {
             totals,
         );
     }
-    useEffect(loadData, [dataState, props.extraFilter]);
+    useEffect(loadData, [dataState, props.extraFilter, props.reloadState]);
 
     useEffect(scrollToHeader, [dataResult.data.data]);
 
