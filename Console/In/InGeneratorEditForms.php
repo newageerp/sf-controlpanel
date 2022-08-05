@@ -10,6 +10,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Newageerp\SfControlpanel\Console\LocalConfigUtils;
+use Newageerp\SfControlpanel\Service\TemplateService;
 use Symfony\Component\Filesystem\Filesystem;
 
 class InGeneratorEditForms extends Command
@@ -23,8 +24,7 @@ class InGeneratorEditForms extends Command
     public function __construct(
         PropertiesUtils $propertiesUtils,
         EntitiesUtils   $entitiesUtils,
-    )
-    {
+    ) {
         parent::__construct();
         $this->propertiesUtils = $propertiesUtils;
         $this->entitiesUtils = $entitiesUtils;
@@ -62,11 +62,11 @@ class InGeneratorEditForms extends Command
 
             $compName = Utils::fixComponentName(
                 ucfirst($editItem['config']['schema']) .
-                ucfirst($editItem['config']['type']) . 'Form'
+                    ucfirst($editItem['config']['type']) . 'Form'
             );
             $compNameDataSource = Utils::fixComponentName(
                 ucfirst($editItem['config']['schema']) .
-                ucfirst($editItem['config']['type']) . 'FormDataSource'
+                    ucfirst($editItem['config']['type']) . 'FormDataSource'
             );
 
             $fieldsToReturn = [];
@@ -128,7 +128,7 @@ class InGeneratorEditForms extends Command
                     $tpOnChange = '(e: any) => onChange(\'' . $fieldProperty['key'] . '\', e)';
                     $tpOnChangeString = '(e: any) => onChange(\'' . $fieldProperty['key'] . '\', e.target.value)';
 
-                    $tpValueObj = 'element.' . $fieldProperty['key'].'?.id';
+                    $tpValueObj = 'element.' . $fieldProperty['key'] . '?.id';
                     $tpOnChangeObj = '(e: any) => onChange(\'' . $fieldProperty['key'] . '\', {id: e})';
 
                     $tpObjectSortStr = json_encode($objectSort, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
@@ -211,6 +211,43 @@ class InGeneratorEditForms extends Command
 
             Utils::writeOnChanges($fileName, $generatedContent);
         }
+
+        // EDIT POPUP
+        $editPopupT = new TemplateService('edit-forms/EditPopup.html.twig');
+        $editPopupMapT = new TemplateService('edit-forms/EditPopupMap.html.twig');
+
+        $folder = Utils::generatedPath('editforms/popups');
+
+        $components = [];
+
+        foreach ($editItems as $editItem) {
+            $compName = Utils::fixComponentName(
+                ucfirst($editItem['config']['schema']) .
+                    ucfirst($editItem['config']['type']) . 'EditPopup'
+            );
+
+            $components[] = [
+                'compName' => $compName,
+                'schema' => $editItem['config']['schema'],
+                'type' => $editItem['config']['type']
+            ];
+
+            $fileName = $folder . '/' . $compName . '.tsx';
+            $editPopupT->writeToFileOnChanges(
+                $fileName,
+
+                [
+                    'compName' => $compName
+                ]
+            );
+        }
+
+        $editPopupMapT->writeToFileOnChanges(
+            Utils::generatedPath('editforms') . '/EditPopup.tsx',
+            [
+                'components' => $components
+            ]
+        );
 
         return Command::SUCCESS;
     }

@@ -1,0 +1,22 @@
+import React from 'react'
+{% for component in components %}
+import {{ component.compName }} from './popups/{{ component.compName }}';
+{% endfor %}
+
+export const EditPopupMap = [
+    {% for component in components %}
+    {
+        schema: '{{ component.schema }}',
+        type: '{{ component.type }}',
+        comp: {{ component.compName }}
+    },
+    {% endfor %}
+];
+
+export const editPopupBySchemaAndType = (schema: string, type: string) => {
+    const f = EditPopupMap.filter(i => i.schema === schema && i.type === type);
+    if (f.length > 0) {
+        return f[0].comp;
+    }
+    return undefined;
+}
