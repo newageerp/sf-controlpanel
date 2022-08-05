@@ -140,6 +140,9 @@ class InGeneratorLayout extends Command
             'layout/main/App.html.twig' => ['main', 'App'],
 //            'layout/main/AppRouting.html.twig' => ['main', 'AppRouting'],
             'layout/main/InitComponent.html.twig' => ['main', 'InitComponent'],
+
+
+            'utils/useConvert.html.twig' => ['utils', 'useConvert'],
         ];
 
         $hasTasksApp = class_exists('App\Entity\Task');
@@ -165,8 +168,6 @@ class InGeneratorLayout extends Command
             'config/widgets/index.html.twig' => ['widgets', 'index'],
 
             'config/lang/i18.html.twig' => ['lang', 'i18'],
-
-            'utils/useConvert.html.twig' => ['utils', 'useConvert'],
         ];
 
         foreach ($templates as $template => $target) {
