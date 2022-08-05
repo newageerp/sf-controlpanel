@@ -3,6 +3,7 @@ import React, {Fragment} from 'react'
 import {{ component.compName }} from './popups/{{ component.compName }}';
 {% endfor %}
 import { MvcEditModalContentProps, MvcViewModalContentProps } from '@newageerp/nae-react-ui/dist/interfaces';
+import { UI } from '@newageerp/nae-react-ui';
 
 export const EditPopupMap = [
     {% for component in components %}
@@ -27,5 +28,38 @@ export const editPopupBySchemaAndType = (schema: string, type: string, props: Po
         // @ts-ignore
         return <Comp {...props} />
     }
-    return <Fragment />;
+    
+    const {editProps} = props;
+
+    return (
+        <UI.Popup.Popup visible={true} toggleVisible={props.onClose}>
+            <UI.Content.Edit
+                schema={editProps.schema}
+                type={editProps.type ? editProps.type : 'main'}
+                id={
+                    typeof editProps.id !== 'string'
+                        ? editProps.id.toString()
+                        : editProps.id
+                }
+                header={UI.Content.EditHeaderType.show}
+                onSave={editProps.onSaveCallback}
+                onSaveAndStay={(el: any, backFunc: any) => {
+                    if (editProps.onSaveCallback) {
+                        editProps.onSaveCallback(el, backFunc);
+                    } else {
+                        backFunc();
+                    }
+                    props.setViewProps({
+                        schema: editProps.schema,
+                        id: el.id,
+                        type: 'main'
+                    })
+                }}
+                onBack={props.onClose}
+                newStateOptions={editProps.newStateOptions}
+                skipHiddenCheck={editProps.skipHiddenCheck}
+                fieldsToReturnOnSave={editProps.fieldsToReturnOnSave}
+            />
+        </UI.Popup.Popup>
+    )
 }
