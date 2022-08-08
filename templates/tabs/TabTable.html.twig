@@ -112,7 +112,7 @@ export default function {{ TP_COMP_NAME }}(props: Props) {
             <div className="flex items-center justify-end">
                 <label className="text-sm font-semibold text-right w-36 p-2 bg-white">{{ total.title }}</label>
                 {!!props.dataTotals && 
-                <span className="w-36 text-right text-base p-2 bg-white">{props.dataTotals['{{ total.field }}']}</span>
+                <span className="w-36 text-right text-sm p-2 bg-white">{props.dataTotals['{{ total.field }}']}</span>
                 }
             </div>
         {% endfor %}
