@@ -157,8 +157,16 @@ class InGeneratorTabs extends Command
                 $tdTemplate = $openTagTd .
                     $wrapStart .
                     str_replace(
-                        ['TP_VALUE', 'TP_KEY'],
-                        [$varName, $colProperty ? $colProperty['key'] : ''],
+                        [
+                            'TP_VALUE',
+                            'TP_KEY',
+                            'TP_SCHEMA'
+                        ],
+                        [
+                            $varName,
+                            $colProperty ? $colProperty['key'] : '',
+                            $colProperty ? $colProperty['schema'] : '',
+                        ],
                         $tdTemplateData['template']
                     ) .
                     $wrapFinish .

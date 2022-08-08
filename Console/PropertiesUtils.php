@@ -303,6 +303,12 @@ class PropertiesUtils
                 ];
                 break;
             case 'text':
+                if (isset($column['editable']) && $column['editable']) {
+                    return [
+                        "import" => 'import { TextEditable } from "@newageerp/data.table.text-editable";',
+                        "template" => '<TextEditable value={TP_VALUE} propertyKey={"TP_KEY"} schema={"TP_SCHEMA"} elementId={item.id} saveFunc={OpenApi.useUSave}/>'
+                    ];
+                }
                 return [
                     "import" => 'import { Text } from "@newageerp/data.table.text";',
                     "template" => '<Text value={TP_VALUE}/>'
