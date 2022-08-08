@@ -109,10 +109,10 @@ export default function {{ TP_COMP_NAME }}(props: Props) {
         />
 
         {% for total in totals %}
-            <div className="flex items-center">
-                <label>{{ total.title }}</label>
+            <div className="flex items-center justify-end">
+                <label className="text-sm font-semibold">{{ total.title }}</label>
                 {!!props.dataTotals && 
-                <span>{props.dataTotals['{{ totalField }}']}</span>
+                <span className="w-56 text-right text-base">{props.dataTotals['{{ totalField }}']}</span>
                 }
             </div>
         {% endfor %}
