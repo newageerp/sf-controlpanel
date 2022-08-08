@@ -670,22 +670,19 @@ class PropertiesUtils
             case 'enum_multi_text':
                 return $property['enum'];
             case 'status':
-                $db = new \SQLite3($_ENV['NAE_SFS_CP_DB_PATH']);
+                $statusData = LocalConfigUtils::getCpConfigFileData('statuses');
+                $statusSchema = array_filter(
+                    $statusData,
+                    function ($item) use ($property) {
+                        return $item['config']['entity'] === $property['schema'];
+                    }
+                );
 
-                $sql = "SELECT 
-                    statuses.id, statuses.text, statuses.entity, statuses.status, statuses.type, statuses.color, statuses.brightness,
-                    entities.slug as entity_slug,
-                    entities.slug || ' (' || entities.titleSingle || ')' as entity_title
-                FROM statuses 
-                left join entities on statuses.entity = entities.id
-                WHERE entities.slug = '" . $property['schema'] . "'
-                ";
-                $result = $db->query($sql);
                 $output = [];
-                while ($data = $result->fetchArray(SQLITE3_ASSOC)) {
+                foreach ($statusSchema as $status) {
                     $output[] = [
-                        'label' => $data['text'],
-                        'value' => $data['id']
+                        'label' => $status['config']['text'],
+                        'value' => $status['config']['status']
                     ];
                 }
                 return $output;
