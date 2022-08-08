@@ -348,6 +348,11 @@ class PropertiesUtils
                     "template" => '<String value={TP_VALUE}/>'
                 ];
                 break;
+            default:
+                return [
+                    "import" => '',
+                    "template" => '<Fragment/>'
+                ];
         }
     }
 
