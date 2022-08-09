@@ -24,7 +24,7 @@ export default function {{ compName }}(props: Props) {
                     }
                     header={UI.Content.EditHeaderType.hide}
                     onSave={editProps.onSaveCallback}
-                    onSaveAndStay={(el: any, backFunc: any) => {
+                    {# onSaveAndStay={(el: any, backFunc: any) => {
                         if (editProps.onSaveCallback) {
                             editProps.onSaveCallback(el, backFunc);
                         } else {
@@ -35,7 +35,7 @@ export default function {{ compName }}(props: Props) {
                             id: el.id,
                             type: 'main'
                         })
-                    }}
+                    }} #}
                     onBack={props.onClose}
                     newStateOptions={editProps.newStateOptions}
                     skipHiddenCheck={editProps.skipHiddenCheck}
