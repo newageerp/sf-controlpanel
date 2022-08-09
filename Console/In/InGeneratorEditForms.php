@@ -90,6 +90,7 @@ class InGeneratorEditForms extends Command
                             }
                         />
                     </div>';
+                    $rows[$lineGroup][] = ['w' => $content, 'c' => $content];
                 } else if (isset($field['type']) && ($field['type'] === 'separator' || $field['type'] === 'horizontal-separator' || $field['type'] === 'tagCloud')) {
                     $content = '<div className="h-6"></div>';
 
