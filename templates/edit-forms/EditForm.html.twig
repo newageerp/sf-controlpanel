@@ -41,7 +41,7 @@ export default function {{ TP_COMP_NAME }}(props: Props) {
     const wideGroups = {};
     const stepsLength = {{ rows|length }};
 
-    {% for stepRows, stepKey in rows %}
+    {% for stepKey, stepRows in rows %}
         wideGroups['{{ stepKey }}'] = (
             <Wide>
                 {% for row in stepRows %}
