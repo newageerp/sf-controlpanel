@@ -80,7 +80,7 @@ class InGeneratorEditForms extends Command
 
                     $rows[$lineGroup][] = ['w' => $content, 'c' => $content];
                 } else if (isset($field['type']) && $field['type'] === 'label') {
-                    $labelInner = ' label={<Label>{t(\'' . $field['text'] . '\')}</Label>}';
+                    $labelInner = ' label={<Label className="' . $field['labelClassName'] . '">{t(\'' . $field['text'] . '\')}</Label>}';
 
                     $contentW = '<WideRow' . $labelInner . ' control={<Fragment/>}/>';
                     $contentC = '<CompactRow' . $labelInner . ' control={<Fragment/>}/>';
@@ -165,7 +165,7 @@ class InGeneratorEditForms extends Command
 
                     $labelInner = '';
                     if (!$field['hideLabel']) {
-                        $labelInner = ' label={<Label>{t(\'' . $fieldProperty['title'] . '\')}</Label>}';
+                        $labelInner = ' label={<Label  className="' . $field['labelClassName'] . '">{t(\'' . $fieldProperty['title'] . '\')}</Label>}';
                     }
 
 
