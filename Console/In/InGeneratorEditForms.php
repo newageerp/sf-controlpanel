@@ -73,9 +73,14 @@ class InGeneratorEditForms extends Command
                 $labelClassName = isset($field['labelClassName']) && $field['labelClassName'] ? $field['labelClassName'] : 'tw3-w-56';
                 $inputClassName = isset($field['inputClassName']) && $field['inputClassName'] ? $field['inputClassName'] : '';
 
+                $stepGroup = isset($field['stepGroup']) && $field['stepGroup'] ? $field['stepGroup'] : '-';
                 $lineGroup = isset($field['lineGroup']) && $field['lineGroup'] ? $field['lineGroup'] : 'line-group-' . $fieldIndex;
-                if (!isset($rows[$lineGroup])) {
+
+                if (!isset($rows[$stepGroup])) {
                     $rows[$lineGroup] = [];
+                }
+                if (!isset($rows[$stepGroup][$lineGroup])) {
+                    $rows[$stepGroup][$lineGroup] = [];
                 }
 
                 if (isset($field['type']) && $field['type'] === 'tagCloud') {
@@ -90,18 +95,18 @@ class InGeneratorEditForms extends Command
                             }
                         />
                     </div>';
-                    $rows[$lineGroup][] = ['w' => $content, 'c' => $content];
+                    $rows[$stepGroup][$lineGroup][] = ['w' => $content, 'c' => $content];
                 } else if (isset($field['type']) && ($field['type'] === 'separator' || $field['type'] === 'horizontal-separator' || $field['type'] === 'tagCloud')) {
                     $content = '<div className="h-6"></div>';
 
-                    $rows[$lineGroup][] = ['w' => $content, 'c' => $content];
+                    $rows[$stepGroup][$lineGroup][] = ['w' => $content, 'c' => $content];
                 } else if (isset($field['type']) && $field['type'] === 'label') {
                     $labelInner = ' label={<Label>{t(\'' . $field['text'] . '\')}</Label>}';
 
                     $contentW = '<WideRow autoWidth={true} labelClassName="' . $labelClassName . '" ' . $labelInner . ' control={<Fragment/>}/>';
                     $contentC = '<CompactRow' . $labelInner . ' control={<Fragment/>}/>';
 
-                    $rows[$lineGroup][] = ['w' => $contentW, 'c' => $contentC];
+                    $rows[$stepGroup][$lineGroup][] = ['w' => $contentW, 'c' => $contentC];
                 } else if (isset($field['path']) && $field['path']) {
                     $pathA = explode(".", $field['path']);
                     $path = $pathA[0] . '.' . $pathA[1];
@@ -191,7 +196,7 @@ class InGeneratorEditForms extends Command
                     $contentC = '<CompactRow' . $labelInner . ' control={' . $fieldTemplate . '}/>';
                     // $tpCompactRows[] = $content;
 
-                    $rows[$lineGroup][] = ['w' => $contentW, 'c' => $contentC];
+                    $rows[$stepGroup][$lineGroup][] = ['w' => $contentW, 'c' => $contentC];
                 }
             }
             $maxCols = 1;

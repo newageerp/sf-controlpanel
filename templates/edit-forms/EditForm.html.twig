@@ -19,38 +19,51 @@ export default function {{ TP_COMP_NAME }}(props: Props) {
     if (props.compact) {
         return (
             <Compact>
-                {% for row in rows %}
-                    {% set colsLength = row|length %}
-                    {% if colsLength > 1 %}
-                        <div className="flex items-center justify-start gap-4">
-                    {% endif %}
-                    {% for field in row %}
-                        {{ field.c|raw }}
+                {% for stepRows in rows %}
+                    {% for row in stepRows %}
+                        {% set colsLength = row|length %}
+                        {% if colsLength > 1 %}
+                            <div className="flex items-center justify-start gap-4">
+                        {% endif %}
+                        {% for field in row %}
+                            {{ field.c|raw }}
+                        {% endfor %}
+                        {% if colsLength > 1 %}
+                            </div>
+                        {% endif %}
                     {% endfor %}
-                    {% if colsLength > 1 %}
-                        </div>
-                    {% endif %}
                 {% endfor %}
                 <CompactToolbar onSave={props.onSave} onCancel={props.onCancel} />
             </Compact>
         )
     }
 
-    return (
-        <Wide>
-            {% for row in rows %}
-                {% set colsLength = row|length %}
-                {% if colsLength > 1 %}
-                    <div className="flex items-center justify-start gap-4">
-                {% endif %}
-                {% for field in row %}
-                    {{ field.w|raw }}
+    const wideGroups = {};
+    const stepsLength = {{ rows|length }};
+
+    {% for stepRows, stepKey in rows %}
+        wideGroups['{{ stepKey }}'] = (
+            <Wide>
+                {% for row in stepRows %}
+                    {% set colsLength = row|length %}
+                    {% if colsLength > 1 %}
+                        <div className="flex items-center justify-start gap-4">
+                    {% endif %}
+                    {% for field in row %}
+                        {{ field.w|raw }}
+                    {% endfor %}
+                    {% if colsLength > 1 %}
+                        </div>
+                    {% endif %}
                 {% endfor %}
-                {% if colsLength > 1 %}
-                    </div>
-                {% endif %}
-            {% endfor %}
-            <WideToolbar onSave={props.onSave} onCancel={props.onCancel} />
-        </Wide>
-    )
+                
+            </Wide>
+        );
+    {% endfor %}
+
+
+    return (<Wide>
+        {stepsLength === 1 && wideGroups['-]}
+        <WideToolbar onSave={props.onSave} onCancel={props.onCancel} />
+    </Wide>)
 }
