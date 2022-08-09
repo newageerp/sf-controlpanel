@@ -16,6 +16,7 @@ import { UserSpaceWrapperToolbarState } from "../../layout/toolbar/UserSpaceWrap
 import {FilterListData} from "@newageerp/sfs.list-toolbar.filter.filter-list-data"
 import {FilterListOptions} from "@newageerp/sfs.list-toolbar.filter.filter-list-options"
 import {FilterDate} from "@newageerp/sfs.list-toolbar.filter.filter-date"
+import { {{ schemaUC }}StatusesList } from "../../statuses/badges/{{ schemaUC }}Statuses";
 
 {% if customToolbarStart %}
 import {{ tpCompName }}ToolbarStartContent from "../../_custom/tabs/tables-data-source/{{ tpCompName }}ToolbarStartContent";
@@ -273,7 +274,7 @@ export default function {{ tpCompName }}(props: Props) {
             {% elseif qfilter.type == 'object' %}
                 <FilterListData path={"{{ qfilter.path }}"} onAddExtraFilter={onAddExtraFilter} schema={"{{ qfilter.property.format }}"} field={"_viewTitle"} iconName={"{% if qfilter.iconName %}{{ qfilter.iconName }}{% endif %}"} />
             {% elseif qfilter.type == 'status' %}
-                <FilterListOptions path={"{{ qfilter.path }}"} onAddExtraFilter={onAddExtraFilter} iconName={"{% if qfilter.iconName %}{{ qfilter.iconName }}{% else %}diagram-project{% endif %}"} />
+                <FilterListOptions options={{{ schemaUC }}StatusesList['{{ qfilter.property.key }}'].map(s => ({ value: s.status, label: s.text }))} path={"{{ qfilter.path }}"} onAddExtraFilter={onAddExtraFilter} iconName={"{% if qfilter.iconName %}{{ qfilter.iconName }}{% else %}diagram-project{% endif %}"} />
             {% endif %}
         {% endfor %}
     </div>
