@@ -1,6 +1,7 @@
 import React, {Fragment} from 'react';
 import { Wide, WideToolbar, WideRow, Compact, CompactToolbar, CompactRow, Label } from '@newageerp/ui.form.base.form-pack';
 import { useTranslation } from 'react-i18next'
+import { TabContainer } from "@newageerp/ui.tabs.tab-container";
 {{ TP_IMPORT|raw }}
 
 interface Props {
@@ -39,7 +40,8 @@ export default function {{ TP_COMP_NAME }}(props: Props) {
     }
 
     const wideGroups : any = {};
-    const withoutSteps = {% if rows|length == 1 %}true{% else %}false{% endif %};
+    {% set stepsLength = rows|length %}
+    const withoutSteps = {% if stepsLength == 1 %}true{% else %}false{% endif %};
 
     {% for stepKey, stepRows in rows %}
         wideGroups['{{ stepKey }}'] = (
@@ -64,6 +66,16 @@ export default function {{ TP_COMP_NAME }}(props: Props) {
 
     return (<Wide>
         {withoutSteps && wideGroups['-']}
+        {!withoutSteps && <TabContainer items={[
+            {% for stepKey, stepRows in rows %}
+            {
+                content: wideGroups['{{ stepKey }}'],
+                tab: {
+                    children: "{{ stepKey }}",
+                },
+            },
+            {% endfor %}
+        ]} />}
         <WideToolbar onSave={props.onSave} onCancel={props.onCancel} />
     </Wide>)
 }
