@@ -387,6 +387,11 @@ class InGeneratorTabs extends Command
                     $dataSourceCustomGeneratedPath . '/' . $dataSourceCompName . 'ToolbarMiddleContent.tsx'
                 );
 
+                $tabTitle = $this->entitiesUtils->getTitlePluralBySlug($tabItem['config']['schema']);
+                if (isset($tabItem['config']['title'])) {
+                    $tabTitle = $tabItem['config']['title'];
+                }
+
                 $dataSourceFileName = $dataSourceGeneratedPath . '/' . $dataSourceCompName . '.tsx';
                 $generatedContent = $tableDataSourceTemplate->render(
                     [
@@ -402,7 +407,7 @@ class InGeneratorTabs extends Command
                         'creatable' => isset($tabItem['config']['disableCreate']) && $tabItem['config']['disableCreate'] ? 'false' : 'true',
                         'otherTabs' => $otherTabs && count($otherTabs) > 0 ? json_encode($otherTabs, JSON_UNESCAPED_UNICODE) : 'null',
 
-                        'toolbarTitle' => $this->entitiesUtils->getTitlePluralBySlug($tabItem['config']['schema']),
+                        'toolbarTitle' => $tabTitle,
 
                         'customToolbarStart' => $customToolbarStart,
                         'customToolbarEnd' => $customToolbarEnd,
