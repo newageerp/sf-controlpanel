@@ -79,7 +79,7 @@ class InGeneratorEditForms extends Command
                 }
 
                 if (isset($field['type']) && $field['type'] === 'tagCloud') {
-                    $imports[] = "import { UI } from '@newageerp/nae-react-ui';";
+                    $tpImports[] = "import { UI } from '@newageerp/nae-react-ui';";
                     $content = '<div>
                         <UI.Content.TagCloud
                             updateElement={onChange}
