@@ -70,6 +70,8 @@ class InGeneratorEditForms extends Command
             $rows = [];
 
             foreach ($editItem['config']['fields'] as $fieldIndex => $field) {
+                $labelClassName = isset($field['labelClassName']) ? $field['labelClassName'] : '';
+
                 $lineGroup = isset($field['lineGroup']) && $field['lineGroup'] ? $field['lineGroup'] : 'line-group-' . $fieldIndex;
                 if (!isset($rows[$lineGroup])) {
                     $rows[$lineGroup] = [];
@@ -80,9 +82,9 @@ class InGeneratorEditForms extends Command
 
                     $rows[$lineGroup][] = ['w' => $content, 'c' => $content];
                 } else if (isset($field['type']) && $field['type'] === 'label') {
-                    $labelInner = ' label={<Label className="' . $field['labelClassName'] . '">{t(\'' . $field['text'] . '\')}</Label>}';
+                    $labelInner = ' label={<Label>{t(\'' . $field['text'] . '\')}</Label>}';
 
-                    $contentW = '<WideRow' . $labelInner . ' control={<Fragment/>}/>';
+                    $contentW = '<WideRow labelWidth="' . $labelClassName . '" ' . $labelInner . ' control={<Fragment/>}/>';
                     $contentC = '<CompactRow' . $labelInner . ' control={<Fragment/>}/>';
 
                     $rows[$lineGroup][] = ['w' => $contentW, 'c' => $contentC];
@@ -165,11 +167,11 @@ class InGeneratorEditForms extends Command
 
                     $labelInner = '';
                     if (!$field['hideLabel']) {
-                        $labelInner = ' label={<Label  className="' . $field['labelClassName'] . '">{t(\'' . $fieldProperty['title'] . '\')}</Label>}';
+                        $labelInner = ' label={<Label>{t(\'' . $fieldProperty['title'] . '\')}</Label>}';
                     }
 
 
-                    $contentW = '<WideRow' . $labelInner . ' control={' . $fieldTemplate . '}/>';
+                    $contentW = '<WideRow labelWidth="' . $labelClassName . '" ' . $labelInner . ' control={' . $fieldTemplate . '}/>';
                     // $tpWideRows[] = $content;
 
                     $contentC = '<CompactRow' . $labelInner . ' control={' . $fieldTemplate . '}/>';
