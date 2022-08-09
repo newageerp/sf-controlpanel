@@ -10,6 +10,7 @@ import {{ TP_COMP_NAME }} from '../forms/{{ TP_COMP_NAME }}';
 import { useRecoilState } from "recoil";
 import { UserSpaceWrapperToolbarState } from "../../layout/toolbar/UserSpaceWrapperToolbar";
 import { useLocation } from 'react-router-dom';
+import { WhiteCard } from '@newageerp/ui.cards.base.white-card';
 
 interface Props {
     id: number | string,
@@ -23,6 +24,8 @@ interface Props {
     disableSetTitle?: boolean,
 
     newStateOptions?: any,
+
+    wrapWithCard?: boolean,
 }
 
 export default function {{ TP_COMP_NAME_DATA_SOURCE }}(props: Props) {
@@ -123,15 +126,28 @@ export default function {{ TP_COMP_NAME_DATA_SOURCE }}(props: Props) {
         return <Fragment/>
     }
 
+    if (props.wrapWithCard) {
+        return (
+            <WhiteCard size={"lg"}>
+                <{{ TP_COMP_NAME }}
+                    element={element}
+                    onChange={updateElement}
+                    compact={props.compact}
+                    onSave={doSave}
+                    onCancel={props.onCancel}
+                />
+            </WhiteCard>
+        )
+    }
     return (
-        <Fragment>
-            <{{ TP_COMP_NAME }}
-                element={element}
-                onChange={updateElement}
-                compact={props.compact}
-                onSave={doSave}
-                onCancel={props.onCancel}
-            />
-        </Fragment>
-    )
+            <Fragment>
+                <{{ TP_COMP_NAME }}
+                    element={element}
+                    onChange={updateElement}
+                    compact={props.compact}
+                    onSave={doSave}
+                    onCancel={props.onCancel}
+                />
+            </Fragment>
+        )
 }
