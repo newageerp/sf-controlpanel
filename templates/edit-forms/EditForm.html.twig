@@ -38,8 +38,8 @@ export default function {{ TP_COMP_NAME }}(props: Props) {
         )
     }
 
-    const wideGroups = {};
-    const stepsLength = {{ rows|length }};
+    const wideGroups : any = {};
+    const withoutSteps = {{ rows|length == 1 }};
 
     {% for stepKey, stepRows in rows %}
         wideGroups['{{ stepKey }}'] = (
@@ -63,7 +63,7 @@ export default function {{ TP_COMP_NAME }}(props: Props) {
 
 
     return (<Wide>
-        {stepsLength === 1 && wideGroups['-]}
+        {withoutSteps && wideGroups['-']}
         <WideToolbar onSave={props.onSave} onCancel={props.onCancel} />
     </Wide>)
 }
