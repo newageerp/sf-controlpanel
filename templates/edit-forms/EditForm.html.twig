@@ -20,11 +20,16 @@ export default function {{ TP_COMP_NAME }}(props: Props) {
         return (
             <Compact>
                 {% for row in rows %}
-                    <div className="grid grid-cols-{{ maxCols }} gap-4">
+                    {% set colsLength = row|length %}
+                    {% if colsLength > 1 %}
+                        <div className="flex items-center justify-start gap-4">
+                    {% endif %}
                     {% for field in row %}
                         {{ field.c|raw }}
                     {% endfor %}
-                    </div>
+                    {% if colsLength > 1 %}
+                        </div>
+                    {% endif %}
                 {% endfor %}
                 <CompactToolbar onSave={props.onSave} onCancel={props.onCancel} />
             </Compact>
@@ -34,11 +39,15 @@ export default function {{ TP_COMP_NAME }}(props: Props) {
     return (
         <Wide>
             {% for row in rows %}
-                <div className="grid grid-cols-{{ maxCols }} gap-4">
+                {% if colsLength > 1 %}
+                    <div className="flex items-center justify-start gap-4">
+                {% endif %}
                 {% for field in row %}
                     {{ field.w|raw }}
                 {% endfor %}
-                </div>
+                {% if colsLength > 1 %}
+                    </div>
+                {% endif %}
             {% endfor %}
             <WideToolbar onSave={props.onSave} onCancel={props.onCancel} />
         </Wide>
