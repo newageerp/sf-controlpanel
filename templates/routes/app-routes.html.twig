@@ -42,7 +42,7 @@ export function EditRoutes() {
                             id: string,
                             onSave: (element: any, isNew: boolean, schema: string) => void,
                         onCancel: () => void,
-                        ) => <{{ component.compName }} id={id} onSave={onSave} onCancel={onCancel} />
+                        ) => <{{ component.compName }} id={id} onSave={onSave} onCancel={onCancel} wrapWithCard={true} />
                         }
                         />
                 </Route>
