@@ -39,6 +39,7 @@ export default function {{ TP_COMP_NAME }}(props: Props) {
     return (
         <Wide>
             {% for row in rows %}
+                {% set colsLength = row|length %}
                 {% if colsLength > 1 %}
                     <div className="flex items-center justify-start gap-4">
                 {% endif %}
