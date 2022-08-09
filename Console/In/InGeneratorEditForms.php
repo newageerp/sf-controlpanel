@@ -77,7 +77,7 @@ class InGeneratorEditForms extends Command
                 $lineGroup = isset($field['lineGroup']) && $field['lineGroup'] ? $field['lineGroup'] : 'line-group-' . $fieldIndex;
 
                 if (!isset($rows[$stepGroup])) {
-                    $rows[$lineGroup] = [];
+                    $rows[$stepGroup] = [];
                 }
                 if (!isset($rows[$stepGroup][$lineGroup])) {
                     $rows[$stepGroup][$lineGroup] = [];
