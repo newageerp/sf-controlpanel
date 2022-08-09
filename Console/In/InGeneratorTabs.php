@@ -82,7 +82,7 @@ class InGeneratorTabs extends Command
             $totals = isset($tabItem['config']['totals']) ? $tabItem['config']['totals'] : [];
 
             foreach ($tabItem['config']['columns'] as $columnIndex => $column) {
-                
+
 
                 $tdClassName = [];
 
@@ -293,7 +293,7 @@ class InGeneratorTabs extends Command
             }
             $exports = isset($tabItem['config']['exports']) ? $tabItem['config']['exports'] : [];
 
-            
+
 
             $pageSize = isset($tabItem['config']['pageSize']) && $tabItem['config']['pageSize'] ? $tabItem['config']['pageSize'] : 20;
 
@@ -388,7 +388,7 @@ class InGeneratorTabs extends Command
                 );
 
                 $tabTitle = $this->entitiesUtils->getTitlePluralBySlug($tabItem['config']['schema']);
-                if (isset($tabItem['config']['title'])) {
+                if (isset($tabItem['config']['title']) && $tabItem['config']['title']) {
                     $tabTitle = $tabItem['config']['title'];
                 }
 
