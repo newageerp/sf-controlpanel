@@ -70,7 +70,7 @@ class InGeneratorEditForms extends Command
             $rows = [];
 
             foreach ($editItem['config']['fields'] as $fieldIndex => $field) {
-                $lineGroup = isset($field['lineGroup']) && $field['lineGroup'] ? $field['lineGroup'] : '';
+                $lineGroup = isset($field['lineGroup']) && $field['lineGroup'] ? $field['lineGroup'] : 'line-group-' . $fieldIndex;
                 if (!isset($rows[$lineGroup])) {
                     $rows[$lineGroup] = [];
                 }
