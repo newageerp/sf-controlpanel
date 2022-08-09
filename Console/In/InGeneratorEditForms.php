@@ -78,7 +78,19 @@ class InGeneratorEditForms extends Command
                     $rows[$lineGroup] = [];
                 }
 
-                if (isset($field['type']) && ($field['type'] === 'separator' || $field['type'] === 'horizontal-separator' || $field['type'] === 'tagCloud')) {
+                if (isset($field['type']) && $field['type'] === 'tagCloud') {
+                    $imports[] = "import { UI } from '@newageerp/nae-react-ui';";
+                    $content = '<div>
+                        <UI.Content.TagCloud
+                            updateElement={onChange}
+                            field={"' . $field['tagCloudField'] . '"}
+                            action={"' . $field['tagCloudAction'] . '"}
+                            val={
+                            element["' . $field['tagCloudField'] . '"] ? element["' . $field['tagCloudField'] . '"] : ""
+                            }
+                        />
+                    </div>';
+                } else if (isset($field['type']) && ($field['type'] === 'separator' || $field['type'] === 'horizontal-separator' || $field['type'] === 'tagCloud')) {
                     $content = '<div className="h-6"></div>';
 
                     $rows[$lineGroup][] = ['w' => $content, 'c' => $content];
