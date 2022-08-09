@@ -14,6 +14,7 @@ import { ToolbarTitle } from "@newageerp/ui.texts.base.toolbar-title";
 import { useRecoilState } from "recoil";
 import { UserSpaceWrapperToolbarState } from "../../layout/toolbar/UserSpaceWrapperToolbar";
 import {FilterListData} from "@newageerp/sfs.list-toolbar.filter.filter-list-data"
+import {FilterListOptions} from "@newageerp/sfs.list-toolbar.filter.filter-list-options"
 import {FilterDate} from "@newageerp/sfs.list-toolbar.filter.filter-date"
 
 {% if customToolbarStart %}
@@ -271,6 +272,8 @@ export default function {{ tpCompName }}(props: Props) {
                 <FilterDate path={"{{ qfilter.path }}"} onAddExtraFilter={onAddExtraFilter} />
             {% elseif qfilter.type == 'object' %}
                 <FilterListData path={"{{ qfilter.path }}"} onAddExtraFilter={onAddExtraFilter} schema={"{{ qfilter.property.format }}"} field={"_viewTitle"} iconName={"{% if qfilter.iconName %}{{ qfilter.iconName }}{% endif %}"} />
+            {% elseif qfilter.type == 'status' %}
+                <FilterListOptions path={"{{ qfilter.path }}"} onAddExtraFilter={onAddExtraFilter} iconName={"{% if qfilter.iconName %}{{ qfilter.iconName }}{% else %}diagram-project{% endif %}"} />
             {% endif %}
         {% endfor %}
     </div>
