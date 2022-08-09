@@ -39,7 +39,7 @@ export default function {{ TP_COMP_NAME }}(props: Props) {
     }
 
     const wideGroups : any = {};
-    const withoutSteps = {{ rows|length == 1 }};
+    const withoutSteps = {% if rows|length == 1 %}true{% else %}false{% endif %};
 
     {% for stepKey, stepRows in rows %}
         wideGroups['{{ stepKey }}'] = (
