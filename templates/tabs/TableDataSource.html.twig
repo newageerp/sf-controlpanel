@@ -274,7 +274,7 @@ export default function {{ tpCompName }}(props: Props) {
             {% elseif qfilter.type == 'object' %}
                 <FilterListData path={"{{ qfilter.path }}"} onAddExtraFilter={onAddExtraFilter} schema={"{{ qfilter.property.format }}"} field={"_viewTitle"} iconName={"{% if qfilter.iconName %}{{ qfilter.iconName }}{% endif %}"} />
             {% elseif qfilter.type == 'status' %}
-                <FilterListOptions options={{{ schemaUC }}StatusesList['{{ qfilter.property.key }}'].map(s => ({ value: s.status, label: s.text }))} path={"{{ qfilter.path }}"} onAddExtraFilter={onAddExtraFilter} iconName={"{% if qfilter.iconName %}{{ qfilter.iconName }}{% else %}diagram-project{% endif %}"} />
+                <FilterListOptions options={ {{ schemaUC }}StatusesList['{{ qfilter.property.key }}'].map(s => ({ value: s.status, label: s.text }))} path={"{{ qfilter.path }}"} onAddExtraFilter={onAddExtraFilter} iconName={"{% if qfilter.iconName %}{{ qfilter.iconName }}{% else %}diagram-project{% endif %}"} />
             {% endif %}
         {% endfor %}
     </div>
