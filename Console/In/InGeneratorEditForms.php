@@ -77,7 +77,7 @@ class InGeneratorEditForms extends Command
 
                 if (isset($field['type']) && ($field['type'] === 'separator' || $field['type'] === 'horizontal-separator' || $field['type'] === 'tagCloud')) {
                     $content = '<div className="h-6"></div>';
-                    
+
                     $rows[$lineGroup][] = ['w' => $content, 'c' => $content];
                 } else if (isset($field['type']) && $field['type'] === 'label') {
                     $labelInner = ' label={<Label>{t(\'' . $field['text'] . '\')}</Label>}';
@@ -86,7 +86,6 @@ class InGeneratorEditForms extends Command
                     $contentC = '<CompactRow' . $labelInner . ' control={<Fragment/>}/>';
 
                     $rows[$lineGroup][] = ['w' => $contentW, 'c' => $contentC];
-                    
                 } else if (isset($field['path']) && $field['path']) {
                     $pathA = explode(".", $field['path']);
                     $path = $pathA[0] . '.' . $pathA[1];
@@ -168,7 +167,7 @@ class InGeneratorEditForms extends Command
                     if (!$field['hideLabel']) {
                         $labelInner = ' label={<Label>{t(\'' . $fieldProperty['title'] . '\')}</Label>}';
                     }
-                    
+
 
                     $contentW = '<WideRow' . $labelInner . ' control={' . $fieldTemplate . '}/>';
                     // $tpWideRows[] = $content;
@@ -179,6 +178,10 @@ class InGeneratorEditForms extends Command
                     $rows[$lineGroup][] = ['w' => $contentW, 'c' => $contentC];
                 }
             }
+            $maxCols = 1;
+            foreach ($rows as $row) {
+                $maxCols = max($maxCols, count($row));
+            }
 
             $fieldsToReturn = array_values(array_unique($fieldsToReturn));
 
@@ -188,12 +191,14 @@ class InGeneratorEditForms extends Command
 
             $fileName = $generatedPath . '/' . $compName . '.tsx';
             $generatedContent = $editFormTemplate->render(
-                ['TP_COMP_NAME' => $compName,
-                'TP_IMPORT' => $tpImportsStr,
-                'rows' => $rows
+                [
+                    'TP_COMP_NAME' => $compName,
+                    'TP_IMPORT' => $tpImportsStr,
+                    'rows' => $rows,
+                    'maxCols' => $maxCols,
                 ]
             );
-            
+
             Utils::writeOnChanges($fileName, $generatedContent);
 
             // DATA SOURCE

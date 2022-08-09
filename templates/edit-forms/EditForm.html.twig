@@ -20,9 +20,11 @@ export default function {{ TP_COMP_NAME }}(props: Props) {
         return (
             <Compact>
                 {% for row in rows %}
+                    <div className="grid grid-cols-{{ maxCols }} gap-4">
                     {% for field in row %}
                         {{ field.c|raw }}
                     {% endfor %}
+                    </div>
                 {% endfor %}
                 <CompactToolbar onSave={props.onSave} onCancel={props.onCancel} />
             </Compact>
@@ -32,9 +34,11 @@ export default function {{ TP_COMP_NAME }}(props: Props) {
     return (
         <Wide>
             {% for row in rows %}
+                <div className="grid grid-cols-{{ maxCols }} gap-4">
                 {% for field in row %}
                     {{ field.w|raw }}
                 {% endfor %}
+                </div>
             {% endfor %}
             <WideToolbar onSave={props.onSave} onCancel={props.onCancel} />
         </Wide>
