@@ -70,7 +70,8 @@ class InGeneratorEditForms extends Command
             $rows = [];
 
             foreach ($editItem['config']['fields'] as $fieldIndex => $field) {
-                $labelClassName = isset($field['labelClassName']) ? $field['labelClassName'] : 'tw3-w-56';
+                $labelClassName = isset($field['labelClassName']) && $field['labelClassName'] ? $field['labelClassName'] : 'tw3-w-56';
+                $inputClassName = isset($field['inputClassName']) && $field['inputClassName'] ? $field['inputClassName'] : '';
 
                 $lineGroup = isset($field['lineGroup']) && $field['lineGroup'] ? $field['lineGroup'] : 'line-group-' . $fieldIndex;
                 if (!isset($rows[$lineGroup])) {
@@ -84,7 +85,7 @@ class InGeneratorEditForms extends Command
                 } else if (isset($field['type']) && $field['type'] === 'label') {
                     $labelInner = ' label={<Label>{t(\'' . $field['text'] . '\')}</Label>}';
 
-                    $contentW = '<WideRow autoWidth={true} className="' . $labelClassName . '" ' . $labelInner . ' control={<Fragment/>}/>';
+                    $contentW = '<WideRow autoWidth={true} labelClassName="' . $labelClassName . '" ' . $labelInner . ' control={<Fragment/>}/>';
                     $contentC = '<CompactRow' . $labelInner . ' control={<Fragment/>}/>';
 
                     $rows[$lineGroup][] = ['w' => $contentW, 'c' => $contentC];
@@ -171,7 +172,7 @@ class InGeneratorEditForms extends Command
                     }
 
 
-                    $contentW = '<WideRow autoWidth={true} className="' . $labelClassName . '" ' . $labelInner . ' control={' . $fieldTemplate . '}/>';
+                    $contentW = '<WideRow autoWidth={true} controlClassName="' . $inputClassName . '" labelClassName="' . $labelClassName . '" ' . $labelInner . ' control={' . $fieldTemplate . '}/>';
                     // $tpWideRows[] = $content;
 
                     $contentC = '<CompactRow' . $labelInner . ' control={' . $fieldTemplate . '}/>';
