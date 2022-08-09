@@ -37,9 +37,7 @@ class InGeneratorEditForms extends Command
             'cache' => '/tmp/smarty',
         ]);
 
-        $editFormTemplate = file_get_contents(
-            __DIR__ . '/templates/edit-forms/EditForm.txt'
-        );
+        $editFormTemplate = $twig->load('edit-forms/EditForm.html.twig');
         $editFormDataSourceTemplate = $twig->load('edit-forms/EditFormDataSource.html.twig');
 
 
@@ -56,8 +54,6 @@ class InGeneratorEditForms extends Command
         $generatedPathDataSource = Utils::generatedPath('editforms/forms-data-source');
 
         foreach ($editItems as $editItem) {
-            $tpCompactRows = [];
-            $tpWideRows = [];
             $tpImports = [];
 
             $compName = Utils::fixComponentName(
@@ -71,19 +67,26 @@ class InGeneratorEditForms extends Command
 
             $fieldsToReturn = [];
 
+            $rows = [];
+
             foreach ($editItem['config']['fields'] as $fieldIndex => $field) {
+                $lineGroup = isset($field['lineGroup']) && $field['lineGroup'] ? $field['lineGroup'] : '';
+                if (!isset($rows[$lineGroup])) {
+                    $rows[$lineGroup] = [];
+                }
+
                 if (isset($field['type']) && ($field['type'] === 'separator' || $field['type'] === 'horizontal-separator' || $field['type'] === 'tagCloud')) {
                     $content = '<div className="h-6"></div>';
-                    $tpWideRows[] = $content;
-                    $tpCompactRows[] = $content;
+                    
+                    $rows[$lineGroup][] = ['w' => $content, 'c' => $content];
                 } else if (isset($field['type']) && $field['type'] === 'label') {
                     $labelInner = ' label={<Label>{t(\'' . $field['text'] . '\')}</Label>}';
 
-                    $content = '<WideRow' . $labelInner . ' control={<Fragment/>}/>';
-                    $tpWideRows[] = $content;
+                    $contentW = '<WideRow' . $labelInner . ' control={<Fragment/>}/>';
+                    $contentC = '<CompactRow' . $labelInner . ' control={<Fragment/>}/>';
 
-                    $content = '<CompactRow' . $labelInner . ' control={<Fragment/>}/>';
-                    $tpCompactRows[] = $content;
+                    $rows[$lineGroup][] = ['w' => $contentW, 'c' => $contentC];
+                    
                 } else if (isset($field['path']) && $field['path']) {
                     $pathA = explode(".", $field['path']);
                     $path = $pathA[0] . '.' . $pathA[1];
@@ -165,37 +168,32 @@ class InGeneratorEditForms extends Command
                     if (!$field['hideLabel']) {
                         $labelInner = ' label={<Label>{t(\'' . $fieldProperty['title'] . '\')}</Label>}';
                     }
+                    
 
-                    $content = '<WideRow' . $labelInner . ' control={' . $fieldTemplate . '}/>';
-                    $tpWideRows[] = $content;
+                    $contentW = '<WideRow' . $labelInner . ' control={' . $fieldTemplate . '}/>';
+                    // $tpWideRows[] = $content;
 
-                    $content = '<CompactRow' . $labelInner . ' control={' . $fieldTemplate . '}/>';
-                    $tpCompactRows[] = $content;
+                    $contentC = '<CompactRow' . $labelInner . ' control={' . $fieldTemplate . '}/>';
+                    // $tpCompactRows[] = $content;
+
+                    $rows[$lineGroup][] = ['w' => $contentW, 'c' => $contentC];
                 }
             }
 
             $fieldsToReturn = array_values(array_unique($fieldsToReturn));
 
-            $tpWideRowsStr = implode("\n", $tpWideRows);
-            $tpCompactRowsStr = implode("\n", $tpCompactRows);
+            // $tpWideRowsStr = implode("\n", $tpWideRows);
+            // $tpCompactRowsStr = implode("\n", $tpCompactRows);
             $tpImportsStr = implode("\n", array_unique($tpImports));
 
             $fileName = $generatedPath . '/' . $compName . '.tsx';
-            $generatedContent = str_replace(
-                [
-                    'TP_COMP_NAME',
-                    'TP_COMPACT_ROWS',
-                    'TP_WIDE_ROWS',
-                    'TP_IMPORT'
-                ],
-                [
-                    $compName,
-                    $tpCompactRowsStr,
-                    $tpWideRowsStr,
-                    $tpImportsStr,
-                ],
-                $editFormTemplate
+            $generatedContent = $editFormTemplate->render(
+                ['TP_COMP_NAME' => $compName,
+                'TP_IMPORT' => $tpImportsStr,
+                'rows' => $rows
+                ]
             );
+            
             Utils::writeOnChanges($fileName, $generatedContent);
 
             // DATA SOURCE
