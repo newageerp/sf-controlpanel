@@ -388,6 +388,7 @@ class InGeneratorTabs extends Command
                         'tpCompName' => $dataSourceCompName,
                         'tpTableCompName' => $compName,
                         'schema' => $tabItem['config']['schema'],
+                        'schemaUC' => Utils::fixComponentName($tabItem['config']['schema']),
                         'type' => $tabItem['config']['type'],
                         'pageSize' => $pageSize,
                         'sort' => json_encode($sort),
