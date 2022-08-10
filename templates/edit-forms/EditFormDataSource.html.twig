@@ -53,7 +53,7 @@ export default function {{ TP_COMP_NAME_DATA_SOURCE }}(props: Props) {
             if (res) {
                 if (res.error) {
                     let errorText = typeof res.error === 'string' ? res.error : ''
-                    if (props.error && res.error.response && res.error.response.data) {
+                    if (res.error && res.error.response && res.error.response.data) {
                         errorText = res.error.response.data.description
                     }
 
