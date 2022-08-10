@@ -158,6 +158,7 @@ class InGeneratorLayout extends Command
         $templates = [
             'config/fields/edit.html.twig' => ['fields', 'edit'],
             'config/fields/fieldDependencies.html.twig' => ['fields', 'fieldDependencies'],
+            'config/fields/fieldVisibility.html.twig' => ['fields', 'fieldVisibility'],
             'config/fields/onEditElementUpdate.html.twig' => ['fields', 'onEditElementUpdate'],
 
             'config/fields/view.html.twig' => ['fields', 'view'],
