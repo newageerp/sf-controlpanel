@@ -167,8 +167,7 @@ class InGeneratorEditForms extends Command
                             'TP_KEY',
                             'TP_OBJECT_SCHEMA',
                             'TP_OBJECT_KEY',
-                            'TP_OBJECT_SORT',
-                            'editType',
+                            'TP_OBJECT_SORT'
                         ],
                         [
                             $tpValueObj,
@@ -180,8 +179,7 @@ class InGeneratorEditForms extends Command
                             $fieldProperty['key'],
                             $fieldObjectProperty ? $fieldObjectProperty['schema'] : '',
                             $fieldObjectProperty ? $fieldObjectProperty['key'] : '',
-                            $tpObjectSortStr,
-                            $editItem['config']['type']
+                            $tpObjectSortStr
                         ],
                         $fieldTemplateData['template']
                     );
@@ -215,10 +213,12 @@ class InGeneratorEditForms extends Command
             $fileName = $generatedPath . '/' . $compName . '.tsx';
             $generatedContent = $editFormTemplate->render(
                 [
+                    'TP_SCHEMA' => $editItem['config']['schema'],
                     'TP_COMP_NAME' => $compName,
                     'TP_IMPORT' => $tpImportsStr,
                     'rows' => $rows,
                     'maxCols' => $maxCols,
+                    'editType' => $editItem['config']['type'],
                 ]
             );
 
