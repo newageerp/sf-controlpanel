@@ -2,20 +2,59 @@ import React, {Fragment} from 'react';
 import { Wide, WideToolbar, WideRow, Compact, CompactToolbar, CompactRow, Label } from '@newageerp/ui.form.base.form-pack';
 import { useTranslation } from 'react-i18next'
 import { TabContainer } from "@newageerp/ui.tabs.tab-container";
+import { fieldVisibility } from '../../../config/fields/fieldVisibility';
+import { UI, UIConfig } from '@newageerp/nae-react-ui';
 {{ TP_IMPORT|raw }}
 
 interface Props {
     element: any;
+    
     onChange: (key: string, value: any) => void,
+    onChangeBatch:  (updates: any) => void,
+
+    hasChanges: boolean,
     compact?: boolean,
 
     onSave: () => void,
     onCancel: () => void,
+
+    skipHiddenCheck?: boolean,
 }
 
 export default function {{ TP_COMP_NAME }}(props: Props) {
+    let hiddenFields: any = []
+    const schemaFieldVisibility = fieldVisibility['{{ TP_SCHEMA }}'];
+    if (schemaFieldVisibility && !props.skipHiddenCheck) {
+        
+        {% for stepRows in rows %}
+            {% for row in stepRows %}
+                {% if row.needCheck %}
+                    if (!!schemaFieldVisibility['{{ row.propertyKey }}'] && schemaFieldVisibility['{{ row.propertyKey }}'](
+                        '{{ TP_SCHEMA }}',
+                        element: props.element,
+                        user: UIConfig.userState,
+                        parentElement: undefined,
+                        hasChanges: props.hasChanges,
+                        updateElement: props.onChange,
+                        type: '{{ editType }}',
+                        isEdit: true
+                    )) {
+                        hiddenFields.push('{{ row.propertyKey }}');
+                    }
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+    }
+
     const { element, onChange } = props;
     const { t } = useTranslation();
+
+    UIConfig.resetFieldsToDefValues(
+        '{{ TP_SCHEMA }}',
+        props.element,
+        JSON.parse(JSON.stringify(hiddenFields)),
+        props.onChangeBatch,
+    )
 
     if (props.compact) {
         return (
@@ -27,7 +66,13 @@ export default function {{ TP_COMP_NAME }}(props: Props) {
                             <div className="flex items-center justify-start gap-4">
                         {% endif %}
                         {% for field in row %}
+                            {% if row.needCheck %}
+                                {hiddenFields.indexOf('{{ row.propertyKey }}') === -1 &&
+                            {% endif %}
                             {{ field.c|raw }}
+                            {% if row.needCheck %}
+                                }
+                            {% endif %}
                         {% endfor %}
                         {% if colsLength > 1 %}
                             </div>
@@ -52,7 +97,13 @@ export default function {{ TP_COMP_NAME }}(props: Props) {
                         <div className="flex items-center justify-start gap-4">
                     {% endif %}
                     {% for field in row %}
+                        {% if row.needCheck %}
+                            {hiddenFields.indexOf('{{ row.propertyKey }}') === -1 &&
+                        {% endif %}
                         {{ field.w|raw }}
+                        {% if row.needCheck %}
+                            }
+                        {% endif %}
                     {% endfor %}
                     {% if colsLength > 1 %}
                         </div>
@@ -62,6 +113,7 @@ export default function {{ TP_COMP_NAME }}(props: Props) {
             </Wide>
         );
     {% endfor %}
+
 
 
     return (<Wide>

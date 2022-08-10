@@ -132,9 +132,11 @@ export default function {{ TP_COMP_NAME_DATA_SOURCE }}(props: Props) {
                 <{{ TP_COMP_NAME }}
                     element={element}
                     onChange={updateElement}
+                    onChangeBatch={updateElementBatch}
                     compact={props.compact}
                     onSave={doSave}
                     onCancel={props.onCancel}
+                    hasChanges={hasChanges}
                 />
             </WhiteCard>
         )
@@ -144,9 +146,11 @@ export default function {{ TP_COMP_NAME_DATA_SOURCE }}(props: Props) {
                 <{{ TP_COMP_NAME }}
                     element={element}
                     onChange={updateElement}
+                    onChangeBatch={updateElementBatch}
                     compact={props.compact}
                     onSave={doSave}
                     onCancel={props.onCancel}
+                    hasChanges={hasChanges}
                 />
             </Fragment>
         )

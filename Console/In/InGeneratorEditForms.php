@@ -84,7 +84,7 @@ class InGeneratorEditForms extends Command
                 }
 
                 if (isset($field['type']) && $field['type'] === 'tagCloud') {
-                    $tpImports[] = "import { UI } from '@newageerp/nae-react-ui';";
+                    // $tpImports[] = "import { UI } from '@newageerp/nae-react-ui';";
                     $content = '<div>
                         <UI.Content.TagCloud
                             updateElement={onChange}
@@ -95,18 +95,18 @@ class InGeneratorEditForms extends Command
                             }
                         />
                     </div>';
-                    $rows[$stepGroup][$lineGroup][] = ['w' => $content, 'c' => $content];
+                    $rows[$stepGroup][$lineGroup][] = ['w' => $content, 'c' => $content, 'needCheck' => false];
                 } else if (isset($field['type']) && ($field['type'] === 'separator' || $field['type'] === 'horizontal-separator' || $field['type'] === 'tagCloud')) {
                     $content = '<div className="h-6"></div>';
 
-                    $rows[$stepGroup][$lineGroup][] = ['w' => $content, 'c' => $content];
+                    $rows[$stepGroup][$lineGroup][] = ['w' => $content, 'c' => $content, 'needCheck' => false];
                 } else if (isset($field['type']) && $field['type'] === 'label') {
                     $labelInner = ' label={<Label>{t(\'' . $field['text'] . '\')}</Label>}';
 
                     $contentW = '<WideRow autoWidth={true} labelClassName="' . $labelClassName . '" ' . $labelInner . ' control={<Fragment/>}/>';
                     $contentC = '<CompactRow' . $labelInner . ' control={<Fragment/>}/>';
 
-                    $rows[$stepGroup][$lineGroup][] = ['w' => $contentW, 'c' => $contentC];
+                    $rows[$stepGroup][$lineGroup][] = ['w' => $contentW, 'c' => $contentC, 'needCheck' => false];
                 } else if (isset($field['path']) && $field['path']) {
                     $pathA = explode(".", $field['path']);
                     $path = $pathA[0] . '.' . $pathA[1];
@@ -167,7 +167,8 @@ class InGeneratorEditForms extends Command
                             'TP_KEY',
                             'TP_OBJECT_SCHEMA',
                             'TP_OBJECT_KEY',
-                            'TP_OBJECT_SORT'
+                            'TP_OBJECT_SORT',
+                            'editType',
                         ],
                         [
                             $tpValueObj,
@@ -180,6 +181,7 @@ class InGeneratorEditForms extends Command
                             $fieldObjectProperty ? $fieldObjectProperty['schema'] : '',
                             $fieldObjectProperty ? $fieldObjectProperty['key'] : '',
                             $tpObjectSortStr,
+                            $editItem['config']['type']
                         ],
                         $fieldTemplateData['template']
                     );
@@ -196,7 +198,7 @@ class InGeneratorEditForms extends Command
                     $contentC = '<CompactRow' . $labelInner . ' control={' . $fieldTemplate . '}/>';
                     // $tpCompactRows[] = $content;
 
-                    $rows[$stepGroup][$lineGroup][] = ['w' => $contentW, 'c' => $contentC];
+                    $rows[$stepGroup][$lineGroup][] = ['w' => $contentW, 'c' => $contentC, 'needCheck' => true, 'propertyKey' => $fieldProperty['key']];
                 }
             }
             $maxCols = 1;
