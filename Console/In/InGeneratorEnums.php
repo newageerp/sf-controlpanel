@@ -51,7 +51,7 @@ class InGeneratorEnums extends Command
                 'label' => $enum['config']['title'],
             ];
             $enums[$enum['config']['entity']][$enum['config']['property']][$enum['config']['value']] = $enum['config']['title'];
-            $enumsColors[$enum['config']['entity']][$enum['config']['property']][$enum['config']['value']] = $enum['config']['badgeVariant'];
+            $enumsColors[$enum['config']['entity']][$enum['config']['property']][$enum['config']['value']] = isset($enum['config']['badgeVariant']) && $enum['config']['badgeVariant']?$enum['config']['badgeVariant']:'slate-50';
         }
 
         foreach ($enums as $slug => $propertyKeys) {
