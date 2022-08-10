@@ -53,7 +53,7 @@ class EntitiesUtils
     {
         foreach ($this->entities as $entity) {
             if ($entity['schema'] === $slug) {
-                return isset($entity['required']) && $entity['required'] ? json_decode($entity['required'], true) : [];
+                return isset($entity['required']) && $entity['required'] ? $entity['required'] : [];
             }
         }
         return [];
