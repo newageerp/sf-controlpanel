@@ -192,7 +192,7 @@ class InGeneratorEditForms extends Command
 
                     $labelInner = '';
                     if (!$field['hideLabel']) {
-                        $labelInner = ' label={<Label required={"' . ($isRequired ? 'true' : 'false') . '"}>{t(\'' . $fieldProperty['title'] . '\')}</Label>}';
+                        $labelInner = ' label={<Label required={' . ($isRequired ? 'true' : 'false') . '}>{t(\'' . $fieldProperty['title'] . '\')}</Label>}';
                     }
 
 
