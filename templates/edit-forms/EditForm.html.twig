@@ -43,7 +43,7 @@ export default function {{ TP_COMP_NAME }}(props: Props) {
                             hiddenFields.push('{{ field.propertyKey }}');
                         }
                     {% endif %}
-                {% endif %}
+                {% endfor %}
             {% endfor %}
         {% endfor %}
     }
