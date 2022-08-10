@@ -31,7 +31,7 @@ export default function {{ TP_COMP_NAME }}(props: Props) {
                 {% for field in row %}
                     {% if field.needCheck %}
                         if (!!schemaFieldVisibility['{{ field.propertyKey }}'] && schemaFieldVisibility['{{ field.propertyKey }}']({
-                            '{{ TP_SCHEMA }}',
+                            schema: '{{ TP_SCHEMA }}',
                             element: props.element,
                             user: UIConfig.userState,
                             parentElement: undefined,
