@@ -108,6 +108,7 @@ export default function {{ TP_COMP_NAME_DATA_SOURCE }}(props: Props) {
         if (val !== _el[key]) {
             setHasChanges(true)
             _el[key] = val
+            setElement(_el)
 
             _el = await UIConfig.onEditElementUpdate('{{ TP_SCHEMA }}', key, val, _el, updateElement)
 
