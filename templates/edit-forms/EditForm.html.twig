@@ -22,41 +22,52 @@ interface Props {
 }
 
 export default function {{ TP_COMP_NAME }}(props: Props) {
-    let hiddenFields: any = []
-    const schemaFieldVisibility = fieldVisibility['{{ TP_SCHEMA }}'];
-    if (schemaFieldVisibility && !props.skipHiddenCheck) {
-        
-        {% for stepRows in rows %}
-            {% for row in stepRows %}
-                {% for field in row %}
-                    {% if field.needCheck %}
-                        if (!!schemaFieldVisibility['{{ field.propertyKey }}'] && schemaFieldVisibility['{{ field.propertyKey }}']({
-                            schema: '{{ TP_SCHEMA }}',
-                            element: props.element,
-                            user: UIConfig.userState,
-                            parentElement: undefined,
-                            hasChanges: props.hasChanges,
-                            updateElement: props.onChange,
-                            type: '{{ editType }}',
-                            isEdit: true
-                        })) {
-                            hiddenFields.push('{{ field.propertyKey }}');
-                        }
-                    {% endif %}
-                {% endfor %}
-            {% endfor %}
-        {% endfor %}
-    }
+    const [hiddenFields, setHiddenFields] = useState<string[]>([]);
 
     const { element, onChange } = props;
     const { t } = useTranslation();
 
-    UIConfig.resetFieldsToDefValues(
-        '{{ TP_SCHEMA }}',
-        props.element,
-        JSON.parse(JSON.stringify(hiddenFields)),
-        props.onChangeBatch,
-    )
+    useEffect(() => {
+        let _hiddenFields: any = []
+        const schemaFieldVisibility = fieldVisibility['{{ TP_SCHEMA }}'];
+        if (schemaFieldVisibility && !props.skipHiddenCheck) {
+            
+            {% for stepRows in rows %}
+                {% for row in stepRows %}
+                    {% for field in row %}
+                        {% if field.needCheck %}
+                            if (!!schemaFieldVisibility['{{ field.propertyKey }}'] && schemaFieldVisibility['{{ field.propertyKey }}']({
+                                schema: '{{ TP_SCHEMA }}',
+                                element: props.element,
+                                user: UIConfig.userState,
+                                parentElement: undefined,
+                                hasChanges: props.hasChanges,
+                                updateElement: props.onChange,
+                                type: '{{ editType }}',
+                                isEdit: true
+                            })) {
+                                _hiddenFields.push('{{ field.propertyKey }}');
+                            }
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+            {% endfor %}
+        }
+        if (JSON.stringify(hiddenFields) !== JSON.stringify(_hiddenFields)) {
+            setHiddenFields(_hiddenFields);
+        }
+    }, [element]);
+
+    useEffect(() => {
+        UIConfig.resetFieldsToDefValues(
+            '{{ TP_SCHEMA }}',
+            props.element,
+            JSON.parse(JSON.stringify(hiddenFields)),
+            props.onChangeBatch,
+        )
+    }, [hiddenFields]);
+
+    
 
     if (props.compact) {
         return (
