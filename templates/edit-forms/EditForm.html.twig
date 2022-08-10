@@ -99,11 +99,11 @@ export default function {{ TP_COMP_NAME }}(props: Props) {
                         <div className="flex items-center justify-start gap-4">
                     {% endif %}
                     {% for field in row %}
-                        {% if row.needCheck %}
+                        {% if field.needCheck %}
                             {hiddenFields.indexOf('{{ field.propertyKey }}') === -1 &&
                         {% endif %}
                         {{ field.w|raw }}
-                        {% if row.needCheck %}
+                        {% if field.needCheck %}
                             }
                         {% endif %}
                     {% endfor %}
