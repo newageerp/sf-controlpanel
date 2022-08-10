@@ -69,7 +69,7 @@ export default function {{ TP_COMP_NAME }}(props: Props) {
                         {% endif %}
                         {% for field in row %}
                             {% if field.needCheck %}
-                                {hiddenFields.indexOf('{{ row.propertyKey }}') === -1 &&
+                                {hiddenFields.indexOf('{{ field.propertyKey }}') === -1 &&
                             {% endif %}
                             {{ field.c|raw }}
                             {% if field.needCheck %}
@@ -100,7 +100,7 @@ export default function {{ TP_COMP_NAME }}(props: Props) {
                     {% endif %}
                     {% for field in row %}
                         {% if row.needCheck %}
-                            {hiddenFields.indexOf('{{ row.propertyKey }}') === -1 &&
+                            {hiddenFields.indexOf('{{ field.propertyKey }}') === -1 &&
                         {% endif %}
                         {{ field.w|raw }}
                         {% if row.needCheck %}
