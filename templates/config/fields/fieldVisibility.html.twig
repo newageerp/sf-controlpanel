@@ -1,0 +1,32 @@
+import { NaeSPropertiesKeys } from "../NaeSPropertiesKeys";
+import { NaeSSchemaMap } from "../NaeSSchema";
+
+export interface FieldVisibilityParams {
+  schema: string;
+  element: any;
+  user: any;
+  parentElement?: any;
+  hasChanges?: boolean;
+  updateElement?: (key: string, val: any) => void;
+}
+
+export interface IFieldVisibility {
+  [key: string]: {
+    [key: string]: (props: FieldVisibilityParams) => boolean;
+  };
+}
+
+export const resetFieldsToDefValues = (
+  schema: string,
+  element: any,
+  hiddenFields: string[],
+  updateElementBatch: (updates: any) => void,
+) => {
+  if (!element) return;
+};
+
+export const fieldsResetToDefFields = {};
+
+export const fieldVisibility: IFieldVisibility = {
+  
+}

@@ -18,6 +18,7 @@ import { getHookForSchema, getSelectorForSchema } from "../../UserComponents/Mod
 import { IUIBuilderTabItem } from "@newageerp/nae-react-ui/dist/UIBuilderPages/UIBuilderTabsPage";
 import { onEditElementUpdate } from "../../config/fields/onEditElementUpdate";
 import { editPopupBySchemaAndType } from "../editforms/EditPopup";
+import { fieldVisibility } from "../../config/fields/fieldVisibility";
 
 // import {
 //     NaeSSchemaFilterKeys,
@@ -40,7 +41,7 @@ export default function InitComponent(props: Props) {
             getHookForSchema={getHookForSchema}
             getSelectorForSchema={getSelectorForSchema}
             userState={userState}
-            fieldVisibility={() => ({})}
+            fieldVisibility={ () => fieldVisibility}
             router={(props) => {
                 history.push(props.path, props.options);
             }}
