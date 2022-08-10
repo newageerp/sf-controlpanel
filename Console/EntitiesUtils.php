@@ -49,6 +49,16 @@ class EntitiesUtils
         return '';
     }
 
+    public function getRequiredBySlug(string $slug)
+    {
+        foreach ($this->entities as $entity) {
+            if ($entity['schema'] === $slug) {
+                return isset($entity['required']) && $entity['required'] ? json_decode($entity['required'], true) : [];
+            }
+        }
+        return [];
+    }
+
     public function getClassNameBySlug(string $slug)
     {
         foreach ($this->entities as $entity) {
@@ -81,7 +91,8 @@ class EntitiesUtils
         ];
 
         foreach ($this->defaultItems as $df) {
-            if ($df['config']['schema'] === $schema &&
+            if (
+                $df['config']['schema'] === $schema &&
                 isset($df['config']['defaultSort']) &&
                 $df['config']['defaultSort']
             ) {

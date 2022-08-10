@@ -52,6 +52,23 @@ export default function {{ TP_COMP_NAME_DATA_SOURCE }}(props: Props) {
         saveData(element, props.id).then((res: any) => {
             if (res) {
                 if (res.error) {
+                    let errorText = typeof res.error === 'string' ? res.error : ''
+                    if (props.error && res.error.response && res.error.response.data) {
+                        errorText = res.error.response.data.description
+                    }
+
+                    if (
+                        errorText &&
+                        errorText[0] === '{' &&
+                        errorText[errorText.length - 1] === '}'
+                    ) {
+                        const er = JSON.parse(errorText)
+                        if (er.description) {
+                            errorText = er.description
+                        }
+                    }
+                    
+                    UIConfig.toast.error(errorText)
                 } else {
                     props.onSave(res.data.element, isNew, '{{ TP_SCHEMA }}');
                 }

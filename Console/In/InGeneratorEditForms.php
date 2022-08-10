@@ -54,6 +54,8 @@ class InGeneratorEditForms extends Command
         $generatedPathDataSource = Utils::generatedPath('editforms/forms-data-source');
 
         foreach ($editItems as $editItem) {
+            $requiredFields = $this->entitiesUtils->getRequiredBySlug($editItem['config']['schema']);
+
             $tpImports = [];
 
             $compName = Utils::fixComponentName(
@@ -108,12 +110,16 @@ class InGeneratorEditForms extends Command
 
                     $rows[$stepGroup][$lineGroup][] = ['w' => $contentW, 'c' => $contentC, 'needCheck' => false];
                 } else if (isset($field['path']) && $field['path']) {
+
+
                     $pathA = explode(".", $field['path']);
                     $path = $pathA[0] . '.' . $pathA[1];
                     $fieldProperty = $this->propertiesUtils->getPropertyForPath($path);
                     $fieldObjectProperty = null;
                     $objectSort = [];
                     $fieldPropertyNaeType = '';
+                    $isRequired = in_array($fieldProperty['key'], $requiredFields);
+
                     if ($fieldProperty) {
                         $fieldPropertyNaeType = $this->propertiesUtils->getPropertyNaeType($fieldProperty, $field);
 
@@ -186,7 +192,7 @@ class InGeneratorEditForms extends Command
 
                     $labelInner = '';
                     if (!$field['hideLabel']) {
-                        $labelInner = ' label={<Label>{t(\'' . $fieldProperty['title'] . '\')}</Label>}';
+                        $labelInner = ' label={<Label required={"' . ($isRequired ? 'true' : 'false') . '"}>{t(\'' . $fieldProperty['title'] . '\')}</Label>}';
                     }
 
 
