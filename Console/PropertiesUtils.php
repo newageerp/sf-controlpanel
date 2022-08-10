@@ -572,6 +572,17 @@ class PropertiesUtils
                     "template" => '<SelectAdvId withIcon={true} options={' . $compName . '[\'TP_KEY\']} selectedId={TP_VALUE} onSelectId={TP_ON_CHANGE} />'
                 ];
             case 'object':
+                // fieldDependency
+                $extraFilter = '';
+                if (isset($column['fieldDependency']) && $column['fieldDependency']) {
+                    [$filterKey, $filterValue] = explode(":", $column['fieldDependency']);
+                    $extraFilter =  'filters={[
+                                    {"and": [
+                                        ["' . $filterKey . '", "=", element.' . $filterValue . ', true]
+                                    ]}
+                                ]}
+                ';
+                }
                 return [
                     "import" => 'import { SelectAdvData } from "@newageerp/ui.form.base.form-pack";',
                     "template" => '<SelectAdvData 
@@ -583,6 +594,7 @@ class PropertiesUtils
                         parentElement={element}
                         parentSchema={"TP_SCHEMA"}
                         sort={TP_OBJECT_SORT}
+                        ' . $extraFilter . '
                         />'
                 ];
             case 'file':
@@ -596,7 +608,7 @@ class PropertiesUtils
                     "template" => '<FilePickerMultiple width="tw3-w-full" val={TP_VALUE} onChange={TP_ON_CHANGE}  folder={"TP_SCHEMA/TP_KEY"}/>'
                 ];
 
-            default :
+            default:
                 return [
                     "import" => '',
                     "template" => '<Fragment/>'
