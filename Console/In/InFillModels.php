@@ -282,7 +282,9 @@ class InFillModels extends Command
             $o = $modelProperties[$m];
 
             $struct = "";
-            $oFields = [];
+            $oFields = [
+                '_viewTitle'
+            ];
 
             foreach ($o as $el) {
                 if ($el['type'] === "object") {
