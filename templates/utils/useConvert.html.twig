@@ -5,6 +5,7 @@ interface Props {
   from: string;
   to: string;
   id: number;
+  inPopup?: boolean;
 }
 
 export default function useConvert(props: Props) {
@@ -19,7 +20,7 @@ export default function useConvert(props: Props) {
       },
     },
     type: "main",
-    inPopup: true,
+    inPopup: !!props.inPopup,
   };
 
   const openLink = () => {
