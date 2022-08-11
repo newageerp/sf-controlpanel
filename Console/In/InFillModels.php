@@ -281,7 +281,8 @@ class InFillModels extends Command
 
             $o = $modelProperties[$m];
 
-            $struct = "";
+            $struct = "_viewTitle: string,
+            ";
             $oFields = [
                 '_viewTitle'
             ];
