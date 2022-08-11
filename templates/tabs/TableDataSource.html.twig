@@ -303,7 +303,8 @@ export default function {{ tpCompName }}(props: Props) {
                     export={!!exports?{
                         schema: '{{ schema }}',
                         requestFunc: OpenApi.useURequest,
-                        exports: exports
+                        exports: exports,
+                        exportOptions: {filter: prepareFilter()}
                         }: undefined
                     }
                     search={
