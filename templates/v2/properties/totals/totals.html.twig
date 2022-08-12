@@ -1,7 +1,25 @@
 import React, {Fragment} from 'react'
+import { NumberCardWidget } from '@newageerp/v2.widgets.number-card-widget'
+import { use{{ slugUc }}HookNae } from '../../../../Components/Hooks/use{{ slugUc }}HookNae'
+import { PropsId } from '../../../../UserComponents/ModelsCacheData/types'
 
-export default function {{ compName }} {
+export default function {{ compName }}() {
     return (
         <Fragment/>
     )
 }
+
+{% for total in totals %}
+export default function {{ total.compName }}(props: PropsId) {
+    const element = use{{ slugUc }}HookNae();
+    if (!element) {
+        return <Fragment/>
+    }
+    return (
+        <NumberCardWidget
+            title={"{{ total.title }}"}
+            number={element['{{total.key}}']}
+        />
+    )
+}
+{% endfor %}

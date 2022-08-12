@@ -37,9 +37,21 @@ class PropertyTotalService
             $slugPath = Utils::generatedV2Path('properties/' . $slugUc);
             $componentName = Utils::fixComponentName($slug . 'Totals');
 
+            $totals = array_map(
+                function ($item) use ($slug) {
+                    $item['config']['compName'] = Utils::fixComponentName($slug . 'Totals-' . $item['config']['key']);
+                    return $item['config'];
+                },
+                $totals
+            );
+
             $tService->writeToFileOnChanges(
                 $slugPath . '/' . $componentName . '.tsx',
-                ['compName' => $componentName]
+                [
+                    'compName' => $componentName,
+                    'totals' => $totals,
+                    'slugUc' => $slugUc,
+                ]
             );
         }
     }
