@@ -13,6 +13,15 @@ class Utils
         return $generatedPath;
     }
 
+    public static function generatedV2Path(string $folder) {
+        $fs = new Filesystem();
+        $generatedPath = LocalConfigUtils::getFrontendGeneratedPath() . '/v2/'.$folder;
+        if (!$fs->exists($generatedPath)) {
+            $fs->mkdir($generatedPath);
+        }
+        return $generatedPath;
+    }
+
     public static function generatedPath(string $folder) {
         $fs = new Filesystem();
         $generatedPath = LocalConfigUtils::getFrontendGeneratedPath() . '/'.$folder;

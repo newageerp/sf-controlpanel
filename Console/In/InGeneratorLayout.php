@@ -7,6 +7,7 @@ use Newageerp\SfControlpanel\Console\LocalConfigUtils;
 use Newageerp\SfControlpanel\Console\PropertiesUtils;
 use Newageerp\SfControlpanel\Console\Utils;
 use Newageerp\SfControlpanel\Service\MenuService;
+use Newageerp\SfControlpanel\Service\Properties\PropertyTotalService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -138,7 +139,7 @@ class InGeneratorLayout extends Command
             'layout/auth/AuthLogin.html.twig' => ['auth', 'AuthLogin'],
 
             'layout/main/App.html.twig' => ['main', 'App'],
-//            'layout/main/AppRouting.html.twig' => ['main', 'AppRouting'],
+            //            'layout/main/AppRouting.html.twig' => ['main', 'AppRouting'],
             'layout/main/InitComponent.html.twig' => ['main', 'InitComponent'],
 
 
@@ -150,7 +151,7 @@ class InGeneratorLayout extends Command
         $settings = LocalConfigUtils::getCpConfigFileData('settings');
 
         foreach ($templates as $template => $target) {
-            $fileName = Utils::generatedPath($target[0]) . '/'.$target[1].'.tsx';
+            $fileName = Utils::generatedPath($target[0]) . '/' . $target[1] . '.tsx';
             $generatedContent = $twig->load($template)->render(['hasTasksApp' => $hasTasksApp, 'settings' => $settings]);
             Utils::writeOnChanges($fileName, $generatedContent);
         }
@@ -173,7 +174,7 @@ class InGeneratorLayout extends Command
 
         foreach ($templates as $template => $target) {
             $ext = 'tsx';
-            $fileName = Utils::generatedConfigPath($target[0]) . '/'.$target[1].'.'.$ext;
+            $fileName = Utils::generatedConfigPath($target[0]) . '/' . $target[1] . '.' . $ext;
             if (!file_exists($fileName)) {
                 $generatedContent = $twig->load($template)->render();
                 Utils::writeOnChanges($fileName, $generatedContent);
@@ -181,18 +182,21 @@ class InGeneratorLayout extends Command
         }
 
         // getFrontendModelsCachePath
-        $fileName = LocalConfigUtils::getFrontendModelsCachePath().'/NotesNameResolver.tsx';
+        $fileName = LocalConfigUtils::getFrontendModelsCachePath() . '/NotesNameResolver.tsx';
         if (!file_exists($fileName)) {
             $generatedContent = $twig->load('user-components/notes/NotesNameResolver.html.twig')->render();
             Utils::writeOnChanges($fileName, $generatedContent);
         }
 
-        $fileName = LocalConfigUtils::getFrontendModelsCachePath().'/types.ts';
+        $fileName = LocalConfigUtils::getFrontendModelsCachePath() . '/types.ts';
         if (!file_exists($fileName)) {
             $generatedContent = $twig->load('user-components/types.html.twig')->render();
             Utils::writeOnChanges($fileName, $generatedContent);
         }
 
+
+        $propertyTotalService = new PropertyTotalService();
+        $propertyTotalService->generate();
 
         return Command::SUCCESS;
     }

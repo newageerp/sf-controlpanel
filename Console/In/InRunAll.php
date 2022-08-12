@@ -45,6 +45,8 @@ class InRunAll extends Command
 
             $greetInput = new ArrayInput([]);
 
+            shell_exec('rm -rf /tmp/*');
+
             $command = $this->getApplication()->find($commandName);
             $returnCode = $command->run($greetInput, $output);
 
