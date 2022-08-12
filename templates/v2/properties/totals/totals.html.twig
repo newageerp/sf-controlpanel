@@ -1,6 +1,6 @@
 import React, {Fragment} from 'react'
 import { NumberCardWidget, NumberWidgetVariant } from '@newageerp/v2.widgets.number-card-widget'
-import { use{{ slugUc }}HookNae } from '../../../../Components/Hooks/use{{ slugUc }}HookNae'
+import { use{{ slugUc }}HookNae, I{{ slugUc }}ModelNae } from '../../../../Components/Hooks/use{{ slugUc }}HookNae'
 import { PropsId } from '../../../../UserComponents/ModelsCacheData/types'
 
 export function {{ compName }}() {
@@ -11,7 +11,7 @@ export function {{ compName }}() {
 
 {% for total in totals %}
 export function {{ total.compName }}(props: PropsId) {
-    const element = use{{ slugUc }}HookNae(props.id);
+    const element : I{{ slugUc }}ModelNae = use{{ slugUc }}HookNae(props.id);
     if (!element) {
         return <Fragment/>
     }
