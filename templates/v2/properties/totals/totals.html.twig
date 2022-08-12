@@ -24,3 +24,9 @@ export function {{ total.compName }}(props: PropsId) {
     )
 }
 {% endfor %}
+
+export const {{ compName }}Map {
+    {% for total in totals %}
+    '{{total.key}}': {{ total.compName }},
+    {% endfor %}
+}
