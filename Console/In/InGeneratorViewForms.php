@@ -145,7 +145,7 @@ class InGeneratorViewForms extends Command
                         $labelInner = ' label={<Label>{t(\'' . $fieldProperty['title'] . '\')}</Label>}';
                     }
 
-                    $content = '<' . $compactPrefix . 'Row' . $labelInner . ' control={' . $fieldTemplate . '}/>';
+                    $content = '<' . $compactPrefix . 'Row' . $labelInner . ' control={getFieldNaeViewByPath("'.$field['path'].'", element.id)}/>';
                     $tpCompactRows[] = $content;
                 }
             }

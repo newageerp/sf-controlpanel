@@ -4,6 +4,7 @@ import React, {Fragment} from 'react'
 {% for import in imports %}
     {{ import|raw }}
 {% endfor %}
+import { getFieldNaeViewByPath } from '../../../UserComponents/ModelsCacheData/ModelFields';
 
 interface Props {
     element: any
