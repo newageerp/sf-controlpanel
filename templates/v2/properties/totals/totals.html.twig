@@ -32,7 +32,7 @@ export function {{ total.compName }}(props: PropsId) {
             title={"{{ total.title }}"}
             number={element['{{total.key}}']}
             variant={NumberWidgetVariant.white}
-            asFloat={{% if total.typeFormat == 'float' %}true{% else %}false{% endif %}}
+            asFloat={ {% if total.typeFormat == 'float' %}true{% else %}false{% endif %} }
         />
     )
 }
