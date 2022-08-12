@@ -3,11 +3,23 @@ import { NumberCardWidget, NumberWidgetVariant } from '@newageerp/v2.widgets.num
 import { use{{ slugUc }}HookNae, I{{ slugUc }}ModelNae } from '../../../../Components/Hooks/use{{ slugUc }}HookNae'
 import { PropsId } from '../../../../UserComponents/ModelsCacheData/types'
 
-export function {{ compName }}() {
+interface Props {
+    id: number,
+    totals: ({% for totalIndex, total in totals %}{% if totalIndex != 0 %} | {% endif %}"{{ total.key }}"{% endfor %})[]
+}
+
+export function {{ compName }}(props: Props) {
     return (
-        <Fragment/>
+        <Fragment>
+            {props.totals.map((totalKey: string, totalIndex: number) => {
+                const Comp : any = {{ compName }}Map[totalKey];
+
+                return <Comp id={props.id}/>
+            })}
+        </Fragment>
     )
 }
+
 
 {% for total in totals %}
 export function {{ total.compName }}(props: PropsId) {
@@ -25,7 +37,7 @@ export function {{ total.compName }}(props: PropsId) {
 }
 {% endfor %}
 
-export const {{ compName }}Map = {
+export const {{ compName }}Map : any = {
     {% for total in totals %}
     '{{total.key}}': {{ total.compName }},
     {% endfor %}
