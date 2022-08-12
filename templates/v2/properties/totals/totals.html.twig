@@ -3,14 +3,14 @@ import { NumberCardWidget, NumberWidgetVariant } from '@newageerp/v2.widgets.num
 import { use{{ slugUc }}HookNae } from '../../../../Components/Hooks/use{{ slugUc }}HookNae'
 import { PropsId } from '../../../../UserComponents/ModelsCacheData/types'
 
-export default function {{ compName }}() {
+export function {{ compName }}() {
     return (
         <Fragment/>
     )
 }
 
 {% for total in totals %}
-export default function {{ total.compName }}(props: PropsId) {
+export function {{ total.compName }}(props: PropsId) {
     const element = use{{ slugUc }}HookNae(props.id);
     if (!element) {
         return <Fragment/>
