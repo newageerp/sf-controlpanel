@@ -612,7 +612,7 @@ class PropertiesUtils
 
                 return [
                     'import' => '',
-                    'template' => '<UI.Form.Array schema={"TP_SCHEMA"} title="" value={TP_VALUE} onChange={TP_ON_CHANGE} tab={functions.tabs.getTabFromSchemaAndType("' . $tabSchema . '", "' . $tabType . '")} parentElement={element} />'
+                    'template' => '<UI.Form.Array schema={"' . $tabSchema . '"} title="" value={TP_VALUE} onChange={TP_ON_CHANGE} tab={functions.tabs.getTabFromSchemaAndType("' . $tabSchema . '", "' . $tabType . '")} parentElement={element} />'
                 ];
             default:
                 return [
