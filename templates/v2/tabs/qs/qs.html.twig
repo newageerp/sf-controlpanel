@@ -2,6 +2,6 @@ import React, {Fragment} from 'react'
 
 export const {{ compName }} = {
     {% for tab in tabs %}
-    '{{ tab.type }}': {{ tab.qsJs }},
+    '{{ tab.type }}': {{ tab.qsJs|raw }},
     {% endfor %}
 }
