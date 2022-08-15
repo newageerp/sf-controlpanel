@@ -607,7 +607,13 @@ class PropertiesUtils
                     "import" => 'import { FilePickerMultiple } from "@newageerp/ui.form.base.form-pack";',
                     "template" => '<FilePickerMultiple width="tw3-w-full" val={TP_VALUE} onChange={TP_ON_CHANGE}  folder={"TP_SCHEMA/TP_KEY"}/>'
                 ];
+            case 'array':
+                [$tabSchema, $tabType] = explode(':', $column['arrayRelTab']);
 
+                return [
+                    'import' => '',
+                    'template' => '<UI.Form.Array schema={"TP_SCHEMA"} title="" value={TP_VALUE} onChange={TP_ON_CHANGE} tab={functions.tabs.getTabFromSchemaAndType("' . $tabSchema . '", "' . $tabType . '")} parentElement={element} />'
+                ];
             default:
                 return [
                     "import" => '',
