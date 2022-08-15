@@ -48,7 +48,6 @@ class InGeneratorTabs extends Command
 
         $defaultItems = LocalConfigUtils::getCpConfigFileData('defaults');
 
-        $tabsFile = $_ENV['NAE_SFS_CP_STORAGE_PATH'] . '/tabs.json';
         $tabItems = LocalConfigUtils::getCpConfigFileData('tabs');
 
         $generatedPath = Utils::generatedPath('tabs/tables');

@@ -127,3 +127,6 @@ services:
   Newageerp\SfControlpanel\Console\Out\OutRunAll:
     tags:
       - { name: 'console.command' }
+
+  Newageerp\SfControlpanel\Service\Defaults\DefaultsService:
+    arguments: [ ]
