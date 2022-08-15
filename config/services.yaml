@@ -132,3 +132,5 @@ services:
     arguments: [ ]
   Newageerp\SfControlpanel\Service\Tabs\TabsQuickSearchService:
     arguments: [ ]
+  Newageerp\SfControlpanel\Service\Tabs\TabsService:
+    arguments: [ ]

@@ -10,6 +10,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Newageerp\SfControlpanel\Console\LocalConfigUtils;
+use Newageerp\SfControlpanel\Service\Tabs\TabsService;
 use Newageerp\SfControlpanel\Service\TemplateService;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -21,13 +22,17 @@ class InGeneratorEditForms extends Command
 
     protected EntitiesUtils $entitiesUtils;
 
+    protected TabsService $tabsService;
+
     public function __construct(
         PropertiesUtils $propertiesUtils,
         EntitiesUtils   $entitiesUtils,
+        TabsService $tabsService,
     ) {
         parent::__construct();
         $this->propertiesUtils = $propertiesUtils;
         $this->entitiesUtils = $entitiesUtils;
+        $this->tabsService = $tabsService;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -40,6 +45,8 @@ class InGeneratorEditForms extends Command
         $editFormTemplate = $twig->load('edit-forms/EditForm.html.twig');
         $editFormDataSourceTemplate = $twig->load('edit-forms/EditFormDataSource.html.twig');
 
+
+        $tabs = LocalConfigUtils::getCpConfigFileData('tabs');
 
         $editsFile = $_ENV['NAE_SFS_CP_STORAGE_PATH'] . '/edit.json';
         $editItems = [];
@@ -121,12 +128,17 @@ class InGeneratorEditForms extends Command
                     $isRequired = in_array($fieldProperty['key'], $requiredFields);
 
                     if ($fieldProperty) {
+
+
+
                         $fieldPropertyNaeType = $this->propertiesUtils->getPropertyNaeType($fieldProperty, $field);
 
                         $pathArray = explode(".", $field['path']);
                         array_shift($pathArray);
                         $objectPath = implode(".", $pathArray);
-                        $fieldsToReturn[] = $objectPath;
+                        if ($fieldProperty['type'] !== 'array') {
+                            $fieldsToReturn[] = $objectPath;
+                        }
                         if (count($pathArray) >= 2) {
                             $fieldsToReturn[] = $pathA[1] . '.id';
 
@@ -140,6 +152,15 @@ class InGeneratorEditForms extends Command
                             $fieldObjectProperty = $this->propertiesUtils->getPropertyForPath($objectRelPath);
                             if ($fieldObjectProperty) {
                                 $objectSort = $this->entitiesUtils->getDefaultSortForSchema($fieldObjectProperty['schema']);
+                            }
+                        }
+
+                        if (isset($field['arrayRelTab']) && $field['arrayRelTab']) {
+                            [$tabSchema, $tabType] = explode(':', $field['arrayRelTab']);
+                            $tab = $this->tabsService->getTabForSchemaAndType($tabSchema, $tabType);
+                            if ($tab) {
+                                $tabFieldsToReturn = $this->tabsService->getFieldsToReturnForTab($tab);
+                                $fieldsToReturn[] = $objectPath . ':' . implode(',' . $tabFieldsToReturn);
                             }
                         }
                     }
