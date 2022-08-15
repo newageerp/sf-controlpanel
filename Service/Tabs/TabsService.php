@@ -32,7 +32,7 @@ class TabsService
 
     public function getFieldsToReturnForTab(array $tab)
     {
-        $fieldsToReturn = [];
+        $fieldsToReturn = ['id', 'scopes'];
         foreach ($tab['config']['columns'] as $field) {
             if (isset($field['path']) && $field['path']) {
                 $pathA = explode(".", $field['path']);
