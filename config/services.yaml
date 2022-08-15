@@ -130,3 +130,5 @@ services:
 
   Newageerp\SfControlpanel\Service\Defaults\DefaultsService:
     arguments: [ ]
+  Newageerp\SfControlpanel\Service\Tabs\TabsQuickSearchService:
+    arguments: [ ]
