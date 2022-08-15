@@ -23,7 +23,7 @@ class TabsQuickSearchService
     public function generate()
     {
         $tService = new TemplateService('v2/tabs/qs/qs.html.twig');
-        
+
         $tabsBySlug = [];
         foreach ($this->tabs as $tabItem) {
             $entity = $tabItem['config']['schema'];
@@ -41,7 +41,23 @@ class TabsQuickSearchService
 
             $tabsBySlug[$entity][] = [
                 'type' => $tabItem['config']['type'],
-                'qs' => $quickSearch,
+                'typeUc' => Utils::fixComponentName($tabItem['config']['type']),
+                'qs' => array_map(function ($item) {
+                    if (is_string($item)) {
+                        return [
+                            $item,
+                            'contains',
+                            'props.qs',
+                            true,
+                        ];
+                    }
+                    return [
+                        $item['key'],
+                        isset($item['method']) ? $item['method'] : 'contains',
+                        'props.qs',
+                        isset($item['directSelect']) ? $item['directSelect'] : true,
+                    ];
+                }, $quickSearch),
                 'qsJs' => json_encode($quickSearch),
             ];
         }

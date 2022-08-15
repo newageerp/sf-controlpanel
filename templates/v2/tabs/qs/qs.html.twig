@@ -5,3 +5,24 @@ export const {{ compName }} = {
     '{{ tab.type }}': {{ tab.qsJs|raw }},
     {% endfor %}
 }
+
+interface FilterProps {
+    qs: string,
+}
+
+{% for tab in tabs %}
+export const {{ compName }}{{ tab.typeUc }}Filter = (props: FilterProps) => {
+    let _or: any = [];
+    {% for qsFilter in tab.qs %}
+    _or.push(
+        [
+            qsFilter[0],
+            qsFilter[1],
+            props.qs,
+            qsFilter[2],
+        ]
+    )
+    {% endfor %}
+    return { or: _or };
+}
+{% endfor %}
