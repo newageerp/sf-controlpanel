@@ -17,7 +17,7 @@ export const {{ compName }}{{ tab.typeUc }}Filter = (props: FilterProps) => {
     _or.push(
         [
             '{{ qsFilter[0] }}',
-            'qsFilter[1]',
+            '{{ qsFilter[1] }}',
             props.qs,
             {% if qsFilter[2] %}true{% else %}false{% endif %},
         ]
