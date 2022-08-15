@@ -8,6 +8,7 @@ use Newageerp\SfControlpanel\Console\PropertiesUtils;
 use Newageerp\SfControlpanel\Console\Utils;
 use Newageerp\SfControlpanel\Service\MenuService;
 use Newageerp\SfControlpanel\Service\Properties\PropertyTotalService;
+use Newageerp\SfControlpanel\Service\Tabs\TabsQuickSearchService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -197,6 +198,9 @@ class InGeneratorLayout extends Command
 
         $propertyTotalService = new PropertyTotalService();
         $propertyTotalService->generate();
+
+        $tabsQs = new TabsQuickSearchService();
+        $tabsQs->generate();
 
         return Command::SUCCESS;
     }
