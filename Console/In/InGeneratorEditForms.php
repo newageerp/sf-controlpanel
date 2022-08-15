@@ -160,7 +160,7 @@ class InGeneratorEditForms extends Command
                             $tab = $this->tabsService->getTabForSchemaAndType($tabSchema, $tabType);
                             if ($tab) {
                                 $tabFieldsToReturn = $this->tabsService->getFieldsToReturnForTab($tab);
-                                $fieldsToReturn[] = $objectPath . ':' . implode(',' . $tabFieldsToReturn);
+                                $fieldsToReturn[] = $objectPath . ':' . implode(',', $tabFieldsToReturn);
                             }
                         }
                     }
