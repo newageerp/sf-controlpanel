@@ -19,13 +19,15 @@ class InGeneratorLayout extends Command
 
     protected PropertiesUtils $propertiesUtils;
     protected EntitiesUtils $entitiesUtils;
+    protected TabsQuickSearchService $tabsQsService;
 
-    public function __construct(PropertiesUtils $propertiesUtils, EntitiesUtils $entitiesUtils)
+    public function __construct(PropertiesUtils $propertiesUtils, EntitiesUtils $entitiesUtils, TabsQuickSearchService $tabsQsService)
     {
         parent::__construct();
 
         $this->propertiesUtils = $propertiesUtils;
         $this->entitiesUtils = $entitiesUtils;
+        $this->tabsQsService = $tabsQsService;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -199,8 +201,7 @@ class InGeneratorLayout extends Command
         $propertyTotalService = new PropertyTotalService();
         $propertyTotalService->generate();
 
-        $tabsQs = new TabsQuickSearchService();
-        $tabsQs->generate();
+        $this->tabsQsService->generate();
 
         return Command::SUCCESS;
     }
