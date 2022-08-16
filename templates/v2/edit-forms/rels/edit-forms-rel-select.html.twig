@@ -16,8 +16,10 @@ export const {{ compName }} = (props: Props) => {
         showEditPopup({
             id: 'new',
             schema: "{{ objectSchema }}",
-            onSaveCallback: () => {
+            onSaveCallback: (el, backFunc) => {
                 setReloadState(new Date().getTime());
+                backFunc();
+                props.onSelectId(el.id);
             }
         })
     }
