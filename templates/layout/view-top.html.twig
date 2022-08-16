@@ -23,7 +23,7 @@ export default function ViewTop(props: Props) {
             element={props.element}
             onEdit={props.extraOptions.onEdit}
             onRemove={props.extraOptions.onRemove}
-
+{% if showTasks %}
             tasksContent={
                 <TasksWidget
                     element={props.element}
@@ -35,6 +35,9 @@ export default function ViewTop(props: Props) {
                     userState={userState}
                 />
             }
+{% endif %}
+            showRemind={{% if showRemind %}true{% else %}false{% endif %}}
+            showBookmark={{% if showBookmark %}true{% else %}false{% endif %}}
 
             contentBefore1Line={
                 <UI.Widget.Widget

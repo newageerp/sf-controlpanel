@@ -50,7 +50,11 @@ class InGeneratorLayout extends Command
 
         // view top
         $viewTopTemplate = $twig->load('layout/view-top.html.twig');
-        $generatedContent = $viewTopTemplate->render();
+        $generatedContent = $viewTopTemplate->render([
+            'showTasks' => class_exists('App\Entity\Task'),
+            'showRemind' => class_exists('App\Entity\FollowUp'),
+            'showBookmark' => class_exists('App\Entity\Bookmark'),
+        ]);
         $fileName = Utils::generatedPath('layout/view') . '/ViewTop.tsx';
         Utils::writeOnChanges($fileName, $generatedContent);
 
