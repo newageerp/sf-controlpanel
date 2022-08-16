@@ -174,11 +174,11 @@ class InGeneratorEditForms extends Command
 
 
                     if ($naeType === 'object') {
-                        $compName = EditFormsRelSelectService::relSelectCompName($editItem, $field['path']);
+                        $objectCompName = EditFormsRelSelectService::relSelectCompName($editItem, $field['path']);
                         $fieldTemplateData['import'] = 'import { MainPaymentProjectTitle } from "../../v2/edit-forms/' . $slugUc . '/rel-select/' . $compName . '";';
                         $fieldTemplateData['template'] = str_replace(
                             'CUSTOM_NAME',
-                            $compName,
+                            $objectCompName,
                             $fieldTemplateData['template']
                         );
                     }
