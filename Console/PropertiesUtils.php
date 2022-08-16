@@ -191,7 +191,7 @@ class PropertiesUtils
         }
         $naeType = $this->getPropertyNaeType($property, $column);
 
-        if ($naeType === 'float' || $naeType === 'number' || $naeType === 'seconds-to-time') {
+        if ($naeType === 'float' || $naeType === 'float4' || $naeType === 'number' || $naeType === 'seconds-to-time') {
             return 'tw3-text-right';
         }
 
@@ -276,6 +276,12 @@ class PropertiesUtils
                 return [
                     "import" => 'import { Float } from "@newageerp/data.table.float";',
                     "template" => '<Float value={TP_VALUE}/>'
+                ];
+                break;
+            case 'float4':
+                return [
+                    "import" => 'import { Float4 } from "@newageerp/data.table.float-4";',
+                    "template" => '<Float4 value={TP_VALUE}/>'
                 ];
                 break;
             case 'number':
@@ -444,6 +450,12 @@ class PropertiesUtils
                     "template" => '<Float value={TP_VALUE}/>'
                 ];
                 break;
+            case 'float4':
+                return [
+                    "import" => 'import { Float } from "@newageerp/data.table.float-4";',
+                    "template" => '<Float4 value={TP_VALUE}/>'
+                ];
+                break;
             case 'number':
                 return [
                     "import" => 'import { Int } from "@newageerp/data.table.int";',
@@ -544,6 +556,11 @@ class PropertiesUtils
                 return [
                     "import" => 'import { InputFloat } from "@newageerp/ui.form.base.form-pack";',
                     "template" => '<InputFloat onChangeFloat={TP_ON_CHANGE} value={TP_VALUE} className={"field-float"}/>'
+                ];
+            case 'float4':
+                return [
+                    "import" => 'import { InputFloat4 } from "@newageerp/ui.form.base.form-pack";',
+                    "template" => '<InputFloat4 onChangeFloat={TP_ON_CHANGE} value={TP_VALUE} className={"field-float"}/>'
                 ];
             case 'number':
                 return [
