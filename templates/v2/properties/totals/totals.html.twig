@@ -20,18 +20,23 @@ export function {{ compName }}(props: Props) {
     )
 }
 
+interface TotalProps {
+    id: number,
+    customTitle?: string,
+    customVariant?: NumberWidgetVariant,
+}
 
 {% for total in totals %}
-export function {{ total.compName }}(props: PropsId) {
+export function {{ total.compName }}(props: TotalProps) {
     const element : I{{ slugUc }}ModelNae = use{{ slugUc }}HookNae(props.id);
     if (!element) {
         return <Fragment/>
     }
     return (
         <NumberCardWidget
-            title={"{{ total.title }}"}
+            title={props.customTitle?props.customTitle:"{{ total.title }}"}
             number={element['{{total.key}}']}
-            variant={NumberWidgetVariant.white}
+            variant={props.customVariant ? props.customVariant : NumberWidgetVariant.white}
             asFloat={ {% if total.typeFormat == 'float' %}true{% else %}false{% endif %} }
         />
     )
