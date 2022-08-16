@@ -10,6 +10,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Newageerp\SfControlpanel\Console\LocalConfigUtils;
+use Newageerp\SfControlpanel\Service\EditForms\EditFormsRelSelectService;
 use Newageerp\SfControlpanel\Service\Tabs\TabsService;
 use Newageerp\SfControlpanel\Service\TemplateService;
 use Symfony\Component\Filesystem\Filesystem;
@@ -173,7 +174,7 @@ class InGeneratorEditForms extends Command
 
 
                     if ($naeType === 'object') {
-                        $compName = '';
+                        $compName = EditFormsRelSelectService::relSelectCompName($editItem, $field['path']);
                         $fieldTemplateData['import'] = 'import { MainPaymentProjectTitle } from "../../v2/edit-forms/' . $slugUc . '/rel-select/' . $compName . '";';
                         $fieldTemplateData['template'] = str_replace(
                             'CUSTOM_NAME',
