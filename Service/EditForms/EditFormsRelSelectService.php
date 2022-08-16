@@ -28,6 +28,9 @@ class EditFormsRelSelectService
                 $path = $pathA[0] . '.' . $pathA[1];
 
                 $fieldProperty = $this->propertiesUtils->getPropertyForPath($path);
+                if (!$fieldProperty) {
+                    continue;
+                }
                 $type = $this->propertiesUtils->getPropertyNaeType($fieldProperty, $field);
 
                 if ($type === 'object') {
