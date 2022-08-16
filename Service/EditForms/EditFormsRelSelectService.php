@@ -31,6 +31,9 @@ class EditFormsRelSelectService
         foreach ($editItems as $editItem) {
             foreach ($editItem['config']['fields'] as $fieldIndex => $field) {
                 $pathA = explode(".", $field['path']);
+                if (count($pathA) < 3) {
+                    continue;
+                }
                 $path = $pathA[0] . '.' . $pathA[1];
 
                 $fieldProperty = $this->propertiesUtils->getPropertyForPath($path);
