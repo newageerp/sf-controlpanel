@@ -134,3 +134,5 @@ services:
     arguments: [ ]
   Newageerp\SfControlpanel\Service\Tabs\TabsService:
     arguments: [ ]
+  Newageerp\SfControlpanel\Service\EditForms\EditFormsRelSelectService:
+    arguments: [ ]

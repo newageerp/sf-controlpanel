@@ -1,0 +1,24 @@
+import { SelectAdvData } from "@newageerp/ui.form.base.form-pack";
+import React, {Fragment} from 'react'
+
+interface Props {
+    selectedId: number,
+    onSelectId: (e: any) => void,
+    parentElement: any
+}
+
+export const {{ compName }} = (props: Props) => {
+    return (
+        <SelectAdvData
+            withIcon={true}
+            schema="{{ objectSchema }}"
+            field="{{ key }}"
+            selectedId={props.selectedId}
+            onSelectId={props.onSelectId}
+            parentElement={props.parentElement}
+            parentSchema={"{{ schema }}"}
+            sort={ {{ sort|raw }} }
+            {{ extraFilter|raw }}
+        />
+    )
+}

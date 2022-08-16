@@ -6,6 +6,7 @@ use Newageerp\SfControlpanel\Console\EntitiesUtils;
 use Newageerp\SfControlpanel\Console\LocalConfigUtils;
 use Newageerp\SfControlpanel\Console\PropertiesUtils;
 use Newageerp\SfControlpanel\Console\Utils;
+use Newageerp\SfControlpanel\Service\EditForms\EditFormsRelSelectService;
 use Newageerp\SfControlpanel\Service\MenuService;
 use Newageerp\SfControlpanel\Service\Properties\PropertyTotalService;
 use Newageerp\SfControlpanel\Service\Tabs\TabsQuickSearchService;
@@ -21,14 +22,20 @@ class InGeneratorLayout extends Command
     protected PropertiesUtils $propertiesUtils;
     protected EntitiesUtils $entitiesUtils;
     protected TabsQuickSearchService $tabsQsService;
+    protected EditFormsRelSelectService $editFormsRelSelectService;
 
-    public function __construct(PropertiesUtils $propertiesUtils, EntitiesUtils $entitiesUtils, TabsQuickSearchService $tabsQsService)
-    {
+    public function __construct(
+        PropertiesUtils $propertiesUtils,
+        EntitiesUtils $entitiesUtils,
+        TabsQuickSearchService $tabsQsService,
+        EditFormsRelSelectService $editFormsRelSelectService,
+    ) {
         parent::__construct();
 
         $this->propertiesUtils = $propertiesUtils;
         $this->entitiesUtils = $entitiesUtils;
         $this->tabsQsService = $tabsQsService;
+        $this->editFormsRelSelectService = $editFormsRelSelectService;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -206,6 +213,8 @@ class InGeneratorLayout extends Command
 
         $utilsService = new UtilsService();
         $utilsService->generate();
+
+        $this->editFormsRelSelectService->generate();
 
         return Command::SUCCESS;
     }
