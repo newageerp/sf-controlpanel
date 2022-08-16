@@ -16,6 +16,7 @@ import { UserSpaceWrapperToolbarState } from "../../layout/toolbar/UserSpaceWrap
 import {FilterListData} from "@newageerp/sfs.list-toolbar.filter.filter-list-data"
 import {FilterListOptions} from "@newageerp/sfs.list-toolbar.filter.filter-list-options"
 import {FilterDate} from "@newageerp/sfs.list-toolbar.filter.filter-date"
+import { useLocationState } from 'use-location-state'
 {% if hasStatusFilter %}
 import { {{ schemaUC }}StatusesList } from "../../statuses/badges/{{ schemaUC }}Statuses";
 {% endif %}
@@ -117,7 +118,7 @@ export default function {{ tpCompName }}(props: Props) {
     const quickSearchFields : any = {{ quickSearch|raw }};
     const predefinedFilter : any = {{ filter|raw }};
 
-    const [dataState, setDateState] = useState(defaultState);
+    const [dataState, setDateState] = useLocationState("{{ tpCompName }}", defaultState);
 
     const setActivePage = (page: number) => {
         if (page !== dataState.page) {
