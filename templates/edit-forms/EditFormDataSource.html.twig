@@ -11,6 +11,7 @@ import { useRecoilState } from "recoil";
 import { UserSpaceWrapperToolbarState } from "../../layout/toolbar/UserSpaceWrapperToolbar";
 import { useLocation } from 'react-router-dom';
 import { WhiteCard } from '@newageerp/ui.cards.base.white-card';
+import { subscribe, unsubscribe } from '../../v2/utils/utils';
 
 interface Props {
     id: number | string,
@@ -103,18 +104,27 @@ export default function {{ TP_COMP_NAME_DATA_SOURCE }}(props: Props) {
         }
     }, [schemaGetDataParams.data.data])
 
-    const updateElement = async (key: string, val: any) => {
+    const updateElement = (key: string, val: any) => {
         let _el = JSON.parse(JSON.stringify(element))
         if (val !== _el[key]) {
             setHasChanges(true)
             _el[key] = val
             setElement(_el)
 
-            _el = await UIConfig.onEditElementUpdate('{{ TP_SCHEMA }}', key, val, _el, updateElement)
-
-            setElement(_el)
+            UIConfig.onEditElementUpdate('{{ TP_SCHEMA }}', key, val, _el, updateElement)
         }
     }
+
+    useEffect(() => {
+        const listener = (e: any) => {
+            updateElement(e.detail.key, e.detail.val);
+        }
+        subscribe("{{ TP_COMP_NAME_DATA_SOURCE }}Update", listener);
+
+        return () => {
+            unsubscribe("{{ TP_COMP_NAME_DATA_SOURCE }}Update", listener);
+        }
+    }, [updateElement]);
 
     const updateElementBatch =  (updates: any) => {
         let _el = JSON.parse(JSON.stringify(element))
