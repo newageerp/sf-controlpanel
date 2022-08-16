@@ -47,6 +47,9 @@ class EditFormsRelSelectService
                     $objectRelPath = implode(".", $relPathArray);
 
                     $fieldObjectProperty = $this->propertiesUtils->getPropertyForPath($objectRelPath);
+                    if (!$fieldObjectProperty) {
+                        continue;
+                    }
                     $objectSort = [];
                     if ($fieldObjectProperty) {
                         $objectSort = $this->entitiesUtils->getDefaultSortForSchema($fieldObjectProperty['schema']);
