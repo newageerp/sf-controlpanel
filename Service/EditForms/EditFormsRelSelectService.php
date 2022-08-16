@@ -79,6 +79,7 @@ class EditFormsRelSelectService
                             'schema' => $fieldProperty ? $fieldProperty['schema'] : '',
                             'sort' => json_encode($objectSort),
                             'extraFilter' => $extraFilter,
+                            'key' => $fieldObjectProperty ? $fieldObjectProperty['key'] : '',
                         ]
                     );
                 }
