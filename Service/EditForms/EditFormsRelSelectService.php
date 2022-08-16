@@ -78,6 +78,7 @@ class EditFormsRelSelectService
                             'sort' => json_encode($objectSort),
                             'extraFilter' => $extraFilter,
                             'key' => $fieldObjectProperty ? $fieldObjectProperty['key'] : '',
+                            'allowCreateRel' => isset($field['allowCreateRel']) && $field['allowCreateRel'] ? true : false
                         ]
                     );
                 }
@@ -85,7 +86,8 @@ class EditFormsRelSelectService
         }
     }
 
-    public static function relSelectCompName(array $editItem, string $path) {
+    public static function relSelectCompName(array $editItem, string $path)
+    {
         $pathA = explode(".", $path);
         $compName = Utils::fixComponentName(
             $editItem['config']['type'] . '-' . $pathA[1] . '-' . $pathA[2]

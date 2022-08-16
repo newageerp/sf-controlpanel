@@ -1,5 +1,6 @@
+import { UI } from "@newageerp/nae-react-ui";
 import { SelectAdvData } from "@newageerp/ui.form.base.form-pack";
-import React, {Fragment} from 'react'
+import React, { Fragment, useState } from 'react'
 
 interface Props {
     selectedId: string,
@@ -8,8 +9,22 @@ interface Props {
 }
 
 export const {{ compName }} = (props: Props) => {
+    const [reloadState, setReloadState] = useState(0);
+    {% if allowCreateRel %}
+    const { showEditPopup } = UI.Window.useNaeWindow();
+    const onNew = () => {
+        showEditPopup({
+            id: 'new',
+            schema: "{{ objectSchema }}",
+            onSaveCallback: () => {
+                setReloadState(new Date().getTime());
+            }
+        })
+    }
+    {% endif %}
     return (
         <SelectAdvData
+            reloadState={reloadState}
             withIcon={true}
             schema="{{ objectSchema }}"
             field="{{ key }}"
