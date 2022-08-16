@@ -10,7 +10,7 @@ interface Props {
 
 export const {{ compName }} = (props: Props) => {
     const [reloadState, setReloadState] = useState(0);
-    {% if allowCreateRel %}
+{% if allowCreateRel %}
     const { showEditPopup } = UI.Window.useNaeWindow();
     const onNew = () => {
         showEditPopup({
@@ -21,7 +21,7 @@ export const {{ compName }} = (props: Props) => {
             }
         })
     }
-    {% endif %}
+{% endif %}
     return (
         <SelectAdvData
             reloadState={reloadState}
@@ -33,6 +33,7 @@ export const {{ compName }} = (props: Props) => {
             parentElement={props.parentElement}
             parentSchema={"{{ schema }}"}
             sort={ {{ sort|raw }} }
+            {% if allowCreateRel %}onCreateNew={onNew}{% endif %}
             {{ extraFilter|raw }}
         />
     )
