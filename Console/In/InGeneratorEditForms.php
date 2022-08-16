@@ -166,6 +166,18 @@ class InGeneratorEditForms extends Command
                     }
 
                     $fieldTemplateData = $this->propertiesUtils->getDefaultPropertyEditValueTemplate($fieldProperty, $field);
+                    $naeType = $this->propertiesUtils->getPropertyNaeType($fieldProperty, $field);
+
+
+                    if ($naeType === 'object') {
+                        $fieldTemplateData['import'] = 'import { MainPaymentProjectTitle } from "../../v2/edit-forms/Payment/rel-select/MainPaymentProjectTitle";';
+                        $fieldTemplateData['template'] = str_replace(
+                            'CUSTOM_NAME',
+                            '',
+                            $fieldTemplateData['template']
+                        );
+                    }
+
                     $importTmp = $fieldTemplateData['import'];
                     if (!is_array($importTmp)) {
                         $importTmp = [$importTmp];

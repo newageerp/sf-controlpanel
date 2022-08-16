@@ -67,9 +67,7 @@ class EditFormsRelSelectService
                     $slugUc = Utils::fixComponentName($slug);
                     $folderPath = Utils::generatedV2Path('edit-forms/' . $slugUc . '/rel-select');
 
-                    $compName = Utils::fixComponentName(
-                        $editItem['config']['type'] . '-' . $pathA[1] . '-' . $pathA[2]
-                    );
+                    $compName = self::relSelectCompName($editItem, $field['path']);
 
                     $tService->writeToFileOnChanges(
                         $folderPath . '/' . $compName . '.tsx',
@@ -85,5 +83,13 @@ class EditFormsRelSelectService
                 }
             }
         }
+    }
+
+    public static function relSelectCompName(array $editItem, string $path) {
+        $pathA = explode(".", $path);
+        $compName = Utils::fixComponentName(
+            $editItem['config']['type'] . '-' . $pathA[1] . '-' . $pathA[2]
+        );
+        return $compName;
     }
 }

@@ -601,17 +601,11 @@ class PropertiesUtils
                 ';
                 }
                 return [
-                    "import" => 'import { SelectAdvData } from "@newageerp/ui.form.base.form-pack";',
-                    "template" => '<SelectAdvData 
-                        withIcon={true}
-                        schema="TP_OBJECT_SCHEMA"
-                        field="TP_OBJECT_KEY"
+                    "import" => '',
+                    "template" => '<CUSTOM_NAME 
                         selectedId={TP_VALUE_OBJ}
                         onSelectId={TP_ON_CHANGE_OBJ}
                         parentElement={element}
-                        parentSchema={"TP_SCHEMA"}
-                        sort={TP_OBJECT_SORT}
-                        ' . $extraFilter . '
                         />'
                 ];
             case 'file':
