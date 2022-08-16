@@ -2,6 +2,7 @@
 
 namespace Newageerp\SfControlpanel\Service\EditForms;
 
+use Newageerp\SfControlpanel\Console\EntitiesUtils;
 use Newageerp\SfControlpanel\Console\LocalConfigUtils;
 use Newageerp\SfControlpanel\Console\PropertiesUtils;
 use Newageerp\SfControlpanel\Console\Utils;
@@ -11,9 +12,14 @@ class EditFormsRelSelectService
 {
     protected PropertiesUtils $propertiesUtils;
 
-    public function __construct(PropertiesUtils $propertiesUtils)
-    {
+    protected EntitiesUtils $entitiesUtils;
+
+    public function __construct(
+        PropertiesUtils $propertiesUtils,
+        EntitiesUtils $entitiesUtils
+    ) {
         $this->propertiesUtils = $propertiesUtils;
+        $this->entitiesUtils = $entitiesUtils;
     }
 
     public function generate()
