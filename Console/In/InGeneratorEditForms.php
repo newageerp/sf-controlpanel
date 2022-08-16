@@ -61,6 +61,9 @@ class InGeneratorEditForms extends Command
         $generatedPathDataSource = Utils::generatedPath('editforms/forms-data-source');
 
         foreach ($editItems as $editItem) {
+            $slug = $editItem['config']['schema'];
+            $slugUc = Utils::fixComponentName($slug);
+
             $requiredFields = $this->entitiesUtils->getRequiredBySlug($editItem['config']['schema']);
 
             $tpImports = [];
@@ -170,10 +173,11 @@ class InGeneratorEditForms extends Command
 
 
                     if ($naeType === 'object') {
-                        $fieldTemplateData['import'] = 'import { MainPaymentProjectTitle } from "../../v2/edit-forms/Payment/rel-select/MainPaymentProjectTitle";';
+                        $compName = '';
+                        $fieldTemplateData['import'] = 'import { MainPaymentProjectTitle } from "../../v2/edit-forms/' . $slugUc . '/rel-select/' . $compName . '";';
                         $fieldTemplateData['template'] = str_replace(
                             'CUSTOM_NAME',
-                            '',
+                            $compName,
                             $fieldTemplateData['template']
                         );
                     }
