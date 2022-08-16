@@ -57,7 +57,7 @@ class EditFormsRelSelectService
                         [$filterKey, $filterValue] = explode(":", $field['fieldDependency']);
                         $extraFilter =  'filters={[
                                     {"and": [
-                                        ["' . $filterKey . '", "=", element.' . $filterValue . ', true]
+                                        ["' . $filterKey . '", "=", props.parentElement.' . $filterValue . ', true]
                                     ]}
                                 ]}
                 ';
