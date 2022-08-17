@@ -196,12 +196,14 @@ class InGeneratorEditForms extends Command
                     $tpOnChangeString = '(e: any) => onChange(\'' . $fieldProperty['key'] . '\', e.target.value)';
 
                     $tpValueObj = 'element.' . $fieldProperty['key'] . '?.id';
+                    $tpValueTitle = 'element.' . $fieldProperty['key'] . '?._viewTitle';
                     $tpOnChangeObj = '(e: any) => onChange(\'' . $fieldProperty['key'] . '\', {id: e})';
 
                     $tpObjectSortStr = json_encode($objectSort, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 
                     $fieldTemplate = str_replace(
                         [
+                            'TP_VALUE_TITLE',
                             'TP_VALUE_OBJ',
                             'TP_VALUE',
                             'TP_ON_CHANGE_OBJ',
