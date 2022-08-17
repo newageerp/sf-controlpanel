@@ -25,6 +25,7 @@ class EditFormsRelSelectService
     public function generate()
     {
         $tService = new TemplateService('v2/edit-forms/rels/edit-forms-rel-select.html.twig');
+        $tServiceSearch = new TemplateService('v2/edit-forms/rels/edit-forms-rel-select-search.html.twig');
 
         $editItems = LocalConfigUtils::getCpConfigFileData('edit');
 
@@ -75,7 +76,9 @@ class EditFormsRelSelectService
 
                     $compName = self::relSelectCompName($editItem, $field['path']);
 
-                    $tService->writeToFileOnChanges(
+                    $service = isset($field['popupSelectRel']) && $field['popupSelectRel'] ? $tService : $tServiceSearch;
+
+                    $service->writeToFileOnChanges(
                         $folderPath . '/' . $compName . '.tsx',
                         [
                             'compName' => $compName,
