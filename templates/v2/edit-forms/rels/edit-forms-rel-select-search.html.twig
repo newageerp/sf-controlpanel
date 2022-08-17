@@ -10,7 +10,8 @@ import { SquareButton } from "@newageerp/ui.buttons.base.square-button";
 interface Props {
     selectedId: any,
     onSelectId: (e: any) => void,
-    parentElement: any
+    parentElement: any,
+    field: string,
 }
 
 export const {{ compName }} = (props: Props) => {
@@ -33,7 +34,7 @@ export const {{ compName }} = (props: Props) => {
             onSaveCallback: (el, backFunc) => {
                 setReloadState(new Date().getTime());
                 backFunc();
-                props.onSelectId({id: el.id, _viewTitle: el._viewTitle});
+                props.onSelectId({id: el.id, [props.field]: el[props.field]});
             }
         })
     }
@@ -41,7 +42,7 @@ export const {{ compName }} = (props: Props) => {
     return (
         <Fragment>
             <div className="flex items-center gap-2">
-                <p className={"flex-grow tw3-border tw3-text-slate-800 tw3-text-sm tw3-border-slate-300 tw3-rounded tw3-px-3 tw3-py-2"}>{props.selectedId?._viewTitle}{" "}</p>
+                <p className={"flex-grow tw3-border tw3-text-slate-800 tw3-text-sm tw3-border-slate-300 tw3-rounded tw3-px-3 tw3-py-2"}>{props.selectedId?[props.field]}{" "}</p>
 {% if allowCreateRel %}
                 <span style={ {minWidth: 54, maxWidth: 54} }>
                     <SquareButton
@@ -74,7 +75,7 @@ export const {{ compName }} = (props: Props) => {
                     disableVerticalMargin={true} 
                     navigate={(schema: string, id: number | string, el: any) => {
                         setShowPopup(false);
-                        props.onSelectId({id: el.id, _viewTitle: el._viewTitle});
+                        props.onSelectId({id: el.id, [props.field]: el[props.field]});
                     }}
                     />
                 </Popup>

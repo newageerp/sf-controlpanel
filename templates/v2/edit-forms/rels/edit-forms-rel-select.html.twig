@@ -6,7 +6,8 @@ interface Props {
     selectedTitle?: string,
     selectedId: any,
     onSelectId: (e: any) => void,
-    parentElement: any
+    parentElement: any,
+    field: string,
 }
 
 export const {{ compName }} = (props: Props) => {
@@ -28,7 +29,7 @@ export const {{ compName }} = (props: Props) => {
             onSaveCallback: (el, backFunc) => {
                 setReloadState(new Date().getTime());
                 backFunc();
-                props.onSelectId({id: el.id, _viewTitle: el._viewTitle});
+                props.onSelectId({id: el.id, [props.field]: el[props.field]});
             }
         })
     }
@@ -40,7 +41,7 @@ export const {{ compName }} = (props: Props) => {
             schema="{{ objectSchema }}"
             field="{{ key }}"
             selectedId={props.selectedId?.id}
-            onSelectOption={(e:any) => props.onSelectId({id: e.value, _viewTitle: e.label})}
+            onSelectOption={(e:any) => props.onSelectId({id: e.value, [props.field]: e.label})}
             parentElement={props.parentElement}
             parentSchema={"{{ schema }}"}
             sort={ {{ sort|raw }} }

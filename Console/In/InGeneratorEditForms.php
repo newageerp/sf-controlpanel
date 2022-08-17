@@ -121,7 +121,7 @@ class InGeneratorEditForms extends Command
 
                     $rows[$stepGroup][$lineGroup][] = ['w' => $contentW, 'c' => $contentC, 'needCheck' => false];
                 } else if (isset($field['path']) && $field['path']) {
-
+                    $fullPathProperty = $this->propertiesUtils->getPropertyForPath($field['path']);
 
                     $pathA = explode(".", $field['path']);
                     $path = $pathA[0] . '.' . $pathA[1];
@@ -145,6 +145,7 @@ class InGeneratorEditForms extends Command
                         }
                         if (count($pathArray) >= 2) {
                             $fieldsToReturn[] = $pathA[1] . '.id';
+                            $fieldsToReturn[] = $pathA[1] . '.'.$fullPathProperty['key'];
 
 
                             $relPathArray = explode(".", $field['path']);
@@ -211,7 +212,8 @@ class InGeneratorEditForms extends Command
                             'TP_KEY',
                             'TP_OBJECT_SCHEMA',
                             'TP_OBJECT_KEY',
-                            'TP_OBJECT_SORT'
+                            'TP_OBJECT_SORT',
+                            'TP_FULL_PATH_KEY'
                         ],
                         [
                             $tpValueObj,
@@ -223,7 +225,8 @@ class InGeneratorEditForms extends Command
                             $fieldProperty['key'],
                             $fieldObjectProperty ? $fieldObjectProperty['schema'] : '',
                             $fieldObjectProperty ? $fieldObjectProperty['key'] : '',
-                            $tpObjectSortStr
+                            $tpObjectSortStr,
+                            $fullPathProperty['key']
                         ],
                         $fieldTemplateData['template']
                     );
