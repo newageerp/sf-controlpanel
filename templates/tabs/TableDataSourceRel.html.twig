@@ -205,7 +205,7 @@ export default function {{ tpCompName }}(props: Props) {
 
     return (
         <div ref={headerRef}>
-            {!(showSearch || showSort || showTabs || showCreate) &&
+            {(showSearch || showSort || showTabs || showCreate) &&
                 <SearchToolbar
                     onCreate={isCreatable?onCreate:undefined}
                     search={
@@ -225,7 +225,7 @@ export default function {{ tpCompName }}(props: Props) {
                         }:
                         undefined
                     }
-                    marginBottom={SearchToolbarMarginBottom['40px']}
+                    marginBottom={SearchToolbarMarginBottom['10px']}
                     tabSwitch={
                         showTabs?
                         {
@@ -235,6 +235,7 @@ export default function {{ tpCompName }}(props: Props) {
                         }:
                         undefined
                     }
+                    className={props.searchToolbarClassName}
                 />
             }
             <div className="overflow-x-auto">
