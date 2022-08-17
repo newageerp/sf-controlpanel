@@ -38,7 +38,7 @@ export const {{ compName }} = (props: Props) => {
             onSaveCallback: (el, backFunc) => {
                 backFunc();
                 props.onSelectId({id: el.id, {{ viewKey }}: el.{{ viewKey }}});
-            }
+            },
             fieldsToReturnOnSave: ["{{ viewKey }}"]
         })
     }
