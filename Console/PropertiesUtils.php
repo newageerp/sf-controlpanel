@@ -603,8 +603,7 @@ class PropertiesUtils
                 return [
                     "import" => '',
                     "template" => '<CUSTOM_NAME 
-                        selectedTitle={TP_VALUE_TITLE}    
-                        selectedId={TP_VALUE_OBJ}
+                        selectedId={TP_VALUE}
                         onSelectId={TP_ON_CHANGE}
                         parentElement={element}
                         />'

@@ -8,8 +8,7 @@ import {{ popupSelectRelType }} from "../../../../tabs/tables-data-source/{{ pop
 import { SquareButton } from "@newageerp/ui.buttons.base.square-button";
 
 interface Props {
-    selectedTitle?: string,
-    selectedId: string,
+    selectedId: any,
     onSelectId: (e: any) => void,
     parentElement: any
 }
@@ -42,7 +41,7 @@ export const {{ compName }} = (props: Props) => {
     return (
         <Fragment>
             <div className="flex items-center gap-2">
-                <p className={"flex-grow tw3-border tw3-text-slate-800 tw3-text-sm tw3-border-slate-300 tw3-rounded tw3-px-3 tw3-py-2"}>{props.selectedTitle}</p>
+                <p className={"flex-grow tw3-border tw3-text-slate-800 tw3-text-sm tw3-border-slate-300 tw3-rounded tw3-px-3 tw3-py-2"}>{props.selectedId?._viewTitle}</p>
 {% if allowCreateRel %}
                 <span style={ {minWidth: 54, maxWidth: 54} }>
                     <SquareButton
