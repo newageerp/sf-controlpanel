@@ -18,7 +18,7 @@ export const {{ compName }}{{ tab.typeUc }}Filter = (props: FilterProps) => {
         [
             '{{ qsFilter[0] }}',
             '{{ qsFilter[1] }}',
-            props.qs,
+            props.qs.trim(),
             {% if qsFilter[2] %}true{% else %}false{% endif %},
         ]
     )
