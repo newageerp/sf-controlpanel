@@ -50,10 +50,10 @@ export const {{ compName }} = (props: Props) => {
                         className={
                             classNames("", TwTextColors.slate500, 'tw3-text-xl')
                         }
-                        style={{ lineHeight: '28px' }}
+                        style={ { lineHeight: '28px' } }
                     />
                 </div>
-                <p style={{marginLeft: 32, lineHeight: '21px'}} className={"flex-grow tw3-text-slate-800 tw3-text-sm "} onClick={() => setShowPopup(true)}>{props.selectedId?.{{ viewKey }}}{" "}</p>
+                <p style={ {marginLeft: 32, lineHeight: '21px'} } className={"flex-grow tw3-text-slate-800 tw3-text-sm "} onClick={() => setShowPopup(true)}>{props.selectedId?.{{ viewKey }}}{" "}</p>
                 <Icon type={IconType.Solid} icon={"binoculars"} className={classNames("", TwTextColors.slate500)} />
 
 {% if allowCreateRel %}
