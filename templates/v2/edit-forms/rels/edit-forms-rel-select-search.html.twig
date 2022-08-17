@@ -33,7 +33,6 @@ export const {{ compName }} = (props: Props) => {
             id: 'new',
             schema: "{{ objectSchema }}",
             onSaveCallback: (el, backFunc) => {
-                setReloadState(new Date().getTime());
                 backFunc();
                 props.onSelectId({id: el.id, {{ viewKey }}: el.{{ viewKey }}});
             }
