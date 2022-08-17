@@ -24,7 +24,9 @@ interface WidgetProps {
     element : {
         id: number,
     },
-    totals: ({% for totalIndex, total in totals %}{% if totalIndex != 0 %} | {% endif %}"{{ total.key }}"{% endfor %})[]
+    options: {
+        totals: ({% for totalIndex, total in totals %}{% if totalIndex != 0 %} | {% endif %}"{{ total.key }}"{% endfor %})[]
+    }
 }
 
 export function {{ compName }}Widget(props: WidgetProps) {
