@@ -41,6 +41,18 @@ export const {{ compName }} = (props: Props) => {
         <Fragment>
             <div className="flex items-center gap-2">
                 <span className={"flex-grow"}>{props.selectedTitle}</span>
+{% if allowCreateRel %}
+                <span style={ {minWidth: 54, maxWidth: 54} }>
+                    <SquareButton
+                        icon={{
+                        icon: "plus",
+                        type: IconType.Regular,
+                        }}
+                        bgColor={TwBackgroundColors.white}
+                        onClick={onNew}
+                    />
+                </span>
+{% endif %}
                 <span style={ {minWidth: 54, maxWidth: 54} }>
                     <SquareButton
                         icon={{
