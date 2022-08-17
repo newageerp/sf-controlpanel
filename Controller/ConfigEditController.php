@@ -114,7 +114,9 @@ class ConfigEditController extends ConfigBaseController
                     foreach ($el['config']['fields'] as &$field) {
                         $naeType = '';
                         $prop = $this->propertiesUtils->getPropertyForPath($field['path'], $field);
-                        $naeType = $this->propertiesUtils->getPropertyNaeType($prop, $field);
+                        if ($prop) {
+                            $naeType = $this->propertiesUtils->getPropertyNaeType($prop, $field);
+                        }
                         $field['_naeType'] = $naeType;
                     }
                 }
