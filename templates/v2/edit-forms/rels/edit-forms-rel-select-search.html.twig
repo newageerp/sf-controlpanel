@@ -2,10 +2,12 @@ import { UI } from "@newageerp/nae-react-ui";
 import { SelectAdvData } from "@newageerp/ui.form.base.form-pack";
 import React, { Fragment, useState } from 'react'
 import { IconType } from "@newageerp/ui.icons.base.icon";
-import { TwBackgroundColors } from "@newageerp/ui.styles.tailwind";
+import { TwTextColors, TwBackgroundColors } from "@newageerp/ui.styles.tailwind";
 import { Popup } from "@newageerp/ui.popups.base.popup";
 import {{ popupSelectRelType }} from "../../../../tabs/tables-data-source/{{ popupSelectRelType }}";
 import { SquareButton } from "@newageerp/ui.buttons.base.square-button";
+import {Icon} from '@newageerp/ui.icons.base.icon'
+import classNames from "classnames";
 
 interface Props {
     selectedId: any,
@@ -40,8 +42,20 @@ export const {{ compName }} = (props: Props) => {
 {% endif %}
     return (
         <Fragment>
-            <div className="flex items-center gap-2">
-                <p className={"flex-grow tw3-border tw3-text-slate-800 tw3-text-sm tw3-border-slate-300 tw3-rounded tw3-px-3 tw3-py-2"}>{props.selectedId?.{{ viewKey }}}{" "}</p>
+            <div className="flex items-center gap-2 tw3-border tw3-border-slate-300 tw3-rounded tw3-px-3 tw3-py-2 tw3-cursor-pointer tw3-relative">
+                <div className={`tw3-absolute tw3-z-10 tw3-pointer-events-none tw3-top-[6px] tw3-left-[9px]`} onClick={() => setShowPopup(true)}>
+                    <Icon
+                        type={IconType.Light}
+                        icon={"search"}
+                        className={
+                            classNames("", TwTextColors.slate500, 'tw3-text-xl')
+                        }
+                        style={{ lineHeight: '28px' }}
+                    />
+                </div>
+                <p style={{marginLeft: 32, lineHeight: '21px'}} className={"flex-grow tw3-text-slate-800 tw3-text-sm "} onClick={() => setShowPopup(true)}>{props.selectedId?.{{ viewKey }}}{" "}</p>
+                <Icon type={IconType.Solid} icon={"binoculars"} className={classNames("", TwTextColors.slate500)} />
+
 {% if allowCreateRel %}
                 <span style={ {minWidth: 54, maxWidth: 54} }>
                     <SquareButton
@@ -56,19 +70,22 @@ export const {{ compName }} = (props: Props) => {
                     />
                 </span>
 {% endif %}
+
                 <span style={ {minWidth: 54, maxWidth: 54} }>
                     <SquareButton
                         icon={
                             {
-                                icon: "search",
+                                icon: "xmark",
                                 type: IconType.Regular,
                             }
                         }
                         bgColor={TwBackgroundColors.white}
-                        onClick={() => setShowPopup(true)}
+                        onClick={() => props.onSelectId(undefined))}
                     />
                 </span>
+
             </div>
+
             {!!showPopup && <Popup onClose={() => setShowPopup(false)}>
                 <{{ popupSelectRelType }} 
                     disableVerticalMargin={true} 
