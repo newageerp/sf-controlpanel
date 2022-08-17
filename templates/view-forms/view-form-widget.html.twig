@@ -10,6 +10,17 @@ import { TwTextColors } from '@newageerp/ui.styles.tailwind';
 import {{ compName }} from '../forms/{{ compName }}';
 import { UI } from '@newageerp/nae-react-ui';
 
+interface WidgetProps {
+    element: {
+        id: number
+    },
+    options: any,
+}
+
+export function {{ compName }}WidgetWidget(props: WidgetProps) {
+    return <{{ compName }}Widget id={props.element.id} {...props.options}/>
+}
+
 interface Props extends PropsId {
     title?: string,
     onEdit?: () => void,
