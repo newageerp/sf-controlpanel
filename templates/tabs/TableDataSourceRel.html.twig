@@ -17,6 +17,7 @@ interface Props {
     relId?: number,
     hideSearchBar?: boolean,
     hidePaging?: boolean,
+    onCustomCreate?: () => void,
 }
 
 export function {{ tpCompName }}Widget(props: ContentWidgetProps) {
@@ -58,7 +59,7 @@ export default function {{ tpCompName }}(props: Props) {
         quickSearch: '',
     }
 
-    const isCreatable = {{ creatable }};
+    const isCreatable = !!props.onCustomCreate || {{ creatable }};
 
     const quickSearchFields : any = {{ quickSearch|raw }};
     const predefinedFilter : any = {{ filter|raw }};
@@ -111,7 +112,11 @@ export default function {{ tpCompName }}(props: Props) {
     }
 
     const onCreate = () => {
-        history.push('/u/{{ schema }}/main/edit/new')
+        if (props.onCustomCreate) {
+            props.onCustomCreate();
+        } else {
+            history.push('/u/{{ schema }}/main/edit/new');
+        }
     }
 
     const loadData = () => {
