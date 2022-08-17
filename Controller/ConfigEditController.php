@@ -8,6 +8,8 @@ use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Request;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Finder\Finder;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * @Route(path="/app/nae-core/config-edit")
@@ -16,8 +18,9 @@ class ConfigEditController extends ConfigBaseController
 {
     protected PropertiesUtils $propertiesUtils;
 
-    public function __construct(PropertiesUtils $propertiesUtils)
+    public function __construct(EntityManagerInterface $em, EventDispatcherInterface $eventDispatcher, PropertiesUtils $propertiesUtils)
     {
+        parent::__construct($em, $eventDispatcher);
         $this->propertiesUtils = $propertiesUtils;
     }
 
