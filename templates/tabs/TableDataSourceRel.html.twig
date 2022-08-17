@@ -98,14 +98,6 @@ export default function {{ tpCompName }}(props: Props) {
     const [getData, dataResult] = OpenApi.useUList('{{ schema }}', fieldsToReturn);
     const { t } = useTranslation();
 
-    const navigate = (schema: string, id: number | string, el: any) => {
-        if (props.navigate) {
-            props.navigate(schema, id, el);
-        } else {
-            history.push(`/u/${schema}/main/view/${id}`);
-        }
-    }
-
     const navigateToTab = (type: string) => {
         history.push(`/u/{{ schema }}/${type}/list`)
     }
@@ -226,7 +218,7 @@ export default function {{ tpCompName }}(props: Props) {
                         data={dataToRender}
                         doReload={loadData}
                         className={`${dataResult.loading?'tw3-animate-pulse':''}`}
-                        navigate={navigate}
+                        navigate={props.navigate}
                 />
             </div>
             {!props.hidePaging && pages > 1 &&
