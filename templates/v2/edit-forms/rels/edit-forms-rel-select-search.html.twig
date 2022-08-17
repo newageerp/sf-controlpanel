@@ -44,10 +44,12 @@ export const {{ compName }} = (props: Props) => {
 {% if allowCreateRel %}
                 <span style={ {minWidth: 54, maxWidth: 54} }>
                     <SquareButton
-                        icon={{
-                        icon: "plus",
-                        type: IconType.Regular,
-                        }}
+                        icon={
+                            {
+                                icon: "plus",
+                                type: IconType.Regular,
+                            }
+                        }
                         bgColor={TwBackgroundColors.white}
                         onClick={onNew}
                     />
@@ -55,10 +57,12 @@ export const {{ compName }} = (props: Props) => {
 {% endif %}
                 <span style={ {minWidth: 54, maxWidth: 54} }>
                     <SquareButton
-                        icon={{
-                        icon: "search",
-                        type: IconType.Regular,
-                        }}
+                        icon={
+                            {
+                                icon: "search",
+                                type: IconType.Regular,
+                            }
+                        }
                         bgColor={TwBackgroundColors.white}
                         onClick={() => setShowPopup(true)}
                     />
