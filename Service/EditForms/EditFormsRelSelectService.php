@@ -76,7 +76,10 @@ class EditFormsRelSelectService
 
                     $compName = self::relSelectCompName($editItem, $field['path']);
 
-                    $service = isset($field['popupSelectRelType']) && $field['popupSelectRelType'] ? $tService : $tServiceSearch;
+                    $isPopupSelectRelType = isset($field['popupSelectRelType']) && $field['popupSelectRelType'];
+                    $popupSelectRelType = $isPopupSelectRelType ? $field['popupSelectRelType'] : 'main';
+
+                    $service = $isPopupSelectRelType ? $tService : $tServiceSearch;
 
                     $objectSchema = $fieldObjectProperty ? $fieldObjectProperty['schema'] : '';
 
@@ -90,7 +93,7 @@ class EditFormsRelSelectService
                             'extraFilter' => $extraFilter,
                             'key' => $fieldObjectProperty ? $fieldObjectProperty['key'] : '',
                             'allowCreateRel' => isset($field['allowCreateRel']) && $field['allowCreateRel'] ? true : false,
-                            'popupSelectRelType' => Utils::fixComponentName($objectSchema . '-' . $field['popupSelectRelType']) . 'TableDataSource',
+                            'popupSelectRelType' => Utils::fixComponentName($objectSchema . '-' . $popupSelectRelType) . 'TableDataSource',
                         ]
                     );
                 }
