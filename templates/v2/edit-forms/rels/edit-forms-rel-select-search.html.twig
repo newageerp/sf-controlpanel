@@ -72,7 +72,7 @@ export const {{ compName }} = (props: Props) => {
                 </span>
             </div>
             {!!showPopup && <Popup onClose={() => setShowPopup(false)}>
-                <BankMainTableDataSource 
+                <{{ popupSelectRelType }} 
                     disableVerticalMargin={true} 
                     navigate={(schema: string, id: number | string, el: any) => {
                         props.onSelectId(el.id);

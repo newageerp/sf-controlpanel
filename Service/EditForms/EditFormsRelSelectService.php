@@ -76,10 +76,10 @@ class EditFormsRelSelectService
 
                     $compName = self::relSelectCompName($editItem, $field['path']);
 
-                    $isPopupSelectRelType = isset($field['popupSelectRelType']) && $field['popupSelectRelType'];
+                    $isPopupSelectRelType = isset($field['popupSelectRelType']) && $field['popupSelectRelType'] !== '' ? true : false;
                     $popupSelectRelType = $isPopupSelectRelType ? $field['popupSelectRelType'] : 'main';
 
-                    $service = $isPopupSelectRelType ? $tService : $tServiceSearch;
+                    $service = $isPopupSelectRelType ? $tServiceSearch : $tService;
 
                     $objectSchema = $fieldObjectProperty ? $fieldObjectProperty['schema'] : '';
 
