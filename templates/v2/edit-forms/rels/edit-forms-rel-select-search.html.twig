@@ -56,7 +56,7 @@ export const {{ compName }} = (props: Props) => {
                     />
                 </div>
                 <p style={ {marginLeft: 32, lineHeight: '21px', minHeight: 21} } className={"flex-grow tw3-text-slate-800 tw3-text-sm "} onClick={() => setShowPopup(true)}>{props.selectedId?.{{ viewKey }}}{" "}</p>
-                <Icon type={IconType.Solid} icon={"binoculars"} className={classNames("", TwTextColors.slate500)} />
+                <Icon type={IconType.Solid} icon={"binoculars"} className={classNames("", TwTextColors.slate500)}  onClick={() => setShowPopup(true)}/>
 
 {% if allowCreateRel %}
                 <button onClick={onNew} className="flex items-center" title={t('Sukurti')}>
