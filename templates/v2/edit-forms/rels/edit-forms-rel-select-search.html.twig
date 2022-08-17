@@ -8,6 +8,7 @@ import {{ popupSelectRelType }} from "../../../../tabs/tables-data-source/{{ pop
 import { SquareButton } from "@newageerp/ui.buttons.base.square-button";
 import {Icon} from '@newageerp/ui.icons.base.icon'
 import classNames from "classnames";
+import { useTranslation } from "react-i18next";
 
 interface Props {
     selectedId: any,
@@ -16,6 +17,8 @@ interface Props {
 }
 
 export const {{ compName }} = (props: Props) => {
+    const {t} = useTranslation();
+
     const [showPopup, setShowPopup] = useState(false);
 
 {% if allowCreateRel %}
@@ -56,13 +59,13 @@ export const {{ compName }} = (props: Props) => {
                 <Icon type={IconType.Solid} icon={"binoculars"} className={classNames("", TwTextColors.slate500)} />
 
 {% if allowCreateRel %}
-                <button onClick={onNew} className="flex items-center">
-                    <Icon type={IconType.Solid} icon={"plus"} className={classNames("text-sm", TwTextColors.slate500)}/>
+                <button onClick={onNew} className="flex items-center" title={t('Sukurti')}>
+                    <Icon type={IconType.Solid} icon={"plus"} className={classNames("text-sm", TwTextColors.slate500, TwTextColors.sky600Hover)}/>
                 </button>
 {% endif %}
 
-                <button onClick={() => props.onSelectId(undefined)} className="flex items-center">
-                    <Icon type={IconType.Solid} icon={"xmark"} className={classNames("text-sm", TwTextColors.slate500)}/>
+                <button onClick={() => props.onSelectId(undefined)} className="flex items-center" title={t('Ištrinti')}>
+                    <Icon type={IconType.Solid} icon={"xmark"} className={classNames("text-sm", TwTextColors.slate500, TwTextColors.sky600Hover)}/>
                 </button>
 
             </div>
@@ -74,6 +77,9 @@ export const {{ compName }} = (props: Props) => {
                         setShowPopup(false);
                         props.onSelectId({id: el.id, {{ viewKey }}: el.{{ viewKey }}});
                     }}
+                    disableCreate={true}
+                    disableScrollToHeader={true}
+                    disableSetTitle={true}
                     />
                 </Popup>
                 }
