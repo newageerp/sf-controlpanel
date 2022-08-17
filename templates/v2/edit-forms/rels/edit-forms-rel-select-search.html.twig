@@ -15,7 +15,6 @@ interface Props {
 }
 
 export const {{ compName }} = (props: Props) => {
-    const [reloadState, setReloadState] = useState(0);
     const [showPopup, setShowPopup] = useState(false);
 
 {% if allowCreateRel %}
@@ -43,7 +42,7 @@ export const {{ compName }} = (props: Props) => {
     return (
         <Fragment>
             <div className="flex items-center gap-2">
-                <span className={"flex-grow"}>{props.selectedTitle}</span>
+                <p className={"flex-grow tw3-border tw3-text-slate-800 tw3-text-sm tw3-border-slate-300 tw3-rounded tw3-px-3 tw3-py-2"}>{props.selectedTitle}</p>
 {% if allowCreateRel %}
                 <span style={ {minWidth: 54, maxWidth: 54} }>
                     <SquareButton
@@ -75,7 +74,7 @@ export const {{ compName }} = (props: Props) => {
                 <{{ popupSelectRelType }} 
                     disableVerticalMargin={true} 
                     navigate={(schema: string, id: number | string, el: any) => {
-                        props.onSelectId(el.id);
+                        setShowPopup(false);
                         props.onSelectId({id: el.id, _viewTitle: el._viewTitle});
                     }}
                     />
