@@ -32,7 +32,7 @@ export const {{ compName }} = (props: Props) => {
             onSaveCallback: (el, backFunc) => {
                 setReloadState(new Date().getTime());
                 backFunc();
-                props.onSelectId(el.id);
+                props.onSelectId({id: el.id, _viewTitle: el._viewTitle});
             }
         })
     }
@@ -57,7 +57,7 @@ export const {{ compName }} = (props: Props) => {
                     disableVerticalMargin={true} 
                     navigate={(schema: string, id: number | string, el: any) => {
                         props.onSelectId(el.id);
-                        setShowPopup(false);
+                        props.onSelectId({id: el.id, _viewTitle: el._viewTitle});
                     }}
                     />
                 </Popup>
