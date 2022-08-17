@@ -2,6 +2,7 @@
 
 namespace Newageerp\SfControlpanel\Controller;
 
+use Newageerp\SfControlpanel\Console\PropertiesUtils;
 use Symfony\Component\Routing\Annotation\Route;
 use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,6 +14,13 @@ use Symfony\Component\Finder\Finder;
  */
 class ConfigEditController extends ConfigBaseController
 {
+    protected PropertiesUtils $propertiesUtils;
+
+    public function __construct(PropertiesUtils $propertiesUtils)
+    {
+        $this->propertiesUtils = $propertiesUtils;
+    }
+
     protected function getLocalStorageFile()
     {
         $file = $this->getLocalStorage() . '/edit.json';
@@ -98,6 +106,14 @@ class ConfigEditController extends ConfigBaseController
                 if ($el['id'] === $item['id']) {
                     $el = $item;
                     $isFound = true;
+                }
+                if (isset($el['config']['fields'])) {
+                    foreach ($el['config']['fields'] as &$field) {
+                        $naeType = '';
+                        $prop = $this->propertiesUtils->getPropertyForPath($field['path'], $field);
+                        $naeType = $this->propertiesUtils->getPropertyNaeType($prop, $field);
+                        $field['_naeType'] = $naeType;
+                    }
                 }
             }
             if (!$isFound) {
