@@ -18,6 +18,7 @@ interface Props {
     hideSearchBar?: boolean,
     hidePaging?: boolean,
     onCustomCreate?: () => void,
+    searchToolbarClassName?: string,
 }
 
 export function {{ tpCompName }}Widget(props: ContentWidgetProps) {
@@ -30,6 +31,7 @@ export function {{ tpCompName }}Widget(props: ContentWidgetProps) {
                 dataProcessing={props.options.dataProcessing}
                 navigate={props.options.navigate}
                 onCustomCreate={props.options.onCustomCreate}
+                searchToolbarClassName={"tw3-px-2"}
             />
         </WhiteCardWithTitle>
     )
@@ -196,28 +198,36 @@ export default function {{ tpCompName }}(props: Props) {
         }
     }, [socketId])
 
+    const showSearch = !props.hideSearchBar;
+    const showSort = !props.hideSearchBar;
+    const showTabs = !!otherTabs;
+    const showCreate = !!isCreatable;
+
     return (
         <div ref={headerRef}>
-            {!props.hideSearchBar &&
+            {!(showSearch || showSort || showTabs || showCreate) &&
                 <SearchToolbar
                     onCreate={isCreatable?onCreate:undefined}
                     search={
+                        showSearch?
                         {
                             searchValue: dataState.quickSearch,
                             onSearch: setQuickSearch
-                        }
+                        }:
+                        undefined
                     }
                     sort={
-                        {
+                        showSort?{
                             onSort: setSort,
                             sort: dataState.sort,
                             defaultSort: sort,
                             schema: '{{ schema }}'
-                        }
+                        }:
+                        undefined
                     }
                     marginBottom={SearchToolbarMarginBottom['40px']}
                     tabSwitch={
-                        otherTabs?
+                        showTabs?
                         {
                             options: otherTabs,
                             currentTab: '{{ type }}',
