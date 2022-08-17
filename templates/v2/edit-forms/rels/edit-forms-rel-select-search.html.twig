@@ -53,36 +53,18 @@ export const {{ compName }} = (props: Props) => {
                         style={ { lineHeight: '28px' } }
                     />
                 </div>
-                <p style={ {marginLeft: 32, lineHeight: '21px'} } className={"flex-grow tw3-text-slate-800 tw3-text-sm "} onClick={() => setShowPopup(true)}>{props.selectedId?.{{ viewKey }}}{" "}</p>
+                <p style={ {marginLeft: 32, lineHeight: '21px', minHeight: 21} } className={"flex-grow tw3-text-slate-800 tw3-text-sm "} onClick={() => setShowPopup(true)}>{props.selectedId?.{{ viewKey }}}{" "}</p>
                 <Icon type={IconType.Solid} icon={"binoculars"} className={classNames("", TwTextColors.slate500)} />
 
 {% if allowCreateRel %}
-                <span style={ {minWidth: 54, maxWidth: 54} }>
-                    <SquareButton
-                        icon={
-                            {
-                                icon: "plus",
-                                type: IconType.Regular,
-                            }
-                        }
-                        bgColor={TwBackgroundColors.white}
-                        onClick={onNew}
-                    />
-                </span>
+                <button onClick={onNew} className="flex items-center">
+                    <Icon type={IconType.Solid} icon={"plus"} className={classNames("text-sm", TwTextColors.slate500)}/>
+                </button>
 {% endif %}
 
-                <span style={ {minWidth: 54, maxWidth: 54} }>
-                    <SquareButton
-                        icon={
-                            {
-                                icon: "xmark",
-                                type: IconType.Regular,
-                            }
-                        }
-                        bgColor={TwBackgroundColors.white}
-                        onClick={() => props.onSelectId(undefined))}
-                    />
-                </span>
+                <button onClick={() => props.onSelectId(undefined)} className="flex items-center">
+                    <Icon type={IconType.Solid} icon={"xmark"} className={classNames("text-sm", TwTextColors.slate500)}/>
+                </button>
 
             </div>
 
