@@ -606,7 +606,6 @@ class PropertiesUtils
                         selectedId={TP_VALUE}
                         onSelectId={TP_ON_CHANGE}
                         parentElement={element}
-                        field={"TP_FULL_PATH_KEY"}
                         />'
                 ];
             case 'file':

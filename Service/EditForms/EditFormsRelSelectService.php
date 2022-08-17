@@ -37,6 +37,8 @@ class EditFormsRelSelectService
                 }
                 $path = $pathA[0] . '.' . $pathA[1];
 
+                $fullPathProperty = $this->propertiesUtils->getPropertyForPath($field['path']);
+
                 $fieldProperty = $this->propertiesUtils->getPropertyForPath($path);
                 if (!$fieldProperty) {
                     continue;
@@ -94,6 +96,7 @@ class EditFormsRelSelectService
                             'key' => $fieldObjectProperty ? $fieldObjectProperty['key'] : '',
                             'allowCreateRel' => isset($field['allowCreateRel']) && $field['allowCreateRel'] ? true : false,
                             'popupSelectRelType' => Utils::fixComponentName($objectSchema . '-' . $popupSelectRelType) . 'TableDataSource',
+                            'viewKey' => $fullPathProperty['key']
                         ]
                     );
                 }

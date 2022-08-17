@@ -213,7 +213,6 @@ class InGeneratorEditForms extends Command
                             'TP_OBJECT_SCHEMA',
                             'TP_OBJECT_KEY',
                             'TP_OBJECT_SORT',
-                            'TP_FULL_PATH_KEY'
                         ],
                         [
                             $tpValueObj,
@@ -226,7 +225,6 @@ class InGeneratorEditForms extends Command
                             $fieldObjectProperty ? $fieldObjectProperty['schema'] : '',
                             $fieldObjectProperty ? $fieldObjectProperty['key'] : '',
                             $tpObjectSortStr,
-                            $fullPathProperty['key']
                         ],
                         $fieldTemplateData['template']
                     );
