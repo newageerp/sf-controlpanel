@@ -107,9 +107,12 @@ class EditFormsRelSelectService
     public static function relSelectCompName(array $editItem, string $path)
     {
         $pathA = explode(".", $path);
-        $compName = Utils::fixComponentName(
-            $editItem['config']['type'] . '-' . $pathA[1] . '-' . $pathA[2]
-        );
+        $compName = 'WrongPath';
+        if (count($pathA) > 2) {
+            $compName = Utils::fixComponentName(
+                $editItem['config']['type'] . '-' . $pathA[1] . '-' . $pathA[2]
+            );
+        }
         return $compName;
     }
 }
