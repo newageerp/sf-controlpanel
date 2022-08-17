@@ -1,0 +1,67 @@
+import { UI } from "@newageerp/nae-react-ui";
+import { SelectAdvData } from "@newageerp/ui.form.base.form-pack";
+import React, { Fragment, useState } from 'react'
+import { IconType } from "@newageerp/ui.icons.base.icon";
+import { TwBackgroundColors } from "@newageerp/ui.styles.tailwind";
+import { Popup } from "@newageerp/ui.popups.base.popup";
+import BankMainTableDataSource from "../../../../tabs/tables-data-source/BankMainTableDataSource";
+
+interface Props {
+    selectedTitle?: string,
+    selectedId: string,
+    onSelectId: (e: any) => void,
+    parentElement: any
+}
+
+export const {{ compName }} = (props: Props) => {
+    const [reloadState, setReloadState] = useState(0);
+{% if allowCreateRel %}
+    const { showEditPopup } = UI.Window.useNaeWindow();
+    const onNew = () => {
+        showEditPopup({
+            newStateOptions: { 
+                createOptions: {
+                    convert: {
+                        schema: "{{ schema }}",
+                        element: props.parentElement,
+                    }
+                } 
+            },
+            id: 'new',
+            schema: "{{ objectSchema }}",
+            onSaveCallback: (el, backFunc) => {
+                setReloadState(new Date().getTime());
+                backFunc();
+                props.onSelectId(el.id);
+            }
+        })
+    }
+{% endif %}
+    return (
+        <Fragment>
+            <div className="flex items-center gap-2">
+                <span className={"flex-grow"}>{props.selectedTitle}</span>
+                <span style={{minWidth: 54, maxWidth: 54}}>
+                    <SquareButton
+                        icon={{
+                        icon: "search",
+                        type: IconType.Regular,
+                        }}
+                        bgColor={TwBackgroundColors.white}
+                        onClick={() => setShowPopup(true)}
+                    />
+                </span>
+            </div>
+            {!!showPopup && <Popup onClose={() => setShowPopup(false)}>
+                <BankMainTableDataSource 
+                    disableVerticalMargin={true} 
+                    navigate={(schema: string, id: number | string, el: any) => {
+                        props.onSelectId(el.id);
+                        setShowPopup(false);
+                    }}
+                    />
+                </Popup>
+                }
+        </Fragment>
+    )
+}

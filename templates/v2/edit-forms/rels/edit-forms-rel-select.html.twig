@@ -3,7 +3,8 @@ import { SelectAdvData } from "@newageerp/ui.form.base.form-pack";
 import React, { Fragment, useState } from 'react'
 
 interface Props {
-    selectedId: string,
+    selectedTitle?: string,
+    selectedId: any,
     onSelectId: (e: any) => void,
     parentElement: any
 }
@@ -27,7 +28,7 @@ export const {{ compName }} = (props: Props) => {
             onSaveCallback: (el, backFunc) => {
                 setReloadState(new Date().getTime());
                 backFunc();
-                props.onSelectId(el.id);
+                props.onSelectId({id: el.id, _viewTitle: el._viewTitle});
             }
         })
     }
@@ -38,8 +39,8 @@ export const {{ compName }} = (props: Props) => {
             withIcon={true}
             schema="{{ objectSchema }}"
             field="{{ key }}"
-            selectedId={props.selectedId}
-            onSelectId={props.onSelectId}
+            selectedId={props.selectedId?.id}
+            onSelectOption={(e) => props.selectedId({id: e.value, _viewTitle: e.label})}
             parentElement={props.parentElement}
             parentSchema={"{{ schema }}"}
             sort={ {{ sort|raw }} }
