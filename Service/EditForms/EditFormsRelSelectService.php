@@ -76,18 +76,21 @@ class EditFormsRelSelectService
 
                     $compName = self::relSelectCompName($editItem, $field['path']);
 
-                    $service = isset($field['popupSelectRel']) && $field['popupSelectRel'] ? $tService : $tServiceSearch;
+                    $service = isset($field['popupSelectRelType']) && $field['popupSelectRelType'] ? $tService : $tServiceSearch;
+
+                    $objectSchema = $fieldObjectProperty ? $fieldObjectProperty['schema'] : '';
 
                     $service->writeToFileOnChanges(
                         $folderPath . '/' . $compName . '.tsx',
                         [
                             'compName' => $compName,
-                            'objectSchema' => $fieldObjectProperty ? $fieldObjectProperty['schema'] : '',
+                            'objectSchema' => $objectSchema,
                             'schema' => $fieldProperty ? $fieldProperty['schema'] : '',
                             'sort' => json_encode($objectSort),
                             'extraFilter' => $extraFilter,
                             'key' => $fieldObjectProperty ? $fieldObjectProperty['key'] : '',
-                            'allowCreateRel' => isset($field['allowCreateRel']) && $field['allowCreateRel'] ? true : false
+                            'allowCreateRel' => isset($field['allowCreateRel']) && $field['allowCreateRel'] ? true : false,
+                            'popupSelectRelType' => Utils::fixComponentName($objectSchema . '-' . $field['popupSelectRelType']) . 'TableDataSource',
                         ]
                     );
                 }
