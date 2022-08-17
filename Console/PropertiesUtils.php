@@ -589,17 +589,6 @@ class PropertiesUtils
                     "template" => '<SelectAdvId withIcon={true} options={' . $compName . '[\'TP_KEY\']} selectedId={TP_VALUE} onSelectId={TP_ON_CHANGE} />'
                 ];
             case 'object':
-                // fieldDependency
-                $extraFilter = '';
-                if (isset($column['fieldDependency']) && $column['fieldDependency']) {
-                    [$filterKey, $filterValue] = explode(":", $column['fieldDependency']);
-                    $extraFilter =  'filters={[
-                                    {"and": [
-                                        ["' . $filterKey . '", "=", element.' . $filterValue . ', true]
-                                    ]}
-                                ]}
-                ';
-                }
                 return [
                     "import" => '',
                     "template" => '<CUSTOM_NAME 

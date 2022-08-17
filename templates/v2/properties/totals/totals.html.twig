@@ -20,6 +20,19 @@ export function {{ compName }}(props: Props) {
     )
 }
 
+interface WidgetProps {
+    element : {
+        id: number,
+    },
+    totals: ({% for totalIndex, total in totals %}{% if totalIndex != 0 %} | {% endif %}"{{ total.key }}"{% endfor %})[]
+}
+
+export function {{ compName }}Widget(props: WidgetProps) {
+    return (
+        <{{ compName }} id={props.element.id} totals={props.options.totals} />
+    )
+}
+
 interface TotalProps {
     id: number,
     customTitle?: string,
