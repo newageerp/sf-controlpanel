@@ -216,6 +216,7 @@ class InGeneratorEditForms extends Command
                             'TP_OBJECT_SORT'
                         ],
                         [
+                            $tpValueTitle,
                             $tpValueObj,
                             $tpValue,
                             $tpOnChangeObj,
