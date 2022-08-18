@@ -13,7 +13,7 @@ interface Props {
 }
 
 export default function {{ compName }}(props: Props) {
-    const element = useInquiryHookNae(props.element.id);
+    const element = use{{ slugUc }}HookNae(props.element.id);
 
     const { ref, isComponentVisible, setIsComponentVisible } = useComponentVisible(false);
     const toggleComponentVisible = () => setIsComponentVisible(!isComponentVisible);
