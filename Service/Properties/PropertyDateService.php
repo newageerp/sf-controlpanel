@@ -37,7 +37,7 @@ class PropertyDateService
         foreach ($dates as $slug => $properties) {
             $slugUc = Utils::fixComponentName($slug);
             $slugPath = Utils::generatedV2Path('properties/' . $slugUc);
-            $componentName = Utils::fixComponentName($slug . 'Totals');
+            $componentName = Utils::fixComponentName($slug . 'Dates');
 
             $parseProps = [];
             foreach ($properties as $property) {
