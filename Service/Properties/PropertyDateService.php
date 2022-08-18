@@ -25,7 +25,7 @@ class PropertyDateService
 
         $dates = [];
         foreach ($this->properties as $property) {
-            if ($property['config']['type'] === 'string' && $property['config']['typeFormat'] === 'typeFormat') {
+            if ($property['config']['type'] === 'string' && $property['config']['typeFormat'] === 'date') {
                 $entity = $property['config']['entity'];
                 if (!isset($dates[$entity])) {
                     $dates[$entity] = [];
