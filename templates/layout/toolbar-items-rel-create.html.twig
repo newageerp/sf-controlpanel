@@ -77,7 +77,7 @@ export default function {{ compName }}(props: Props) {
                         <MenuItem 
                             {% if item.tooltip %}tooltipContent={"{{ item.tooltip }}"} {% endif %}
                             onClick={() => openLink("{{ item.target }}")}
-                            disabled={{% if item.disableOnScope %}element.scopes.indexOf("{{ item.disableOnScope }}") >= 0{% else %}false{% endif %}}
+                            disabled={ {% if item.disableOnScope %}element.scopes.indexOf("{{ item.disableOnScope }}") >= 0{% else %}false{% endif %} }
                         >
                             {{  item.targetTitle }}
                         </MenuItem>
