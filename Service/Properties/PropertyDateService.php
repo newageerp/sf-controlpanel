@@ -49,8 +49,8 @@ class PropertyDateService
             if (count($parseProps) > 0) {
                 $parseProps = array_map(
                     function ($item) use ($slug) {
-                        $item['config']['compName'] = Utils::fixComponentName($slug . 'Date-' . $item['config']['key']);
-                        return $item['config'];
+                        $item['compName'] = Utils::fixComponentName($slug . 'Date-' . $item['key']);
+                        return $item;
                     },
                     $parseProps
                 );
