@@ -67,7 +67,7 @@ export default function {{ compName }}(props: Props) {
             {!!isComponentVisible &&
                 <Menu>
                     {% for item in items %}
-                        <MenuItem onClick={() => openLink("{{ item.target }}")}>{{  item.targetTitle }}</MenuItem>
+                        <MenuItem {% if item.tooltip %}tooltipContent={"{{ item.tooltip }}"} {% endif %}onClick={() => openLink("{{ item.target }}")}>{{  item.targetTitle }}</MenuItem>
                     {% endfor %}
                 </Menu>
             }
