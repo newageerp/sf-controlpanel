@@ -1,17 +1,20 @@
 import { SquareButton } from '@newageerp/ui.buttons.base.square-button'
-import React from 'react'
+import React, { Fragment } from 'react'
 import { TwBackgroundColors, TwTextColors } from '@newageerp/ui.styles.tailwind'
 import { IconType } from '@newageerp/ui.icons.base.icon'
 import { IconList } from '@newageerp/ui.icons.base.icon-list'
 import { useComponentVisible } from '@newageerp/hooks.use-component-visible'
 import { Menu, MenuItem } from '@newageerp/sfs.modal.menu'
 import { UI, UIConfig } from '@newageerp/nae-react-ui'
+import { use{{ slugUc }}HookNae } from '../../../../Components/Hooks/use{{ slugUc }}HookNae'
 
 interface Props {
     element: any,
 }
 
 export default function {{ compName }}(props: Props) {
+    const element = useInquiryHookNae(props.element.id);
+
     const { ref, isComponentVisible, setIsComponentVisible } = useComponentVisible(false);
     const toggleComponentVisible = () => setIsComponentVisible(!isComponentVisible);
 
@@ -51,6 +54,10 @@ export default function {{ compName }}(props: Props) {
         }
     }
 
+    if (!element) {
+        return <Fragment/>
+    }
+
     return (
         <span className='relative' ref={ref}>
             <SquareButton
@@ -67,7 +74,13 @@ export default function {{ compName }}(props: Props) {
             {!!isComponentVisible &&
                 <Menu>
                     {% for item in items %}
-                        <MenuItem {% if item.tooltip %}tooltipContent={"{{ item.tooltip }}"} {% endif %}onClick={() => openLink("{{ item.target }}")}>{{  item.targetTitle }}</MenuItem>
+                        <MenuItem 
+                            {% if item.tooltip %}tooltipContent={"{{ item.tooltip }}"} {% endif %}
+                            onClick={() => openLink("{{ item.target }}")}
+                            disabled={{% if item.disableOnScope %}element.scopes.indexOf("{{ item.disableOnScope }}") >= 0{% else %}false{% endif %}}
+                        >
+                            {{  item.targetTitle }}
+                        </MenuItem>
                     {% endfor %}
                 </Menu>
             }
