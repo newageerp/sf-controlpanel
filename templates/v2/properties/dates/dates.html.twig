@@ -1,0 +1,64 @@
+import React, {Fragment} from 'react'
+import { DateCardWidget, DateWidgetVariant } from '@newageerp/v2.widgets.date-card-widget'
+import { use{{ slugUc }}HookNae, I{{ slugUc }}ModelNae } from '../../../../Components/Hooks/use{{ slugUc }}HookNae'
+import { PropsId } from '../../../../UserComponents/ModelsCacheData/types'
+
+interface Props {
+    id: number,
+    dates: ({% for dateIndex, prop in properties %}{% if dateIndex != 0 %} | {% endif %}"{{ prop.key }}"{% endfor %})[]
+}
+
+export function {{ compName }}(props: Props) {
+    return (
+        <Fragment>
+            {props.dates.map((dateKey: string, dateIndex: number) => {
+                const Comp : any = {{ compName }}Map[dateKey];
+
+                return <Comp id={props.id} key={`date-${dateKey}`}/>
+            })}
+        </Fragment>
+    )
+}
+
+interface WidgetProps {
+    element : {
+        id: number,
+    },
+    options: {
+        dates: ({% for dateIndex, prop in properties %}{% if dateIndex != 0 %} | {% endif %}"{{ prop.key }}"{% endfor %})[]
+    }
+}
+
+export function {{ compName }}Widget(props: WidgetProps) {
+    return (
+        <{{ compName }} id={props.element.id} dates={props.options.dates} />
+    )
+}
+
+interface DateProps {
+    id: number,
+    customTitle?: string,
+    customVariant?: DateWidgetVariant,
+}
+
+{% for date in properties %}
+export function {{ date.compName }}(props: DateProps) {
+    const element : I{{ slugUc }}ModelNae = use{{ slugUc }}HookNae(props.id);
+    if (!element) {
+        return <Fragment/>
+    }
+    return (
+        <DateCardWidget
+            title={props.customTitle?props.customTitle:"{{ date.title }}"}
+            date={element['{{date.key}}']}
+            variant={props.customVariant ? props.customVariant : DateWidgetVariant.white}
+        />
+    )
+}
+{% endfor %}
+
+export const {{ compName }}Map : any = {
+    {% for date in properties %}
+    '{{date.key}}': {{ date.compName }},
+    {% endfor %}
+}

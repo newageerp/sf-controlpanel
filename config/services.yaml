@@ -130,6 +130,8 @@ services:
 
   Newageerp\SfControlpanel\Service\Defaults\DefaultsService:
     arguments: [ ]
+  Newageerp\SfControlpanel\Service\Properties\PropertyDateService:
+    arguments: [ ]
   Newageerp\SfControlpanel\Service\Tabs\TabsQuickSearchService:
     arguments: [ ]
   Newageerp\SfControlpanel\Service\Tabs\TabsService:

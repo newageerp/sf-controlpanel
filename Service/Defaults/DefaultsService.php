@@ -37,4 +37,16 @@ class DefaultsService
         }
         return [];
     }
+
+    public function isFieldExistsInDefaults(string $schema, string $path)
+    {
+        $df = $this->getDefaultsForSchema($schema);
+        $founded = array_filter(
+            $df['config']['fields'],
+            function ($f) use ($path) {
+                return $f['path'] === $path;
+            }
+        );
+        return count($founded) > 0;
+    }
 }

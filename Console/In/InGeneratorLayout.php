@@ -8,6 +8,7 @@ use Newageerp\SfControlpanel\Console\PropertiesUtils;
 use Newageerp\SfControlpanel\Console\Utils;
 use Newageerp\SfControlpanel\Service\EditForms\EditFormsRelSelectService;
 use Newageerp\SfControlpanel\Service\MenuService;
+use Newageerp\SfControlpanel\Service\Properties\PropertyDateService;
 use Newageerp\SfControlpanel\Service\Properties\PropertyTotalService;
 use Newageerp\SfControlpanel\Service\Tabs\TabsQuickSearchService;
 use Newageerp\SfControlpanel\Service\Utils\UtilsService;
@@ -23,12 +24,14 @@ class InGeneratorLayout extends Command
     protected EntitiesUtils $entitiesUtils;
     protected TabsQuickSearchService $tabsQsService;
     protected EditFormsRelSelectService $editFormsRelSelectService;
+    protected PropertyDateService $propertyDateService;
 
     public function __construct(
         PropertiesUtils $propertiesUtils,
         EntitiesUtils $entitiesUtils,
         TabsQuickSearchService $tabsQsService,
         EditFormsRelSelectService $editFormsRelSelectService,
+        PropertyDateService $propertyDateService,
     ) {
         parent::__construct();
 
@@ -36,6 +39,7 @@ class InGeneratorLayout extends Command
         $this->entitiesUtils = $entitiesUtils;
         $this->tabsQsService = $tabsQsService;
         $this->editFormsRelSelectService = $editFormsRelSelectService;
+        $this->propertyDateService = $propertyDateService;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -212,6 +216,8 @@ class InGeneratorLayout extends Command
 
         $propertyTotalService = new PropertyTotalService();
         $propertyTotalService->generate();
+
+        $this->propertyDateService->generate();
 
         $this->tabsQsService->generate();
 

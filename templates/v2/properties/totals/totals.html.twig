@@ -14,7 +14,7 @@ export function {{ compName }}(props: Props) {
             {props.totals.map((totalKey: string, totalIndex: number) => {
                 const Comp : any = {{ compName }}Map[totalKey];
 
-                return <Comp id={props.id}/>
+                return <Comp id={props.id} key={`total-${totalKey}`}/>
             })}
         </Fragment>
     )
