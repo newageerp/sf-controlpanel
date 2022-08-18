@@ -39,6 +39,8 @@ interface DateProps {
     id: number,
     customTitle?: string,
     customVariant?: DateWidgetVariant,
+    onClick?: () => void,
+    onEdit?: () => void,
 }
 
 {% for date in properties %}
@@ -52,6 +54,8 @@ export function {{ date.compName }}(props: DateProps) {
             title={props.customTitle?props.customTitle:"{{ date.title }}"}
             date={element['{{date.key}}']}
             variant={props.customVariant ? props.customVariant : DateWidgetVariant.white}
+            onClick={props.onClick}
+            onEdit={props.onEdit}
         />
     )
 }
