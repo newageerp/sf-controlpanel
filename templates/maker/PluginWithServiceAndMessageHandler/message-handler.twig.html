@@ -1,0 +1,60 @@
+<?php
+
+namespace App\Plugins\{{ name }};
+
+use Doctrine\ORM\EntityManagerInterface;
+use Enqueue\Client\ProducerInterface;
+use Newageerp\SfSocket\Event\SocketSendPoolEvent;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use App\Entity\{{ entityName }};
+
+#[AsMessageHandler]
+class {{ messageHandlerName }}
+{
+    protected ProducerInterface $producer;
+
+    protected {{ serviceName }} $service;
+
+    protected EntityManagerInterface $em;
+
+    protected LoggerInterface $ajLogger;
+
+    protected EventDispatcherInterface $evt;
+
+    public function __construct(
+        ProducerInterface $producer,
+        {{ serviceName }} $service,
+        EntityManagerInterface $em,
+        LoggerInterface $ajLogger,
+        EventDispatcherInterface $evt,
+    ) {
+        $this->producer = $producer;
+        $this->service = $service;
+        $this->em = $em;
+        $this->ajLogger = $ajLogger;
+        $this->evt = $evt;
+    }
+
+    public function __invoke({{ messageName }} $message)
+    {
+        $this->ajLogger->warning('{{ messageName }} ' . $message->getId());
+        
+        $repo = $this->em->getRepository({{ entityName }}::class);
+
+        /**
+         * @var {{ entityName }} $element
+         */
+        $element = $repo->find($message->getId());
+
+        if ($element) {
+            
+        }
+
+        $this->em->flush();
+
+        $event = new SocketSendPoolEvent();
+        $this->evt->dispatch($event, SocketSendPoolEvent::NAME);
+    }
+}

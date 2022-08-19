@@ -51,6 +51,10 @@ services:
   Newageerp\SfControlpanel\Console\EntitiesUtils:
     arguments: [ ]
 
+  Newageerp\SfControlpanel\Console\Maker\MakePluginWithServiceAndMessageHandler:
+    tags:
+      - { name: 'console.command' }
+
   Newageerp\SfControlpanel\Console\In\InLocalConfigSyncEntitiesConsole:
     tags:
       - { name: 'console.command' }
