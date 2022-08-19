@@ -6,6 +6,7 @@ interface Props {
   to: string;
   id: number;
   inPopup?: boolean;
+  type?: string;
 }
 
 export default function useConvert(props: Props) {
@@ -19,7 +20,7 @@ export default function useConvert(props: Props) {
         element: { id: props.id },
       },
     },
-    type: "main",
+    type: props.type ? props.props : "main",
     inPopup: !!props.inPopup,
   };
 
