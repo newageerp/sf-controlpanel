@@ -28,6 +28,7 @@ class MakePluginWithServiceAndMessageHandler extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $params = [];
+        $params['name'] = $input->getArgument('name');
         $params['pluginName'] = $input->getArgument('name');
         $params['entityName'] = $input->getArgument('entity_name');
         $params['serviceName'] = $params['pluginName'] . 'Service';
