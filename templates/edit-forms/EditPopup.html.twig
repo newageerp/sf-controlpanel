@@ -41,6 +41,8 @@ export default function {{ compName }}(props: Props) {
                     skipHiddenCheck={editProps.skipHiddenCheck}
                     fieldsToReturnOnSave={editProps.fieldsToReturnOnSave}
                     contentWrap={UI.Card.TransparentCardCompact}
+                    editContainerClassName={"pb-40"}
+                    saveOnBottom={true}
                 />
             </UI.Popup.NaePopupProvider>
         </Popup>

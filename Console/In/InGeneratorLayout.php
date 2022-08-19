@@ -7,6 +7,7 @@ use Newageerp\SfControlpanel\Console\LocalConfigUtils;
 use Newageerp\SfControlpanel\Console\PropertiesUtils;
 use Newageerp\SfControlpanel\Console\Utils;
 use Newageerp\SfControlpanel\Service\EditForms\EditFormsRelSelectService;
+use Newageerp\SfControlpanel\Service\Entities\EntitiesService;
 use Newageerp\SfControlpanel\Service\MenuService;
 use Newageerp\SfControlpanel\Service\Properties\PropertyDateService;
 use Newageerp\SfControlpanel\Service\Properties\PropertyTotalService;
@@ -224,17 +225,24 @@ class InGeneratorLayout extends Command
             Utils::writeOnChanges($fileName, $generatedContent);
         }
 
+        // ENTITIES
+        $entitiesService = new EntitiesService();
+        $entitiesService->generate();
 
+        // PROPERTIES
         $propertyTotalService = new PropertyTotalService();
         $propertyTotalService->generate();
 
         $this->propertyDateService->generate();
 
+        // TABS
         $this->tabsQsService->generate();
 
+        // UTILS
         $utilsService = new UtilsService();
         $utilsService->generate();
 
+        // EDIT FORMS
         $this->editFormsRelSelectService->generate();
 
         return Command::SUCCESS;
