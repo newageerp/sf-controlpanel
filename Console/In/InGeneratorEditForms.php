@@ -292,6 +292,8 @@ class InGeneratorEditForms extends Command
         $components = [];
 
         foreach ($editItems as $editItem) {
+            $slugUc = Utils::fixComponentName($editItem['config']['schema']);
+            
             $compName = Utils::fixComponentName(
                 ucfirst($editItem['config']['schema']) .
                     ucfirst($editItem['config']['type']) . 'EditPopup'
@@ -308,7 +310,8 @@ class InGeneratorEditForms extends Command
                 $fileName,
 
                 [
-                    'compName' => $compName
+                    'compName' => $compName,
+                    'slugUc' => $slugUc,
                 ]
             );
         }

@@ -2,6 +2,7 @@ import { UI } from '@newageerp/nae-react-ui';
 import { MvcEditModalContentProps, MvcViewModalContentProps } from '@newageerp/nae-react-ui/dist/interfaces';
 import React, { Fragment, useState, useEffect } from 'react';
 import { Popup } from '@newageerp/ui.popups.base.popup'
+import { {{ slugUc }}TitlesSingle } from '../../v2/entities/{{ slugUc }}/{{ slugUc }}Titles';
 
 interface Props {
     onClose: () => void,
@@ -12,7 +13,7 @@ interface Props {
 export default function {{ compName }}(props: Props) {
     const { editProps } = props;
     return (
-        <Popup onClose={props.onClose}>
+        <Popup onClose={props.onClose} header={<{{ slugUc }}TitlesSingle/>}>
             <UI.Popup.NaePopupProvider isPopup={true} onClose={props.onClose}>
                 <UI.Content.Edit
                     schema={editProps.schema}
