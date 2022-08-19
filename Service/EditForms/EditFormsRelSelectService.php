@@ -62,6 +62,7 @@ class EditFormsRelSelectService
                     }
 
                     $extraFilter = '';
+                    $extraFilterSearch = '';
                     if (isset($field['fieldDependency']) && $field['fieldDependency']) {
                         [$filterKey, $filterValue] = explode(":", $field['fieldDependency']);
                         $extraFilter =  'filters={[
