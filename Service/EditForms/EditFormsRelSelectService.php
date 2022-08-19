@@ -70,6 +70,12 @@ class EditFormsRelSelectService
                                     ]}
                                 ]}
                 ';
+                        $extraFilterSearch =  'extraFilter={
+                    {"and": [
+                        ["' . $filterKey . '", "=", props.parentElement.' . $filterValue . ', true]
+                    ]}
+                }
+';
                     }
 
                     $slug = $editItem['config']['schema'];
@@ -93,6 +99,7 @@ class EditFormsRelSelectService
                             'schema' => $fieldProperty ? $fieldProperty['schema'] : '',
                             'sort' => json_encode($objectSort),
                             'extraFilter' => $extraFilter,
+                            'extraFilterSearch' => $extraFilterSearch,
                             'key' => $fieldObjectProperty ? $fieldObjectProperty['key'] : '',
                             'allowCreateRel' => isset($field['allowCreateRel']) && $field['allowCreateRel'] ? true : false,
                             'popupSelectRelType' => Utils::fixComponentName($objectSchema . '-' . $popupSelectRelType) . 'TableDataSource',
