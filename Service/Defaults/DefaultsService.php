@@ -41,7 +41,7 @@ class DefaultsService
     public function isFieldExistsInDefaults(string $schema, string $path)
     {
         $df = $this->getDefaultsForSchema($schema);
-        if (!$df) {
+        if (!$df || !isset($df['config']['fields'])) {
             return false;
         }
         $founded = array_filter(
