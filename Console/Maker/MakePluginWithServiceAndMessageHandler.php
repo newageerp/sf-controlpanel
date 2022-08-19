@@ -43,9 +43,9 @@ class MakePluginWithServiceAndMessageHandler extends Command
         if (!is_dir($dir)) {
             mkdir($dir);
 
-            $tService->writeIfNotExists($dir . '/' . $params['serviceName'] . 'php', $params);
-            $tMessage->writeIfNotExists($dir . '/' . $params['messageName'] . 'php', $params);
-            $tMessageHandler->writeIfNotExists($dir . '/' . $params['messageHandlerName'] . 'php', $params);
+            $tService->writeIfNotExists($dir . '/' . $params['serviceName'] . '.php', $params);
+            $tMessage->writeIfNotExists($dir . '/' . $params['messageName'] . '.php', $params);
+            $tMessageHandler->writeIfNotExists($dir . '/' . $params['messageHandlerName'] . '.php', $params);
 
         } else {
             $output->writeln('Directory ' . $params['pluginName'] . ' already exists');
