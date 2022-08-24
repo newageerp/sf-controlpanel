@@ -20,7 +20,7 @@ export default function useConvert(props: Props) {
         element: { id: props.id },
       },
     },
-    type: props.type ? props.props : "main",
+    type: props.type ? props.type : "main",
     inPopup: !!props.inPopup,
   };
 
