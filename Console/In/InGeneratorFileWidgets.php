@@ -58,6 +58,7 @@ class InGeneratorFileWidgets extends Command
                 $widgetItems[] = [
                     'title' => $item['config']['title'],
                     'type' => $item['config']['type'],
+                    'hint' => $item['config']['hint'],
                 ];
             }
 
