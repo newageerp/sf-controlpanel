@@ -244,7 +244,7 @@ export default function {{ tpCompName }}(props: Props) {
                         doReload={loadData}
                         className={`${dataResult.loading?'tw3-animate-pulse':''}`}
                         navigate={props.navigate}
-                        customComponentOptions={{{ customComponentOptions|raw }}}
+                        customComponentOptions={ {{ customComponentOptions|raw }} }
                 />
             </div>
             {!props.hidePaging && pages > 1 &&
