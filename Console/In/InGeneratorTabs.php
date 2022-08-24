@@ -201,7 +201,7 @@ class InGeneratorTabs extends Command
 
                         $tdTemplate = $openTagTd .
                             $wrapStart .
-                            '<' . $customComponentName . ' item={item} value={' . $varName . '} />'
+                            '<' . $customComponentName . ' item={item} value={' . $varName . '} schema={"'.$tabItem['config']['schema'].'"} />'
                             .
                             $wrapFinish .
                             '</Td>';
