@@ -5,19 +5,29 @@ interface Props {
     element: {
         id: number;
     };
+    options?: any,
 }
 
 export default function {{ compName }}(props: Props) {
     const schema = "{{ schema }}";
-    const items = [
-        {% for file in files %}
+    const items = [];
+
+    const options = props.options ? props.options : {};
+
+    {% for file in files %}
+    const options{{ file.type }} = options['{{file.type}}']?options['{{file.type}}']:{};
+    const isHide{{file.type}} = !!options{{file.type}}.hide;
+    const disableUpload{{file.type}} = !!options{{file.type}}.disableUpload;
+    if (!isHide) {
+        items.push(
             {
                 title: "{{ file.title }}",
                 folder: `${schema}/${props.element.id}/{{ file.type }}`,
-                disableUpload: false,
-            },
-        {% endfor %}
+                disableUpload: disableUpload{{file.type}},
+            }
+        );
+    }
+    {% endfor %}
 
-    ];
     return <MultipleFilesWidget items={items} />;
 }
