@@ -369,11 +369,12 @@ class InGeneratorTabs extends Command
 
                             'totals' => $totals && count($totals) > 0 ? json_encode($totals, JSON_UNESCAPED_UNICODE) : 'null',
 
-                            'customComponentOptions' => json_encode(
+                            'customComponentOptions' => str_replace('"props.relId"', 'props.relId', json_encode(
                                 [
                                     'relSchema' => $relProperty['schema'],
+                                    'relId' => "props.relId"
                                 ]
-                            )
+                            ))
                         ]
                     );
 
