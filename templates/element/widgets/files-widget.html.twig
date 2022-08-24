@@ -18,7 +18,7 @@ export default function {{ compName }}(props: Props) {
     const options{{ file.type }} = options['{{file.type}}']?options['{{file.type}}']:{};
     const isHide{{file.type}} = !!options{{file.type}}.hide;
     const disableUpload{{file.type}} = !!options{{file.type}}.disableUpload;
-    if (!isHide) {
+    if (!isHide{{file.type}}) {
         items.push(
             {
                 title: "{{ file.title }}",
