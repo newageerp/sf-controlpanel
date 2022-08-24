@@ -201,7 +201,7 @@ class InGeneratorTabs extends Command
 
                         $tdTemplate = $openTagTd .
                             $wrapStart .
-                            '<' . $customComponentName . ' item={item} value={' . $varName . '} schema={"'.$tabItem['config']['schema'].'"} />'
+                            '<' . $customComponentName . ' item={item} value={' . $varName . '} {...props.customComponentOptions} />'
                             .
                             $wrapFinish .
                             '</Td>';
@@ -368,6 +368,12 @@ class InGeneratorTabs extends Command
                             'quickFilters' => $quickFilters && count($quickFilters) > 0 ? $quickFilters : 'null',
 
                             'totals' => $totals && count($totals) > 0 ? json_encode($totals, JSON_UNESCAPED_UNICODE) : 'null',
+
+                            'customComponentOptions' => json_encode(
+                                [
+                                    'relSchema' => $relProperty['schema'],
+                                ]
+                            )
                         ]
                     );
 
