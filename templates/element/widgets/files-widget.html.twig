@@ -18,12 +18,15 @@ export default function {{ compName }}(props: Props) {
     const options{{ file.type }} = options['{{file.type}}']?options['{{file.type}}']:{};
     const isHide{{file.type}} = !!options{{file.type}}.hide;
     const disableUpload{{file.type}} = !!options{{file.type}}.disableUpload;
+    const hint{{file.type}} = !!options{{file.type}}.hint?options{{file.type}}.hint:"{{ file.hint }}";
+
     if (!isHide{{file.type}}) {
         items.push(
             {
                 title: "{{ file.title }}",
                 folder: `${schema}/${props.element.id}/{{ file.type }}`,
                 disableUpload: disableUpload{{file.type}},
+                hint: hint{{file.type}},
             }
         );
     }
