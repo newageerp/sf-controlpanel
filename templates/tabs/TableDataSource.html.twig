@@ -76,7 +76,7 @@ export default function {{ tpCompName }}(props: Props) {
         const _extraFilter = JSON.parse(JSON.stringify(dataState.extraFilter));
         _extraFilter[key] = data;
 
-        if (!data && key in _extraFilter) {
+        if (!data && !(key in _extraFilter)) {
             return;
         }
 
