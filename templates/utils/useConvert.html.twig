@@ -7,6 +7,7 @@ interface Props {
   id: number;
   inPopup?: boolean;
   type?: string;
+  onSaveCallback?: (el: any, backFunc: any) => void;
 }
 
 export default function useConvert(props: Props) {
@@ -22,6 +23,7 @@ export default function useConvert(props: Props) {
     },
     type: props.type ? props.type : "main",
     inPopup: !!props.inPopup,
+    onSaveCallback: props.onSaveCallback
   };
 
   const openLink = () => {
@@ -32,6 +34,7 @@ export default function useConvert(props: Props) {
         schema: props.to,
         newStateOptions: { createOptions: createOptions.options },
         type: createOptions.type,
+        onSaveCallback: createOptions.onSaveCallback,
       });
     } else {
       UIConfig.router({
