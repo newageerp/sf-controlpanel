@@ -4,6 +4,7 @@ import { MenuItem } from '@newageerp/sfs.modal.menu'
 import { UI, UIConfig } from '@newageerp/nae-react-ui'
 import { use{{ slugUc }}HookNae } from '../../../../Components/Hooks/use{{ slugUc }}HookNae'
 import {ToolbarButtonWithMenu} from '@newageerp/v2.element.toolbar-button-with-menu'
+import { useTranslation } from 'react-i18next'
 
 interface Props {
     element: any,
@@ -11,6 +12,7 @@ interface Props {
 
 export default function {{ compName }}(props: Props) {
     const element = use{{ slugUc }}HookNae(props.element.id);
+    const {t} = useTranslation();
 
     const { isPopup } = UI.Popup.useNaePopup();
     const { showEditPopup } = UI.Window.useNaeWindow();
