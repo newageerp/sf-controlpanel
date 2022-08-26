@@ -4,47 +4,9 @@ services:
     autowire: true      # Automatically injects dependencies in your services.
     autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
-  Newageerp\SfControlpanel\Controller\ConfigBuilderController:
+  Newageerp\SfControlpanel\Controller\*:
     arguments: [ ]
-  Newageerp\SfControlpanel\Controller\ConfigCacheController:
-    arguments: [ ]
-  Newageerp\SfControlpanel\Controller\ConfigDbController:
-    arguments: [ ]
-  Newageerp\SfControlpanel\Controller\ConfigDefaultsController:
-    arguments: [ ]
-  Newageerp\SfControlpanel\Controller\ConfigEditController:
-    arguments: [ ]
-  Newageerp\SfControlpanel\Controller\ConfigTabsController:
-    arguments: [ ]
-  Newageerp\SfControlpanel\Controller\ConfigViewController:
-    arguments: [ ]
-  Newageerp\SfControlpanel\Controller\ConfigWidgetsController:
-    arguments: [ ]
-  Newageerp\SfControlpanel\Controller\ConfigMenuController:
-    arguments: [ ]
-  Newageerp\SfControlpanel\Controller\ConfigMenuFolderController:
-    arguments: [ ]
-  Newageerp\SfControlpanel\Controller\ConfigMenuTitleController:
-    arguments: [ ]
-  Newageerp\SfControlpanel\Controller\ConfigBadgeController:
-    arguments: [ ]
-  Newageerp\SfControlpanel\Controller\ConfigFilesWidgetController:
-    arguments: [ ]
-  Newageerp\SfControlpanel\Controller\ConfigPropertiesController:
-    arguments: [ ]
-  Newageerp\SfControlpanel\Controller\ConfigVariablesController:
-    arguments: [ ]
-  Newageerp\SfControlpanel\Controller\ConfigUserPermissionsController:
-    arguments: [ ]
-  Newageerp\SfControlpanel\Controller\ConfigEntitiesController:
-    arguments: [ ]
-  Newageerp\SfControlpanel\Controller\ConfigEnumsController:
-    arguments: [ ]
-  Newageerp\SfControlpanel\Controller\ConfigPdfsController:
-    arguments: [ ]
-  Newageerp\SfControlpanel\Controller\ConfigStatusesController:
-    arguments: [ ]
-  Newageerp\SfControlpanel\Service\MenuService:
+  Newageerp\SfControlpanel\Service\*:
     arguments: [ ]
   Newageerp\SfControlpanel\Console\PropertiesUtils:
     arguments: [ ]
@@ -55,90 +17,10 @@ services:
     tags:
       - { name: 'console.command' }
 
-  Newageerp\SfControlpanel\Console\In\InLocalConfigSyncEntitiesConsole:
-    tags:
-      - { name: 'console.command' }
-  Newageerp\SfControlpanel\Console\In\InLocalConfigSyncFieldsConsole:
-    tags:
-      - { name: 'console.command' }
-  Newageerp\SfControlpanel\Console\In\InLocalConfigSyncPdfsConsole:
-    tags:
-      - { name: 'console.command' }
-  Newageerp\SfControlpanel\Console\In\InLocalConfigSyncStatusesConsole:
-    tags:
-      - { name: 'console.command' }
-  Newageerp\SfControlpanel\Console\In\InLocalConfigSyncUsersPermissionsConsole:
-    tags:
-      - { name: 'console.command' }
-  Newageerp\SfControlpanel\Console\In\InLocalConfigSyncVariablesConsole:
-    tags:
-      - { name: 'console.command' }
-  Newageerp\SfControlpanel\Console\In\InPathMapConsole:
-    tags:
-      - { name: 'console.command' }
-  Newageerp\SfControlpanel\Console\In\InGeneratorMenu:
-    tags:
-      - { name: 'console.command' }
-  Newageerp\SfControlpanel\Console\In\InGeneratorTabs:
-    tags:
-      - { name: 'console.command' }
-  Newageerp\SfControlpanel\Console\In\InGeneratorStatuses:
-    tags:
-      - { name: 'console.command' }
-  Newageerp\SfControlpanel\Console\In\InGeneratorEnums:
-    tags:
-      - { name: 'console.command' }
-  Newageerp\SfControlpanel\Console\In\InGeneratorBadges:
-    tags:
-      - { name: 'console.command' }
-  Newageerp\SfControlpanel\Console\In\InFillModels:
-    tags:
-      - { name: 'console.command' }
-  Newageerp\SfControlpanel\Console\In\InGeneratorEditForms:
-    tags:
-      - { name: 'console.command' }
-  Newageerp\SfControlpanel\Console\In\InGeneratorViewForms:
-    tags:
-      - { name: 'console.command' }
-  Newageerp\SfControlpanel\Console\In\InGeneratorRoutes:
-    tags:
-      - { name: 'console.command' }
-  Newageerp\SfControlpanel\Console\In\InGeneratorFileWidgets:
-    tags:
-      - { name: 'console.command' }
-  Newageerp\SfControlpanel\Console\In\InGeneratorPdfs:
-    tags:
-      - { name: 'console.command' }
-  Newageerp\SfControlpanel\Console\In\InGeneratorLayout:
-    tags:
-      - { name: 'console.command' }
-  Newageerp\SfControlpanel\Console\In\InRunAll:
+  Newageerp\SfControlpanel\Console\In\*:
     tags:
       - { name: 'console.command' }
 
-  Newageerp\SfControlpanel\Console\Out\OutCacheDocJsonConsole:
+  Newageerp\SfControlpanel\Console\Out\*:
     tags:
       - { name: 'console.command' }
-  Newageerp\SfControlpanel\Console\Out\OutLocalConfigBuildMockConsole:
-    tags:
-      - { name: 'console.command' }
-  Newageerp\SfControlpanel\Console\Out\OutLocalConfigSyncPropertiesConsole:
-    tags:
-      - { name: 'console.command' }
-  Newageerp\SfControlpanel\Console\Out\OutLocalConfigSyncSchemasConsole:
-    tags:
-      - { name: 'console.command' }
-  Newageerp\SfControlpanel\Console\Out\OutRunAll:
-    tags:
-      - { name: 'console.command' }
-
-  Newageerp\SfControlpanel\Service\Defaults\DefaultsService:
-    arguments: [ ]
-  Newageerp\SfControlpanel\Service\Properties\PropertyDateService:
-    arguments: [ ]
-  Newageerp\SfControlpanel\Service\Tabs\TabsQuickSearchService:
-    arguments: [ ]
-  Newageerp\SfControlpanel\Service\Tabs\TabsService:
-    arguments: [ ]
-  Newageerp\SfControlpanel\Service\EditForms\EditFormsRelSelectService:
-    arguments: [ ]
