@@ -1,12 +1,9 @@
-import { SquareButton } from '@newageerp/ui.buttons.base.square-button'
 import React, { Fragment } from 'react'
-import { TwBackgroundColors, TwTextColors } from '@newageerp/ui.styles.tailwind'
-import { IconType } from '@newageerp/ui.icons.base.icon'
 import { IconList } from '@newageerp/ui.icons.base.icon-list'
-import { useComponentVisible } from '@newageerp/hooks.use-component-visible'
-import { Menu, MenuItem } from '@newageerp/sfs.modal.menu'
+import { MenuItem } from '@newageerp/sfs.modal.menu'
 import { UI, UIConfig } from '@newageerp/nae-react-ui'
 import { use{{ slugUc }}HookNae } from '../../../../Components/Hooks/use{{ slugUc }}HookNae'
+import {ToolbarButtonWithMenu} from '@newageerp/v2.element.toolbar-button-with-menu'
 
 interface Props {
     element: any,
@@ -14,9 +11,6 @@ interface Props {
 
 export default function {{ compName }}(props: Props) {
     const element = use{{ slugUc }}HookNae(props.element.id);
-
-    const { ref, isComponentVisible, setIsComponentVisible } = useComponentVisible(false);
-    const toggleComponentVisible = () => setIsComponentVisible(!isComponentVisible);
 
     const { isPopup } = UI.Popup.useNaePopup();
     const { showEditPopup } = UI.Window.useNaeWindow();
@@ -59,31 +53,16 @@ export default function {{ compName }}(props: Props) {
     }
 
     return (
-        <span className='relative' ref={ref}>
-            <SquareButton
-                    bgColor={TwBackgroundColors.slate50}
-                    onClick={toggleComponentVisible}
-                    icon={
-                            {
-                                icon: IconList.plus,
-                                type: IconType.Solid,
-                                className: TwTextColors.slate400
-                            }
-                    }
-            />
-            {!!isComponentVisible &&
-                <Menu>
-                    {% for item in items %}
-                        <MenuItem 
-                            {% if item.tooltip %}tooltipContent={"{{ item.tooltip }}"} {% endif %}
-                            onClick={() => openLink("{{ item.target }}")}
-                            disabled={ {% if item.disableOnScope %}element.scopes.indexOf("{{ item.disableOnScope }}") >= 0{% else %}false{% endif %} }
-                        >
-                            {{  item.targetTitle }}
-                        </MenuItem>
-                    {% endfor %}
-                </Menu>
-            }
-        </span>
+        <ToolbarButtonWithMenu icon={IconList.plus} title={t("Sukurti")}>
+        {% for item in items %}
+            <MenuItem 
+                {% if item.tooltip %}tooltipContent={"{{ item.tooltip }}"} {% endif %}
+                onClick={() => openLink("{{ item.target }}")}
+                disabled={ {% if item.disableOnScope %}element.scopes.indexOf("{{ item.disableOnScope }}") >= 0{% else %}false{% endif %} }
+            >
+                {{  item.targetTitle }}
+            </MenuItem>
+        {% endfor %}
+        </ToolbarButtonWithMenu>
     )
 }
