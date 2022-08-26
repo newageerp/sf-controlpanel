@@ -319,6 +319,9 @@ class InGeneratorTabs extends Command
                         $item['sort'] = $this->defaultsService->getSortForSchema($item['property']['format']);
                         $item['sortStr'] = json_encode($item['sort']);
                     }
+                    if (!$item['sortStr']) {
+                        $item['sortStr'] = json_encode([]);
+                    }
 
                     return $item;
                 },
