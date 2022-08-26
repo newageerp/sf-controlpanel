@@ -4,9 +4,11 @@ services:
     autowire: true      # Automatically injects dependencies in your services.
     autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
-  Newageerp\SfControlpanel\Controller\*:
+  Newageerp\SfControlpanel\Controller\:
+    resource: '../Controller/*'
     arguments: [ ]
-  Newageerp\SfControlpanel\Service\*:
+  Newageerp\SfControlpanel\Service\:
+    resource: '../Service/*'
     arguments: [ ]
   Newageerp\SfControlpanel\Console\PropertiesUtils:
     arguments: [ ]
@@ -17,10 +19,12 @@ services:
     tags:
       - { name: 'console.command' }
 
-  Newageerp\SfControlpanel\Console\In\*:
+  Newageerp\SfControlpanel\Console\In:
+    resource: '../Console/In/*'
     tags:
       - { name: 'console.command' }
 
-  Newageerp\SfControlpanel\Console\Out\*:
+  Newageerp\SfControlpanel\Console\Out\:
+    resource: '../Console/Out/*'
     tags:
       - { name: 'console.command' }
