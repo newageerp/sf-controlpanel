@@ -86,4 +86,15 @@ export const {{ TP_COMP_NAME }}{{ k }}Widget = (props: ContentWidgetProps) => {
     )
 };
 
+export const {{ TP_COMP_NAME }}{{ k }}ElementStatus = (props: StatusProps) => {
+    const element = use{{ schemaUc }}HookNae(props.element.id);
+    if (!element) {
+        return <Fragment/>
+    }
+
+    const CompName = `{{schemaUc}}{{ k }}Badge${element[k]}`
+
+    return <CompName {...props}/>
+}
+
 {% endfor %}
