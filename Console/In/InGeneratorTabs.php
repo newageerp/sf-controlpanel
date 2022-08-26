@@ -10,6 +10,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Newageerp\SfControlpanel\Console\LocalConfigUtils;
+use Newageerp\SfControlpanel\Service\Defaults\DefaultsService;
 use Newageerp\SfControlpanel\Service\TemplateService;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -21,11 +22,17 @@ class InGeneratorTabs extends Command
 
     protected EntitiesUtils $entitiesUtils;
 
-    public function __construct(PropertiesUtils $propertiesUtils, EntitiesUtils $entitiesUtils)
-    {
+    protected DefaultsService $defaultsService;
+
+    public function __construct(
+        PropertiesUtils $propertiesUtils,
+        EntitiesUtils $entitiesUtils,
+        DefaultsService $defaultsService,
+    ) {
         parent::__construct();
         $this->propertiesUtils = $propertiesUtils;
         $this->entitiesUtils = $entitiesUtils;
+        $this->defaultsService = $defaultsService;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -306,6 +313,11 @@ class InGeneratorTabs extends Command
 
                     if ($item['type'] === 'status') {
                         $hasStatusFilter = true;
+                    }
+
+                    if ($item['type'] === 'object') {
+                        $item['sort'] = $this->defaultsService->getSortForSchema($item['property']['format']);
+                        $item['sortStr'] = json_encode($item['sort']);
                     }
 
                     return $item;

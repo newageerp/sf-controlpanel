@@ -38,6 +38,18 @@ class DefaultsService
         return [];
     }
 
+    public function getSortForSchema(string $schema)
+    {
+        $df = $this->getDefaultsForSchema($schema);
+        if (
+            $df && isset($df['config']['defaultSort']) &&
+            $df['config']['defaultSort']
+        ) {
+            return json_decode($df['config']['defaultSort'], true);
+        }
+        return [];
+    }
+
     public function isFieldExistsInDefaults(string $schema, string $path)
     {
         $df = $this->getDefaultsForSchema($schema);
