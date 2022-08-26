@@ -64,7 +64,7 @@ export const {{ TP_COMP_NAME }} = (status: number, type: string, short?: boolean
 
 export const {{ TP_COMP_NAME }}List = {{ statusJson|raw }};
 
-export const {{ TP_COMP_NAME }}Map = {
+export const {{ TP_COMP_NAME }}Map : any = {
     {% for status in statusData %}
         '{{ status.type }}-{{ status.status }}': {{ status.statusName }},
     {% endfor %}
