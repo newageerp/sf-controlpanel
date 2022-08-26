@@ -17,6 +17,10 @@ interface StatusProps {
     size?: string
 }
 
+interface StatusElementProps extend StatusProps {
+    id: number
+}
+
 interface StatusPropsWithStatus extends StatusProps {
     status: number,
 }
@@ -87,12 +91,12 @@ export const {{ TP_COMP_NAME }}{{ k }}Widget = (props: ContentWidgetProps) => {
 };
 
 export const {{ TP_COMP_NAME }}{{ k }}ElementStatus = (props: StatusProps) => {
-    const element = use{{ schemaUc }}HookNae(props.element.id);
+    const element = use{{ schemaUc }}HookNae(props.id);
     if (!element) {
         return <Fragment/>
     }
 
-    const CompName = `{{schemaUc}}{{ k }}Badge${element[k]}`
+    const CompName = `{{schemaUc}}{{ k }}Badge${element['{{ k }}']}`
 
     return <CompName {...props}/>
 }
