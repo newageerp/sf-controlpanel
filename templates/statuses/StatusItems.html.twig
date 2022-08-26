@@ -17,7 +17,7 @@ interface StatusProps {
     size?: string
 }
 
-interface StatusElementProps extend StatusProps {
+interface StatusElementProps extends StatusProps {
     id: number
 }
 
@@ -64,6 +64,12 @@ export const {{ TP_COMP_NAME }} = (status: number, type: string, short?: boolean
 
 export const {{ TP_COMP_NAME }}List = {{ statusJson|raw }};
 
+export const {{ TP_COMP_NAME }}Map = {
+    {% for status in statusData %}
+        '{{ status.type }}-{{ status.status }}': {{ status.statusName }},
+    {% endfor %}
+};
+
 {% for k,c in statusCompJson %}
 
 export const {{ TP_COMP_NAME }}{{ k }}Widget = (props: ContentWidgetProps) => {
@@ -90,13 +96,18 @@ export const {{ TP_COMP_NAME }}{{ k }}Widget = (props: ContentWidgetProps) => {
     )
 };
 
-export const {{ TP_COMP_NAME }}{{ k }}ElementStatus = (props: StatusProps) => {
+export const {{ TP_COMP_NAME }}{{ k }}ElementStatus = (props: StatusElementProps) => {
     const element = use{{ schemaUc }}HookNae(props.id);
     if (!element) {
         return <Fragment/>
     }
 
-    const CompName = `{{schemaUc}}{{ k }}Badge${element['{{ k }}']}`
+    const key = `{{ c.type }}-${element['{{ c.type }}']}`;
+    const CompName = {{ TP_COMP_NAME }}Map[key];
+
+    if (!CompName) {
+        return <Fragment/>
+    }
 
     return <CompName {...props}/>
 }
