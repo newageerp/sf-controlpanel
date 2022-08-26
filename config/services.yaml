@@ -19,7 +19,7 @@ services:
     tags:
       - { name: 'console.command' }
 
-  Newageerp\SfControlpanel\Console\In:
+  Newageerp\SfControlpanel\Console\In\:
     resource: '../Console/In/*'
     tags:
       - { name: 'console.command' }
