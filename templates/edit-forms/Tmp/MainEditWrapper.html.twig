@@ -96,18 +96,27 @@ export default function MainEditWrapper(props: Props) {
             {element ? (
                 <div className={`space-y-4 ${props.editContainerClassName ? props.editContainerClassName : ''}`}>
                     {headerContent}
-                    <div className={`flex gap-2 ${isCompact ? 'flex-col' : ''}`}>
+                    <div className={`flex gap-2  ${isCompact ? 'flex-col' : ''}`}>
                         <WrapComponent className={'flex-grow'}>
                             <div className={'space-y-2'}>{children}</div>
-                        </WrapComponent>
-                        <WideToolbar onSave={props.onSave} onCancel={props.goBack} />
-                        {!!props.error && <UI.Form.ErrorAlert error={props.error} />}
 
-                        {/* <div
+                            <WideToolbar onSave={props.onSave} onCancel={props.goBack} />
+                            {!!props.error && <UI.Form.ErrorAlert error={props.error} />}
+                            
+                        </WrapComponent>
+
+
+                        <div
                             className={`${isCompact ? 'w-full' : 'w-80'}`}
                             style={isCompact ? {} : { minWidth: '20rem' }}
                         >
-                            <div className={`grid grid-cols-1 gap-1`}>
+                            <UI.Widget.Widget
+                                type={UI.Widget.WidgetType.editRight}
+                                element={element}
+                                schema={props.schema ? props.schema : '-'}
+                                saveError={props.error}
+                            />
+                            {/* <div className={`grid grid-cols-1 gap-1`}>
                                 {!!props.onSave && (
                                     <UI.Buttons.Button
                                         icon={'fad fa-save'}
@@ -128,14 +137,9 @@ export default function MainEditWrapper(props: Props) {
                                 )}
 
 
-                                <UI.Widget.Widget
-                                    type={UI.Widget.WidgetType.editRight}
-                                    element={element}
-                                    schema={props.schema ? props.schema : '-'}
-                                    saveError={props.error}
-                                />
-                            </div>
-                        </div> */}
+                                
+                            </div> */}
+                        </div>
                     </div>
                 </div>
             ) : (
