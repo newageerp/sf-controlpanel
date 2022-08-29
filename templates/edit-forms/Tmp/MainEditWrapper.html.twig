@@ -1,0 +1,146 @@
+import React, { Fragment } from 'react'
+import { useTranslation } from 'react-i18next'
+import { isMobile } from 'react-device-detect'
+import { UI } from '@newageerp/nae-react-ui'
+import { WideToolbar } from '@newageerp/ui.form.base.form-pack'
+
+export enum EditHeaderType {
+    show = 'Show',
+    showToolbar = 'ShowAsToolbar',
+    hide = 'Hide'
+}
+
+interface Props {
+    element: any
+    schema?: string
+    title: string
+    children?: any
+
+    onSave?: () => void
+    onSaveAndStay?: () => void
+    saveLoading?: boolean
+
+    disableBack?: boolean
+
+    error?: any
+
+    goBack?: () => void
+
+    compact?: boolean
+
+    header: EditHeaderType
+    contentWrap?: any
+
+    saveOnBottom?: boolean,
+    editContainerClassName?: string,
+}
+
+export default function MainEditWrapper(props: Props) {
+    const { element, title, children } = props
+
+    const { t } = useTranslation()
+
+    const goBack = () => {
+        // if (isPopup) {
+        //     if (onClose) {
+        //         onClose();
+        //     }
+        // } else {
+        //     history.goBack();
+        // }
+        // history.goBack()
+        if (props.goBack) {
+            props.goBack()
+        }
+    }
+
+    const isCompact = isMobile || props.compact || props.saveOnBottom;
+
+    const WrapComponent = props.contentWrap ? props.contentWrap : UI.Card.WhiteCard
+
+    const headerContent =
+        props.header === EditHeaderType.hide ? (
+            <Fragment />
+        ) : (
+            <Fragment>
+                {props.header === EditHeaderType.showToolbar ? (
+                    <Fragment>
+                        <UI.Toolbar.Toolbar>
+                            <div className={'flex gap-2'}>
+                                {!props.disableBack && (
+                                    <button onClick={goBack}>
+                                        <i className={'fad fa-arrow-left text-white'} />
+                                    </button>
+                                )}
+                                <UI.Typography.H3 className={'text-nsecondary-200'}>{title}</UI.Typography.H3>
+                            </div>
+                        </UI.Toolbar.Toolbar>
+                    </Fragment>
+                ) : (
+                    <Fragment>
+                        <div className={'flex gap-2'}>
+                            {!props.disableBack && (
+                                <button onClick={goBack}>
+                                    <i className={'fad fa-arrow-left text-gray-400'} />
+                                </button>
+                            )}
+                            <UI.Typography.H3>{title}</UI.Typography.H3>
+                        </div>
+                    </Fragment>
+                )}
+            </Fragment>
+        )
+
+    return (
+        <Fragment>
+            {element ? (
+                <div className={`space-y-4 ${props.editContainerClassName ? props.editContainerClassName : ''}`}>
+                    {headerContent}
+                    <div className={`flex gap-2 ${isCompact ? 'flex-col' : ''}`}>
+                        <WrapComponent className={'flex-grow'}>
+                            <div className={'space-y-2'}>{children}</div>
+                        </WrapComponent>
+                        <WideToolbar onSave={props.onSave} onCancel={props.goBack} />
+                        {!!props.error && <UI.Form.ErrorAlert error={props.error} />}
+
+                        {/* <div
+                            className={`${isCompact ? 'w-full' : 'w-80'}`}
+                            style={isCompact ? {} : { minWidth: '20rem' }}
+                        >
+                            <div className={`grid grid-cols-1 gap-1`}>
+                                {!!props.onSave && (
+                                    <UI.Buttons.Button
+                                        icon={'fad fa-save'}
+                                        onClick={props.onSave}
+                                        iconLoading={props.saveLoading}
+                                    >
+                                        {t('Išsaugoti')}
+                                    </UI.Buttons.Button>
+                                )}
+                                {!!props.onSaveAndStay && (
+                                    <UI.Buttons.Button
+                                        icon={'fad fa-save'}
+                                        onClick={props.onSaveAndStay}
+                                        iconLoading={props.saveLoading}
+                                    >
+                                        {t('Išsaugoti ir likti')}
+                                    </UI.Buttons.Button>
+                                )}
+
+
+                                <UI.Widget.Widget
+                                    type={UI.Widget.WidgetType.editRight}
+                                    element={element}
+                                    schema={props.schema ? props.schema : '-'}
+                                    saveError={props.error}
+                                />
+                            </div>
+                        </div> */}
+                    </div>
+                </div>
+            ) : (
+                <Fragment />
+            )}
+        </Fragment>
+    )
+}

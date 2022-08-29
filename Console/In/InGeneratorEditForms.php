@@ -323,6 +323,16 @@ class InGeneratorEditForms extends Command
             ]
         );
 
+        // TMP
+        (new TemplateService('edit-forms/Tmp/MainEdit.html.twig'))->writeToFileOnChanges(
+            Utils::generatedV2Path('edit-forms') . '/EdMainEdititPopup.tsx',
+            [],
+        );
+        (new TemplateService('edit-forms/Tmp/MainEditWrapper.html.twig'))->writeToFileOnChanges(
+            Utils::generatedV2Path('edit-forms') . '/MainEditWrapper.tsx',
+            [],
+        );;
+
         return Command::SUCCESS;
     }
 }
