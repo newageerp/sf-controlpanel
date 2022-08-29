@@ -100,9 +100,9 @@ export default function MainEditWrapper(props: Props) {
                         <WrapComponent className={'flex-grow'}>
                             <div className={'space-y-2'}>{children}</div>
 
-                            <WideToolbar onSave={props.onSave} onCancel={props.goBack} />
+                            <WideToolbar onSave={props.onSave} onCancel={props.goBack} onExtraSave={props.onSaveAndStay} size={props.compact ? 'base' : 'xl'} />
                             {!!props.error && <UI.Form.ErrorAlert error={props.error} />}
-                            
+
                         </WrapComponent>
 
 

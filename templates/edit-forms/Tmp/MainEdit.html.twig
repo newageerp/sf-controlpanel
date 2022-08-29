@@ -20,7 +20,7 @@ interface Props {
   onSave?: (el: any, backFunc: any) => void
   onSaveAndStay?: (el: any, backFunc: any) => void
 
-  onBack: (isNew: boolean, el?: any) => void
+  onBack?: (isNew: boolean, el?: any) => void
 
   newStateOptions?: any
 
@@ -93,7 +93,9 @@ export default function MainEdit(props: Props) {
         if (res.error) {
         } else {
           const backFunction = () => {
-            props.onBack(isNew, res.data.element)
+            if (props.onBack) {
+              props.onBack(isNew, res.data.element)
+            }
           }
           if (props.onSave) {
             props.onSave(res.data.element, backFunction)
@@ -116,7 +118,9 @@ export default function MainEdit(props: Props) {
         if (res.error) {
         } else {
           const backFunction = () => {
-            props.onBack(isNew, res.data.element)
+            if (props.onBack) {
+              props.onBack(isNew, res.data.element)
+            }
           }
           if (props.onSaveAndStay) {
             props.onSaveAndStay(res.data.element, backFunction)
@@ -671,7 +675,11 @@ export default function MainEdit(props: Props) {
       onSaveAndStay={props.onSaveAndStay ? doSaveAndStay : undefined}
       saveLoading={saveDataParams.loading}
       error={saveDataParams.error}
-      goBack={() => props.onBack(false)}
+      goBack={() => {
+        if (props.onBack) {
+          props.onBack(false)
+        }
+      }}
       header={props.header}
       schema={props.schema}
       compact={props.compact}
