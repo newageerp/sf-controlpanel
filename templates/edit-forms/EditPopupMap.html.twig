@@ -4,6 +4,7 @@ import {{ component.compName }} from './popups/{{ component.compName }}';
 {% endfor %}
 import { MvcEditModalContentProps, MvcViewModalContentProps } from '@newageerp/nae-react-ui/dist/interfaces';
 import { UI } from '@newageerp/nae-react-ui';
+import MainEdit from '../v2/edit-forms/MainEdit';
 
 export const EditPopupMap = [
     {% for component in components %}
@@ -33,7 +34,7 @@ export const editPopupBySchemaAndType = (schema: string, type: string, props: Po
 
     return (
         <UI.Popup.Popup visible={true} toggleVisible={props.onClose}>
-            <UI.Content.Edit
+            <MainEdit
                 schema={editProps.schema}
                 type={editProps.type ? editProps.type : 'main'}
                 id={

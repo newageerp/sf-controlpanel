@@ -3,6 +3,7 @@ import { MvcEditModalContentProps, MvcViewModalContentProps } from '@newageerp/n
 import React, { Fragment, useState, useEffect } from 'react';
 import { Popup } from '@newageerp/ui.popups.base.popup'
 import { {{ slugUc }}TitlesSingle } from '../../v2/entities/{{ slugUc }}/{{ slugUc }}Titles';
+import MainEdit from '../v2/edit-forms/MainEdit';
 
 interface Props {
     onClose: () => void,
@@ -15,7 +16,7 @@ export default function {{ compName }}(props: Props) {
     return (
         <Popup onClose={props.onClose} header={<{{ slugUc }}TitlesSingle/>}>
             <UI.Popup.NaePopupProvider isPopup={true} onClose={props.onClose}>
-                <UI.Content.Edit
+                <MainEdit
                     schema={editProps.schema}
                     type={editProps.type ? editProps.type : 'main'}
                     id={
