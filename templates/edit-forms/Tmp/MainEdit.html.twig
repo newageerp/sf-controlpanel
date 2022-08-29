@@ -675,7 +675,11 @@ export default function MainEdit(props: Props) {
       onSaveAndStay={props.onSaveAndStay ? doSaveAndStay : undefined}
       saveLoading={saveDataParams.loading}
       error={saveDataParams.error}
-      goBack={props.onBack?() => {props.onBack(false)}:undefined}
+      goBack={props.onBack?() => {
+        if (props.onBack) {
+        props.onBack(false);
+        }
+      }:undefined}
       header={props.header}
       schema={props.schema}
       compact={props.compact}
