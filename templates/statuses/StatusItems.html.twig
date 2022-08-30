@@ -92,6 +92,8 @@ export const {{ TP_COMP_NAME }}{{ k }}Widget = (props: ContentWidgetProps) => {
 
             onStatusChange={changeStatus}
             reloadState={element.{{ c.type }}}
+
+            showOnlyActive={props.options.showOnlyActive}
         />
     )
 };
