@@ -9,6 +9,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use App\Entity\{{ entityName }};
+use Newageerp\SfSocket\Service\SocketService;
 
 #[AsMessageHandler]
 class {{ messageHandlerName }}
@@ -23,18 +24,22 @@ class {{ messageHandlerName }}
 
     protected EventDispatcherInterface $evt;
 
+    protected SocketService $socketService;
+
     public function __construct(
         ProducerInterface $producer,
         {{ serviceName }} $service,
         EntityManagerInterface $em,
         LoggerInterface $ajLogger,
         EventDispatcherInterface $evt,
+        SocketService $socketService,
     ) {
         $this->producer = $producer;
         $this->service = $service;
         $this->em = $em;
         $this->ajLogger = $ajLogger;
         $this->evt = $evt;
+        $this->socketService = $socketService;
     }
 
     public function __invoke({{ messageName }} $message)
@@ -54,7 +59,6 @@ class {{ messageHandlerName }}
 
         $this->em->flush();
 
-        $event = new SocketSendPoolEvent();
-        $this->evt->dispatch($event, SocketSendPoolEvent::NAME);
+        $this->socketService->sendPool();
     }
 }

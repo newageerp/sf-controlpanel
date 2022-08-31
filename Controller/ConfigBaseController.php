@@ -5,6 +5,7 @@ namespace Newageerp\SfControlpanel\Controller;
 use Doctrine\ORM\EntityManagerInterface;
 use Newageerp\SfBaseEntity\Controller\OaBaseController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Newageerp\SfSocket\Service\SocketService;
 
 class ConfigBaseController extends OaBaseController
 {
@@ -12,9 +13,9 @@ class ConfigBaseController extends OaBaseController
 
     protected string $localDbFile;
 
-    public function __construct(EntityManagerInterface $em, EventDispatcherInterface $eventDispatcher)
+    public function __construct(EntityManagerInterface $em, EventDispatcherInterface $eventDispatcher, SocketService $socketService)
     {
-        parent::__construct($em, $eventDispatcher);
+        parent::__construct($em, $eventDispatcher, $socketService);
 
         $this->localStorage = $_ENV['NAE_SFS_CP_STORAGE_PATH'];
         $this->localDbFile = $_ENV['NAE_SFS_CP_DB_PATH'];

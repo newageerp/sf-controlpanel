@@ -10,6 +10,7 @@ use Ramsey\Uuid\Uuid;
 use Symfony\Component\Finder\Finder;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Newageerp\SfSocket\Service\SocketService;
 
 /**
  * @Route(path="/app/nae-core/config-edit")
@@ -18,9 +19,9 @@ class ConfigEditController extends ConfigBaseController
 {
     protected PropertiesUtils $propertiesUtils;
 
-    public function __construct(EntityManagerInterface $em, EventDispatcherInterface $eventDispatcher, PropertiesUtils $propertiesUtils)
+    public function __construct(EntityManagerInterface $em, EventDispatcherInterface $eventDispatcher, PropertiesUtils $propertiesUtils, SocketService $socketService)
     {
-        parent::__construct($em, $eventDispatcher);
+        parent::__construct($em, $eventDispatcher, $socketService);
         $this->propertiesUtils = $propertiesUtils;
     }
 
