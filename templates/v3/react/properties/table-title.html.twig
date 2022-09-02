@@ -3,5 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Th } from '@newageerp/ui.table.base.table'
 
 export const {{ compName }} = () => {
-    return <Th>{{ property.title }}</Th>
+    const {t} = useTranslation();
+
+    return <Th>{t('{{ property.title }}')}</Th>
 }
