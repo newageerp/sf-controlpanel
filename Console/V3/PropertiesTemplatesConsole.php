@@ -29,28 +29,35 @@ class PropertiesTemplatesConsole extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $propertiesMap = [];
+
         $entities = $this->entitiesUtils->getEntities();
 
-        foreach ($entities as $entity) {
+        foreach ($entities as $key => $entity) {
             $slug = $entity['config']['slug'];
             $className = $entity['config']['className'];
 
             $properties = $this->propertiesUtils->getPropertiesForEntitySlug($slug);
 
             foreach ($properties as $property) {
-                
+
                 $components = [
-                    'edit-title',
-                    'edit-value',
-                    'filter-title',
-                    'filter-value',
                     'table-title',
                     'table-value',
                     'view-title',
                     'view-value',
                 ];
 
+                if ($property['isDb']) {
+                    $components[] = 'edit-title';
+                    $components[] = 'edit-value';
+
+                    $components[] = 'filter-title';
+                    $components[] = 'filter-value';
+                }
+
                 $propertySlug = $property['config']['key'];
+
                 $mainCompName = UtilsV3::fixComponentName(
                     [
                         $className,
@@ -72,9 +79,15 @@ class PropertiesTemplatesConsole extends Command
 
 
                     $compName = UtilsV3::fixComponentName([$mainCompName, $comp, $template]);
-                    $path = $folder .'/'.$compName.'.tsx';
+                    $path = $folder . '/' . $compName . '.tsx';
 
-                    (new TemplateService('v3/react/properties/'.$comp.'.html.twig'))->writeToFileOnChanges(
+
+                    $propertiesMap[] = [
+                        'path' => $folder,
+                        'comp' => $compName
+                    ];
+
+                    (new TemplateService('v3/react/properties/' . $comp . '.html.twig'))->writeToFileOnChanges(
                         $path,
                         [
                             'compName' => $compName
@@ -82,7 +95,20 @@ class PropertiesTemplatesConsole extends Command
                     );
                 }
             }
+
+            // TODO TMP
+            if ($key > 10) {
+                break;
+            }
         }
+
+
+        (new TemplateService('v3/react/properties/properties.map.html.twig'))->writeToFileOnChanges(
+            $path,
+            [
+                'propertiesMap' => $propertiesMap
+            ]
+        );
 
         return Command::SUCCESS;
     }
