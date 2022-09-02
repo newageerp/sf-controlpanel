@@ -99,11 +99,6 @@ class PropertiesTemplatesConsole extends Command
                     );
                 }
             }
-
-            // TODO TMP
-            if ($key > 10) {
-                break;
-            }
         }
 
         $propertiesTree = [];
