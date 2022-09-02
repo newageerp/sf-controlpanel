@@ -51,7 +51,7 @@ class PropertiesTemplatesConsole extends Command
                 ];
 
                 $propertySlug = $property['config']['key'];
-                $compName = UtilsV3::fixComponentName(
+                $mainCompName = UtilsV3::fixComponentName(
                     [
                         $className,
                         $propertySlug,
@@ -71,7 +71,7 @@ class PropertiesTemplatesConsole extends Command
                     );
 
 
-                    $compName = UtilsV3::fixComponentName([$compName, $comp, $template]);
+                    $compName = UtilsV3::fixComponentName([$mainCompName, $comp, $template]);
                     $path = $folder .'/'.$compName.'.tsx';
 
                     (new TemplateService('v3/react/properties/'.$comp.'.html.twig'))->writeToFileOnChanges(
