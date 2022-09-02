@@ -83,8 +83,12 @@ class PropertiesTemplatesConsole extends Command
 
 
                     $propertiesMap[] = [
-                        'path' => UtilsV3::relPathForPath($folder),
-                        'comp' => $compName
+                        'path' => UtilsV3::relPathForPath($path),
+                        'comp' => $compName,
+                        'templateComp' => $comp,
+                        'entity' => $className,
+                        'key' => $propertySlug,
+                        'template' => $template,
                     ];
 
                     (new TemplateService('v3/react/properties/' . $comp . '.html.twig'))->writeToFileOnChanges(
@@ -102,11 +106,25 @@ class PropertiesTemplatesConsole extends Command
             }
         }
 
+        $propertiesTree = [];
+        foreach ($propertiesMap as $el) {
+            if (!isset($propertiesTree[$el['entity']])) {
+                $propertiesTree[$el['entity']] = [];
+            }
+            if (!isset($propertiesTree[$el['entity']][$el['key']])) {
+                $propertiesTree[$el['entity']][$el['key']] = [];
+            }
+            if (!isset($propertiesTree[$el['entity']][$el['key']][$el['templateComp']])) {
+                $propertiesTree[$el['entity']][$el['key']][$el['templateComp']] = [];
+            }
+            $propertiesTree[$el['entity']][$el['key']][$el['templateComp']][$el['template']] = $comp;
+        }
 
         (new TemplateService('v3/react/properties/properties.map.html.twig'))->writeToFileOnChanges(
             UtilsV3::generatedV3Path('') . 'PropertiesMap.tsx',
             [
-                'propertiesMap' => $propertiesMap
+                'propertiesMap' => $propertiesMap,
+                'propertiesTree' => $propertiesTree,
             ]
         );
 
