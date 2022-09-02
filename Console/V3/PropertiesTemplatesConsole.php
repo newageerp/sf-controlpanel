@@ -48,7 +48,7 @@ class PropertiesTemplatesConsole extends Command
                     'view-value',
                 ];
 
-                if ($property['isDb']) {
+                if (isset($property['config']['isDb']) && $property['config']['isDb']) {
                     $components[] = 'edit-title';
                     $components[] = 'edit-value';
 
