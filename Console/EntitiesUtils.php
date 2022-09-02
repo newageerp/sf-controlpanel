@@ -101,4 +101,14 @@ class EntitiesUtils
         }
         return $sort;
     }
+
+    /**
+     * Get the value of entities
+     *
+     * @return array
+     */
+    public function getEntities(): array
+    {
+        return $this->entities;
+    }
 }

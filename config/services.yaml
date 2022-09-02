@@ -23,6 +23,10 @@ services:
     resource: '../Console/In/*'
     tags:
       - { name: 'console.command' }
+  Newageerp\SfControlpanel\Console\V3\:
+    resource: '../Console/V3/*'
+    tags:
+      - { name: 'console.command' }
 
   Newageerp\SfControlpanel\Console\Out\:
     resource: '../Console/Out/*'
