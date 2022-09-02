@@ -92,7 +92,8 @@ class PropertiesTemplatesConsole extends Command
                     (new TemplateService('v3/react/properties/' . $comp . '.html.twig'))->writeToFileOnChanges(
                         $path,
                         [
-                            'compName' => $compName
+                            'compName' => $compName,
+                            'property' => $property['config'],
                         ]
                     );
                 }
