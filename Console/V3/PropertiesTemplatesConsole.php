@@ -117,7 +117,7 @@ class PropertiesTemplatesConsole extends Command
             if (!isset($propertiesTree[$el['entity']][$el['key']][$el['templateComp']])) {
                 $propertiesTree[$el['entity']][$el['key']][$el['templateComp']] = [];
             }
-            $propertiesTree[$el['entity']][$el['key']][$el['templateComp']][$el['template']] = $comp;
+            $propertiesTree[$el['entity']][$el['key']][$el['templateComp']][$el['template']] = $el['comp'];
         }
 
         (new TemplateService('v3/react/properties/properties.map.html.twig'))->writeToFileOnChanges(

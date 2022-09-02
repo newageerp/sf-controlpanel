@@ -1,11 +1,19 @@
 {% for el in propertiesMap %}import {{ el.comp }} from '{{ el.path }}'{% endfor %}
 
 export const V3Properties : any = { 
-{% for slug,properties in propertiesTree %} {{ slug }}: {
-{% for property,comps in properties %}      {{property}}: {
-{% for comp,templates in comps %}           {{comp}}: {
-{% for template,compName in templates %}                {{template}}: {{compName}},{% endfor %}
-            },{% endfor %}
-        },{% endfor %}
-    },{% endfor %}
+{% for slug,properties in propertiesTree %} 
+    '{{ slug }}': {
+    {% for property,comps in properties %}
+        '{{property}}': {
+        {% for comp,templates in comps %}
+            '{{comp}}: {
+            {% for template,compName in templates %}
+                {{template}}: {{compName}},
+            {% endfor %}
+            },
+        {% endfor %}
+        },
+    {% endfor %}
+    },
+{% endfor %}
 }
