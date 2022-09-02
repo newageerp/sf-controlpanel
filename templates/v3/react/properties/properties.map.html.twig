@@ -6,9 +6,9 @@ export const V3Properties : any = {
     {% for property,comps in properties %}
         '{{property}}': {
         {% for comp,templates in comps %}
-            '{{comp}}: {
+            '{{comp}}': {
             {% for template,compName in templates %}
-                {{template}}: {{compName}},
+                '{{template}}': {{compName}},
             {% endfor %}
             },
         {% endfor %}
