@@ -83,7 +83,7 @@ class PropertiesTemplatesConsole extends Command
 
 
                     $propertiesMap[] = [
-                        'path' => UtilsV3::relPathForPath($path),
+                        'path' => str_replace(".tsx", "", UtilsV3::relPathForPath($path)),
                         'comp' => $compName,
                         'templateComp' => $comp,
                         'entity' => $className,
