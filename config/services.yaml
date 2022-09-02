@@ -14,6 +14,10 @@ services:
     arguments: [ ]
   Newageerp\SfControlpanel\Console\EntitiesUtils:
     arguments: [ ]
+  Newageerp\SfControlpanel\Console\PropertiesUtilsV3:
+    arguments: [ ]
+  Newageerp\SfControlpanel\Console\EntitiesUtilsV3:
+    arguments: [ ]
 
   Newageerp\SfControlpanel\Console\Maker\MakePluginWithServiceAndMessageHandler:
     tags:
