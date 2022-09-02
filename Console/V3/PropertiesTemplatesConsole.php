@@ -66,14 +66,12 @@ class PropertiesTemplatesConsole extends Command
                 );
                 foreach ($components as $comp) {
                     $template = 'main';
-                    [$compType, $compTypeValue] = explode("-", $comp);
 
                     $folder = UtilsV3::generatedV3Path(
                         [
                             $className,
                             'properties',
-                            $propertySlug,
-                            $compType
+                            $propertySlug
                         ]
                     );
 
