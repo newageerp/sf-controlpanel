@@ -83,7 +83,7 @@ class PropertiesTemplatesConsole extends Command
 
 
                     $propertiesMap[] = [
-                        'path' => $folder,
+                        'path' => UtilsV3::relPathForPath($folder),
                         'comp' => $compName
                     ];
 
@@ -104,7 +104,7 @@ class PropertiesTemplatesConsole extends Command
 
 
         (new TemplateService('v3/react/properties/properties.map.html.twig'))->writeToFileOnChanges(
-            $path,
+            UtilsV3::generatedV3Path('') . 'PropertiesMap.tsx',
             [
                 'propertiesMap' => $propertiesMap
             ]

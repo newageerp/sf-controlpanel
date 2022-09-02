@@ -6,6 +6,10 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class UtilsV3
 {
+    public static function relPathForPath(string $path) {
+        return str_replace(LocalConfigUtils::getFrontendGeneratedPath() . '/v3/', './', $path);
+    }
+
     public static function generatedV3Path(string | array $folder)
     {
         if (is_array($folder)) {
