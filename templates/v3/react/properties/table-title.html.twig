@@ -2,8 +2,13 @@ import React, { Fragment } from 'react'
 import { useTranslation } from 'react-i18next';
 import { Th } from '@newageerp/ui.table.base.table'
 
+{% set textAlignment = 'tw3-text-left' %}
+{% if naeType == 'float' or naeType == 'float4' or naeType == 'number' or naeType == 'seconds-to-time'}
+    {% set textAlignment = 'tw3-text-right' %}
+{% endif %}
+
 export const {{ compName }} = () => {
     const {t} = useTranslation();
 
-    return <Th>{t('{{ property.title }}')}</Th>
+    return <Th textAlignment="{{textAlignment}}">{t('{{ property.title }}')}</Th>
 }

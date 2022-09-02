@@ -34,12 +34,17 @@ class PropertiesTemplatesConsole extends Command
         $entities = $this->entitiesUtils->getEntities();
 
         foreach ($entities as $key => $entity) {
+            // if (!isset($entity['config']['enableForGen'])) {
+            //     continue;
+            // }
             $slug = $entity['config']['slug'];
             $className = $entity['config']['className'];
 
             $properties = $this->propertiesUtils->getPropertiesForEntitySlug($slug);
 
             foreach ($properties as $property) {
+
+                $naeType = $this->propertiesUtils->getPropertyNaeType($property);
 
                 $components = [
                     'table-title',
@@ -119,6 +124,7 @@ class PropertiesTemplatesConsole extends Command
             [
                 'propertiesMap' => $propertiesMap,
                 'propertiesTree' => $propertiesTree,
+                'naeType' => $naeType,
             ]
         );
 
