@@ -108,11 +108,12 @@ export const {{ compName }}Item = (props: {{ compName }}ItemProps) => {
     <Fragment>
         <PdfLine title={props.title} onReset={pdfData?onReset:undefined} onDownload={onDownload} onPrint={onPrint} onClick={onClick} onSend={onSend} loading={isLoading} />
         {showPdf && !!pdfData &&
-            <PopupPdf onClose={() => setShowPdf(false)}>
+            <PopupPdf onClose={() => setShowPdf(false)} title={props.title}>
                 <PdfWindow
                     pdf={pdfData}
                     onBack={() => setShowPdf(false)}
                     onEmail={onSend}
+                    inPopup={true}
                 />
             </PopupPdf>
         }
