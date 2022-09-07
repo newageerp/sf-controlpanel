@@ -200,7 +200,7 @@ class ConfigPropertiesController extends ConfigBaseController
 
             $relProperties = [];
             foreach ($relSchemaProperties as $relSchemaProperty) {
-                $key = explode(".", $relSchemaProperty['value']);
+                $key = explode(".", $relSchemaProperty['id']);
                 $title = $relSchemaProperty['label'];
                 $relProperties[] = [
                     'id' => 'i.' . $relProperty['key'] . '.' . $key[1],
