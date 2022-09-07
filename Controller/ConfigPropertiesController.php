@@ -23,7 +23,8 @@ class ConfigPropertiesController extends ConfigBaseController
         return $file;
     }
 
-    protected function saveBuilder($data) {
+    protected function saveBuilder($data)
+    {
         file_put_contents(
             $this->getLocalStorageFile(),
             json_encode($data)
@@ -208,14 +209,15 @@ class ConfigPropertiesController extends ConfigBaseController
                 ];
             }
 
-            $output[] = [
-                'id' => 'rel-' . $relProperty['format'],
-                'title' => $relProperty['title'],
-                'isActive' => false,
-                'items' => array_values($relProperties)
-            ];
+            if ($relProperty['title']) {
+                $output[] = [
+                    'id' => 'rel-' . $relProperty['format'],
+                    'title' => $relProperty['title'],
+                    'isActive' => false,
+                    'items' => array_values($relProperties)
+                ];
+            }
         }
-
 
         return $this->json(['data' => $output]);
     }
@@ -257,19 +259,19 @@ class ConfigPropertiesController extends ConfigBaseController
                     $property['key'] !== 'id' &&
                     isset($property['isDb']) &&
                     $property['isDb'] &&
-                    isset($property['available']) &&
-                    $property['available']['sort'] &&
+                    // isset($property['available']) &&
+                    // $property['available']['sort'] &&
                     $property['type'] !== 'rel' &&
                     $property['type'] !== 'array'
                 );
             }
         );
         $hasId = count(array_filter(
-                $schemaProperties,
-                function ($property) {
-                    return $property['key'] === 'id';
-                }
-            )) > 0;
+            $schemaProperties,
+            function ($property) {
+                return $property['key'] === 'id';
+            }
+        )) > 0;
         if (!$hasId) {
             array_unshift(
                 $schemaProperties,
@@ -279,15 +281,17 @@ class ConfigPropertiesController extends ConfigBaseController
                 ]
             );
         }
-        $schemaProperties = array_map(
-            function ($property) {
-                return [
-                    'value' => 'i.' . $property['key'],
-                    'label' => $property['title'],
-                ];
-            },
-            $schemaProperties
-        );
+        if ($property['title']) {
+            $schemaProperties = array_map(
+                function ($property) {
+                    return [
+                        'value' => 'i.' . $property['key'],
+                        'label' => $property['title'],
+                    ];
+                },
+                $schemaProperties
+            );
+        }
         return $schemaProperties;
     }
 
@@ -329,8 +333,8 @@ class ConfigPropertiesController extends ConfigBaseController
             $propertiesUtils->getProperties(),
             function ($property) use ($schema) {
                 return ($property['schema'] === $schema &&
-                    isset($property['available']) &&
-                    $property['available']['sort'] &&
+                    // isset($property['available']) &&
+                    // $property['available']['sort'] &&
                     $property['type'] == 'rel'
                 );
             }
