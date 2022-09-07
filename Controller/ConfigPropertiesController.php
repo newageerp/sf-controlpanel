@@ -196,7 +196,7 @@ class ConfigPropertiesController extends ConfigBaseController
 
         $rels = $this->relPropertiesForFilter($schema, $propertiesUtils);
         foreach ($rels as $relProperty) {
-            $relSchemaProperties = $this->schemaPropertiesForSort($relProperty['format'], $propertiesUtils);
+            $relSchemaProperties = $this->schemaPropertiesForFilter($relProperty['format'], $propertiesUtils);
 
             $relProperties = [];
             foreach ($relSchemaProperties as $relSchemaProperty) {
@@ -300,8 +300,8 @@ class ConfigPropertiesController extends ConfigBaseController
                     $property['key'] !== 'id' &&
                     isset($property['isDb']) &&
                     $property['isDb'] &&
-                    isset($property['available']) &&
-                    $property['available']['filter'] &&
+                    // isset($property['available']) &&
+                    // $property['available']['filter'] &&
                     $property['type'] !== 'rel' &&
                     $property['type'] !== 'array'
                 );
@@ -345,8 +345,8 @@ class ConfigPropertiesController extends ConfigBaseController
             $propertiesUtils->getProperties(),
             function ($property) use ($schema) {
                 return ($property['schema'] === $schema &&
-                    isset($property['available']) &&
-                    $property['available']['filter'] &&
+                    // isset($property['available']) &&
+                    // $property['available']['filter'] &&
                     $property['type'] == 'rel'
                 );
             }
