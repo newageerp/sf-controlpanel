@@ -312,6 +312,7 @@ class InGeneratorEditForms extends Command
                 [
                     'compName' => $compName,
                     'slugUc' => $slugUc,
+                    'skipRequiredCheck' => isset($editItem['config']['skipCheckRequiredFields']) && $editItem['config']['skipCheckRequiredFields']
                 ]
             );
         }
