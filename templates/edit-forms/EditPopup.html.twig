@@ -45,7 +45,7 @@ export default function {{ compName }}(props: Props) {
                     contentWrap={UI.Card.TransparentCardCompact}
                     editContainerClassName={"pb-40"}
                     saveOnBottom={true}
-                    skipRequiredCheck={ {% if skipRequiredCheck }true{% else %}false{% endif %} }
+                    skipRequiredCheck={ {% if skipRequiredCheck %}true{% else %}false{% endif %} }
                 />
             </UI.Popup.NaePopupProvider>
         </Popup>

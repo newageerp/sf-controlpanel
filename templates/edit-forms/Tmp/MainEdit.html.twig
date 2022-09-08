@@ -34,6 +34,8 @@ interface Props {
   fieldsToReturnOnSave?: string[]
 
   editContainerClassName?: string,
+
+  skipRequiredCheck?: boolean,
 }
 
 export default function MainEdit(props: Props) {
@@ -88,7 +90,7 @@ export default function MainEdit(props: Props) {
     }
     const isNew = props.id === 'new'
     setHasChanges(false)
-    saveData(element, props.id).then((res: any) => {
+    saveData({...element, skipRequiredCheck: props.skipRequiredCheck}, props.id).then((res: any) => {
       if (res) {
         if (res.error) {
         } else {
