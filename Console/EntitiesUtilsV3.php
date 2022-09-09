@@ -18,6 +18,36 @@ class EntitiesUtilsV3
         }
     }
 
+    public function getEntityBySlug(string $slug)
+    {
+        foreach ($this->entities as $entity) {
+            if ($entity['config']['slug'] === $slug) {
+                return $entity;
+            }
+        }
+        return null;
+    }
+
+    public function getTitleBySlug(string $slug)
+    {
+        $entity = $this->getEntityBySlug($slug);
+        if ($entity) {
+            return $entity['titleSingle'];
+        }
+
+        return '';
+    }
+
+    public function getTitlePluralBySlug(string $slug)
+    {
+        $entity = $this->getEntityBySlug($slug);
+        if ($entity) {
+            return $entity['titlePlural'];
+        }
+
+        return '';
+    }
+
     /**
      * Get the value of entities
      *
