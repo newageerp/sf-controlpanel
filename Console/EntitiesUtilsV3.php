@@ -32,7 +32,7 @@ class EntitiesUtilsV3
     {
         $entity = $this->getEntityBySlug($slug);
         if ($entity) {
-            return $entity['titleSingle'];
+            return $entity['config']['titleSingle'];
         }
 
         return '';
@@ -42,7 +42,7 @@ class EntitiesUtilsV3
     {
         $entity = $this->getEntityBySlug($slug);
         if ($entity) {
-            return $entity['titlePlural'];
+            return $entity['config']['titlePlural'];
         }
 
         return '';
