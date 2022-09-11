@@ -50,6 +50,37 @@ interface Props {
 
 export default function {{ tpCompName }}(props: Props) {
     const [itemsFilter, setItemsFilter] = useState(initialStateItemsFilter);
+    const [showExtendedSearch, setShowExtendedSearch] = useState(false);
+    const addNewBlockFilter = (path: string, title: string) => {
+        const _itemsFilter: TypeItemFilters = JSON.parse(
+        JSON.stringify(itemsFilter)
+        );
+
+        _itemsFilter.push({
+        id: Date.now(),
+        filter: [
+            {
+            filterId: Date.now(),
+            items: [
+                {
+                itemId: Date.now(),
+                filterValue: "",
+                selectedFilter: {
+                    id: path,
+                    title: title,
+                    type: "string",
+                    // options?: { value: string; label: string }[]
+                },
+                },
+            ],
+            },
+        ],
+        });
+
+        console.log("_itemsFilter", _itemsFilter);
+
+        setItemsFilter(_itemsFilter);
+    };
 
     const checkIsCreatable = () => {
         const scopes = functions.schemas.getSchemaScopes('{{ schema }}');
@@ -337,7 +368,9 @@ export default function {{ tpCompName }}(props: Props) {
                             itemsFilter: itemsFilter,
                             setItemsFilter: setItemsFilter,
                             onSearch: setDetailedSearch,
-                            schema: '{{ schema }}'
+                            schema: '{{ schema }}',
+                            showExtendedSearch: showExtendedSearch,
+                            setShowExtendedSearch: setShowExtendedSearch,
                         }:undefined
                     }
                     tabSwitch={
