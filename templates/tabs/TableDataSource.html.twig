@@ -17,6 +17,8 @@ import {FilterListData} from "@newageerp/sfs.list-toolbar.filter.filter-list-dat
 import {FilterListOptions} from "@newageerp/sfs.list-toolbar.filter.filter-list-options"
 import {FilterDate} from "@newageerp/sfs.list-toolbar.filter.filter-date"
 import { useLocationState } from 'use-location-state'
+import {initialStateItemsFilter} from '@newageerp/ui.components.list.filter-container'
+
 {% if hasStatusFilter %}
 import { {{ schemaUC }}StatusesList } from "../../statuses/badges/{{ schemaUC }}Statuses";
 {% endif %}
@@ -47,6 +49,8 @@ interface Props {
 }
 
 export default function {{ tpCompName }}(props: Props) {
+    const [itemsFilter, setItemsFilter] = useState(initialStateItemsFilter);
+
     const checkIsCreatable = () => {
         const scopes = functions.schemas.getSchemaScopes('{{ schema }}');
         const userState: any = UIConfig.userState
@@ -330,7 +334,8 @@ export default function {{ tpCompName }}(props: Props) {
                     extendedSearch={
                         1 === 1?
                         {
-                            search: dataState.detailedSearch,
+                            itemsFilter: itemsFilter,
+                            setItemsFilter: setItemsFilter,
                             onSearch: setDetailedSearch,
                             schema: '{{ schema }}'
                         }:undefined
