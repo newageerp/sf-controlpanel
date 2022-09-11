@@ -259,6 +259,8 @@ class ConfigPropertiesController extends ConfigBaseController
                     $property['key'] !== 'id' &&
                     isset($property['isDb']) &&
                     $property['isDb'] &&
+                    isset($property['title']) &&
+                    $property['title'] &&
                     // isset($property['available']) &&
                     // $property['available']['sort'] &&
                     $property['type'] !== 'rel' &&
@@ -281,17 +283,17 @@ class ConfigPropertiesController extends ConfigBaseController
                 ]
             );
         }
-        if ($property['title']) {
-            $schemaProperties = array_map(
-                function ($property) {
-                    return [
-                        'value' => 'i.' . $property['key'],
-                        'label' => $property['title'],
-                    ];
-                },
-                $schemaProperties
-            );
-        }
+        
+        $schemaProperties = array_map(
+            function ($property) {
+                return [
+                    'value' => 'i.' . $property['key'],
+                    'label' => $property['title'],
+                ];
+            },
+            $schemaProperties
+        );
+        
         return $schemaProperties;
     }
 
