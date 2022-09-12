@@ -84,7 +84,7 @@ class PropertiesUtilsV3
         $enumsList = array_filter(
             $this->enumsList,
             function ($item) use ($prop) {
-                return $item['config']['entity'] === $prop['config']['entity'] && $item['config']['property'] === $prop['config']['key'];
+                return $item['config']['entity'] === $prop['entity'] && $item['config']['property'] === $prop['key'];
             }
         );
         return count($enumsList) > 0;
