@@ -11,7 +11,7 @@ class TabsUtilsV3
         $tabsFile = LocalConfigUtilsV3::getConfigCpPath() . '/tabs.json';
         $this->tabs = [];
         if (file_exists($tabsFile)) {
-            $this->entities = json_decode(
+            $this->tabs = json_decode(
                 file_get_contents($tabsFile),
                 true
             );
@@ -27,7 +27,7 @@ class TabsUtilsV3
             }
         );
         if (count($tabsF) > 0) {
-            return $tabsF[0]['config'];
+            return reset($tabsF)['config'];
         }
         return null;
     }

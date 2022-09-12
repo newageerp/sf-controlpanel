@@ -37,10 +37,10 @@ class PropertiesUtilsV3
                     $prop = $this->getPropertyForSchema($_lastSchema, $pathPart);
                     if (
                         ($prop['type'] === 'array' || $prop['type'] === 'rel') &&
-                        isset($prop['format']) &&
-                        $prop['format']
+                        isset($prop['typeFormat']) &&
+                        $prop['typeFormat']
                     ) {
-                        $_schema = $prop['format'];
+                        $_schema = $prop['typeFormat'];
                     }
                 }
             }
