@@ -99,7 +99,7 @@ export default function {{ TP_COMP_NAME }}(props: Props) {
                 <thead>
                 {tData.tableHeader.length > 0
                             ?
-                            <TemplateLoader templates={tData.tableHeader} templateData={{ addNewBlockFilter: props.addNewBlockFilter }} />
+                            <TemplateLoader templates={tData.tableHeader} templateData={ { addNewBlockFilter: props.addNewBlockFilter } } />
                 :
                     <tr>
                         {{ TP_THEAD|raw }}
