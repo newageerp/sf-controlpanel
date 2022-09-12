@@ -8,14 +8,8 @@ class PropertiesUtilsV3
 
     public function __construct()
     {
-        $propertiesFile = LocalConfigUtilsV3::getConfigCpPath() . '/properties.json';
-        $this->properties = [];
-        if (file_exists($propertiesFile)) {
-            $this->properties = json_decode(
-                file_get_contents($propertiesFile),
-                true
-            );
-        }
+        $this->properties = LocalConfigUtils::getCpConfigFileData('properties');
+        $this->enumsList = LocalConfigUtils::getCpConfigFileData('enums');
     }
 
     public function getPropertyForPath(string $_path): ?array
@@ -85,6 +79,17 @@ class PropertiesUtilsV3
         );
     }
 
+    public function propertyHasEnum(array $prop)
+    {
+        $enumsList = array_filter(
+            $this->enumsList,
+            function ($item) use ($prop) {
+                return $item['config']['entity'] === $prop['config']['entity'] && $item['config']['property'] === $prop['config']['key'];
+            }
+        );
+        return count($enumsList) > 0;
+    }
+
     public function getPropertyNaeType(array $property, array $column = []): string
     {
         if (!isset($property['as'])) {
@@ -93,6 +98,8 @@ class PropertiesUtilsV3
         if (!isset($column['type'])) {
             $column['type'] = '';
         }
+
+        $hasEnum = $this->propertyHasEnum($property);
 
         $isStatus = $property['as'] === 'status' || $column['type'] === 'status';
 
@@ -111,14 +118,11 @@ class PropertiesUtilsV3
 
         $isObject = $property['type'] === 'rel';
 
-        $isMultiString = $property['type'] === 'array' && isset($property['enum']) && count($property['enum']) > 0;
-        $isMultiNumber = $property['type'] === 'array' &&
-            $property['typeFormat'] === 'number' &&
-            isset($property['enum']) && count($property['enum']) > 0;
+        $isMultiString = $property['type'] === 'array' && $hasEnum;
+        $isMultiNumber = $property['type'] === 'array' && $property['typeFormat'] === 'number' && $hasEnum;
 
-        $isEnumString = $property['type'] === 'string' &&
-            isset($property['enum']) && count($property['enum']) > 0;
-        $isEnumInteger = ($property['type'] === 'integer' || $property['type'] === 'number') && isset($property['enum']) && count($property['enum']) > 0;
+        $isEnumString = $property['type'] === 'string' && $hasEnum;
+        $isEnumInteger = ($property['type'] === 'integer' || $property['type'] === 'number') && $hasEnum;
 
         $isFile = $property['as'] === 'file';
         $isFileMultiple = $property['as'] === 'fileMultiple';

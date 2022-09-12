@@ -7,6 +7,7 @@ import { OpenApi } from "@newageerp/nae-react-auth-wrapper";
 import { TwTextColors, TwBackgroundColors } from "@newageerp/ui.styles.tailwind";
 import { Button } from "@newageerp/ui.buttons.base.button";
 import { UI } from "@newageerp/nae-react-ui";
+import { TemplatesParser, useTemplateLoader } from "../../v3/templates/TemplateLoader";
 
 {{ TP_IMPORT|raw }}
 
@@ -32,6 +33,8 @@ interface Props {
 }
 
 export default function {{ TP_COMP_NAME }}(props: Props) {
+    const { data: tData } = useTemplateLoader();
+
     const { data, navigate } = props;
     const { t } = useTranslation();
 
@@ -93,9 +96,14 @@ export default function {{ TP_COMP_NAME }}(props: Props) {
             className={props.className}
             thead={
                 <thead>
+                {tData.tableHeader.length > 0
+                            ?
+                            <TemplatesParser templates={tData.tableHeader} />
+                :
                     <tr>
                         {{ TP_THEAD|raw }}
                     </tr>
+                    }
                 </thead>
             }
             tbody={
