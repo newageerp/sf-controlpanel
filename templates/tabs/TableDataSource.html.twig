@@ -54,28 +54,36 @@ export default function {{ tpCompName }}(props: Props) {
     const [showExtendedSearch, setShowExtendedSearch] = useState(false);
     const addNewBlockFilter = (filter: ServerFilterItem) => {
         const _itemsFilter: TypeItemFilters = JSON.parse(
-        JSON.stringify(itemsFilter)
+            JSON.stringify(itemsFilter)
         );
 
         _itemsFilter.push({
-        id: Date.now(),
-        filter: [
-            {
-            filterId: Date.now(),
-            items: [
+            id: Date.now(),
+            filter: [
                 {
-                itemId: Date.now(),
-                filterValue: "",
-                selectedFilter: filter,
+                    filterId: Date.now(),
+                    items: [
+                        {
+                            itemId: Date.now(),
+                            filterValue: "",
+                            selectedFilter: filter,
+                        },
+                    ],
                 },
             ],
-            },
-        ],
         });
 
         setItemsFilter(_itemsFilter);
-        setShowExtendedSearch(true);
     };
+
+    useEffect(() => {
+        if (itemsFilter.length > 0 && !showExtendedSearch) {
+            setShowExtendedSearch(true);
+        }
+        // if (showExtendedSearch && itemsFilter.length === 0) {
+        //     setItemsFilter(initialStateItemsFilter);
+        // }
+    }, [itemsFilter, showExtendedSearch]);
 
     const checkIsCreatable = () => {
         const scopes = functions.schemas.getSchemaScopes('{{ schema }}');
