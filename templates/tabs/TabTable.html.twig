@@ -97,7 +97,7 @@ export default function {{ TP_COMP_NAME }}(props: Props) {
             className={props.className}
             thead={
                 <thead>
-                {tData.tableHeader.length > 0
+                {!!tData && !!tData.tableHeader && tData.tableHeader.length > 0
                             ?
                             <TemplateLoader templates={tData.tableHeader} templateData={ { addNewBlockFilter: props.addNewBlockFilter } } />
                 :
