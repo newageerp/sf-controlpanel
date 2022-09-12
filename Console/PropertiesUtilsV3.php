@@ -12,6 +12,13 @@ class PropertiesUtilsV3
         $this->enumsList = LocalConfigUtils::getCpConfigFileData('enums');
     }
 
+    public static function swapSchemaToI($path)
+    {
+        $pathA = explode(".", $path);
+        $pathA[0] = 'i';
+        return implode(".", $pathA);
+    }
+
     public function getPropertyForPath(string $_path): ?array
     {
         $path = explode(".", $_path);
@@ -88,6 +95,51 @@ class PropertiesUtilsV3
             }
         );
         return count($enumsList) > 0;
+    }
+
+    public function getPropertyEnumsList(array $prop)
+    {
+        $enumsList = array_filter(
+            $this->enumsList,
+            function ($item) use ($prop) {
+                return $item['config']['entity'] === $prop['entity'] && $item['config']['property'] === $prop['key'];
+            }
+        );
+        $enumsData = [];
+        foreach ($enumsList as $enum) {
+            $enumsData[] = [
+                'sort' => $enum['config']['sort'],
+                'title' => $enum['config']['title'],
+                'value' => $enum['config']['value'],
+            ];
+        }
+
+        usort($enumsData, function ($pdfA, $pdfB) {
+            if ($pdfA['sort'] < $pdfB['sort']) {
+                return -1;
+            }
+            if ($pdfA['sort'] > $pdfB['sort']) {
+                return 1;
+            }
+            if ($pdfA['title'] < $pdfB['title']) {
+                return -1;
+            }
+            if ($pdfA['title'] > $pdfB['title']) {
+                return 1;
+            }
+            return 0;
+        });
+
+        return  array_values(array_map(
+            function ($en) use ($prop) {
+                $isInt = $prop['config']['type'] === 'integer' || $prop['config']['type'] === 'int' || $prop['config']['type'] === 'number';
+                return [
+                    'label' => $en['title'],
+                    'value' => $isInt ? ((int)$en['value']) : $en['value']
+                ];
+            },
+            $enumsData
+        ));
     }
 
     public function getPropertyNaeType(array $property, array $column = []): string
@@ -172,5 +224,50 @@ class PropertiesUtilsV3
             return 'array';
         }
         return 'string';
+    }
+
+    public function getDefaultPropertySearchComparison(?array $property, ?array $column): string
+    {
+        if (!$property) {
+            return 'no';
+        }
+
+        $naeType = $this->getPropertyNaeType($property, $column ?: []);
+
+        switch ($naeType) {
+            case 'enum_text':
+            case 'enum_number':
+            case 'bool':
+            case 'status':
+            case 'enum_multi_number':
+            case 'enum_multi_text':
+                return 'enum';
+                break;
+            case 'fileMultiple':
+            case 'file':
+            case 'object':
+            case 'string_array':
+            case 'array':
+                return 'no';
+                break;
+            case 'audio':
+            case 'image':
+            case 'color':
+            case 'text':
+            case 'string':
+                return 'string';
+                break;
+
+            case 'number':
+            case 'float':
+                return 'number';
+                break;
+            case 'datetime':
+            case 'date':
+                return 'date';
+                break;
+            default:
+                return 'no';
+        }
     }
 }
