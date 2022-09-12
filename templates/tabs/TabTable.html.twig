@@ -7,7 +7,8 @@ import { OpenApi } from "@newageerp/nae-react-auth-wrapper";
 import { TwTextColors, TwBackgroundColors } from "@newageerp/ui.styles.tailwind";
 import { Button } from "@newageerp/ui.buttons.base.button";
 import { UI } from "@newageerp/nae-react-ui";
-import { TemplatesParser, useTemplateLoader } from "../../v3/templates/TemplateLoader";
+import TemplateLoader, { useTemplateLoader } from "../../v3/templates/TemplateLoader";
+import { ServerFilterItem } from '@newageerp/ui.components.list.filter-container'
 
 {{ TP_IMPORT|raw }}
 
@@ -29,7 +30,7 @@ interface Props {
 
     customComponentOptions?: any,
 
-    addNewBlockFilter?: (path: string, title: string) => void,
+    addNewBlockFilter?: (filter: ServerFilterItem) => void,
 }
 
 export default function {{ TP_COMP_NAME }}(props: Props) {
@@ -98,7 +99,7 @@ export default function {{ TP_COMP_NAME }}(props: Props) {
                 <thead>
                 {tData.tableHeader.length > 0
                             ?
-                            <TemplatesParser templates={tData.tableHeader} />
+                            <TemplateLoader templates={tData.tableHeader} templateData={{ addNewBlockFilter: props.addNewBlockFilter }} />
                 :
                     <tr>
                         {{ TP_THEAD|raw }}

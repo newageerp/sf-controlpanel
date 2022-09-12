@@ -18,6 +18,7 @@ import {FilterListOptions} from "@newageerp/sfs.list-toolbar.filter.filter-list-
 import {FilterDate} from "@newageerp/sfs.list-toolbar.filter.filter-date"
 import { useLocationState } from 'use-location-state'
 import {initialStateItemsFilter} from '@newageerp/ui.components.list.filter-container'
+import { ServerFilterItem } from '@newageerp/ui.components.list.filter-container'
 
 {% if hasStatusFilter %}
 import { {{ schemaUC }}StatusesList } from "../../statuses/badges/{{ schemaUC }}Statuses";
@@ -51,7 +52,7 @@ interface Props {
 export default function {{ tpCompName }}(props: Props) {
     const [itemsFilter, setItemsFilter] = useState(initialStateItemsFilter);
     const [showExtendedSearch, setShowExtendedSearch] = useState(false);
-    const addNewBlockFilter = (path: string, title: string) => {
+    const addNewBlockFilter = (filter: ServerFilterItem) => {
         const _itemsFilter: TypeItemFilters = JSON.parse(
         JSON.stringify(itemsFilter)
         );
@@ -65,21 +66,15 @@ export default function {{ tpCompName }}(props: Props) {
                 {
                 itemId: Date.now(),
                 filterValue: "",
-                selectedFilter: {
-                    id: path,
-                    title: title,
-                    type: "string",
-                    // options?: { value: string; label: string }[]
-                },
+                selectedFilter: filter,
                 },
             ],
             },
         ],
         });
 
-        console.log("_itemsFilter", _itemsFilter);
-
         setItemsFilter(_itemsFilter);
+        setShowExtendedSearch(true);
     };
 
     const checkIsCreatable = () => {
@@ -399,6 +394,7 @@ export default function {{ tpCompName }}(props: Props) {
                     className={`${dataResult.loading?'tw3-animate-pulse':''}`}
                     navigate={navigate}
                     dataTotals={dataTotals}
+                    addNewBlockFilter={addNewBlockFilter}
             />
             {!props.hidePaging && pages > 1 &&
             <PageContainer pages={pages} activePage={dataState.page} setActivePage={setActivePage} marginTop={PageContainerMarginTop['42px']} />
