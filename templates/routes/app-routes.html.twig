@@ -2,10 +2,10 @@ import React, { Fragment } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import DefaultEditRouteWrapper from "./wrappers/DefaultEditRouteWrapper";
 {% for import in imports %}
-    {{ import|raw }}
+{{ import|raw }}
 {% endfor %}
 import { UI } from "@newageerp/nae-react-ui";
-
+import MainList from "../v3/pages/MainList";
 
 export function AppsRoutes() {
     return (
@@ -22,11 +22,14 @@ export function AppsRoutes() {
 export function ListRoutes() {
     return (
         <Fragment>
-            {% for component in listComponents %}
+            <Route path={"/u/schema/:type/list/"}>
+                <MainList />
+            </Route>
+            {# {% for component in listComponents %}
                 <Route path={"/u/{{ component.schema }}/{{ component.type }}/list/"}>
                     <{{ component.compName }} />
                 </Route>
-            {% endfor %}
+            {% endfor %} #}
         </Fragment>
     )
 }
