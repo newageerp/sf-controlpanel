@@ -241,11 +241,12 @@ class PropertiesUtilsV3
             case 'status':
             case 'enum_multi_number':
             case 'enum_multi_text':
+            case 'object':
                 return 'enum';
                 break;
             case 'fileMultiple':
             case 'file':
-            case 'object':
+            
             case 'string_array':
             case 'array':
                 return 'no';

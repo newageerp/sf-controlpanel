@@ -6,16 +6,12 @@ class EntitiesUtilsV3
 {
     protected array $entities = [];
 
+    protected array $defaults = [];
+
     public function __construct()
     {
-        $entitiesFile = LocalConfigUtilsV3::getConfigCpPath() . '/entities.json';
-        $this->entities = [];
-        if (file_exists($entitiesFile)) {
-            $this->entities = json_decode(
-                file_get_contents($entitiesFile),
-                true
-            );
-        }
+        $this->entities = LocalConfigUtils::getCpConfigFileData('entities');
+        $this->defaults = LocalConfigUtils::getCpConfigFileData('defaults');
     }
 
     public function getEntityBySlug(string $slug)
@@ -56,5 +52,23 @@ class EntitiesUtilsV3
     public function getEntities(): array
     {
         return $this->entities;
+    }
+
+    public function getDefaultSortForSchema(string $schema)
+    {
+        $sort = [
+            ['key' => 'i.id', 'value' => 'DESC']
+        ];
+
+        foreach ($this->defaultItems as $df) {
+            if (
+                $df['config']['schema'] === $schema &&
+                isset($df['config']['defaultSort']) &&
+                $df['config']['defaultSort']
+            ) {
+                $sort = json_decode($df['config']['defaultSort'], true);
+            }
+        }
+        return $sort;
     }
 }
