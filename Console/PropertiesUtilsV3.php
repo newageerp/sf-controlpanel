@@ -132,7 +132,7 @@ class PropertiesUtilsV3
 
         return  array_values(array_map(
             function ($en) use ($prop) {
-                $isInt = $prop['config']['type'] === 'integer' || $prop['config']['type'] === 'int' || $prop['config']['type'] === 'number';
+                $isInt = $prop['type'] === 'integer' || $prop['type'] === 'int' || $prop['type'] === 'number';
                 return [
                     'label' => $en['title'],
                     'value' => $isInt ? ((int)$en['value']) : $en['value']
