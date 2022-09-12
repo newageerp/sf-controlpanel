@@ -50,7 +50,7 @@ interface Props {
 }
 
 export default function {{ tpCompName }}(props: Props) {
-    const [itemsFilter, setItemsFilter] = useState(initialStateItemsFilter);
+    const [itemsFilter, setItemsFilter] = useState<TypeItemFilters>([]);
     const [showExtendedSearch, setShowExtendedSearch] = useState(false);
     const addNewBlockFilter = (filter: ServerFilterItem) => {
         const _itemsFilter: TypeItemFilters = JSON.parse(
