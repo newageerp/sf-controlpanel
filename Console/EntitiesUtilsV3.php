@@ -60,7 +60,7 @@ class EntitiesUtilsV3
             ['key' => 'i.id', 'value' => 'DESC']
         ];
 
-        foreach ($this->defaultItems as $df) {
+        foreach ($this->defaults as $df) {
             if (
                 $df['config']['schema'] === $schema &&
                 isset($df['config']['defaultSort']) &&
