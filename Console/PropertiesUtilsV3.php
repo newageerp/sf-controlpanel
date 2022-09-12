@@ -18,6 +18,49 @@ class PropertiesUtilsV3
         }
     }
 
+    public function getPropertyForPath(string $_path): ?array
+    {
+        $path = explode(".", $_path);
+        $pathLen = count($path);
+        if ($pathLen === 1) {
+            return null;
+        } else {
+            $_schema = '';
+            foreach ($path as $i => $pathPart) {
+                if ($i === 0) {
+                    $_schema = $pathPart;
+                } else if ($i === $pathLen - 1) {
+                    return $this->getPropertyForSchema($_schema, $pathPart);
+                } else {
+                    $_lastSchema = $_schema;
+                    $_schema = '';
+                    $prop = $this->getPropertyForSchema($_lastSchema, $pathPart);
+                    if (
+                        ($prop['type'] === 'array' || $prop['type'] === 'rel') &&
+                        isset($prop['format']) &&
+                        $prop['format']
+                    ) {
+                        $_schema = $prop['format'];
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public function getPropertyForSchema(string $schema, string $key): ?array
+    {
+        $properties = $this->getPropertiesForEntitySlug($schema);
+
+        foreach ($properties as $prop) {
+            if ($prop['config']['key'] === $key) {
+                return $prop['config'];
+            }
+        }
+
+        return null;
+    }
+
     public function getPropertiesForEntitySlug(string $slug)
     {
         return array_filter(

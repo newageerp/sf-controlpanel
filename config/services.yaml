@@ -18,6 +18,8 @@ services:
     arguments: [ ]
   Newageerp\SfControlpanel\Console\EntitiesUtilsV3:
     arguments: [ ]
+  Newageerp\SfControlpanel\Console\TabsUtilsV3:
+    arguments: [ ]
 
   Newageerp\SfControlpanel\Console\Maker\MakePluginWithServiceAndMessageHandler:
     tags:
