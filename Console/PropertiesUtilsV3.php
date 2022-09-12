@@ -96,24 +96,24 @@ class PropertiesUtilsV3
 
         $isStatus = $property['as'] === 'status' || $column['type'] === 'status';
 
-        $isStringArray = $property['type'] === 'array' && $property['format'] === 'string';
+        $isStringArray = $property['type'] === 'array' && $property['typeFormat'] === 'string';
         $isArray = $property['type'] === 'array' && !$isStringArray;
 
-        $isFloat = $property['type'] === 'number' && $property['format'] === 'float';
+        $isFloat = $property['type'] === 'number' && $property['typeFormat'] === 'float';
         $isNumber = $isFloat || ($property['type'] === 'integer' && !isset($property['enum']));
 
         $isBoolean = $property['type'] === 'bool' || $property['type'] === 'boolean';
-        $isDate = $property['type'] === 'string' && $property['format'] === 'date';
+        $isDate = $property['type'] === 'string' && $property['typeFormat'] === 'date';
 
-        $isDateTime = $property['type'] === 'string' && $property['format'] === 'datetime';
+        $isDateTime = $property['type'] === 'string' && $property['typeFormat'] === 'datetime';
 
-        $isLargeText = $property['type'] === 'string' && $property['format'] === 'text';
+        $isLargeText = $property['type'] === 'string' && $property['typeFormat'] === 'text';
 
         $isObject = $property['type'] === 'rel';
 
         $isMultiString = $property['type'] === 'array' && isset($property['enum']) && count($property['enum']) > 0;
         $isMultiNumber = $property['type'] === 'array' &&
-            $property['format'] === 'number' &&
+            $property['typeFormat'] === 'number' &&
             isset($property['enum']) && count($property['enum']) > 0;
 
         $isEnumString = $property['type'] === 'string' &&
