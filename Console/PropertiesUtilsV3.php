@@ -48,6 +48,20 @@ class PropertiesUtilsV3
         return null;
     }
 
+    public function getPropertyTableAlignment(?array $property, ?array $column): string
+    {
+        if (!$property) {
+            return 'tw3-text-left';
+        }
+        $naeType = $this->getPropertyNaeType($property, $column);
+
+        if ($naeType === 'float' || $naeType === 'float4' || $naeType === 'number' || $naeType === 'seconds-to-time') {
+            return 'tw3-text-right';
+        }
+
+        return 'tw3-text-left';
+    }
+
     public function getPropertyForSchema(string $schema, string $key): ?array
     {
         $properties = $this->getPropertiesForEntitySlug($schema);
