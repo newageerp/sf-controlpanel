@@ -22,7 +22,7 @@ export function AppsRoutes() {
 export function ListRoutes() {
     return (
         <Fragment>
-            <Route path={"/u/schema/:type/list/"}>
+            <Route path={"/u/:schema/:type/list/"}>
                 <MainList />
             </Route>
             {# {% for component in listComponents %}
