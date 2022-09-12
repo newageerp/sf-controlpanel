@@ -107,7 +107,7 @@ class PropertiesUtilsV3
         $isArray = $property['type'] === 'array' && !$isStringArray;
 
         $isFloat = $property['type'] === 'number' && $property['typeFormat'] === 'float';
-        $isNumber = $isFloat || ($property['type'] === 'integer' && !isset($property['enum']));
+        $isNumber = $isFloat || ($property['type'] === 'integer' && !$hasEnum);
 
         $isBoolean = $property['type'] === 'bool' || $property['type'] === 'boolean';
         $isDate = $property['type'] === 'string' && $property['typeFormat'] === 'date';
