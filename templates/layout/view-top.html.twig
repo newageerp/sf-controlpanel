@@ -4,6 +4,7 @@ import { UI } from '@newageerp/nae-react-ui';
 import { OpenApi } from '@newageerp/nae-react-auth-wrapper';
 import { useRecoilValue } from 'recoil';
 import TasksWidget from '../../apps/tasks/TasksWidget';
+import TemplateLoader, { useTemplateLoader } from '../../v3/templates/TemplateLoader';
 
 interface Props {
     extraOptions: any,
@@ -13,6 +14,7 @@ interface Props {
 
 export default function ViewTop(props: Props) {
     const userState = useRecoilValue(OpenApi.naeUserState);
+    const { data: tData } = useTemplateLoader();
 
     return (
         <ElementToolbar
@@ -67,6 +69,9 @@ export default function ViewTop(props: Props) {
                     schema={props.schema}
                     element={props.element}
                 />
+            }
+            contentAfterFields2Line={
+                <TemplateLoader templates={tData.elementToolbarAfterFieldsContent} />
             }
         />
     )
