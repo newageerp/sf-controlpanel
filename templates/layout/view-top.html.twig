@@ -71,7 +71,7 @@ export default function ViewTop(props: Props) {
                 />
             }
             contentAfterFields2Line={
-                <TemplateLoader templates={tData.elementToolbarAfterFieldsContent} />
+                <TemplateLoader templates={tData.elementToolbarAfterFieldsContent} templateData={{element: props.element}} />
             }
         />
     )
