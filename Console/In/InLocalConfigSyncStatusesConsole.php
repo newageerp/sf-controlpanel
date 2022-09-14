@@ -17,8 +17,7 @@ class InLocalConfigSyncStatusesConsole extends Command
 
     public function __construct(
         EntityManagerInterface $em
-    )
-    {
+    ) {
         parent::__construct();
         $this->em = $em;
     }
@@ -62,7 +61,7 @@ class InLocalConfigSyncStatusesConsole extends Command
         }
         // TMP OLD SYNC OFF
 
-//        $configJsonPath = LocalConfigUtils::getStrapiCachePath() . '/NaeSStatuses.json';
+        //        $configJsonPath = LocalConfigUtils::getStrapiCachePath() . '/NaeSStatuses.json';
         $configPath = LocalConfigUtils::getFrontendConfigPath() . '/NaeSStatuses.tsx';
 
         $fileContent = 'import { INaeStatus } from "@newageerp/nae-react-ui/dist/interfaces";
@@ -79,6 +78,7 @@ class InLocalConfigSyncStatusesConsole extends Command
                 'bgColor' => $status['config']['color'],
                 'brightness' => (int)str_replace('b', '', $status['config']['brightness']),
                 'schema' => $status['config']['entity'],
+                'variant' => isset($status['config']['badgeVariant']) ? $status['config']['badgeVariant'] : 'blue',
             ];
         }
 
@@ -104,10 +104,10 @@ class InLocalConfigSyncStatusesConsole extends Command
             $configPath,
             $fileContent
         );
-//        file_put_contents(
-//            $configJsonPath,
-//            json_encode($statuses, JSON_PRETTY_PRINT)
-//        );
+        //        file_put_contents(
+        //            $configJsonPath,
+        //            json_encode($statuses, JSON_PRETTY_PRINT)
+        //        );
 
         return Command::SUCCESS;
     }
