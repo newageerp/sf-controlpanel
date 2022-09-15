@@ -23,14 +23,14 @@ class EditFormsUtilsV3
 
     public function getEditFormBySchemaAndType(string $schema, string $type): ?array
     {
-        $tabsF = array_filter(
-            $this->tabs,
+        $formsF = array_filter(
+            $this->getEditForms(),
             function ($item) use ($schema, $type) {
                 return $item['config']['schema'] === $schema && $item['config']['type'] === $type;
             }
         );
-        if (count($tabsF) > 0) {
-            return reset($tabsF)['config'];
+        if (count($formsF) > 0) {
+            return reset($formsF)['config'];
         }
         return null;
     }

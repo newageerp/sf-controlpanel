@@ -20,14 +20,14 @@ class TabsUtilsV3
 
     public function getTabBySchemaAndType(string $schema, string $type): ?array
     {
-        $formsF = array_filter(
-            $this->tabs,
+        $tabsF = array_filter(
+            $this->getTabs(),
             function ($item) use ($schema, $type) {
                 return $item['config']['schema'] === $schema && $item['config']['type'] === $type;
             }
         );
-        if (count($formsF) > 0) {
-            return reset($formsF)['config'];
+        if (count($tabsF) > 0) {
+            return reset($tabsF)['config'];
         }
         return null;
     }
