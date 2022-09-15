@@ -20,6 +20,8 @@ services:
     arguments: [ ]
   Newageerp\SfControlpanel\Console\TabsUtilsV3:
     arguments: [ ]
+  Newageerp\SfControlpanel\Console\EditFormsUtilsV3:
+    arguments: [ ]
 
   Newageerp\SfControlpanel\Console\Maker\MakePluginWithServiceAndMessageHandler:
     tags:
