@@ -10,6 +10,21 @@ import { INaeEditField, INaeEditSettings, INaeFormEditRow, INaeProperty } from '
 import { EditHeaderType } from '@newageerp/nae-react-ui/dist/UI/Mvc/MvcEditPage'
 import MainEditWrapper from './MainEditWrapper'
 
+import TemplateLoader, {
+  useTemplateLoader,
+} from "../../v3/templates/TemplateLoader";
+import { fieldVisibility, IFieldVisibility } from "../../../config/fields/fieldVisibility";
+
+export interface MainEditTemplateData {
+  element: any,
+  updateElement: (key: string, val: any) => void,
+  fieldVisibility: IFieldVisibility,
+  parentElement: any,
+  hasChanges: boolean,
+  formType: string,
+  pushHiddenFields: (fieldKey: string) => void
+}
+
 interface Props {
   schema: string
   type: string
@@ -39,6 +54,8 @@ interface Props {
 }
 
 export default function MainEdit(props: Props) {
+  const { data: tData } = useTemplateLoader();
+
   let hiddenFields: any = []
   const { t } = useTranslation()
   const location = useLocation<any>()
@@ -628,10 +645,25 @@ export default function MainEdit(props: Props) {
     return <div className={'flex space-x-2'}></div>
   }
 
+  const templateData : MainEditTemplateData = { 
+    element, 
+    updateElement, 
+    fieldVisibility, 
+    parentElement: props.parentElement, 
+    hasChanges, 
+    formType: props.type,
+    pushHiddenFields: (fieldKey: string) => hiddenFields.push(fieldKey) 
+  }
+
   const content = (
     <Fragment>
       {element ? (
         <Fragment>
+          <TemplateLoader
+            templates={tData.formContent}
+            templateData={templateData}
+          />
+
           {editFields.fields.map(
             (fieldRow: INaeFormEditRow, fieldRowIndex: number) => {
               return (
