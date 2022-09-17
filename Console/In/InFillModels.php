@@ -399,8 +399,15 @@ import { " . $selectorsJoin . " } from '../../Components/Models/ormSelectors';
         }
 
         $componentsContent .= PHP_EOL . PHP_EOL;
+
+        $componentsContent .= 'export const useEmptyHook = (id: number) => {
+            return undefined;
+        }';
+
+        $componentsContent .= PHP_EOL . PHP_EOL;
+        
         $componentsContent .= 'export const getHookForSchema = (schema: string) => {
-  let selector : any;';
+  let selector : any = useEmptyHook;';
 
         foreach ($models as $m) {
             $s = $this->entitiesUtils->getSlugByClassName($m);
