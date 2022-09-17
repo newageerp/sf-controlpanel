@@ -9,7 +9,23 @@ interface ChildId {
 }
 
 export interface I{{ modelName }}ModelNae {
-    {{ modelsStruct|raw }}
+{% for key, type in struct %}
+  {% if type is iterable %}
+  {{ key }}: {
+    {% for keyB, typeB in type %}
+      {% if typeB is iterable %}
+        {% for keyC, typeC in typeB %}
+      {{ keyC }}: {{ typeC }},
+        {% endfor %}
+      {% else %}
+    {{ keyB }}: {{ typeB }},
+      {% endif %}
+    {% endfor %}
+  },
+  {% else %}
+  {{ key }}: {{ type }},
+  {% endif %}
+{% endfor %}
 }
 
 export const I{{ modelName }}FieldsNae = {{ modelFieldsArray|raw }};

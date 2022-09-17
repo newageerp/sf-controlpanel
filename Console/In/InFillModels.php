@@ -280,11 +280,10 @@ class InFillModels extends Command
                 continue;
             }
 
-
+            $struct = [];
             $o = $modelProperties[$m];
+            $struct['_viewTitle'] = 'string';
 
-            $struct = "_viewTitle: string,
-            ";
             $oFields = [
                 '_viewTitle'
             ];
@@ -306,7 +305,7 @@ class InFillModels extends Command
                         );
                     }
 
-                    $objectStruct = "";
+                    $objectStruct = [];
                     foreach ($el['fields'] as $f) {
                         if ($f['type'] === "object") {
                             $objectFieldsB = [];
@@ -324,30 +323,27 @@ class InFillModels extends Command
                                 );
                             }
 
-                            $objectStructB = "";
+                            $objectStructB = [];
                             foreach ($f['fields'] as $fB) {
                                 if (!in_array($fB['key'], $objectFieldsB)) {
-                                    $objectStructB .= $fB['key'] . ': ' . $fB['type'] . PHP_EOL;
+                                    $objectStructB[$fB['key']] = $fB['type'];
                                     $oFields[] = $el['key'] . '.' . $f['key'] . '.' . $fB['key'];
                                 }
                             }
 
-                            $objectStruct .= $f['key'] . ': {
-                ' . $objectStructB . '
-            },' . PHP_EOL;
+                            $objectStruct[$f['key']] = $objectStructB;
                         } else {
                             if (!in_array($f['key'], $objectFields)) {
-                                $objectStruct .= $f['key'] . ': ' . $f['type'] . ',' . PHP_EOL;
+                                $objectStruct[$f['key']] = $f['type'];
+
                                 $oFields[] = $el['key'] . '.' . $f['key'];
                             }
                         }
                     }
 
-                    $struct .= $el['key'] . ': {
-    ' . $objectStruct . '
-},' . PHP_EOL;
+                    $struct[$el['key']] = $objectStruct;
                 } else {
-                    $struct .= $el['key'] . ': ' . $el['type'] . ',' . PHP_EOL;
+                    $struct[$el['key']] = $el['type'] === '|ChildId|' ? 'ChildId[]' : $el['type'];
 
                     if ($el['type'] === "|ChildId|") {
                         $oFields[] = $el['key'] . ':id';
