@@ -43,7 +43,6 @@ const cacheData = (userState: any) => ([
         schema: NaeSSchemaMap.User.schema,
         page: 1,
         pageSize: 200,
-        fieldsToReturn: IUserFieldsNae,
     },
     {% endif %}
     {% if hasNotes %}
@@ -51,7 +50,6 @@ const cacheData = (userState: any) => ([
         schema: NaeSSchemaMap.Note.schema,
         page: 1,
         pageSize: 200,
-        fieldsToReturn: INoteFieldsNae,
         filters: [
             {
                 "and": [
@@ -82,7 +80,7 @@ export const DataCacheProvider = (props: DataCacheProps) => {
     const [isQueueLoading, setIsQueueLoading] = useState(false);
 
     const [isCaching, setIsCaching] = useState(true);
-    const [preloadCache] = OpenApi.useURequest('NAEUMultipleList');
+    const [preloadCache] = OpenApi.useURequest('NAEUMultipleListForModels');
     const isLoggedIn = !!userState && userState.id > 0;
     useEffect(() => {
         if (!userState || !userState.id) {
@@ -111,7 +109,6 @@ export const DataCacheProvider = (props: DataCacheProps) => {
             loadCacheData[item.schema] = {
                 schema: item.schema,
                 ids: [],
-                fieldsToReturn: item.fields
             };
         }
         loadCacheData[item.schema].ids.push(item.elementId);
@@ -125,7 +122,6 @@ export const DataCacheProvider = (props: DataCacheProps) => {
                 schema: _data.schema,
                 page: 1,
                 pageSize: _data.ids.length,
-                fieldsToReturn: _data.fieldsToReturn,
                 filters: [{ and: [["i.id", "in", _data.ids, true]] }]
             }
         );
