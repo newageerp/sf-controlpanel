@@ -1,12 +1,12 @@
 import { createSelector } from "redux-orm";
 import orm from "./orm";
 
-{% for m in modelClasses %}
+{% for m in models %}
 export const Selector{{ m }}Nae = createSelector(orm.{{ m }}Model);
 {% endfor %}
 
 export const selectorBySchemaClassName = (schema) => {
-    {% for m in modelClasses %}
+    {% for m in models %}
     if (schema === '{{ m }}') {
         return Selector{{ m }}Nae;
     }
