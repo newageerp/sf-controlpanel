@@ -9,10 +9,10 @@ interface ChildId {
 }
 
 export interface I{{ modelName }}ModelNae {
-    {{ modelsStruct }}
+    {{ modelsStruct|raw }}
 }
 
-export const I{{ modelName }}FieldsNae = {{ modelFieldsArray }};
+export const I{{ modelName }}FieldsNae = {{ modelFieldsArray|raw }};
 
 export function use{{ modelName }}HookNae(id: number) : I{{ modelName }}ModelNae {
   // @ts-ignore
