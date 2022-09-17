@@ -14,9 +14,11 @@ export interface I{{ modelName }}ModelNae {
   {{ key }}: {
     {% for keyB, typeB in type %}
       {% if typeB is iterable %}
+      {{ keyB }}: {
         {% for keyC, typeC in typeB %}
       {{ keyC }}: {{ typeC }},
         {% endfor %}
+        },
       {% else %}
     {{ keyB }}: {{ typeB }},
       {% endif %}
