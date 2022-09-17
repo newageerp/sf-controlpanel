@@ -1,0 +1,34 @@
+import { useEffect } from "react";
+import { NaeSSchemaMap } from "../../config/NaeSSchema";
+import { useDataCache } from "./DataCacheProvider";
+import { useSelector } from "react-redux";
+import { Selector{{ modelName }}Nae } from "../Models/ormSelectors";
+
+interface ChildId {
+  id: number
+}
+
+export interface I{{ modelName }}ModelNae {
+    {{ modelsStruct }}
+}
+
+export const I{{ modelName }}FieldsNae = {{ modelFieldsArray }};
+
+export function use{{ modelName }}HookNae(id: number) : I{{ modelName }}ModelNae {
+  // @ts-ignore
+  const element = useSelector((state) => Selector{{ modelName }}Nae(state, id));
+
+  const { addToQueue } = useDataCache();
+
+  useEffect(() => {
+    if (!element) {
+      addToQueue({
+        elementId: id,
+        schema: NaeSSchemaMap.{{ modelName }}.schema,
+        fields: I{{ modelName }}FieldsNae,
+      });
+    }
+  }, [element, id]);
+
+  return element;
+}

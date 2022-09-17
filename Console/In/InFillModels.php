@@ -6,6 +6,7 @@ use Newageerp\SfControlpanel\Console\EntitiesUtils;
 use Newageerp\SfControlpanel\Console\LocalConfigUtils;
 use Newageerp\SfControlpanel\Console\PropertiesUtils;
 use Newageerp\SfControlpanel\Console\Utils;
+use Newageerp\SfControlpanel\Service\TemplateService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -22,8 +23,7 @@ class InFillModels extends Command
     public function __construct(
         PropertiesUtils $propertiesUtils,
         EntitiesUtils   $entitiesUtils,
-    )
-    {
+    ) {
         parent::__construct();
         $this->propertiesUtils = $propertiesUtils;
         $this->entitiesUtils = $entitiesUtils;
@@ -36,16 +36,16 @@ class InFillModels extends Command
             'cache' => '/tmp/smarty',
         ]);
         $ormjsTemplate = $twig->load('front-models/ormjs.html.twig');
-        $ormSelectorsJsTemplate = $twig->load('front-models/ormSelectorsJs.html.twig');
+
         $dataCacheSocketTemplate = $twig->load('front-models/DataCacheSocketComponent.html.twig');
         $dataCacheProviderTemplate = $twig->load('front-models/DataCacheProvider.html.twig');
         $queueModelTemplate = $twig->load('front-models/QueueModel.html.twig');
 
+        $ormSelectorsJsTemplate = new TemplateService('front-models/ormSelectorsJs.html.twig');
+        $hooksTemplate = new TemplateService('v3/models/hooks.html.twig');
+
         $modelTemplate = file_get_contents(
             __DIR__ . '/templates/fill-models/model-template.txt'
-        );
-        $hookTemplate = file_get_contents(
-            __DIR__ . '/templates/fill-models/hook-template.txt'
         );
 
         $templates = [
@@ -133,10 +133,10 @@ class InFillModels extends Command
         sort($modelClasses);
 
         $modelsImport = array_map(
-                function ($m) {
-                    return 'import ' . $m . 'Model from "./' . $m . 'Model"';
-                },
-                $modelClasses
+            function ($m) {
+                return 'import ' . $m . 'Model from "./' . $m . 'Model"';
+            },
+            $modelClasses
         );
         $modelsList =
             array_map(
@@ -156,20 +156,22 @@ class InFillModels extends Command
 
         // FILL ormSelectors
         $selectorsPath = $modelsDir . "/ormSelectors.js";
-        if (file_exists($selectorsPath)) {
-            $selectorsContent = file_get_contents($selectorsPath);
-        } else {
-            $selectorsContent = $ormSelectorsJsTemplate->render([]);
-        }
 
-
-        foreach ($modelClasses as $m) {
-            $selector = 'Selector' . $m . 'Nae';
-            if (mb_strpos($selectorsContent, $selector) === false) {
-                $selectorsContent .= 'export const ' . $selector . ' = createSelector(orm.' . $m . 'Model);' . PHP_EOL;
-            }
-        }
-        Utils::writeOnChanges($selectorsPath, $selectorsContent);
+        $ormSelectorsJsTemplate->writeToFileOnChanges(
+            $selectorsPath,
+            [
+                'models' => $modelClasses,
+                'modelsSlugs' => array_map(
+                    function ($m) {
+                        return [
+                            'cl' => $m,
+                            'slug' => $this->entitiesUtils->getSlugByClassName($m)
+                        ];
+                    },
+                    $modelClasses
+                )
+            ]
+        );
 
         // FILL HOOKS
         $hooksDir = LocalConfigUtils::getFrontendHooksPath();
@@ -355,15 +357,13 @@ class InFillModels extends Command
                 }
             }
 
-            $hooksContent = str_replace(
-                ['|MODELFIELDSSTRUCT|', '|MODELFIELDSARRAY|', '|MODELNAME|', '|ChildId|'],
-                [$struct, json_encode($oFields, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE), $m, 'ChildId[]'],
-                $hookTemplate
-            );
-
-            file_put_contents(
+            $hooksTemplate->writeToFileOnChanges(
                 $hooksDir . '/use' . $m . 'HookNae.tsx',
-                $hooksContent
+                [
+                    'modelName' => $m,
+                    'modelsStruct' => $struct,
+                    'modelFieldsArray' => json_encode($oFields, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)
+                ]
             );
         }
 
@@ -644,16 +644,15 @@ import { " . $selectorsJoin . " } from '../../Components/Models/ormSelectors';
         $field,
         $className,
         $propertyPath
-    )
-    {
+    ) {
         // var_dump($key);
         // var_dump($field);
         // var_dump($className);
         // var_dump($propertyPath);
 
         $isFilter = count(array_filter($o, function ($o) use ($key) {
-                return $o['key'] === $key;
-            })) > 0;
+            return $o['key'] === $key;
+        })) > 0;
 
         // var_dump($isFilter);
         // var_dump('-------');
@@ -721,8 +720,7 @@ import { " . $selectorsJoin . " } from '../../Components/Models/ormSelectors';
         $keyC,
         $schema,
         $template
-    ): array
-    {
+    ): array {
         $compName = $schema . ucfirst($keyC) . 'FieldNae';
 
         return [
@@ -748,8 +746,7 @@ import { " . $selectorsJoin . " } from '../../Components/Models/ormSelectors';
         $keyB,
         $keyC,
         $template
-    ): array
-    {
+    ): array {
         $compName = $model . ucfirst($key) . ucfirst($keyB,) . ucfirst($keyC) . 'FieldNae';
 
         return [
@@ -774,8 +771,7 @@ import { " . $selectorsJoin . " } from '../../Components/Models/ormSelectors';
         $keyB,
         $schema,
         $template
-    ): array
-    {
+    ): array {
         $compName = $model . ucfirst($key) . 'REL' . ucfirst($keyB,) . 'FieldNae';
 
         return [
