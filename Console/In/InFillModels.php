@@ -275,6 +275,7 @@ class InFillModels extends Command
             $modelProperties[$m] = $o;
         }
 
+        $modelsFieldsCache = [];
         foreach ($modelClasses as $m) {
             if ($m === 'Queue') {
                 continue;
@@ -361,7 +362,13 @@ class InFillModels extends Command
                     'modelFieldsArray' => json_encode($oFields, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)
                 ]
             );
+
+            $modelsFieldsCache[$this->entitiesUtils->getSlugByClassName($m)] = $oFields;
         }
+        file_put_contents(
+            '/var/www/symfony/assets/model-fields.json',
+            json_encode($modelsFieldsCache, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)
+        );
 
         // ModelsCacheData
         $compDir = LocalConfigUtils::getFrontendModelsCachePath();
