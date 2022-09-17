@@ -9,7 +9,7 @@ interface ChildId {
 }
 
 export interface I{{ modelName }}ModelNae {
-{% for key, type in struct %}
+{% for key, type in modelsStruct %}
   {% if type is iterable %}
   {{ key }}: {
     {% for keyB, typeB in type %}
