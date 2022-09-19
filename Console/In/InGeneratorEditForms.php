@@ -48,6 +48,7 @@ class InGeneratorEditForms extends Command
 
         $efCustomComponentsGeneratedPath = Utils::customFolderPath('edit/components');
         $customEfFunctionTemplate = new TemplateService('v3/edit/CustomFieldFunction.html.twig');
+        $customEfFunctionTemplateMap = new TemplateService('v3/edit/CustomEditComponentsMap.html.twig');
 
         $tabs = LocalConfigUtils::getCpConfigFileData('tabs');
 
@@ -312,6 +313,11 @@ class InGeneratorEditForms extends Command
 
             Utils::writeOnChanges($fileName, $generatedContent);
         }
+
+        $customEfFunctionTemplateMap->writeToFileOnChanges(
+            Utils::customFolderPath('edit').'/CustomEditComponentsMap.ts',
+            ['templates' => $customComponents,]
+        );
 
         // EDIT POPUP
         $editPopupT = new TemplateService('edit-forms/EditPopup.html.twig');
