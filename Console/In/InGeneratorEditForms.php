@@ -320,38 +320,38 @@ class InGeneratorEditForms extends Command
         );
 
         // EDIT POPUP
-        $editPopupT = new TemplateService('edit-forms/EditPopup.html.twig');
+        // $editPopupT = new TemplateService('edit-forms/EditPopup.html.twig');
         $editPopupMapT = new TemplateService('edit-forms/EditPopupMap.html.twig');
 
-        $folder = Utils::generatedPath('editforms/popups');
+        // $folder = Utils::generatedPath('editforms/popups');
 
         $components = [];
 
-        foreach ($editItems as $editItem) {
-            $slugUc = Utils::fixComponentName($editItem['config']['schema']);
+        // foreach ($editItems as $editItem) {
+        //     $slugUc = Utils::fixComponentName($editItem['config']['schema']);
 
-            $compName = Utils::fixComponentName(
-                ucfirst($editItem['config']['schema']) .
-                    ucfirst($editItem['config']['type']) . 'EditPopup'
-            );
+        //     $compName = Utils::fixComponentName(
+        //         ucfirst($editItem['config']['schema']) .
+        //             ucfirst($editItem['config']['type']) . 'EditPopup'
+        //     );
 
-            $components[] = [
-                'compName' => $compName,
-                'schema' => $editItem['config']['schema'],
-                'type' => $editItem['config']['type']
-            ];
+        //     $components[] = [
+        //         'compName' => $compName,
+        //         'schema' => $editItem['config']['schema'],
+        //         'type' => $editItem['config']['type']
+        //     ];
 
-            $fileName = $folder . '/' . $compName . '.tsx';
-            $editPopupT->writeToFileOnChanges(
-                $fileName,
+        //     $fileName = $folder . '/' . $compName . '.tsx';
+        //     $editPopupT->writeToFileOnChanges(
+        //         $fileName,
 
-                [
-                    'compName' => $compName,
-                    'slugUc' => $slugUc,
-                    'skipRequiredCheck' => isset($editItem['config']['skipCheckRequiredFields']) && $editItem['config']['skipCheckRequiredFields']
-                ]
-            );
-        }
+        //         [
+        //             'compName' => $compName,
+        //             'slugUc' => $slugUc,
+        //             'skipRequiredCheck' => isset($editItem['config']['skipCheckRequiredFields']) && $editItem['config']['skipCheckRequiredFields']
+        //         ]
+        //     );
+        // }
 
         $editPopupMapT->writeToFileOnChanges(
             Utils::generatedPath('editforms') . '/EditPopup.tsx',
