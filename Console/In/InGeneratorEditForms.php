@@ -63,6 +63,8 @@ class InGeneratorEditForms extends Command
         $generatedPath = Utils::generatedPath('editforms/forms');
         $generatedPathDataSource = Utils::generatedPath('editforms/forms-data-source');
 
+        $customComponents = [];
+
         foreach ($editItems as $editItem) {
             $slug = $editItem['config']['schema'];
             $slugUc = Utils::fixComponentName($slug);
@@ -86,7 +88,6 @@ class InGeneratorEditForms extends Command
 
             foreach ($editItem['config']['fields'] as $fieldIndex => $field) {
                 if (isset($field['componentName']) && $field['componentName']) {
-
                     $componentNameA = explode("/", $field['componentName']);
                     $customComponentName = end($componentNameA);
                     $componentNamePath = $efCustomComponentsGeneratedPath . '/' . $field['componentName'] . '.tsx';
@@ -98,6 +99,11 @@ class InGeneratorEditForms extends Command
                             ['compName' => $customComponentName]
                         );
                     }
+
+                    $customComponents[] = [
+                        'componentName' => $field['componentName'],
+                        'name' => $customComponentName,
+                    ];
                 }
 
                 $labelClassName = isset($field['labelClassName']) && $field['labelClassName'] ? $field['labelClassName'] : 'tw3-w-56';
