@@ -120,6 +120,13 @@ class InGeneratorEditForms extends Command
                     $contentC = '<CompactRow' . $labelInner . ' control={<Fragment/>}/>';
 
                     $rows[$stepGroup][$lineGroup][] = ['w' => $contentW, 'c' => $contentC, 'needCheck' => false];
+                }  else if (isset($field['type']) && $field['type'] === 'hint') {
+                    $labelInner = ' label={<Label>{t(\'' . $field['text'] . '\')}</Label>}';
+
+                    $contentW = '<WideRow autoWidth={true} labelClassName="' . $labelClassName . '" ' . $labelInner . ' control={<Fragment/>}/>';
+                    $contentC = '<CompactRow' . $labelInner . ' control={<Fragment/>}/>';
+
+                    $rows[$stepGroup][$lineGroup][] = ['w' => $contentW, 'c' => $contentC, 'needCheck' => false];
                 } else if (isset($field['path']) && $field['path']) {
                     $fullPathProperty = $this->propertiesUtils->getPropertyForPath($field['path']);
 
