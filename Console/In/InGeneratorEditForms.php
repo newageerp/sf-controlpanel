@@ -46,6 +46,8 @@ class InGeneratorEditForms extends Command
         $editFormTemplate = $twig->load('edit-forms/EditForm.html.twig');
         $editFormDataSourceTemplate = $twig->load('edit-forms/EditFormDataSource.html.twig');
 
+        $efCustomComponentsGeneratedPath = Utils::customFolderPath('edit/components');
+        $customEfFunctionTemplate = new TemplateService('v3/edit/CustomFieldFunction.html.twig');
 
         $tabs = LocalConfigUtils::getCpConfigFileData('tabs');
 
@@ -83,6 +85,21 @@ class InGeneratorEditForms extends Command
             $rows = [];
 
             foreach ($editItem['config']['fields'] as $fieldIndex => $field) {
+                if (isset($field['componentName']) && $field['componentName']) {
+
+                    $componentNameA = explode("/", $field['componentName']);
+                    $customComponentName = end($componentNameA);
+                    $componentNamePath = $efCustomComponentsGeneratedPath . '/' . $field['componentName'] . '.tsx';
+                    if (!file_exists($componentNamePath)) {
+                        Utils::customFolderPath('edit/components/' . implode("/", array_slice($componentNameA, 0, -1)));
+
+                        $customEfFunctionTemplate->writeIfNotExists(
+                            $componentNamePath,
+                            ['compName' => $customComponentName]
+                        );
+                    }
+                }
+
                 $labelClassName = isset($field['labelClassName']) && $field['labelClassName'] ? $field['labelClassName'] : 'tw3-w-56';
                 $inputClassName = isset($field['inputClassName']) && $field['inputClassName'] ? $field['inputClassName'] : '';
 
@@ -120,7 +137,7 @@ class InGeneratorEditForms extends Command
                     $contentC = '<CompactRow' . $labelInner . ' control={<Fragment/>}/>';
 
                     $rows[$stepGroup][$lineGroup][] = ['w' => $contentW, 'c' => $contentC, 'needCheck' => false];
-                }  else if (isset($field['type']) && $field['type'] === 'hint') {
+                } else if (isset($field['type']) && $field['type'] === 'hint') {
                     $labelInner = ' label={<Label>{t(\'' . $field['text'] . '\')}</Label>}';
 
                     $contentW = '<WideRow autoWidth={true} labelClassName="' . $labelClassName . '" ' . $labelInner . ' control={<Fragment/>}/>';
@@ -152,7 +169,7 @@ class InGeneratorEditForms extends Command
                         }
                         if (count($pathArray) >= 2) {
                             $fieldsToReturn[] = $pathA[1] . '.id';
-                            $fieldsToReturn[] = $pathA[1] . '.'.$fullPathProperty['key'];
+                            $fieldsToReturn[] = $pathA[1] . '.' . $fullPathProperty['key'];
 
 
                             $relPathArray = explode(".", $field['path']);
@@ -300,7 +317,7 @@ class InGeneratorEditForms extends Command
 
         foreach ($editItems as $editItem) {
             $slugUc = Utils::fixComponentName($editItem['config']['schema']);
-            
+
             $compName = Utils::fixComponentName(
                 ucfirst($editItem['config']['schema']) .
                     ucfirst($editItem['config']['type']) . 'EditPopup'
