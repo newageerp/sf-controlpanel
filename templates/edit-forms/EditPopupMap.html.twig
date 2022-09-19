@@ -21,9 +21,11 @@ export const editPopupBySchemaAndType = (schema: string, type: string, props: Po
                 key={`${editProps.schema}-${editProps.type}-${editProps.id}`}
                 templateName="PageMainEdit"
                 data={editProps}
-                templateData={{
+                templateData={
+                    {
                     onBack: props.onClose,
-                }}
+                    }
+                }
             />
         </Popup>
     )
