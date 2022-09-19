@@ -103,7 +103,7 @@ class InGeneratorEditForms extends Command
 
                     $customComponents[] = [
                         'componentName' => $field['componentName'],
-                        'name' => $customComponentName,
+                        'name' => $customComponentName.mb_substr(md5($field['componentName']), 0, 5),
                     ];
                 }
 
