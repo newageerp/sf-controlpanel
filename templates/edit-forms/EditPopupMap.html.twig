@@ -23,12 +23,12 @@ interface PopupProps {
 }
 
 export const editPopupBySchemaAndType = (schema: string, type: string, props: PopupProps) => {
-    const f = EditPopupMap.filter(i => i.schema === schema && i.type === type);
+    {# const f = EditPopupMap.filter(i => i.schema === schema && i.type === type);
     if (f.length > 0) {
         const Comp = f[0].comp;
         // @ts-ignore
         return <Comp {...props} />
-    }
+    } #}
     
     const {editProps} = props;
 
