@@ -155,7 +155,7 @@ class InFillModels extends Command
         Utils::writeOnChanges($ormPath, $ormContents);
 
         // FILL ormSelectors
-        $selectorsPath = $modelsDir . "/ormSelectors.js";
+        $selectorsPath = $modelsDir . "/ormSelectors.ts";
 
         $ormSelectorsJsTemplate->writeToFileOnChanges(
             $selectorsPath,
