@@ -608,7 +608,8 @@ class PropertiesUtils
                     "template" => '<FilePickerMultiple width="tw3-w-full" val={TP_VALUE} onChange={TP_ON_CHANGE}  folder={"TP_SCHEMA/TP_KEY"}/>'
                 ];
             case 'array':
-                [$tabSchema, $tabType] = explode(':', $column['arrayRelTab']);
+                $arrayRelTab = isset($column['arrayRelTab']) && $column['arrayRelTab']?$column['arrayRelTab']:"";
+                [$tabSchema, $tabType] = explode(':', $arrayRelTab);
 
                 return [
                     'import' => '',
