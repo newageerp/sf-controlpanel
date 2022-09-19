@@ -1,20 +1,10 @@
 import React, {Fragment} from 'react'
-{% for component in components %}
-import {{ component.compName }} from './popups/{{ component.compName }}';
-{% endfor %}
-import { MvcEditModalContentProps, MvcViewModalContentProps } from '@newageerp/nae-react-ui/dist/interfaces';
-import { UI } from '@newageerp/nae-react-ui';
-import MainEdit from '../v2/edit-forms/MainEdit';
 
-export const EditPopupMap = [
-    {% for component in components %}
-    {
-        schema: '{{ component.schema }}',
-        type: '{{ component.type }}',
-        comp: {{ component.compName }}
-    },
-    {% endfor %}
-];
+import { MvcEditModalContentProps, MvcViewModalContentProps } from '@newageerp/nae-react-ui/dist/interfaces';
+import TemplateLoader from '../v3/templates/TemplateLoader';
+import { Popup } from '@newageerp/ui.popups.base.popup'
+
+
 
 interface PopupProps {
     onClose: () => void,
@@ -23,44 +13,18 @@ interface PopupProps {
 }
 
 export const editPopupBySchemaAndType = (schema: string, type: string, props: PopupProps) => {
-    {# const f = EditPopupMap.filter(i => i.schema === schema && i.type === type);
-    if (f.length > 0) {
-        const Comp = f[0].comp;
-        // @ts-ignore
-        return <Comp {...props} />
-    } #}
-    
-    const {editProps} = props;
+    const { editProps } = props;
 
     return (
-        <UI.Popup.Popup visible={true} toggleVisible={props.onClose}>
-            <MainEdit
-                schema={editProps.schema}
-                type={editProps.type ? editProps.type : 'main'}
-                id={
-                    typeof editProps.id !== 'string'
-                        ? editProps.id.toString()
-                        : editProps.id
-                }
-                header={UI.Content.EditHeaderType.show}
-                onSave={editProps.onSaveCallback}
-                onSaveAndStay={(el: any, backFunc: any) => {
-                    if (editProps.onSaveCallback) {
-                        editProps.onSaveCallback(el, backFunc);
-                    } else {
-                        backFunc();
-                    }
-                    props.setViewProps({
-                        schema: editProps.schema,
-                        id: el.id,
-                        type: 'main'
-                    })
+        <Popup onClose={props.onClose}>
+            <TemplateLoader
+                key={`${editProps.schema}-${editProps.type}-${editProps.id}`}
+                templateName="PageMainEdit"
+                data={editProps}
+                templateData={{
+                    onBack: props.onClose,
                 }}
-                onBack={props.onClose}
-                newStateOptions={editProps.newStateOptions}
-                skipHiddenCheck={editProps.skipHiddenCheck}
-                fieldsToReturnOnSave={editProps.fieldsToReturnOnSave}
             />
-        </UI.Popup.Popup>
+        </Popup>
     )
 }
