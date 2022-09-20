@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
-import { isMobile } from 'react-device-detect'
 import { UI } from '@newageerp/nae-react-ui'
 import { WideToolbar } from '@newageerp/ui.form.base.form-pack'
 
@@ -39,25 +38,6 @@ export default function MainEditWrapper(props: Props) {
     const { element, title, children } = props
 
     const { t } = useTranslation()
-
-    const goBack = () => {
-        // if (isPopup) {
-        //     if (onClose) {
-        //         onClose();
-        //     }
-        // } else {
-        //     history.goBack();
-        // }
-        // history.goBack()
-        if (props.goBack) {
-            props.goBack()
-        }
-    }
-
-    const isCompact = isMobile || props.compact || props.saveOnBottom;
-
-    const WrapComponent = props.contentWrap ? props.contentWrap : UI.Card.WhiteCard
-
 
     return (
         <Fragment>
