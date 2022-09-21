@@ -8,12 +8,13 @@ import { isMobile } from 'react-device-detect'
 import { functions, UI, UIConfig } from '@newageerp/nae-react-ui'
 import { INaeEditField, INaeEditSettings, INaeFormEditRow, INaeProperty } from '@newageerp/nae-react-ui/dist/interfaces'
 import { EditHeaderType } from '@newageerp/nae-react-ui/dist/UI/Mvc/MvcEditPage'
-import MainEditWrapper from './MainEditWrapper'
 
 import TemplateLoader, {
   useTemplateLoader,
 } from "../../v3/templates/TemplateLoader";
 import { fieldVisibility, IFieldVisibility } from "../../../config/fields/fieldVisibility";
+import { WideToolbar } from '@newageerp/ui.form.base.form-pack'
+import { OpenApi } from '@newageerp/nae-react-auth-wrapper'
 
 export interface MainEditTemplateData {
   element: any,
@@ -39,11 +40,8 @@ interface Props {
 
   newStateOptions?: any
 
-  parentElement?: any
-
   skipHiddenCheck?: boolean
-  compact?: boolean
-  saveOnBottom?: boolean,
+
   contentWrap?: any
 
   fieldsToReturnOnSave?: string[]
@@ -60,8 +58,6 @@ export default function MainEdit(props: Props) {
   const { t } = useTranslation()
   const location = useLocation<any>()
   const locationState = location.state
-
-  const isCompact = isMobile || props.compact
 
   const [saveData, saveDataParams] = UIConfig.useUSave(
     props.schema,
@@ -107,7 +103,7 @@ export default function MainEdit(props: Props) {
     }
     const isNew = props.id === 'new'
     setHasChanges(false)
-    saveData({...element, skipRequiredCheck: props.skipRequiredCheck}, props.id).then((res: any) => {
+    saveData({ ...element, skipRequiredCheck: props.skipRequiredCheck }, props.id).then((res: any) => {
       if (res) {
         if (res.error) {
         } else {
@@ -135,7 +131,10 @@ export default function MainEdit(props: Props) {
     saveData(element, props.id).then((res: any) => {
       if (res) {
         if (res.error) {
+          OpenApi.toast.error(t("Klaida"));
         } else {
+          OpenApi.toast.success(t("Išsaugota"));
+
           const backFunction = () => {
             if (props.onBack) {
               props.onBack(isNew, res.data.element)
@@ -186,31 +185,25 @@ export default function MainEdit(props: Props) {
     }
   }, [schemaGetDataParams.data.data])
 
-  const templateData : MainEditTemplateData = { 
-    element, 
-    updateElement, 
-    fieldVisibility, 
-    parentElement: props.parentElement, 
-    hasChanges, 
+
+  const goBack = props.onBack ? () => {
+    if (props.onBack) {
+      props.onBack(false);
+    }
+  } : undefined;
+
+  const templateData = {
+    element,
+    updateElement,
+    fieldVisibility,
+    hasChanges,
     formType: props.type,
-    pushHiddenFields: (fieldKey: string) => hiddenFields.push(fieldKey) 
+    pushHiddenFields: (fieldKey: string) => hiddenFields.push(fieldKey),
+    onSave: doSave,
+    onExtraSave: props.onSaveAndStay ? doSaveAndStay : undefined,
+    onBack: goBack
   }
 
-  const content = (
-    <Fragment>
-      {element ? (
-        <Fragment>
-          <TemplateLoader
-            templates={tData.formContent}
-            templateData={templateData}
-          />
-
-        </Fragment>
-      ) : (
-        <Fragment />
-      )}
-    </Fragment>
-  )
 
   UIConfig.resetFieldsToDefValues(
     props.schema,
@@ -219,28 +212,40 @@ export default function MainEdit(props: Props) {
     updateElementBatch
   )
 
-  return (
-    <MainEditWrapper
-      title={functions.schemas.getSchemaTitle(props.schema, false)}
-      element={element}
-      onSave={doSave}
-      onSaveAndStay={props.onSaveAndStay ? doSaveAndStay : undefined}
-      saveLoading={saveDataParams.loading}
-      error={saveDataParams.error}
-      goBack={props.onBack?() => {
-        if (props.onBack) {
-        props.onBack(false);
-        }
-      }:undefined}
-      header={props.header}
-      schema={props.schema}
-      compact={props.compact}
-      contentWrap={props.contentWrap}
 
-      saveOnBottom={props.saveOnBottom}
-      editContainerClassName={props.editContainerClassName}
-    >
-      {content}
-    </MainEditWrapper>
+  return (
+    <Fragment>
+      {element ? (
+        <div className={`tw3-space-y-4 tw3-max-w-[1200px] tw3-mx-auto ${props.editContainerClassName ? props.editContainerClassName : ''}`}>
+
+
+
+          {element ? (
+            <Fragment>
+              <TemplateLoader
+                templates={[tData.formContent]}
+                templateData={templateData}
+              />
+
+            </Fragment>
+          ) : (
+            <Fragment />
+          )}
+
+
+          {!!saveDataParams.error && <UI.Form.ErrorAlert error={saveDataParams.error} />}
+
+          <UI.Widget.Widget
+            type={UI.Widget.WidgetType.editRight}
+            element={element}
+            schema={props.schema ? props.schema : '-'}
+            saveError={saveDataParams.error}
+          />
+        </div>
+      ) : (
+        <Fragment />
+      )}
+    </Fragment>
+
   )
 }

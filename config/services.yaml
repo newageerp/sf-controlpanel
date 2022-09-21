@@ -22,6 +22,8 @@ services:
     arguments: [ ]
   Newageerp\SfControlpanel\Console\EditFormsUtilsV3:
     arguments: [ ]
+  Newageerp\SfControlpanel\Console\ViewFormsUtilsV3:
+    arguments: [ ]
 
   Newageerp\SfControlpanel\Console\Maker\MakePluginWithServiceAndMessageHandler:
     tags:

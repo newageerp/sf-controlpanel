@@ -365,10 +365,6 @@ class InGeneratorEditForms extends Command
             Utils::generatedV2Path('edit-forms') . '/MainEdit.tsx',
             [],
         );
-        (new TemplateService('edit-forms/Tmp/MainEditWrapper.html.twig'))->writeToFileOnChanges(
-            Utils::generatedV2Path('edit-forms') . '/MainEditWrapper.tsx',
-            [],
-        );;
 
         return Command::SUCCESS;
     }
