@@ -1,19 +1,15 @@
 import React, { Fragment, useEffect, useState } from 'react'
-import moment from 'moment'
 
 import { useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
-import { isMobile } from 'react-device-detect'
 import { functions, UI, UIConfig } from '@newageerp/nae-react-ui'
-import { INaeEditField, INaeEditSettings, INaeFormEditRow, INaeProperty } from '@newageerp/nae-react-ui/dist/interfaces'
-import { EditHeaderType } from '@newageerp/nae-react-ui/dist/UI/Mvc/MvcEditPage'
+import { INaeEditSettings } from '@newageerp/nae-react-ui/dist/interfaces'
 
 import TemplateLoader, {
   useTemplateLoader,
 } from "../../v3/templates/TemplateLoader";
 import { fieldVisibility, IFieldVisibility } from "../../../config/fields/fieldVisibility";
-import { WideToolbar } from '@newageerp/ui.form.base.form-pack'
 import { OpenApi } from '@newageerp/nae-react-auth-wrapper'
 
 export interface MainEditTemplateData {
@@ -31,7 +27,6 @@ interface Props {
   type: string
   id: string
 
-  header: EditHeaderType
 
   onSave?: (el: any, backFunc: any) => void
   onSaveAndStay?: (el: any, backFunc: any) => void
