@@ -11,10 +11,19 @@ class PdfsUtilsV3
         $this->pdfs = LocalConfigUtils::getCpConfigFileData('pdfs');
     }
 
-    public function getPdfItemsForSchema(string $schema) {
+    public function getPdfItemsForSchema(string $schema)
+    {
         $pdfs = array_filter(
             $this->pdfs,
             function ($item) use ($schema) {
+                if (
+                    isset($item['config']['skipList']) &&
+                    ($item['config']['skipList'] === 1 ||
+                        $item['config']['skipList'] === true
+                    )
+                ) {
+                    return false;
+                }
                 return $item['config']['entity'] === $schema;
             }
         );
