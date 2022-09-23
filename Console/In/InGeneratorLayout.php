@@ -64,48 +64,48 @@ class InGeneratorLayout extends Command
         Utils::writeOnChanges($fileName, $generatedContent);
 
         // toolbar layout rels create
-        $relsCreateFile = $_ENV['NAE_SFS_CP_STORAGE_PATH'] . '/rels-create.json';
-        if (file_exists($relsCreateFile)) {
-            $relsList = json_decode(file_get_contents($relsCreateFile), true);
-            $rels = [];
-            foreach ($relsList as $relItem) {
-                if (!isset($rels[$relItem['source']])) {
-                    $rels[$relItem['source']] = [];
-                }
-                if (!isset($relItem['targetTitle'])) {
-                    $relItem['targetTitle'] = $this->entitiesUtils->getTitleBySlug($relItem['target']);
-                }
-                if (!isset($relItem['type'])) {
-                    $relItem['type'] = 'main';
-                }
-                if (!isset($relItem['forcePopup'])) {
-                    $relItem['forcePopup'] = false;
-                }
-                if (!isset($relItem['disableOnScope'])) {
-                    $relItem['disableOnScope'] = "";
-                }
-                $rels[$relItem['source']][] = $relItem;
-            }
+        // $relsCreateFile = $_ENV['NAE_SFS_CP_STORAGE_PATH'] . '/rels-create.json';
+        // if (file_exists($relsCreateFile)) {
+        //     $relsList = json_decode(file_get_contents($relsCreateFile), true);
+        //     $rels = [];
+        //     foreach ($relsList as $relItem) {
+        //         if (!isset($rels[$relItem['source']])) {
+        //             $rels[$relItem['source']] = [];
+        //         }
+        //         if (!isset($relItem['targetTitle'])) {
+        //             $relItem['targetTitle'] = $this->entitiesUtils->getTitleBySlug($relItem['target']);
+        //         }
+        //         if (!isset($relItem['type'])) {
+        //             $relItem['type'] = 'main';
+        //         }
+        //         if (!isset($relItem['forcePopup'])) {
+        //             $relItem['forcePopup'] = false;
+        //         }
+        //         if (!isset($relItem['disableOnScope'])) {
+        //             $relItem['disableOnScope'] = "";
+        //         }
+        //         $rels[$relItem['source']][] = $relItem;
+        //     }
 
-            $toolbarItemTemplate = $twig->load('layout/toolbar-items-rel-create.html.twig');
-            foreach ($rels as $source => $items) {
-                $slugUc = Utils::fixComponentName($source);
-                $compName = $slugUc . 'RelCreate';
-                $fileName = Utils::generatedPath('layout/view/toolbar-items') . '/' . $compName . '.tsx';
+        //     $toolbarItemTemplate = $twig->load('layout/toolbar-items-rel-create.html.twig');
+        //     foreach ($rels as $source => $items) {
+        //         $slugUc = Utils::fixComponentName($source);
+        //         $compName = $slugUc . 'RelCreate';
+        //         $fileName = Utils::generatedPath('layout/view/toolbar-items') . '/' . $compName . '.tsx';
 
-                $widgetComponents[$source] = $compName;
+        //         $widgetComponents[$source] = $compName;
 
-                $generatedContent = $toolbarItemTemplate->render(
-                    [
-                        'compName' => $compName, 
-                        'items' => $items, 
-                        'schema' => $source,
-                        'slugUc' => $slugUc,
-                    ]
-                );
-                Utils::writeOnChanges($fileName, $generatedContent);
-            }
-        }
+        //         $generatedContent = $toolbarItemTemplate->render(
+        //             [
+        //                 'compName' => $compName, 
+        //                 'items' => $items, 
+        //                 'schema' => $source,
+        //                 'slugUc' => $slugUc,
+        //             ]
+        //         );
+        //         Utils::writeOnChanges($fileName, $generatedContent);
+        //     }
+        // }
 
         // toolbar layout rels copy
         $relsCreateFile = $_ENV['NAE_SFS_CP_STORAGE_PATH'] . '/rels-copy.json';
