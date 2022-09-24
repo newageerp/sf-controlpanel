@@ -6,16 +6,12 @@ class TabsUtilsV3
 {
     protected array $tabs = [];
 
-    public function __construct()
+    protected EntitiesUtilsV3 $entitiesUtilsV3;
+
+    public function __construct(EntitiesUtilsV3 $entitiesUtilsV3)
     {
-        $tabsFile = LocalConfigUtilsV3::getConfigCpPath() . '/tabs.json';
-        $this->tabs = [];
-        if (file_exists($tabsFile)) {
-            $this->tabs = json_decode(
-                file_get_contents($tabsFile),
-                true
-            );
-        }
+        $this->entitiesUtilsV3 = $entitiesUtilsV3;
+        $this->tabs = LocalConfigUtils::getCpConfigFileData('tabs');
     }
 
     public function getTabBySchemaAndType(string $schema, string $type): ?array
@@ -28,6 +24,39 @@ class TabsUtilsV3
         );
         if (count($tabsF) > 0) {
             return reset($tabsF)['config'];
+        }
+        return null;
+    }
+
+    public function getTabQsFields(string $schema, string $type) {
+        $tab = $this->getTabBySchemaAndType($schema, $type);
+        if (!$tab) {
+            return [];
+        }
+        if (isset($tab['quickSearchFilterKeys']) && $tab['quickSearchFilterKeys']) {
+            return json_decode($tab['quickSearchFilterKeys'], true);
+        }
+        return $this->entitiesUtilsV3->getDefaultQsForSchema($schema);
+    }
+
+    public function getTabSort(string $schema, string $type) {
+        $tab = $this->getTabBySchemaAndType($schema, $type);
+        if (!$tab) {
+            return [];
+        }
+        if (isset($tab['sort']) && $tab['sort']) {
+            return json_decode($tab['sort'], true);
+        }
+        return $this->entitiesUtilsV3->getDefaultSortForSchema($schema);
+    }
+
+    public function getTabFilter(string $schema, string $type) {
+        $tab = $this->getTabBySchemaAndType($schema, $type);
+        if (!$tab) {
+            return null;
+        }
+        if (isset($tab['predefinedFilter']) && $tab['predefinedFilter']) {
+            return json_decode($tab['predefinedFilter'], true);
         }
         return null;
     }

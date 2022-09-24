@@ -71,4 +71,20 @@ class EntitiesUtilsV3
         }
         return $sort;
     }
+
+    public function getDefaultQsForSchema(string $schema)
+    {
+        $qs = [];
+
+        foreach ($this->defaults as $df) {
+            if (
+                $df['config']['schema'] === $schema &&
+                isset($df['config']['defaultQuickSearch']) &&
+                $df['config']['defaultQuickSearch']
+            ) {
+                $qs = json_decode($df['config']['defaultQuickSearch'], true);
+            }
+        }
+        return $qs;
+    }
 }
