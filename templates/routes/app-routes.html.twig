@@ -6,6 +6,7 @@ import DefaultEditRouteWrapper from "./wrappers/DefaultEditRouteWrapper";
 {% endfor %}
 import { UI } from "@newageerp/nae-react-ui";
 import MainList from "../v3/pages/MainList";
+import TemplateRoute from "../v3/templates/TemplateRoute";
 
 export function AppsRoutes() {
     return (
@@ -24,6 +25,9 @@ export function ListRoutes() {
         <Fragment>
             <Route path={"/u/:schema/:type/list/"}>
                 <MainList />
+            </Route>
+            <Route path={"/tpl/:templateName"}>
+                <TemplateRoute />
             </Route>
             {# {% for component in listComponents %}
                 <Route path={"/u/{{ component.schema }}/{{ component.type }}/list/"}>
