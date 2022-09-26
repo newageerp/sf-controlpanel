@@ -47,6 +47,8 @@ class InGeneratorTabs extends Command
         $tableDataSourceRelTemplate = $twig->load('tabs/TableDataSourceRel.html.twig');
         $customColumnFunctionTemplate = $twig->load('tabs/CustomColumnFunction.html.twig');
 
+        $customEfFunctionTemplateMap = new TemplateService('v3/list/CustomListComponentsMap.html.twig');
+
         $tablesDataSourceTemplate = $twig->load('tabs/TablesDataSource.html.twig');
         $tablesDataSourceComponents = [];
 
@@ -63,6 +65,8 @@ class InGeneratorTabs extends Command
 
         $dataSourceCustomGeneratedPath = Utils::customFolderPath('tabs/tables-data-source');
         $tabCustomComponentsGeneratedPath = Utils::customFolderPath('tabs/components');
+
+        $customComponents = [];
 
         foreach ($tabItems as $tabItem) {
             $tpHead = [];
@@ -212,7 +216,14 @@ class InGeneratorTabs extends Command
                             .
                             $wrapFinish .
                             '</Td>';
+
+                        $customComponents[] = [
+                            'componentName' => $column['componentName'],
+                            'name' => $customComponentName.mb_substr(md5($column['componentName']), 0, 5),
+                        ];
                     }
+
+                    
                 }
 
                 $tpBody[] = $tdTemplate;
@@ -449,6 +460,11 @@ class InGeneratorTabs extends Command
                 ];
             }
         }
+
+        $customEfFunctionTemplateMap->writeToFileOnChanges(
+            Utils::customFolderPath('tabs').'/Custom:ListComponentsMap.ts',
+            ['templates' => $customComponents,]
+        );
 
         // DefaultSearchToolbar
         $generatedPath = Utils::generatedPath('tabs');
