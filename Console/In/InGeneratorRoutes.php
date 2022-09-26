@@ -82,7 +82,7 @@ class InGeneratorRoutes extends Command
                 ucfirst($tabItem['config']['schema']) .
                 ucfirst($tabItem['config']['type']) . 'TableDataSource'
             );
-            $imports[] = 'import ' . $dataSourceCompName . ' from "../tabs/tables-data-source/' . $dataSourceCompName . '"';
+            // $imports[] = 'import ' . $dataSourceCompName . ' from "../tabs/tables-data-source/' . $dataSourceCompName . '"';
 
             $listComponents[] = [
                 'schema' => $tabItem['config']['schema'],
@@ -97,7 +97,7 @@ class InGeneratorRoutes extends Command
                 ucfirst($editItem['config']['schema']) .
                 ucfirst($editItem['config']['type']) . 'FormDataSource'
             );
-            $imports[] = 'import ' . $compNameDataSource . ' from "../editforms/forms-data-source/' . $compNameDataSource . '"';
+            // $imports[] = 'import ' . $compNameDataSource . ' from "../editforms/forms-data-source/' . $compNameDataSource . '"';
 
             $editComponents[] = [
                 'schema' => $editItem['config']['schema'],
