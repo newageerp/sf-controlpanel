@@ -437,7 +437,7 @@ import { " . $selectorsJoin . " } from '../../Components/Models/ormSelectors';
 
         $componentsContent .= PHP_EOL . PHP_EOL;
 
-        $pathByComponent = [];
+        // $pathByComponent = [];
 
         foreach ($models as $m) {
             $fields = $modelProperties[$m];
@@ -498,29 +498,29 @@ import { " . $selectorsJoin . " } from '../../Components/Models/ormSelectors';
                                     }
 
                                     if (in_array($elC['key'], $objectFieldsB)) {
-                                        $t = $this->addFieldObjExBTemplate(
-                                            $m,
-                                            $el['schema'],
-                                            $el['key'],
-                                            $elB['key'],
-                                            $elC['key'],
-                                            $elB['schema'],
-                                            $templates['fieldObjExB']
-                                        );
-                                        $componentsContent .= $t['content'];
-                                        $elPath = $slug . '.' . $el['key'] . '.' . $elB['key'] . '.' . $elC['key'];
-                                        $pathByComponent[$elPath] = $t['comp'];
+                                        // $t = $this->addFieldObjExBTemplate(
+                                        //     $m,
+                                        //     $el['schema'],
+                                        //     $el['key'],
+                                        //     $elB['key'],
+                                        //     $elC['key'],
+                                        //     $elB['schema'],
+                                        //     $templates['fieldObjExB']
+                                        // );
+                                        // $componentsContent .= $t['content'];
+                                        // $elPath = $slug . '.' . $el['key'] . '.' . $elB['key'] . '.' . $elC['key'];
+                                        // $pathByComponent[$elPath] = $t['comp'];
                                     } else {
-                                        $t = $this->addFieldObjBTemplate(
-                                            $m,
-                                            $el['key'],
-                                            $elB['key'],
-                                            $elC['key'],
-                                            $templates['fieldObjB']
-                                        );
-                                        $componentsContent .= $t['content'];
-                                        $elPath = $slug . '.' . $el['key'] . '.' . $elB['key'] . '.' . $elC['key'];
-                                        $pathByComponent[$elPath] = $t['comp'];
+                                        // $t = $this->addFieldObjBTemplate(
+                                        //     $m,
+                                        //     $el['key'],
+                                        //     $elB['key'],
+                                        //     $elC['key'],
+                                        //     $templates['fieldObjB']
+                                        // );
+                                        // $componentsContent .= $t['content'];
+                                        // $elPath = $slug . '.' . $el['key'] . '.' . $elB['key'] . '.' . $elC['key'];
+                                        // $pathByComponent[$elPath] = $t['comp'];
                                     }
                                 }
                             }
@@ -541,45 +541,45 @@ import { " . $selectorsJoin . " } from '../../Components/Models/ormSelectors';
                             }
 
                             if (in_array($elB['key'], $objectFields)) {
-                                $t = $this->addFieldObjExTemplate(
-                                    $m,
-                                    $el['key'],
-                                    $elB['key'],
-                                    $el['schema'],
-                                    $templates['fieldObjEx'],
-                                );
-                                $componentsContent .= $t['content'];
+                                // $t = $this->addFieldObjExTemplate(
+                                //     $m,
+                                //     $el['key'],
+                                //     $elB['key'],
+                                //     $el['schema'],
+                                //     $templates['fieldObjEx'],
+                                // );
+                                // $componentsContent .= $t['content'];
 
-                                $elPath = $slug . '.' . $el['key'] . '.' . $elB['key'];
-                                $pathByComponent[$elPath] = $t['comp'];
+                                // $elPath = $slug . '.' . $el['key'] . '.' . $elB['key'];
+                                // $pathByComponent[$elPath] = $t['comp'];
                             } else {
-                                $t = $this->addFieldObjTemplate(
-                                    $m,
-                                    $el['key'],
-                                    $elB['key'],
-                                    $templates['fieldObj']
-                                );
+                                // $t = $this->addFieldObjTemplate(
+                                //     $m,
+                                //     $el['key'],
+                                //     $elB['key'],
+                                //     $templates['fieldObj']
+                                // );
 
-                                $componentsContent .= $t['content'];
-                                $elPath = $slug . '.' . $el['key'] . '.' . $elB['key'];
-                                $pathByComponent[$elPath] = $t['comp'];
+                                // $componentsContent .= $t['content'];
+                                // $elPath = $slug . '.' . $el['key'] . '.' . $elB['key'];
+                                // $pathByComponent[$elPath] = $t['comp'];
                             }
                         }
                     }
                 } else {
-                    $property = $this->propertiesUtils->getPropertyForPath($el['path']);
+                    // $property = $this->propertiesUtils->getPropertyForPath($el['path']);
 
-                    if (isset($property['enum']) && count($property['enum']) > 0) {
-                        $t = $this->addFieldTemplateEnum($m, $el['key'], $templates['fieldEnum']);
-                    } else if ($property['type'] === "string" && $property['format'] === "date") {
-                        $t = $this->addFieldTemplateDate($m, $el['key'], $templates['fieldDate']);
-                    } else if ($property['type'] === "string" && $property['format'] === "text") {
-                        $t = $this->addFieldTemplateText($m, $el['key'], $templates['fieldText']);
-                    } else {
-                        $t = $this->addFieldTemplate($m, $el['key'], $templates['field']);
-                    }
-                    $componentsContent .= $t['content'];
-                    $pathByComponent[$el['path']] = $t['comp'];
+                    // if (isset($property['enum']) && count($property['enum']) > 0) {
+                    //     $t = $this->addFieldTemplateEnum($m, $el['key'], $templates['fieldEnum']);
+                    // } else if ($property['type'] === "string" && $property['format'] === "date") {
+                    //     $t = $this->addFieldTemplateDate($m, $el['key'], $templates['fieldDate']);
+                    // } else if ($property['type'] === "string" && $property['format'] === "text") {
+                    //     $t = $this->addFieldTemplateText($m, $el['key'], $templates['fieldText']);
+                    // } else {
+                    //     $t = $this->addFieldTemplate($m, $el['key'], $templates['field']);
+                    // }
+                    // $componentsContent .= $t['content'];
+                    // $pathByComponent[$el['path']] = $t['comp'];
                 }
             }
         }
