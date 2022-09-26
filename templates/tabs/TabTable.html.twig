@@ -110,6 +110,13 @@ export default function {{ TP_COMP_NAME }}(props: Props) {
             tbody={
                 <tbody>
                     {data.map((item: any) => {
+                        if (!!tData && !!tData.tableRow && tData.tableRow.length > 0) {
+                            return (
+                                <TemplateLoader key={`row-${item?.id}`} templates={tData.tableRow} templateData={ { element: item, doReload: props.doReload } } />
+                            )
+                        }
+
+                        
                         {{ TP_ROW_DATA|raw }}
                         return (
                             <tr key={`row-${item?.id}`}>
