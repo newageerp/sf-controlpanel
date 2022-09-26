@@ -7,6 +7,7 @@ import DefaultEditRouteWrapper from "./wrappers/DefaultEditRouteWrapper";
 import { UI } from "@newageerp/nae-react-ui";
 import MainList from "../v3/pages/MainList";
 import TemplateRoute from "../v3/templates/TemplateRoute";
+import MainEdit from "../v3/pages/MainEdit";
 
 export function AppsRoutes() {
     return (
@@ -41,7 +42,10 @@ export function ListRoutes() {
 export function EditRoutes() {
     return (
         <Fragment>
-            {% for component in editComponents %}
+            <Route path={"/u/:schema/:type/edit/"}>
+                <MainEdit />
+            </Route>
+            {# {% for component in editComponents %}
                 <Route path={"/u/{{ component.schema }}/{{ component.type }}/edit/:id"}>
                     <DefaultEditRouteWrapper
                             render={
@@ -53,7 +57,7 @@ export function EditRoutes() {
                         }
                         />
                 </Route>
-            {% endfor %}
+            {% endfor %} #}
         </Fragment>
     )
 }
