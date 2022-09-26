@@ -3,6 +3,6 @@ import {{ template.name }} from "./components/{{ template.componentName }}";
 {% endfor %}
 export const CustomListComponentsMap: any = {
 {% for template in templates %}
-    'customedit.{{ template.componentName }}': {{ template.name }},
+    'customlist.{{ template.componentName }}': {{ template.name }},
 {% endfor %}
 }

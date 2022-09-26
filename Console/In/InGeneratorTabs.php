@@ -462,7 +462,7 @@ class InGeneratorTabs extends Command
         }
 
         $customEfFunctionTemplateMap->writeToFileOnChanges(
-            Utils::customFolderPath('tabs').'/Custom:ListComponentsMap.ts',
+            Utils::customFolderPath('tabs').'/CustomListComponentsMap.ts',
             ['templates' => $customComponents,]
         );
 
