@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import { TP_HOOK_NAME } from '../../../Components/Hooks/TP_HOOK_NAME';
 import { PropsId } from '../../../UserComponents/ModelsCacheData/types';
-import { getFieldNaeViewByPath } from '../../../UserComponents/ModelsCacheData/ModelFields';
+import { DfValueView } from '../../v3/hooks/useDfValue';
 import { Badge, BadgeSize } from '@newageerp/ui.badges.base.badge';
 import { functions } from "@newageerp/nae-react-ui";
 TP_IMPORT

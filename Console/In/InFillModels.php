@@ -584,17 +584,17 @@ import { " . $selectorsJoin . " } from '../../Components/Models/ormSelectors';
             }
         }
 
-        $componentsContent .= ' export const getFieldNaeViewByPath = (path: string, id: number) => {' . PHP_EOL;
+//         $componentsContent .= ' export const getFieldNaeViewByPath = (path: string, id: number) => {' . PHP_EOL;
 
-        foreach ($pathByComponent as $path => $comp) {
-            $componentsContent .= '
-    if (path === \'' . $path . '\') {
-        return <' . $comp . ' id={id}/>;
-    }';
-        }
+//         foreach ($pathByComponent as $path => $comp) {
+//             $componentsContent .= '
+//     if (path === \'' . $path . '\') {
+//         return <' . $comp . ' id={id}/>;
+//     }';
+//         }
 
-        $componentsContent .= '
-}' . PHP_EOL;
+//         $componentsContent .= '
+// }' . PHP_EOL;
 
         file_put_contents($compFile, $componentsContent);
 

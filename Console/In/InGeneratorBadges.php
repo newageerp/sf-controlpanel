@@ -60,7 +60,7 @@ class InGeneratorBadges extends Command
             }
 
             if (isset($badgeItem['config']['path']) && $badgeItem['config']['path']) {
-                $badgeContent = 'getFieldNaeViewByPath("' . $badgeItem['config']['path'] . '", element.id)';
+                $badgeContent = '<DfValueView path="' . $badgeItem['config']['path'] . '" id={element.id} />';
                 $property = $this->propertiesUtils->getPropertyForPath($badgeItem['config']['path']);
                 if (isset($property['enum']) && $property['enum']) {
                     $pathA = explode(".", $badgeItem['config']['path']);
