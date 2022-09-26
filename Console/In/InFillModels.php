@@ -422,20 +422,20 @@ import { " . $selectorsJoin . " } from '../../Components/Models/ormSelectors';
 
         $componentsContent .= PHP_EOL . PHP_EOL;
 
-        $componentsContent .= 'export const getSelectorForSchema = (schema: string) => {
-  let selector : any;';
-        foreach ($models as $m) {
-            $s = $this->entitiesUtils->getSlugByClassName($m);
-            $componentsContent .= "
-  if (schema === '" . $s . "') {
-    return Selector" . $m . "Nae;
-  }";
-        }
-        $componentsContent .= '
-  return selector;
-}';
+//         $componentsContent .= 'export const getSelectorForSchema = (schema: string) => {
+//   let selector : any;';
+//         foreach ($models as $m) {
+//             $s = $this->entitiesUtils->getSlugByClassName($m);
+//             $componentsContent .= "
+//   if (schema === '" . $s . "') {
+//     return Selector" . $m . "Nae;
+//   }";
+//         }
+//         $componentsContent .= '
+//   return selector;
+// }';
 
-        $componentsContent .= PHP_EOL . PHP_EOL;
+//         $componentsContent .= PHP_EOL . PHP_EOL;
 
         // $pathByComponent = [];
 
