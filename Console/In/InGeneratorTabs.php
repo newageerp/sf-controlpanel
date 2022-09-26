@@ -217,7 +217,7 @@ class InGeneratorTabs extends Command
                             $wrapFinish .
                             '</Td>';
 
-                        $customComponents[] = [
+                        $customComponents[$column['componentName']] = [
                             'componentName' => $column['componentName'],
                             'name' => $customComponentName.mb_substr(md5($column['componentName']), 0, 5),
                         ];
@@ -463,7 +463,7 @@ class InGeneratorTabs extends Command
 
         $customEfFunctionTemplateMap->writeToFileOnChanges(
             Utils::customFolderPath('tabs').'/CustomListComponentsMap.ts',
-            ['templates' => $customComponents,]
+            ['templates' => array_values($customComponents),]
         );
 
         // DefaultSearchToolbar

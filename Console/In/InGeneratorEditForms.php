@@ -101,7 +101,7 @@ class InGeneratorEditForms extends Command
                         );
                     }
 
-                    $customComponents[] = [
+                    $customComponents[$field['componentName']] = [
                         'componentName' => $field['componentName'],
                         'name' => $customComponentName.mb_substr(md5($field['componentName']), 0, 5),
                     ];
@@ -316,7 +316,7 @@ class InGeneratorEditForms extends Command
 
         $customEfFunctionTemplateMap->writeToFileOnChanges(
             Utils::customFolderPath('edit').'/CustomEditComponentsMap.ts',
-            ['templates' => $customComponents,]
+            ['templates' => array_values($customComponents),]
         );
 
         // EDIT POPUP
