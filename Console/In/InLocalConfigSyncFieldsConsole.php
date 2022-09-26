@@ -270,8 +270,8 @@ class InLocalConfigSyncFieldsConsole extends Command
                     },
                     $enumsData
                 );
-                $propSet['naeType'] = $this->propertiesUtils->getPropertyNaeType($propSet, []);
             }
+            $propSet['naeType'] = $this->propertiesUtils->getPropertyNaeType($propSet, []);
 
             $properties[] = $propSet;
 
