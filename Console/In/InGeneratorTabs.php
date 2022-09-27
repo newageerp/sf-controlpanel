@@ -61,7 +61,7 @@ class InGeneratorTabs extends Command
 
         $generatedPath = Utils::generatedPath('tabs/tables');
         $dataSourceGeneratedPath = Utils::generatedPath('tabs/tables-data-source');
-        $dataSourceRelGeneratedPath = Utils::generatedPath('tabs/tables-rel-data-source');
+        // $dataSourceRelGeneratedPath = Utils::generatedPath('tabs/tables-rel-data-source');
 
         $dataSourceCustomGeneratedPath = Utils::customFolderPath('tabs/tables-data-source');
         $tabCustomComponentsGeneratedPath = Utils::customFolderPath('tabs/components');
@@ -371,40 +371,40 @@ class InGeneratorTabs extends Command
                         true
                     ];
 
-                    $dataSourceFileName = $dataSourceRelGeneratedPath . '/' . $dataSourceRelCompName . '.tsx';
-                    $generatedContent = $tableDataSourceRelTemplate->render(
-                        [
-                            'tpCompName' => $dataSourceRelCompName,
-                            'tpTableCompName' => $compName,
-                            'schema' => $tabItem['config']['schema'],
-                            'schemaUC' => Utils::fixComponentName($tabItem['config']['schema']),
-                            'schemaTitle' => $this->entitiesUtils->getTitlePluralBySlug($tabItem['config']['schema']),
-                            'type' => $tabItem['config']['type'],
-                            'pageSize' => $pageSize,
-                            'sort' => json_encode($sort),
-                            'filter' => $filter ? json_encode($filter) : 'null',
-                            'quickSearch' => json_encode($quickSearch),
-                            'creatable' => isset($tabItem['config']['disableCreate']) && $tabItem['config']['disableCreate'] ? 'false' : 'true',
-                            'otherTabs' => $otherTabs && count($otherTabs) > 0 ? json_encode($otherTabs, JSON_UNESCAPED_UNICODE) : 'null',
-                            'exports' => $exports && count($exports) > 0 ? json_encode($exports, JSON_UNESCAPED_UNICODE) : 'null',
-                            'relFilter' => str_replace('"props.relId"', 'props.relId', json_encode($relFilter)),
-                            'mappedField' => $mapped,
-                            'relSchema' => $relProperty['schema'],
+                    // $dataSourceFileName = $dataSourceRelGeneratedPath . '/' . $dataSourceRelCompName . '.tsx';
+                    // $generatedContent = $tableDataSourceRelTemplate->render(
+                    //     [
+                    //         'tpCompName' => $dataSourceRelCompName,
+                    //         'tpTableCompName' => $compName,
+                    //         'schema' => $tabItem['config']['schema'],
+                    //         'schemaUC' => Utils::fixComponentName($tabItem['config']['schema']),
+                    //         'schemaTitle' => $this->entitiesUtils->getTitlePluralBySlug($tabItem['config']['schema']),
+                    //         'type' => $tabItem['config']['type'],
+                    //         'pageSize' => $pageSize,
+                    //         'sort' => json_encode($sort),
+                    //         'filter' => $filter ? json_encode($filter) : 'null',
+                    //         'quickSearch' => json_encode($quickSearch),
+                    //         'creatable' => isset($tabItem['config']['disableCreate']) && $tabItem['config']['disableCreate'] ? 'false' : 'true',
+                    //         'otherTabs' => $otherTabs && count($otherTabs) > 0 ? json_encode($otherTabs, JSON_UNESCAPED_UNICODE) : 'null',
+                    //         'exports' => $exports && count($exports) > 0 ? json_encode($exports, JSON_UNESCAPED_UNICODE) : 'null',
+                    //         'relFilter' => str_replace('"props.relId"', 'props.relId', json_encode($relFilter)),
+                    //         'mappedField' => $mapped,
+                    //         'relSchema' => $relProperty['schema'],
 
-                            'quickFilters' => $quickFilters && count($quickFilters) > 0 ? $quickFilters : 'null',
+                    //         'quickFilters' => $quickFilters && count($quickFilters) > 0 ? $quickFilters : 'null',
 
-                            'totals' => $totals && count($totals) > 0 ? json_encode($totals, JSON_UNESCAPED_UNICODE) : 'null',
+                    //         'totals' => $totals && count($totals) > 0 ? json_encode($totals, JSON_UNESCAPED_UNICODE) : 'null',
 
-                            'customComponentOptions' => str_replace('"props.relId"', 'props.relId', json_encode(
-                                [
-                                    'relSchema' => $relProperty['schema'],
-                                    'relId' => "props.relId"
-                                ]
-                            ))
-                        ]
-                    );
+                    //         'customComponentOptions' => str_replace('"props.relId"', 'props.relId', json_encode(
+                    //             [
+                    //                 'relSchema' => $relProperty['schema'],
+                    //                 'relId' => "props.relId"
+                    //             ]
+                    //         ))
+                    //     ]
+                    // );
 
-                    Utils::writeOnChanges($dataSourceFileName, $generatedContent);
+                    // Utils::writeOnChanges($dataSourceFileName, $generatedContent);
                 }
             } else {
                 $customToolbarStart = file_exists(
