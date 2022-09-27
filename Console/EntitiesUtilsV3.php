@@ -87,4 +87,34 @@ class EntitiesUtilsV3
         }
         return $qs;
     }
+
+    public function checkIsCreatable(string $schema, string $permissionGroup)
+    {
+        $entity = $this->getEntityBySlug($schema);
+        if ($entity) {
+            $scopes = isset($entity['config']['scopes']) && $entity['config']['scopes'] ? json_decode($entity['config']['scopes'], true) : [];
+
+            if (in_array('disable-create', $scopes)) {
+                return false;
+            }
+            if (in_array('disable-' . $permissionGroup . '-create', $scopes)) {
+                return false;
+            }
+
+            $isAllowScope = false;
+            foreach ($scopes as $scope) {
+                if (mb_strpos($scope, 'allow-create')) {
+                    $isAllowScope = true;
+                }
+            }
+            if ($isAllowScope) {
+                if (in_array('allow-create-' . $permissionGroup, $scopes)) {
+                    return true;
+                }
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
 }

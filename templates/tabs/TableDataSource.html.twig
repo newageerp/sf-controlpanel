@@ -327,18 +327,10 @@ export default function {{ tpCompName }}(props: Props) {
 
     return (
 <Fragment>
-{#    <LayoutToolbar#}
-{#        toolbar={#}
-{#            <Toolbar>#}
-{#                <ToolbarTitle>{{ toolbarTitle }}</ToolbarTitle>#}
-{#            </Toolbar>#}
-{#        }#}
-{#    >#}
-{#    <UI.Toolbar.Toolbar>#}
-{#        <UI.Typography.H3Toolbar>{% if toolbarTitle != "" %}{{ toolbarTitle }}{% else %}{" "}{% endif %}</UI.Typography.H3Toolbar>#}
-{#    </UI.Toolbar.Toolbar>#}
+
         <div ref={headerRef} className={props.disableVerticalMargin?"":"py-8"}>
         {!props.hideSearchBar &&
+        <Fragment>
             <DefaultSearchToolbar
                     toolbarQuickFilterContent={toolbarQuickFilterContent}
                     onCreate={isCreatable?onCreate:undefined}
@@ -398,6 +390,7 @@ export default function {{ tpCompName }}(props: Props) {
                     toolbarMiddleContent={<{{ tpCompName }}ToolbarMiddleContent onAddExtraFilter={onAddExtraFilter} loadData={loadData} prepareFilter={prepareFilter} />}
                     {% endif %}
                 />
+                </Fragment>
         }
             <Table
                 className={`${dataResult.loading ? 'tw3-animate-pulse' : ''}`}
@@ -430,7 +423,7 @@ export default function {{ tpCompName }}(props: Props) {
             <PageContainer pages={pages} activePage={dataState.page} setActivePage={setActivePage} marginTop={PageContainerMarginTop['42px']} />
             }
         </div>
-{#    </LayoutToolbar>#}
+
 </Fragment>
     )
 }
