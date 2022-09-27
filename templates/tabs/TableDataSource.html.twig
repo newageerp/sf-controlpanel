@@ -411,7 +411,7 @@ export default function {{ tpCompName }}(props: Props) {
                     <tbody>
                         {dataToRender.map((item: any) => {
                             return (
-                                <TemplateLoader key={`row-${item?.id}`} templates={tData.tableRow} templateData={{ element: item, doReload: loadData }} />
+                                <TemplateLoader key={`row-${item?.id}`} templates={tData.tableRow} templateData={ { element: item, doReload: loadData } } />
                             )
                         })}
                     </tbody>
