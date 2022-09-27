@@ -234,18 +234,18 @@ class InGeneratorTabs extends Command
             $tpImportsStr = implode("\n", array_unique($tpImports));
 
 
-            $tabTableT->writeToFileOnChanges(
-                $generatedPath . '/' . $compName . '.tsx',
-                [
-                    'TP_COMP_NAME' => $compName,
-                    'TP_THEAD' => $tpHeadStr,
-                    'TP_TBODY' => $tpBodyStr,
-                    'TP_ROW_DATA' => $tpRowDataStr,
-                    'TP_IMPORT' => $tpImportsStr,
-                    'TP_SCHEMA' => $tabItem['config']['schema'],
-                    'totals' => $totals,
-                ]
-            );
+            // $tabTableT->writeToFileOnChanges(
+            //     $generatedPath . '/' . $compName . '.tsx',
+            //     [
+            //         'TP_COMP_NAME' => $compName,
+            //         'TP_THEAD' => $tpHeadStr,
+            //         'TP_TBODY' => $tpBodyStr,
+            //         'TP_ROW_DATA' => $tpRowDataStr,
+            //         'TP_IMPORT' => $tpImportsStr,
+            //         'TP_SCHEMA' => $tabItem['config']['schema'],
+            //         'totals' => $totals,
+            //     ]
+            // );
 
 
             // data sort
@@ -446,6 +446,8 @@ class InGeneratorTabs extends Command
                         'exports' => $exports && count($exports) > 0 ? json_encode($exports, JSON_UNESCAPED_UNICODE) : 'null',
 
                         'totals' => $totals && count($totals) > 0 ? json_encode($totals, JSON_UNESCAPED_UNICODE) : 'null',
+
+                        'totalsA' => $totals,
 
                         'quickFilters' => $quickFilters && count($quickFilters) > 0 ? $quickFilters : 'null',
                         'hasStatusFilter' => $hasStatusFilter,

@@ -19,6 +19,8 @@ import {FilterDate} from "@newageerp/sfs.list-toolbar.filter.filter-date"
 import { useLocationState } from 'use-location-state'
 import {initialStateItemsFilter} from '@newageerp/ui.components.list.filter-container'
 import { ServerFilterItem } from '@newageerp/ui.components.list.filter-container'
+import { Table } from "@newageerp/ui.table.base.table";
+import TemplateLoader, { useTemplateLoader } from "../../v3/templates/TemplateLoader";
 
 {% if hasStatusFilter %}
 import { {{ schemaUC }}StatusesList } from "../../statuses/badges/{{ schemaUC }}Statuses";
@@ -50,6 +52,8 @@ interface Props {
 }
 
 export default function {{ tpCompName }}(props: Props) {
+    const { data: tData } = useTemplateLoader();
+
     const [itemsFilter, setItemsFilter] = useState<TypeItemFilters>([]);
     const [showExtendedSearch, setShowExtendedSearch] = useState(false);
     const addNewBlockFilter = (filter: ServerFilterItem) => {
@@ -396,14 +400,33 @@ export default function {{ tpCompName }}(props: Props) {
                     {% endif %}
                 />
         }
-            <{{ tpTableCompName }}
-                    data={dataToRender}
-                    doReload={loadData}
-                    className={`${dataResult.loading?'tw3-animate-pulse':''}`}
-                    navigate={navigate}
-                    dataTotals={dataTotals}
-                    addNewBlockFilter={addNewBlockFilter}
+            <Table
+                className={`${dataResult.loading ? 'tw3-animate-pulse' : ''}`}
+                thead={
+                    <thead>
+                        <TemplateLoader templates={tData.tableHeader} templateData={{ addNewBlockFilter: props.addNewBlockFilter }} />
+                    </thead>
+                }
+                tbody={
+                    <tbody>
+                        {dataToRender.map((item: any) => {
+                            return (
+                                <TemplateLoader key={`row-${item?.id}`} templates={tData.tableRow} templateData={{ element: item, doReload: loadData }} />
+                            )
+                        })}
+                    </tbody>
+                }
             />
+
+            {% for total in totalsA %}
+                <div className="flex items-center justify-end">
+                    <label className="text-sm font-semibold text-right w-36 p-2 bg-white">{{ total.title }}</label>
+                    {!!dataTotals && 
+                    <span className="w-36 text-right text-sm p-2 bg-white">{dataTotals['{{ total.field }}'].toFixed(2)}</span>
+                    }
+                </div>
+            {% endfor %}
+
             {!props.hidePaging && pages > 1 &&
             <PageContainer pages={pages} activePage={dataState.page} setActivePage={setActivePage} marginTop={PageContainerMarginTop['42px']} />
             }
