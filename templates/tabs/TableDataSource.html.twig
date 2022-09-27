@@ -398,6 +398,13 @@ export default function {{ tpCompName }}(props: Props) {
                                 quickSearch: dataState?.extraFilter?.__qs?._,
                             },
                             onAddExtraFilter,
+                            sort: {
+                                value: dataState?.sort,
+                                onChange: setSort,
+                            },
+                            filter: {
+                                prepareFilter,
+                            },
                         }
                     }
                 />
