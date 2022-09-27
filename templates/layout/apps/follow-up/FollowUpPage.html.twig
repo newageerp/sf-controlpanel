@@ -124,11 +124,13 @@ export default function FollowUpPage() {
 
                         <TemplateLoader
                             templateName="PageInlineList"
-                            data={{
-                                schema: comp.schema,
-                                type: "main",
-                                extraFilters: [comp.extraFilter]
-                            }}
+                            data={
+                                {
+                                    schema: comp.schema,
+                                    type: "main",
+                                    extraFilters: [comp.extraFilter]
+                                }
+                            }
                         />
 
                     </Fragment>

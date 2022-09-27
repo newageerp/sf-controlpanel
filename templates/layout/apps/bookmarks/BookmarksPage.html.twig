@@ -97,11 +97,13 @@ export default function BookmarksPage() {
 
                         <TemplateLoader
                             templateName="PageInlineList"
-                            data={{
-                                schema: comp.schema,
-                                type: "main",
-                                extraFilters: [comp.extraFilter]
-                            }}
+                            data={
+                                {
+                                        schema: comp.schema,
+                                        type: "main",
+                                        extraFilters: [comp.extraFilter]
+                                }
+                            }
                         />
 
                     </Fragment>
