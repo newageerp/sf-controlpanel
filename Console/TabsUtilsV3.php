@@ -71,7 +71,7 @@ class TabsUtilsV3
             return [];
         }
         $otherTabs = [];
-        if (isset($tab['config']['tabGroup']) && $tab['config']['tabGroup']) {
+        if (isset($tab['tabGroup']) && $tab['tabGroup']) {
             $otherTabs =
                 array_values(
                     array_map(
@@ -84,7 +84,7 @@ class TabsUtilsV3
                         array_filter(
                             $this->getTabs(),
                             function ($t) use ($tab) {
-                                return $t['config']['schema'] === $tab['config']['schema'] && $t['config']['tabGroup'] === $tabItem['config']['tabGroup'];
+                                return $t['config']['schema'] === $tab['schema'] && $t['config']['tabGroup'] === $tab['tabGroup'];
                             }
                         )
                     )
