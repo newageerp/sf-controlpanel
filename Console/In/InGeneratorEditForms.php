@@ -284,34 +284,34 @@ class InGeneratorEditForms extends Command
 
             // $tpWideRowsStr = implode("\n", $tpWideRows);
             // $tpCompactRowsStr = implode("\n", $tpCompactRows);
-            $tpImportsStr = implode("\n", array_unique($tpImports));
+            // $tpImportsStr = implode("\n", array_unique($tpImports));
 
-            $fileName = $generatedPath . '/' . $compName . '.tsx';
-            $generatedContent = $editFormTemplate->render(
-                [
-                    'TP_SCHEMA' => $editItem['config']['schema'],
-                    'TP_COMP_NAME' => $compName,
-                    'TP_IMPORT' => $tpImportsStr,
-                    'rows' => $rows,
-                    'maxCols' => $maxCols,
-                    'editType' => $editItem['config']['type'],
-                ]
-            );
+            // $fileName = $generatedPath . '/' . $compName . '.tsx';
+            // $generatedContent = $editFormTemplate->render(
+            //     [
+            //         'TP_SCHEMA' => $editItem['config']['schema'],
+            //         'TP_COMP_NAME' => $compName,
+            //         'TP_IMPORT' => $tpImportsStr,
+            //         'rows' => $rows,
+            //         'maxCols' => $maxCols,
+            //         'editType' => $editItem['config']['type'],
+            //     ]
+            // );
 
-            Utils::writeOnChanges($fileName, $generatedContent);
+            // Utils::writeOnChanges($fileName, $generatedContent);
 
             // DATA SOURCE
-            $fileName = $generatedPathDataSource . '/' . $compNameDataSource . '.tsx';
+            // $fileName = $generatedPathDataSource . '/' . $compNameDataSource . '.tsx';
 
-            $generatedContent = $editFormDataSourceTemplate->render([
-                'TP_COMP_NAME_DATA_SOURCE' => $compNameDataSource,
-                'TP_COMP_NAME' => $compName,
-                'TP_SCHEMA' => $editItem['config']['schema'],
-                'TP_FIELDS_TO_RETURN' => json_encode($fieldsToReturn, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE),
-                'toolbarTitle' => $this->entitiesUtils->getTitleBySlug($editItem['config']['schema'])
-            ]);
+            // $generatedContent = $editFormDataSourceTemplate->render([
+            //     'TP_COMP_NAME_DATA_SOURCE' => $compNameDataSource,
+            //     'TP_COMP_NAME' => $compName,
+            //     'TP_SCHEMA' => $editItem['config']['schema'],
+            //     'TP_FIELDS_TO_RETURN' => json_encode($fieldsToReturn, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE),
+            //     'toolbarTitle' => $this->entitiesUtils->getTitleBySlug($editItem['config']['schema'])
+            // ]);
 
-            Utils::writeOnChanges($fileName, $generatedContent);
+            // Utils::writeOnChanges($fileName, $generatedContent);
         }
 
         $customEfFunctionTemplateMap->writeToFileOnChanges(

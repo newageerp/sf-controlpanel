@@ -24,92 +24,92 @@ class EditFormsRelSelectService
 
     public function generate()
     {
-        $tService = new TemplateService('v2/edit-forms/rels/edit-forms-rel-select.html.twig');
-        $tServiceSearch = new TemplateService('v2/edit-forms/rels/edit-forms-rel-select-search.html.twig');
+//         $tService = new TemplateService('v2/edit-forms/rels/edit-forms-rel-select.html.twig');
+//         $tServiceSearch = new TemplateService('v2/edit-forms/rels/edit-forms-rel-select-search.html.twig');
 
-        $editItems = LocalConfigUtils::getCpConfigFileData('edit');
+//         $editItems = LocalConfigUtils::getCpConfigFileData('edit');
 
-        foreach ($editItems as $editItem) {
-            foreach ($editItem['config']['fields'] as $fieldIndex => $field) {
-                $pathA = explode(".", $field['path']);
-                if (count($pathA) < 3) {
-                    continue;
-                }
-                $path = $pathA[0] . '.' . $pathA[1];
+//         foreach ($editItems as $editItem) {
+//             foreach ($editItem['config']['fields'] as $fieldIndex => $field) {
+//                 $pathA = explode(".", $field['path']);
+//                 if (count($pathA) < 3) {
+//                     continue;
+//                 }
+//                 $path = $pathA[0] . '.' . $pathA[1];
 
-                $fullPathProperty = $this->propertiesUtils->getPropertyForPath($field['path']);
+//                 $fullPathProperty = $this->propertiesUtils->getPropertyForPath($field['path']);
 
-                $fieldProperty = $this->propertiesUtils->getPropertyForPath($path);
-                if (!$fieldProperty) {
-                    continue;
-                }
-                $type = $this->propertiesUtils->getPropertyNaeType($fieldProperty, $field);
+//                 $fieldProperty = $this->propertiesUtils->getPropertyForPath($path);
+//                 if (!$fieldProperty) {
+//                     continue;
+//                 }
+//                 $type = $this->propertiesUtils->getPropertyNaeType($fieldProperty, $field);
 
-                if ($type === 'object') {
-                    $relPathArray = explode(".", $field['path']);
-                    array_shift($relPathArray);
-                    array_shift($relPathArray);
-                    array_unshift($relPathArray, $fieldProperty['format']);
-                    $objectRelPath = implode(".", $relPathArray);
+//                 if ($type === 'object') {
+//                     $relPathArray = explode(".", $field['path']);
+//                     array_shift($relPathArray);
+//                     array_shift($relPathArray);
+//                     array_unshift($relPathArray, $fieldProperty['format']);
+//                     $objectRelPath = implode(".", $relPathArray);
 
-                    $fieldObjectProperty = $this->propertiesUtils->getPropertyForPath($objectRelPath);
-                    if (!$fieldObjectProperty) {
-                        continue;
-                    }
-                    $objectSort = [];
-                    if ($fieldObjectProperty) {
-                        $objectSort = $this->entitiesUtils->getDefaultSortForSchema($fieldObjectProperty['schema']);
-                    }
+//                     $fieldObjectProperty = $this->propertiesUtils->getPropertyForPath($objectRelPath);
+//                     if (!$fieldObjectProperty) {
+//                         continue;
+//                     }
+//                     $objectSort = [];
+//                     if ($fieldObjectProperty) {
+//                         $objectSort = $this->entitiesUtils->getDefaultSortForSchema($fieldObjectProperty['schema']);
+//                     }
 
-                    $extraFilter = '';
-                    $extraFilterSearch = '';
-                    if (isset($field['fieldDependency']) && $field['fieldDependency']) {
-                        [$filterKey, $filterValue] = explode(":", $field['fieldDependency']);
-                        $extraFilter =  'filters={[
-                                    {"and": [
-                                        ["' . $filterKey . '", "=", props.parentElement.' . $filterValue . ', true]
-                                    ]}
-                                ]}
-                ';
-                        $extraFilterSearch =  'extraFilter={
-                    {"and": [
-                        ["' . $filterKey . '", "=", props.parentElement.' . $filterValue . ', true]
-                    ]}
-                }
-';
-                    }
+//                     $extraFilter = '';
+//                     $extraFilterSearch = '';
+//                     if (isset($field['fieldDependency']) && $field['fieldDependency']) {
+//                         [$filterKey, $filterValue] = explode(":", $field['fieldDependency']);
+//                         $extraFilter =  'filters={[
+//                                     {"and": [
+//                                         ["' . $filterKey . '", "=", props.parentElement.' . $filterValue . ', true]
+//                                     ]}
+//                                 ]}
+//                 ';
+//                         $extraFilterSearch =  'extraFilter={
+//                     {"and": [
+//                         ["' . $filterKey . '", "=", props.parentElement.' . $filterValue . ', true]
+//                     ]}
+//                 }
+// ';
+//                     }
 
-                    $slug = $editItem['config']['schema'];
-                    $slugUc = Utils::fixComponentName($slug);
-                    $folderPath = Utils::generatedV2Path('edit-forms/' . $slugUc . '/rel-select');
+//                     $slug = $editItem['config']['schema'];
+//                     $slugUc = Utils::fixComponentName($slug);
+//                     $folderPath = Utils::generatedV2Path('edit-forms/' . $slugUc . '/rel-select');
 
-                    $compName = self::relSelectCompName($editItem, $field['path']);
+//                     $compName = self::relSelectCompName($editItem, $field['path']);
 
-                    $isPopupSelectRelType = isset($field['popupSelectRelType']) && $field['popupSelectRelType'] !== '' ? true : false;
-                    $popupSelectRelType = $isPopupSelectRelType ? $field['popupSelectRelType'] : 'main';
+//                     $isPopupSelectRelType = isset($field['popupSelectRelType']) && $field['popupSelectRelType'] !== '' ? true : false;
+//                     $popupSelectRelType = $isPopupSelectRelType ? $field['popupSelectRelType'] : 'main';
 
-                    $service = $isPopupSelectRelType ? $tServiceSearch : $tService;
+//                     $service = $isPopupSelectRelType ? $tServiceSearch : $tService;
 
-                    $objectSchema = $fieldObjectProperty ? $fieldObjectProperty['schema'] : '';
+//                     $objectSchema = $fieldObjectProperty ? $fieldObjectProperty['schema'] : '';
 
-                    $service->writeToFileOnChanges(
-                        $folderPath . '/' . $compName . '.tsx',
-                        [
-                            'compName' => $compName,
-                            'objectSchema' => $objectSchema,
-                            'schema' => $fieldProperty ? $fieldProperty['schema'] : '',
-                            'sort' => json_encode($objectSort),
-                            'extraFilter' => $extraFilter,
-                            'extraFilterSearch' => $extraFilterSearch,
-                            'key' => $fieldObjectProperty ? $fieldObjectProperty['key'] : '',
-                            'allowCreateRel' => isset($field['allowCreateRel']) && $field['allowCreateRel'] ? true : false,
-                            'popupSelectRelType' => Utils::fixComponentName($objectSchema . '-' . $popupSelectRelType) . 'TableDataSource',
-                            'viewKey' => $fullPathProperty['key']
-                        ]
-                    );
-                }
-            }
-        }
+//                     $service->writeToFileOnChanges(
+//                         $folderPath . '/' . $compName . '.tsx',
+//                         [
+//                             'compName' => $compName,
+//                             'objectSchema' => $objectSchema,
+//                             'schema' => $fieldProperty ? $fieldProperty['schema'] : '',
+//                             'sort' => json_encode($objectSort),
+//                             'extraFilter' => $extraFilter,
+//                             'extraFilterSearch' => $extraFilterSearch,
+//                             'key' => $fieldObjectProperty ? $fieldObjectProperty['key'] : '',
+//                             'allowCreateRel' => isset($field['allowCreateRel']) && $field['allowCreateRel'] ? true : false,
+//                             'popupSelectRelType' => Utils::fixComponentName($objectSchema . '-' . $popupSelectRelType) . 'TableDataSource',
+//                             'viewKey' => $fullPathProperty['key']
+//                         ]
+//                     );
+//                 }
+//             }
+//         }
     }
 
     public static function relSelectCompName(array $editItem, string $path)
