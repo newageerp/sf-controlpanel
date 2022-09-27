@@ -390,6 +390,17 @@ export default function {{ tpCompName }}(props: Props) {
                     toolbarMiddleContent={<{{ tpCompName }}ToolbarMiddleContent onAddExtraFilter={onAddExtraFilter} loadData={loadData} prepareFilter={prepareFilter} />}
                     {% endif %}
                 />
+                <TemplateLoader
+                    templates={[tData.toolbar]}
+                    templateData={
+                        {
+                            defaults: {
+                                quickSearch: dataState?.extraFilter?.__qs?._,
+                            },
+                            onAddExtraFilter,
+                        }
+                    }
+                />
                 </Fragment>
         }
             <Table

@@ -28,7 +28,8 @@ class TabsUtilsV3
         return null;
     }
 
-    public function getTabQsFields(string $schema, string $type) {
+    public function getTabQsFields(string $schema, string $type)
+    {
         $tab = $this->getTabBySchemaAndType($schema, $type);
         if (!$tab) {
             return [];
@@ -39,7 +40,8 @@ class TabsUtilsV3
         return $this->entitiesUtilsV3->getDefaultQsForSchema($schema);
     }
 
-    public function getTabSort(string $schema, string $type) {
+    public function getTabSort(string $schema, string $type)
+    {
         $tab = $this->getTabBySchemaAndType($schema, $type);
         if (!$tab) {
             return [];
@@ -50,7 +52,8 @@ class TabsUtilsV3
         return $this->entitiesUtilsV3->getDefaultSortForSchema($schema);
     }
 
-    public function getTabFilter(string $schema, string $type) {
+    public function getTabFilter(string $schema, string $type)
+    {
         $tab = $this->getTabBySchemaAndType($schema, $type);
         if (!$tab) {
             return null;
@@ -59,6 +62,35 @@ class TabsUtilsV3
             return json_decode($tab['predefinedFilter'], true);
         }
         return null;
+    }
+
+    public function getTabsSwitchOptions(string $schema, string $type): array
+    {
+        $tab = $this->getTabBySchemaAndType($schema, $type);
+        if (!$tab) {
+            return [];
+        }
+        $otherTabs = [];
+        if (isset($tabItem['config']['tabGroup']) && $tabItem['config']['tabGroup']) {
+            $otherTabs =
+                array_values(
+                    array_map(
+                        function ($t) {
+                            return [
+                                'value' => $t['config']['type'],
+                                'label' => isset($t['config']['tabGroupTitle']) && $t['config']['tabGroupTitle'] ? $t['config']['tabGroupTitle'] : $t['config']['title']
+                            ];
+                        },
+                        array_filter(
+                            $this->getTabs(),
+                            function ($t) use ($tabItem) {
+                                return $t['config']['schema'] === $tabItem['config']['schema'] && $t['config']['tabGroup'] === $tabItem['config']['tabGroup'];
+                            }
+                        )
+                    )
+                );
+        }
+        return $otherTabs;
     }
 
     /**
