@@ -112,8 +112,6 @@ export default function {{ tpCompName }}(props: Props) {
         return true
     }
 
-    const [, setToolbarTitle] = useRecoilState(UserSpaceWrapperToolbarState)
-
     const history = useHistory()
 
     const onAddExtraFilter = (key: string, data: any) => {
@@ -306,12 +304,6 @@ export default function {{ tpCompName }}(props: Props) {
 
     const dataToRender = dataProcessing(dataResult.data.data);
 
-    useEffect(() => {
-        if (!props.disableSetTitle) {
-            setToolbarTitle('{% if toolbarTitle != "" %}{{ toolbarTitle }}{% else %}{" "}{% endif %}');
-        }
-    }, []);
-
     const toolbarQuickFilterContent = {% if quickFilters %}<Fragment>
     <div className="flex items-center gap-2">
         {% for qfilter in quickFilters %}
@@ -334,7 +326,7 @@ export default function {{ tpCompName }}(props: Props) {
         <div ref={headerRef} className={props.disableVerticalMargin?"":"py-8"}>
         {!props.hideSearchBar &&
         <Fragment>
-            <DefaultSearchToolbar
+            {# <DefaultSearchToolbar
                     toolbarQuickFilterContent={toolbarQuickFilterContent}
                     onCreate={isCreatable?onCreate:undefined}
                     export={!!exports?{
@@ -392,7 +384,7 @@ export default function {{ tpCompName }}(props: Props) {
                     {% if customToolbarMiddle %}
                     toolbarMiddleContent={<{{ tpCompName }}ToolbarMiddleContent onAddExtraFilter={onAddExtraFilter} loadData={loadData} prepareFilter={prepareFilter} />}
                     {% endif %}
-                />
+                /> #}
                 <TemplateLoader
                     templates={[tData.toolbar]}
                     templateData={
