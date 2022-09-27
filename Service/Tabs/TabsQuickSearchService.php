@@ -22,59 +22,59 @@ class TabsQuickSearchService
 
     public function generate()
     {
-        $tService = new TemplateService('v2/tabs/qs/qs.html.twig');
+        // $tService = new TemplateService('v2/tabs/qs/qs.html.twig');
 
-        $tabsBySlug = [];
-        foreach ($this->tabs as $tabItem) {
-            $entity = $tabItem['config']['schema'];
+        // $tabsBySlug = [];
+        // foreach ($this->tabs as $tabItem) {
+        //     $entity = $tabItem['config']['schema'];
 
-            $quickSearch = [];
-            if (isset($tabItem['config']['quickSearchFilterKeys']) && $tabItem['config']['quickSearchFilterKeys']) {
-                $quickSearch = json_decode($tabItem['config']['quickSearchFilterKeys'], true);
-            } else {
-                $quickSearch = $this->defaultsService->getQuickSearchForSchema($tabItem['config']['schema']);
-            }
+        //     $quickSearch = [];
+        //     if (isset($tabItem['config']['quickSearchFilterKeys']) && $tabItem['config']['quickSearchFilterKeys']) {
+        //         $quickSearch = json_decode($tabItem['config']['quickSearchFilterKeys'], true);
+        //     } else {
+        //         $quickSearch = $this->defaultsService->getQuickSearchForSchema($tabItem['config']['schema']);
+        //     }
 
-            if (!isset($tabsBySlug[$entity])) {
-                $tabsBySlug[$entity] = [];
-            }
+        //     if (!isset($tabsBySlug[$entity])) {
+        //         $tabsBySlug[$entity] = [];
+        //     }
 
-            $tabsBySlug[$entity][] = [
-                'type' => $tabItem['config']['type'],
-                'typeUc' => Utils::fixComponentName($tabItem['config']['type']),
-                'qs' => array_map(function ($item) {
-                    if (is_string($item)) {
-                        return [
-                            $item,
-                            'contains',
-                            'props.qs',
-                            true,
-                        ];
-                    }
-                    return [
-                        $item['key'],
-                        isset($item['method']) ? $item['method'] : 'contains',
-                        'props.qs',
-                        isset($item['directSelect']) ? $item['directSelect'] : true,
-                    ];
-                }, $quickSearch),
-                'qsJs' => json_encode($quickSearch),
-            ];
-        }
+        //     $tabsBySlug[$entity][] = [
+        //         'type' => $tabItem['config']['type'],
+        //         'typeUc' => Utils::fixComponentName($tabItem['config']['type']),
+        //         'qs' => array_map(function ($item) {
+        //             if (is_string($item)) {
+        //                 return [
+        //                     $item,
+        //                     'contains',
+        //                     'props.qs',
+        //                     true,
+        //                 ];
+        //             }
+        //             return [
+        //                 $item['key'],
+        //                 isset($item['method']) ? $item['method'] : 'contains',
+        //                 'props.qs',
+        //                 isset($item['directSelect']) ? $item['directSelect'] : true,
+        //             ];
+        //         }, $quickSearch),
+        //         'qsJs' => json_encode($quickSearch),
+        //     ];
+        // }
 
-        foreach ($tabsBySlug as $slug => $tabs) {
-            $slugUc = Utils::fixComponentName($slug);
-            $slugPath = Utils::generatedV2Path('tabs/' . $slugUc);
-            $componentName = Utils::fixComponentName($slug . 'Qs');
+        // foreach ($tabsBySlug as $slug => $tabs) {
+        //     $slugUc = Utils::fixComponentName($slug);
+        //     $slugPath = Utils::generatedV2Path('tabs/' . $slugUc);
+        //     $componentName = Utils::fixComponentName($slug . 'Qs');
 
-            $tService->writeToFileOnChanges(
-                $slugPath . '/' . $componentName . '.tsx',
-                [
-                    'compName' => $componentName,
-                    'slugUc' => $slugUc,
-                    'tabs' => $tabs,
-                ]
-            );
-        }
+        //     $tService->writeToFileOnChanges(
+        //         $slugPath . '/' . $componentName . '.tsx',
+        //         [
+        //             'compName' => $componentName,
+        //             'slugUc' => $slugUc,
+        //             'tabs' => $tabs,
+        //         ]
+        //     );
+        // }
     }
 }
