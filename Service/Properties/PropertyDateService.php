@@ -21,49 +21,49 @@ class PropertyDateService
 
     public function generate()
     {
-        $tService = new TemplateService('v2/properties/dates/dates.html.twig');
+        // $tService = new TemplateService('v2/properties/dates/dates.html.twig');
 
-        $dates = [];
-        foreach ($this->properties as $property) {
-            if ($property['config']['type'] === 'string' && $property['config']['typeFormat'] === 'date') {
-                $entity = $property['config']['entity'];
-                if (!isset($dates[$entity])) {
-                    $dates[$entity] = [];
-                }
-                $dates[$entity][] = $property['config'];
-            }
-        }
+        // $dates = [];
+        // foreach ($this->properties as $property) {
+        //     if ($property['config']['type'] === 'string' && $property['config']['typeFormat'] === 'date') {
+        //         $entity = $property['config']['entity'];
+        //         if (!isset($dates[$entity])) {
+        //             $dates[$entity] = [];
+        //         }
+        //         $dates[$entity][] = $property['config'];
+        //     }
+        // }
 
-        foreach ($dates as $slug => $properties) {
-            $slugUc = Utils::fixComponentName($slug);
-            $slugPath = Utils::generatedV2Path('properties/' . $slugUc);
-            $componentName = Utils::fixComponentName($slug . 'Dates');
+        // foreach ($dates as $slug => $properties) {
+        //     $slugUc = Utils::fixComponentName($slug);
+        //     $slugPath = Utils::generatedV2Path('properties/' . $slugUc);
+        //     $componentName = Utils::fixComponentName($slug . 'Dates');
 
-            $parseProps = [];
-            foreach ($properties as $property) {
-                if ($this->defaultsService->isFieldExistsInDefaults($slug, $slug . '.' . $property['key'])) {
-                    $parseProps[] = $property;
-                }
-            }
+        //     $parseProps = [];
+        //     foreach ($properties as $property) {
+        //         if ($this->defaultsService->isFieldExistsInDefaults($slug, $slug . '.' . $property['key'])) {
+        //             $parseProps[] = $property;
+        //         }
+        //     }
 
-            if (count($parseProps) > 0) {
-                $parseProps = array_map(
-                    function ($item) use ($slug) {
-                        $item['compName'] = Utils::fixComponentName($slug . 'Date-' . $item['key']);
-                        return $item;
-                    },
-                    $parseProps
-                );
+        //     if (count($parseProps) > 0) {
+        //         $parseProps = array_map(
+        //             function ($item) use ($slug) {
+        //                 $item['compName'] = Utils::fixComponentName($slug . 'Date-' . $item['key']);
+        //                 return $item;
+        //             },
+        //             $parseProps
+        //         );
 
-                $tService->writeToFileOnChanges(
-                    $slugPath . '/' . $componentName . '.tsx',
-                    [
-                        'compName' => $componentName,
-                        'properties' => $parseProps,
-                        'slugUc' => $slugUc,
-                    ]
-                );
-            }
-        }
+        //         $tService->writeToFileOnChanges(
+        //             $slugPath . '/' . $componentName . '.tsx',
+        //             [
+        //                 'compName' => $componentName,
+        //                 'properties' => $parseProps,
+        //                 'slugUc' => $slugUc,
+        //             ]
+        //         );
+        //     }
+        // }
     }
 }
