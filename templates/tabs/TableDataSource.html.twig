@@ -20,6 +20,7 @@ import {initialStateItemsFilter} from '@newageerp/ui.components.list.filter-cont
 import { ServerFilterItem } from '@newageerp/ui.components.list.filter-container'
 import { Table } from "@newageerp/ui.table.base.table";
 import TemplateLoader, { useTemplateLoader } from "../../v3/templates/TemplateLoader";
+import {FilterContainer} from '@newageerp/ui.components.list.filter-container';
 
 {% if hasStatusFilter %}
 import { {{ schemaUC }}StatusesList } from "../../statuses/badges/{{ schemaUC }}Statuses";
@@ -51,6 +52,8 @@ interface Props {
 }
 
 export default function {{ tpCompName }}(props: Props) {
+    const [extendedSearchOptions, setExtendedSearchOptions] = useState<any[]>([]);
+
     const { data: tData } = useTemplateLoader();
 
     const [itemsFilter, setItemsFilter] = useState<TypeItemFilters>([]);
@@ -405,9 +408,27 @@ export default function {{ tpCompName }}(props: Props) {
                             filter: {
                                 prepareFilter,
                             },
+                            extendedSearch: {
+                                value: showExtendedSearch,
+                                onChange: setShowExtendedSearch,
+                                properties: {
+                                    value: extendedSearchOptions,
+                                    onChange: setExtendedSearchOptions,
+                                }
+
+                            },
                         }
                     }
                 />
+                {showExtendedSearch && extendedSearchOptions.length > 0 && (
+                    <FilterContainer
+                        onCloseFilter={() => setShowExtendedSearch(false)}
+                        modalProperties={extendedSearchOptions}
+                        onFilter={setDetailedSearch}
+                        itemsFilter={itemsFilter}
+                        setItemsFilter={setItemsFilter}
+                    />
+                )}
                 </Fragment>
         }
             <Table
