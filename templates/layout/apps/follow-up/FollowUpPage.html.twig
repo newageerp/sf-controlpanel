@@ -4,10 +4,10 @@ import { useTranslation } from 'react-i18next';
 import { OpenApi } from '@newageerp/nae-react-auth-wrapper';
 import { functions, UI } from '@newageerp/nae-react-ui';
 import moment from 'moment';
-import { tablesDataSourceBySchemaAndType } from '../../tabs/TablesDataSource';
 import { useRecoilState } from 'recoil';
 import { UserSpaceWrapperToolbarState } from '../../layout/toolbar/UserSpaceWrapperToolbar';
 import { TitleOverTable } from '@newageerp/ui.texts.base.title-over-table'
+import TemplateLoader from '../../v3/templates/TemplateLoader';
 
 export default function FollowUpPage() {
     const { t } = useTranslation();
@@ -87,11 +87,6 @@ export default function FollowUpPage() {
     const schemas = listSchema ? Object.keys(listSchema) : []
 
     const schemaComponents = schemas.map(s => {
-        let bookmarksComp = tablesDataSourceBySchemaAndType(s, 'follow-up');
-        if (!bookmarksComp) {
-            bookmarksComp = tablesDataSourceBySchemaAndType(s, 'main');
-        }
-
         const els: any = listSchema[s]
         const idsMap = els.filter((f: number) => f > 0)
         const extraFilter = {
@@ -100,7 +95,6 @@ export default function FollowUpPage() {
 
         return (
             {
-                comp: bookmarksComp,
                 schema: s,
                 extraFilter: extraFilter,
                 title: functions.schemas.getSchemaTitle(s, true)
@@ -124,19 +118,17 @@ export default function FollowUpPage() {
             />
 
             {schemaComponents.map((comp: any, idX: number) => {
-                const Comp = comp.comp;
                 return (
                     <Fragment key={`follow-up-${idX}-${comp.schema}`}>
                         <TitleOverTable>{comp.title}</TitleOverTable>
 
-                        <Comp
-                            extraFilter={comp.extraFilter}
-                            navigate={(schema: string, id: number | string) => {
-                                showViewPopup({ schema, id })
+                        <TemplateLoader
+                            templateName="PageInlineList"
+                            data={{
+                                schema: comp.schema,
+                                type: "main",
+                                extraFilters: [comp.extraFilter]
                             }}
-                            disableScrollToHeader={true}
-                            disableCreate={true}
-                            disableSetTitle={true}
                         />
 
                     </Fragment>

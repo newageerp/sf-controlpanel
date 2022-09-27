@@ -422,44 +422,44 @@ class InGeneratorTabs extends Command
                     $tabTitle = $tabItem['config']['title'];
                 }
 
-                $dataSourceFileName = $dataSourceGeneratedPath . '/' . $dataSourceCompName . '.tsx';
-                $generatedContent = $tableDataSourceTemplate->render(
-                    [
-                        'tpCompName' => $dataSourceCompName,
-                        'tpTableCompName' => $compName,
-                        'schema' => $tabItem['config']['schema'],
-                        'schemaUC' => Utils::fixComponentName($tabItem['config']['schema']),
-                        'type' => $tabItem['config']['type'],
-                        'pageSize' => $pageSize,
-                        'sort' => json_encode($sort),
-                        'filter' => $filter ? json_encode($filter) : 'null',
-                        'quickSearch' => json_encode($quickSearch),
-                        'creatable' => isset($tabItem['config']['disableCreate']) && $tabItem['config']['disableCreate'] ? 'false' : 'true',
-                        'otherTabs' => $otherTabs && count($otherTabs) > 0 ? json_encode($otherTabs, JSON_UNESCAPED_UNICODE) : 'null',
+                // $dataSourceFileName = $dataSourceGeneratedPath . '/' . $dataSourceCompName . '.tsx';
+                // $generatedContent = $tableDataSourceTemplate->render(
+                //     [
+                //         'tpCompName' => $dataSourceCompName,
+                //         'tpTableCompName' => $compName,
+                //         'schema' => $tabItem['config']['schema'],
+                //         'schemaUC' => Utils::fixComponentName($tabItem['config']['schema']),
+                //         'type' => $tabItem['config']['type'],
+                //         'pageSize' => $pageSize,
+                //         'sort' => json_encode($sort),
+                //         'filter' => $filter ? json_encode($filter) : 'null',
+                //         'quickSearch' => json_encode($quickSearch),
+                //         'creatable' => isset($tabItem['config']['disableCreate']) && $tabItem['config']['disableCreate'] ? 'false' : 'true',
+                //         'otherTabs' => $otherTabs && count($otherTabs) > 0 ? json_encode($otherTabs, JSON_UNESCAPED_UNICODE) : 'null',
 
-                        'toolbarTitle' => $tabTitle,
+                //         'toolbarTitle' => $tabTitle,
 
-                        'customToolbarStart' => $customToolbarStart,
-                        'customToolbarEnd' => $customToolbarEnd,
-                        'customToolbarMiddle' => $customToolbarMiddle,
+                //         'customToolbarStart' => $customToolbarStart,
+                //         'customToolbarEnd' => $customToolbarEnd,
+                //         'customToolbarMiddle' => $customToolbarMiddle,
 
-                        'exports' => $exports && count($exports) > 0 ? json_encode($exports, JSON_UNESCAPED_UNICODE) : 'null',
+                //         'exports' => $exports && count($exports) > 0 ? json_encode($exports, JSON_UNESCAPED_UNICODE) : 'null',
 
-                        'totals' => $totals && count($totals) > 0 ? json_encode($totals, JSON_UNESCAPED_UNICODE) : 'null',
+                //         'totals' => $totals && count($totals) > 0 ? json_encode($totals, JSON_UNESCAPED_UNICODE) : 'null',
 
-                        'totalsA' => $totals,
+                //         'totalsA' => $totals,
 
-                        'quickFilters' => $quickFilters && count($quickFilters) > 0 ? $quickFilters : 'null',
-                        'hasStatusFilter' => $hasStatusFilter,
-                    ]
-                );
-                Utils::writeOnChanges($dataSourceFileName, $generatedContent);
+                //         'quickFilters' => $quickFilters && count($quickFilters) > 0 ? $quickFilters : 'null',
+                //         'hasStatusFilter' => $hasStatusFilter,
+                //     ]
+                // );
+                // Utils::writeOnChanges($dataSourceFileName, $generatedContent);
 
-                $tablesDataSourceComponents[] = [
-                    'compName' => $dataSourceCompName,
-                    'type' => $tabItem['config']['type'],
-                    'schema' => $tabItem['config']['schema'],
-                ];
+                // $tablesDataSourceComponents[] = [
+                //     'compName' => $dataSourceCompName,
+                //     'type' => $tabItem['config']['type'],
+                //     'schema' => $tabItem['config']['schema'],
+                // ];
             }
         }
 
@@ -468,17 +468,17 @@ class InGeneratorTabs extends Command
             ['templates' => array_values($customComponents),]
         );
 
-        // DefaultSearchToolbar
-        $generatedPath = Utils::generatedPath('tabs');
-        $defaultSearchToolbarFile = $generatedPath . '/DefaultSearchToolbar.tsx';
-        $contents = $defaultSearchToolbarTemplate->render([]);
-        Utils::writeOnChanges($defaultSearchToolbarFile, $contents);
+        // // DefaultSearchToolbar
+        // $generatedPath = Utils::generatedPath('tabs');
+        // $defaultSearchToolbarFile = $generatedPath . '/DefaultSearchToolbar.tsx';
+        // $contents = $defaultSearchToolbarTemplate->render([]);
+        // Utils::writeOnChanges($defaultSearchToolbarFile, $contents);
 
-        // TABLES DATA SOURCE
-        $generatedPath = Utils::generatedPath('tabs');
-        $defaultSearchToolbarFile = $generatedPath . '/TablesDataSource.tsx';
-        $contents = $tablesDataSourceTemplate->render(['components' => $tablesDataSourceComponents]);
-        Utils::writeOnChanges($defaultSearchToolbarFile, $contents);
+        // // TABLES DATA SOURCE
+        // $generatedPath = Utils::generatedPath('tabs');
+        // $defaultSearchToolbarFile = $generatedPath . '/TablesDataSource.tsx';
+        // $contents = $tablesDataSourceTemplate->render(['components' => $tablesDataSourceComponents]);
+        // Utils::writeOnChanges($defaultSearchToolbarFile, $contents);
 
         return Command::SUCCESS;
     }
