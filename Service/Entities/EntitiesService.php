@@ -15,23 +15,23 @@ class EntitiesService {
     }
 
     public function generate() {
-        $tService = new TemplateService('v2/entities/entities/titles.html.twig');
+        // $tService = new TemplateService('v2/entities/entities/titles.html.twig');
 
-        foreach ($this->entities as $entity) {
-            $slug = $entity['config']['slug'];
-            $slugUc = Utils::fixComponentName($slug);
+        // foreach ($this->entities as $entity) {
+        //     $slug = $entity['config']['slug'];
+        //     $slugUc = Utils::fixComponentName($slug);
 
-            $slugPath = Utils::generatedV2Path('entities/' . $slugUc);
-            $componentName = Utils::fixComponentName($slug . '-titles');
+        //     $slugPath = Utils::generatedV2Path('entities/' . $slugUc);
+        //     $componentName = Utils::fixComponentName($slug . '-titles');
 
-            $tService->writeToFileOnChanges(
-                $slugPath . '/' . $componentName . '.tsx',
-                [
-                    'compName' => $componentName,
-                    'titleSingle' => $entity['config']['titleSingle'],
-                    'titlePlural' => $entity['config']['titlePlural'],
-                ]
-            );
-        }
+        //     $tService->writeToFileOnChanges(
+        //         $slugPath . '/' . $componentName . '.tsx',
+        //         [
+        //             'compName' => $componentName,
+        //             'titleSingle' => $entity['config']['titleSingle'],
+        //             'titlePlural' => $entity['config']['titlePlural'],
+        //         ]
+        //     );
+        // }
     }
 }

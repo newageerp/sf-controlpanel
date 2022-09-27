@@ -61,8 +61,8 @@ class InGeneratorEditForms extends Command
             );
         }
 
-        $generatedPath = Utils::generatedPath('editforms/forms');
-        $generatedPathDataSource = Utils::generatedPath('editforms/forms-data-source');
+        // $generatedPath = Utils::generatedPath('editforms/forms');
+        // $generatedPathDataSource = Utils::generatedPath('editforms/forms-data-source');
 
         $customComponents = [];
 
