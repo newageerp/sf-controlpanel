@@ -404,7 +404,7 @@ export default function {{ tpCompName }}(props: Props) {
                 className={`${dataResult.loading ? 'tw3-animate-pulse' : ''}`}
                 thead={
                     <thead>
-                        <TemplateLoader templates={tData.tableHeader} templateData={{ addNewBlockFilter: props.addNewBlockFilter }} />
+                        <TemplateLoader templates={tData.tableHeader} templateData={ { addNewBlockFilter } } />
                     </thead>
                 }
                 tbody={
