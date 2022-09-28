@@ -294,12 +294,12 @@ class PropertiesUtilsV3
             case 'enum_number':
             case 'enum_multi_number':
             case 'enum_multi_text':
-                return $property['enum'];
+                return $this->getPropertyEnumsList($property);
             case 'status':
                 $statusSchema = array_filter(
                     $this->statuses,
                     function ($item) use ($property) {
-                        return $item['config']['entity'] === $property['schema'] && $item['config']['type'] === $property['key'];
+                        return $item['config']['entity'] === $property['entity'] && $item['config']['type'] === $property['key'];
                     }
                 );
 
