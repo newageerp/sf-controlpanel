@@ -185,7 +185,7 @@ class PropertiesUtilsV3
         $isImage = $property['as'] === 'image';
         $isAudio = $property['as'] === 'audio';
 
-        if ($column && isset($column['customTemplate'])) {
+        if ($column && isset($column['customTemplate']) && $column['customTemplate']) {
             return $column['customTemplate'];
         } else if ($isStatus) {
             return 'status';
