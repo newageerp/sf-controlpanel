@@ -100,7 +100,7 @@ class PropertiesUtilsV3
         return count($enumsList) > 0;
     }
 
-    public function getPropertyEnumsList(array $prop, ?bool $addEmpty)
+    public function getPropertyEnumsList(array $prop, ?bool $addEmpty = false)
     {
         $enumsList = array_filter(
             $this->enumsList,
