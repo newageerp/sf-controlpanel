@@ -5,11 +5,14 @@ namespace Newageerp\SfControlpanel\Console;
 class PropertiesUtilsV3
 {
     protected array $properties = [];
+    protected array $enumsList = [];
+    protected array $statuses = [];
 
     public function __construct()
     {
         $this->properties = LocalConfigUtils::getCpConfigFileData('properties');
         $this->enumsList = LocalConfigUtils::getCpConfigFileData('enums');
+        $this->statuses = LocalConfigUtils::getCpConfigFileData('statuses');
     }
 
     public static function swapSchemaToI($path)
@@ -269,6 +272,63 @@ class PropertiesUtilsV3
                 break;
             default:
                 return 'no';
+        }
+    }
+
+    public function getDefaultPropertySearchOptions(?array $property, ?array $column): array
+    {
+        if (!$property) {
+            return [];
+        }
+
+        $naeType = $this->getPropertyNaeType($property, $column ?: []);
+
+        switch ($naeType) {
+            case 'bool':
+                return [
+                    ['label' => 'Taip', 'value' => 1],
+                    ['label' => 'Ne', 'value' => 0]
+                ];
+                break;
+            case 'enum_text':
+            case 'enum_number':
+            case 'enum_multi_number':
+            case 'enum_multi_text':
+                return $property['enum'];
+            case 'status':
+                $statusSchema = array_filter(
+                    $this->statuses,
+                    function ($item) use ($property) {
+                        return $item['config']['entity'] === $property['schema'] && $item['config']['type'] === $property['key'];
+                    }
+                );
+
+                $output = [];
+                foreach ($statusSchema as $status) {
+                    $output[] = [
+                        'label' => $status['config']['text'],
+                        'value' => $status['config']['status']
+                    ];
+                }
+                return $output;
+                break;
+            case 'fileMultiple':
+            case 'file':
+            case 'object':
+            case 'string_array':
+            case 'array':
+            case 'audio':
+            case 'image':
+            case 'color':
+            case 'text':
+            case 'string':
+            case 'number':
+            case 'float':
+            case 'datetime':
+            case 'date':
+                return [];
+            default:
+                return [];
         }
     }
 }

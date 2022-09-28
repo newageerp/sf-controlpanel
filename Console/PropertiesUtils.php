@@ -693,7 +693,7 @@ class PropertiesUtils
                 $statusSchema = array_filter(
                     $statusData,
                     function ($item) use ($property) {
-                        return $item['config']['entity'] === $property['schema'];
+                        return $item['config']['entity'] === $property['schema'] && $item['config']['type'] === $property['key'];
                     }
                 );
 
