@@ -100,7 +100,7 @@ class PropertiesUtilsV3
         return count($enumsList) > 0;
     }
 
-    public function getPropertyEnumsList(array $prop)
+    public function getPropertyEnumsList(array $prop, ?bool $addEmpty)
     {
         $enumsList = array_filter(
             $this->enumsList,
@@ -109,6 +109,13 @@ class PropertiesUtilsV3
             }
         );
         $enumsData = [];
+        if ($addEmpty) {
+            $enumsData[] = [
+                'sort' => -1000,
+                'title' => '',
+                'value' => '',
+            ];
+        }
         foreach ($enumsList as $enum) {
             $enumsData[] = [
                 'sort' => $enum['config']['sort'],
@@ -303,7 +310,12 @@ class PropertiesUtilsV3
                     }
                 );
 
-                $output = [];
+                $output = [
+                    [
+                        'label' => '',
+                        'value' => ''
+                    ]
+                ];
                 foreach ($statusSchema as $status) {
                     $output[] = [
                         'label' => $status['config']['text'],
