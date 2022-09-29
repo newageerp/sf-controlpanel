@@ -14,6 +14,16 @@ class EntitiesUtilsV3
         $this->defaults = LocalConfigUtils::getCpConfigFileData('defaults');
     }
 
+    public function getRequiredBySlug(string $slug)
+    {
+        $entity = $this->getEntityBySlug($slug);
+
+        if ($entity) {
+            return isset($entity['required']) && $entity['required'] ? json_decode($entity['required'], true) : [];
+        }
+        return $slug;
+    }
+
     public function getEntityBySlug(string $slug)
     {
         foreach ($this->entities as $entity) {
