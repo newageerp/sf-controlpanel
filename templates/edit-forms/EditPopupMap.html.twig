@@ -1,33 +1,39 @@
-import React, {Fragment} from 'react'
+import React, { Fragment } from "react";
 
-import { MvcEditModalContentProps, MvcViewModalContentProps } from '@newageerp/nae-react-ui/dist/interfaces';
-import TemplateLoader from '../v3/templates/TemplateLoader';
-import { Popup } from '@newageerp/ui.popups.base.popup'
-
-
+import {
+  MvcEditModalContentProps,
+  MvcViewModalContentProps,
+} from "@newageerp/nae-react-ui/dist/interfaces";
+import TemplateLoader from "../v3/templates/TemplateLoader";
+import { Popup } from "@newageerp/ui.popups.base.popup";
+import { UI } from "@newageerp/nae-react-ui";
 
 interface PopupProps {
-    onClose: () => void,
-    editProps: MvcEditModalContentProps,
-    setViewProps: (v: MvcViewModalContentProps) => void,
+  onClose: () => void;
+  editProps: MvcEditModalContentProps;
+  setViewProps: (v: MvcViewModalContentProps) => void;
 }
 
-export const editPopupBySchemaAndType = (schema: string, type: string, props: PopupProps) => {
-    const { editProps } = props;
+export const editPopupBySchemaAndType = (
+  schema: string,
+  type: string,
+  props: PopupProps
+) => {
+  const { editProps } = props;
 
-    return (
-        <Popup onClose={props.onClose}>
-            <TemplateLoader
-                key={`${editProps.schema}-${editProps.type}-${editProps.id}`}
-                templateName="PageMainEdit"
-                data={editProps}
-                templateData={
-                    {
-                    onBack: props.onClose,
-                    onSaveCallback: editProps.onSaveCallback,
-                    }
-                }
-            />
-        </Popup>
-    )
-}
+  return (
+    <UI.Popup.NaePopupProvider isPopup={true} onClose={props.onClose}>
+      <Popup onClose={props.onClose}>
+        <TemplateLoader
+          key={`${editProps.schema}-${editProps.type}-${editProps.id}`}
+          templateName="PageMainEdit"
+          data={editProps}
+          templateData={{
+            onBack: props.onClose,
+            onSaveCallback: editProps.onSaveCallback,
+          }}
+        />
+      </Popup>
+    </UI.Popup.NaePopupProvider>
+  );
+};
