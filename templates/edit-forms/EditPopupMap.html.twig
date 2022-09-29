@@ -28,10 +28,12 @@ export const editPopupBySchemaAndType = (
           key={`${editProps.schema}-${editProps.type}-${editProps.id}`}
           templateName="PageMainEdit"
           data={editProps}
-          templateData={{
+          templateData={
+            {
             onBack: props.onClose,
             onSaveCallback: editProps.onSaveCallback,
-          }}
+          }
+          }
         />
       </Popup>
     </UI.Popup.NaePopupProvider>
