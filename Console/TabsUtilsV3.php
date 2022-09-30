@@ -40,6 +40,18 @@ class TabsUtilsV3
         return $this->entitiesUtilsV3->getDefaultQsForSchema($schema);
     }
 
+    public function getTabQuickFilters(string $schema, string $type)
+    {
+        $tab = $this->getTabBySchemaAndType($schema, $type);
+        if (!$tab) {
+            return [];
+        }
+        if (isset($tab['quickFilters']) && $tab['quickFilters']) {
+            return json_decode($tab['quickFilters'], true);
+        }
+        return [];
+    }
+
     public function getTabSort(string $schema, string $type)
     {
         $tab = $this->getTabBySchemaAndType($schema, $type);
