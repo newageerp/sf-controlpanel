@@ -47,7 +47,7 @@ class TabsUtilsV3
             return [];
         }
         if (isset($tab['quickFilters']) && $tab['quickFilters']) {
-            return json_decode($tab['quickFilters'], true);
+            return $tab['quickFilters'];
         }
         return [];
     }
